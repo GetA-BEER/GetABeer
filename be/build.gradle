@@ -50,13 +50,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-devtools:' // DevTools
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // Email 전송
 	implementation 'com.google.code.gson:gson' // Serialization, Deserialization
+	implementation 'org.seleniumhq.selenium:selenium-java:4.1.2' // Crawling
 	//    --------------------------------------------JWT---------------------------------------------
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	//    -----------------------------------------Query DSL------------------------------------------
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	//    --------------------------------------------------------------------------------------------
