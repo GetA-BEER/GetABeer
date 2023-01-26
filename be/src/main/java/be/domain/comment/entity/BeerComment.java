@@ -38,7 +38,7 @@ public class BeerComment extends BaseTimeEntity {
 	private Long id;
 
 	@Column(nullable = false)
-	private String nickName;
+	private String nickname;
 
 	@Column(columnDefinition = "TEXT")
 	private String content;

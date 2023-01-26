@@ -29,7 +29,7 @@ public class PairingRecomment extends BaseTimeEntity {
 	private Long id;
 
 	@Column(nullable = false)
-	private String nickName;
+	private String nickname;
 
 	@Column(nullable = false)
 	private String content;
