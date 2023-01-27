@@ -1,7 +1,6 @@
 package be.domain.beer.entity;
 
-import be.domain.beerCategory.entity.BeerCategory;
-import be.domain.beerTag.entity.BeerTag;
+import be.domain.beertag.entity.BeerTag;
 import lombok.*;
 
 import javax.persistence.*;
