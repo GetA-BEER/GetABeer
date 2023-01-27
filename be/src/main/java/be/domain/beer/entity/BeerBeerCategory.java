@@ -1,6 +1,6 @@
 package be.domain.beer.entity;
 
-import be.domain.beerCategory.entity.BeerCategory;
+import be.domain.beercategory.entity.BeerCategory;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,10 +16,10 @@ public class BeerBeerCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "beer_beer_category_id")
     private Long id;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_id")
     private Beer beer;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_category_id")
     private BeerCategory beerCategory;
 

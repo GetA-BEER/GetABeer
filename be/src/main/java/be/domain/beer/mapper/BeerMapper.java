@@ -2,22 +2,155 @@ package be.domain.beer.mapper;
 
 import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
+import be.domain.beer.entity.BeerBeerCategory;
+import be.domain.beer.entity.BeerDetailsBasic;
+import be.domain.beer.entity.BeerDetailsCounts;
+import be.domain.beer.entity.BeerDetailsRatings;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beercategory.dto.BeerCategoryDto;
+import be.domain.beercategory.entity.BeerCategory;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BeerMapper {
 
-    Beer beerPostToBeer(BeerDto.Post postBeer);
-    Beer beerPatchToBeer(BeerDto.Patch patchBeer);
-    BeerDto.DetailsResponse beerToBeerDetailsResponse(Beer beer);
-    List<BeerDto.MonthlyBestResponse> beersToMonthlyBeerResponse(List<MonthlyBeer> beerList);
+    default Beer beerPostToBeerTest(BeerDto.Post postBeer) {
+
+        BeerDetailsBasic beerDetailsBasic = postBeerToBeerDetailsBasic(postBeer);
+        List<BeerBeerCategory> beerBeerCategories = getBeerBeerCategoriesFromResponseDto(postBeer.getBeerCategories());
+
+        return Beer.builder()
+                .beerDetailsBasic(beerDetailsBasic)
+                .beerBeerCategories(beerBeerCategories)
+                .build();
+    }
+
+    default Beer beerPatchToBeer(BeerDto.Patch patchBeer) {
+
+        BeerDetailsBasic beerDetailsBasic = patchBeerToBeerDetailsBasic(patchBeer);
+        List<BeerBeerCategory> beerBeerCategories = getBeerBeerCategoriesFromResponseDto(patchBeer.getBeerCategories());
+
+        return Beer.builder()
+                .beerDetailsBasic(beerDetailsBasic)
+                .beerBeerCategories(beerBeerCategories)
+                .build();
+    }
+
+    default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer) {
+
+        BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
+
+        detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
+        detailsResponse.beerDetailsRatings(beer.getBeerDetailsRatings());
+        detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
+        detailsResponse.isWishListed(beer.getIsWishListed());
+        detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+        detailsResponse.beerCategories(beer.getBeerBeerCategories().stream()
+                .map(a -> a.getBeerCategory()
+                        .getBeerCategoryType())
+                .collect(Collectors.toList()));
+//        detailsResponse.beerTags(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+
+        return detailsResponse.build();
+    }
+
+//    default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer) {
+//
+//        BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
+//
+//        detailsResponse.id(beer.getId());
+//        detailsResponse.korName(beer.getKorName());
+//        detailsResponse.engName(beer.getEngName());
+//        detailsResponse.country(beer.getCountry());
+//        detailsResponse.thumbnail(beer.getThumbnail());
+//        detailsResponse.abv(beer.getAbv());
+//        detailsResponse.ibu(beer.getIbu());
+//        detailsResponse.ratingCount(beer.getRatingCount());
+//        detailsResponse.commentCount(beer.getCommentCount());
+//        detailsResponse.pairingCount(beer.getPairingCount());
+//        detailsResponse.isWishListed(beer.getIsWishListed());
+//        detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+//        detailsResponse.beerCategories(beer.getBeerBeerCategories().stream()
+//                .map(a -> a.getBeerCategory()
+//                        .getBeerCategoryType())
+//                .collect(Collectors.toList()));
+////        detailsResponse.beerTags(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+//
+//        return detailsResponse.build();
+//    }
+
+    List<BeerDto.MonthlyBestResponse> beersToMonthlyBestBeerResponse(List<MonthlyBeer> beerList);
+
     List<BeerDto.SimilarResponse> beersToSimilarBeerResponse(List<Beer> beerList);
+
     default PageImpl<BeerDto.MyPageResponse> beersToMyPageResponse(Page<Beer> beerPage) {
-     return null;
+        return null;
+    }
+
+    private static List<BeerBeerCategory> getBeerBeerCategoriesFromResponseDto(List<BeerCategoryDto.Response> responseList) {
+        return responseList.stream()
+                .map(response ->
+                        BeerBeerCategory.builder().
+                                beerCategory(BeerCategory.builder()
+                                        .id(response.getBeerCategoryId())
+                                        .beerCategoryType(response.getBeerCategoryType())
+                                        .build())
+                                .build())
+                .collect(Collectors.toList());
+    }
+
+    private static BeerDetailsBasic postBeerToBeerDetailsBasic(BeerDto.Post postBeer) {
+
+        BeerDetailsBasic.BeerDetailsBasicBuilder beerDetailsBasic = BeerDetailsBasic.builder();
+
+        beerDetailsBasic.korName(postBeer.getKorName());
+        beerDetailsBasic.engName(postBeer.getEngName());
+        beerDetailsBasic.country(postBeer.getCountry());
+        beerDetailsBasic.thumbnail(postBeer.getThumbnail());
+        beerDetailsBasic.abv(postBeer.getAbv());
+        beerDetailsBasic.ibu(postBeer.getIbu());
+
+        return beerDetailsBasic.build();
+    }
+
+    private static BeerDetailsBasic patchBeerToBeerDetailsBasic(BeerDto.Patch patchBeer) {
+
+        BeerDetailsBasic.BeerDetailsBasicBuilder beerDetailsBasic = BeerDetailsBasic.builder();
+
+        beerDetailsBasic.korName(patchBeer.getKorName());
+        beerDetailsBasic.engName(patchBeer.getEngName());
+        beerDetailsBasic.country(patchBeer.getCountry());
+        beerDetailsBasic.thumbnail(patchBeer.getThumbnail());
+        beerDetailsBasic.abv(patchBeer.getAbv());
+        beerDetailsBasic.ibu(patchBeer.getIbu());
+
+        return beerDetailsBasic.build();
+    }
+
+    private static BeerDetailsRatings beerToBeerDetailsRatings(Beer beer) {
+
+        BeerDetailsRatings.BeerDetailsRatingsBuilder beerDetailsRatings = BeerDetailsRatings.builder();
+
+        beerDetailsRatings.totalAverageRating(beer.getBeerDetailsRatings().getTotalAverageRating());
+        beerDetailsRatings.femaleAverageRating(beer.getBeerDetailsRatings().getFemaleAverageRating());
+        beerDetailsRatings.maleAverageRating(beer.getBeerDetailsRatings().getMaleAverageRating());
+
+        return beerDetailsRatings.build();
+    }
+
+    private static BeerDetailsCounts beerToBeerDetailsCounts(Beer beer) {
+
+        BeerDetailsCounts.BeerDetailsCountsBuilder beerDetailsCounts = BeerDetailsCounts.builder();
+
+        beerDetailsCounts.starCount(beer.getBeerDetailsCounts().getStarCount());
+        beerDetailsCounts.commentCount(beer.getBeerDetailsCounts().getCommentCount());
+        beerDetailsCounts.pairingCount(beer.getBeerDetailsCounts().getPairingCount());
+
+        return beerDetailsCounts.build();
     }
 }
