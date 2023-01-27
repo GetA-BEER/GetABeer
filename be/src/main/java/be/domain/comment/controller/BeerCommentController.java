@@ -1,7 +1,9 @@
 package be.domain.comment.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class BeerCommentController {
 
 	/* 맥주 코멘트 등록 */

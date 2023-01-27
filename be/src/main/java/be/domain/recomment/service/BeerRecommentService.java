@@ -2,8 +2,11 @@ package be.domain.recomment.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import be.domain.recomment.entity.BeerRecomment;
 
+@Service
 public class BeerRecommentService {
 
 	/* 맥주 대댓글 등록 */

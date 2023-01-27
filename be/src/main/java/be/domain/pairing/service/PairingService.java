@@ -2,8 +2,11 @@ package be.domain.pairing.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import be.domain.pairing.entity.Pairing;
 
+@Service
 public class PairingService {
 
 	/* 페어링 등록 */

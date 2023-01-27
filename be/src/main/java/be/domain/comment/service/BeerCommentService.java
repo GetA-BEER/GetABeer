@@ -2,8 +2,11 @@ package be.domain.comment.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import be.domain.comment.entity.BeerComment;
 
+@Service
 public class BeerCommentService {
 
 	/* 맥주 코멘트 등록 */

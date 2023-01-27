@@ -2,8 +2,11 @@ package be.domain.recomment.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import be.domain.recomment.entity.PairingRecomment;
 
+@Service
 public class PairingRecommentService {
 
 	/* 페어링 대댓글 등록 */

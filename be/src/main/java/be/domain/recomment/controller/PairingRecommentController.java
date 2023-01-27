@@ -1,7 +1,9 @@
 package be.domain.recomment.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class PairingRecommentController {
 
 	/* 페어링 대댓글 등록 */
