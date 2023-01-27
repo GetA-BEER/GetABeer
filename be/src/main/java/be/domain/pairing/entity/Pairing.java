@@ -88,4 +88,12 @@ public class Pairing extends BaseTimeEntity {
 			pairingRecomment.belongToPairing(this);
 		}
 	}
+
+	public void updateContent(String content) {
+		this.content = content;
+	}
+
+	public void updateCategory(PairingCategory pairingCategory) {
+		this.pairingCategory = pairingCategory;
+	}
 }

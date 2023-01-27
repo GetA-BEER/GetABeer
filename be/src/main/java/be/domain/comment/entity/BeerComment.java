@@ -75,4 +75,12 @@ public class BeerComment extends BaseTimeEntity {
 			beerRecomment.belongToBeerComment(this);
 		}
 	}
+
+	public void updateContent(String content) {
+		this.content = content;
+	}
+
+	public void updateStar(Double star) {
+		this.star = star;
+	}
 }
