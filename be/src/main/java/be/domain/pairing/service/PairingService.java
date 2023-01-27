@@ -1,6 +1,6 @@
 package be.domain.pairing.service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +23,9 @@ public class PairingService {
 	/* 페어링 등록 */
 	public Pairing create(Pairing pairing, String category) {
 		pairing.updateCategory(findCategory(category));
+
+		/* 이미지를 어떻게 저장할지 해결되면, 이 부분은 바뀔 예정 */
+		pairing.saveDefault(new ArrayList<>(), new ArrayList<>(), 0, 0);
 		pairingRepository.save(pairing);
 
 		return pairing;
@@ -36,7 +39,9 @@ public class PairingService {
 
 		/* 수정할 내용이 존재하면, 해당 정보 수정 후 저장*/
 		Optional.ofNullable(pairing.getContent()).ifPresent(findPairing::updateContent);
-		Optional.ofNullable(category).ifPresent(updateCategory -> findPairing.updateCategory(findCategory(updateCategory)));
+		if (category != null) {
+			findPairing.updateCategory(findCategory(category));
+		}
 		pairingRepository.save(findPairing);
 
 		return findPairing;
@@ -70,8 +75,7 @@ public class PairingService {
 
 	/* 카테고리 불러오기 */
 	private PairingCategory findCategory(String category) {
-		PairingCategory pairingCategory = PairingCategory.valueOf(category);
 
-		return pairingCategory;
+		return PairingCategory.valueOf(category);
 	}
 }

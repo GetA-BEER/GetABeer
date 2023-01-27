@@ -1,8 +1,9 @@
 package be.domain.pairing.dto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
+import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.entity.PairingImage;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,8 +46,9 @@ public class PairingDto {
 	public static class Response {
 		private Long pairingId;
 		private String nickname;
-		private ArrayList<PairingImage> imageList;
-		private String category;
+		private String content;
+		private List<PairingImage> imageList;
+		private PairingCategory category;
 		private Integer likeCount;
 		private Integer recommentCount;
 		private LocalDateTime createdAt;
@@ -56,11 +58,12 @@ public class PairingDto {
 		}
 
 		@Builder
-		public Response(Long pairingId, String nickname, ArrayList<PairingImage> imageList, String category,
-			Integer likeCount,
-			Integer recommentCount, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+		public Response(Long pairingId, String nickname, String content, List<PairingImage> imageList,
+			PairingCategory category, Integer likeCount, Integer recommentCount, LocalDateTime createdAt,
+			LocalDateTime modifiedAt) {
 			this.pairingId = pairingId;
 			this.nickname = nickname;
+			this.content = content;
 			this.imageList = imageList;
 			this.category = category;
 			this.likeCount = likeCount;
