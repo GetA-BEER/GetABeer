@@ -12,9 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Max;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.validator.constraints.Range;
 
 import be.domain.beer.entity.Beer;
 import be.domain.recomment.entity.BeerRecomment;
@@ -43,7 +43,7 @@ public class BeerComment extends BaseTimeEntity {
 	@Column(columnDefinition = "TEXT")
 	private String content;
 
-	@Max(5)
+	@Range(min = 0, max = 5)
 	@Column(nullable = false)
 	private Double star;
 
