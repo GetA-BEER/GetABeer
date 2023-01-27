@@ -88,4 +88,20 @@ public class Pairing extends BaseTimeEntity {
 			pairingRecomment.belongToPairing(this);
 		}
 	}
+
+	public void saveDefault(List<PairingImage> paringImageList, List<PairingRecomment> pairingRecommentList,
+		Integer likeCount, Integer recommentCount) {
+		this.paringImageList = paringImageList;
+		this.pairingRecommentList = pairingRecommentList;
+		this.likeCount = likeCount;
+		this.recommentCount = recommentCount;
+	}
+
+	public void updateContent(String content) {
+		this.content = content;
+	}
+
+	public void updateCategory(PairingCategory pairingCategory) {
+		this.pairingCategory = pairingCategory;
+	}
 }
