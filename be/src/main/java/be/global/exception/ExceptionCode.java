@@ -13,7 +13,11 @@ public enum ExceptionCode {
 	USER_ID_EXISTS( 409, "User ID Exists"),
 	NICKNAME_EXISTS(409, "Nickname Exists"),
 	UNAUTHORIZED(401, "Unauthorized"), // 인증이 필요한 상태
-	FORBIDDEN(403, "Forbidden"); // 인증은 되었으나 권한이 없는 상태
+	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는 상태
+
+  BEER_NOT_FOUND(404,"Beer Not Found"),
+  BEER_CATEGORY_NOT_FOUND(404,"Beer Category Not Found");
+
 
 	@Getter
 	private int status;

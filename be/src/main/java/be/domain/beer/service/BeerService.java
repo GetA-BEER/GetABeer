@@ -1,39 +1,66 @@
 package be.domain.beer.service;
 
 import be.domain.beer.entity.Beer;
+import be.domain.beer.entity.BeerBeerCategory;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.repository.BeerBeerCategoryRepository;
+import be.domain.beer.repository.BeerQueryRepository;
+import be.domain.beer.repository.BeerRepository;
+import be.domain.beer.repository.MonthlyBeerQueryRepository;
+import be.domain.beer.repository.MonthlyBeerRepository;
+import be.domain.beercategory.entity.BeerCategory;
+import be.domain.beercategory.service.BeerCategoryService;
+import be.global.exception.BusinessLogicException;
+import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class BeerService {
 
+    private final BeerRepository beerRepository;
+    private final BeerQueryRepository beerQueryRepository;
+    private final MonthlyBeerRepository monthlyBeerRepository;
+    private final MonthlyBeerQueryRepository monthlyBeerQueryRepository;
+    private final BeerCategoryService beerCategoryService;
+    private final BeerBeerCategoryRepository beerBeerCategoryRepository;
+
     @Transactional
     public Beer createBeer(Beer beer) {
-        return null;
+
+        Beer savedBeer = Beer.builder().build();
+
+        savedBeer.create(beer);
+
+        saveBeerBeerCategories(savedBeer, beer);
+
+        return beerRepository.save(savedBeer);
     }
 
     @Transactional
     public Beer updateBeer(Beer beer, Long beerId) {
-        return null;
+
+        Beer findBeer = findVerifiedBeer(beerId);
+
+        findBeer.update(beer);
+
+        saveBeerBeerCategories(findBeer, beer);
+
+        return beerRepository.save(findBeer);
     }
 
-    private void beerCategoryToBeer(Beer beer, Beer savedBeer) {
-
-    }
-
-    public Beer findBeer(Long beerId) {
-        return null;
-    }
-
+    @Transactional
     public void deleteBeer(Long beerId) {
 
+        beerRepository.deleteById(beerId);
     }
 
 //    public Beer isWishListedBeer(Beer beer, User user){
@@ -48,21 +75,61 @@ public class BeerService {
 //        return null;
 //    }
 
+    @Transactional(readOnly = true)
     public List<MonthlyBeer> findMonthlyBeers() {
+
+        Optional<List<MonthlyBeer>> monthlyBeers = monthlyBeerQueryRepository.findMonthlyBeer();
+
+        if (monthlyBeers.isEmpty()) {
+
+            List<MonthlyBeer> monthlyBeersTemp = new ArrayList<>();
+            List<Beer> findBeers = beerQueryRepository.findMonthlyBeer();
+
+            findBeers.forEach(beer -> {
+                MonthlyBeer monthlyBeer = MonthlyBeer.builder().build();
+                monthlyBeer.create(beer);
+                monthlyBeersTemp.add(monthlyBeer);
+                    });
+
+            return monthlyBeerRepository.saveAll(monthlyBeersTemp);
+        }
+
         return null;
     }
 
+    @Transactional(readOnly = true)
     public List<Beer> findSimilarBeers(Beer beer) {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public Page<Beer> findMyPageBeers(Integer page) {
 
         PageRequest pageRequest = PageRequest.of(page - 1, 10);
         return null;
     }
 
+    @Transactional(readOnly = true)
     public Beer findVerifiedBeer(Long beerId) {
-        return null;
+
+        Optional<Beer> optionalBeer = beerRepository.findById(beerId);
+
+        return optionalBeer.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.BEER_NOT_FOUND));
+    }
+
+    private void saveBeerBeerCategories(Beer savedBeer, Beer beer) {
+
+        beer.getBeerBeerCategories()
+                .forEach(beerBeerCategory -> {
+                    BeerCategory beerCategory =
+                            beerCategoryService.findVerifiedBeerCategory(beerBeerCategory.getBeerCategory().getBeerCategoryType());
+                    BeerBeerCategory savedBeerBeerCategory =
+                            BeerBeerCategory.builder()
+                                    .beer(savedBeer)
+                                    .beerCategory(beerCategory)
+                                    .build();
+                    beerBeerCategoryRepository.save(savedBeerBeerCategory);
+                });
     }
 }
