@@ -1,10 +1,9 @@
-import SmallCard from './SmallCard';
-// import SmallCardInfo from '@/pages/main';
+import SmallPairingCard from './SmallPairingCard';
 import React, { useState } from 'react';
 
-export interface SmallCardInfo {
+export interface SmallPairingCardInfo {
   id: number;
-  star: number;
+  pairing: string;
   nickName: string;
   description: string;
   date: string;
@@ -13,10 +12,12 @@ export interface SmallCardInfo {
 }
 
 export default function SmallCardController() {
-  const [smallCardList, setSmallCardList] = useState<SmallCardInfo[]>([
+  const [smallPairingList, setSmallPairingList] = useState<
+    SmallPairingCardInfo[]
+  >([
     {
       id: 1,
-      star: 4.0,
+      pairing: '튀김',
       nickName: '유진님',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -26,7 +27,7 @@ export default function SmallCardController() {
     },
     {
       id: 2,
-      star: 4.0,
+      pairing: '구이',
       nickName: '테스트',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -36,7 +37,7 @@ export default function SmallCardController() {
     },
     {
       id: 3,
-      star: 4.0,
+      pairing: '견과류',
       nickName: '어렵네',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -46,7 +47,7 @@ export default function SmallCardController() {
     },
     {
       id: 4,
-      star: 4.0,
+      pairing: '과자',
       nickName: '유진님',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -56,7 +57,7 @@ export default function SmallCardController() {
     },
     {
       id: 5,
-      star: 4.0,
+      pairing: '튀김',
       nickName: '테스트',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -66,7 +67,7 @@ export default function SmallCardController() {
     },
     {
       id: 6,
-      star: 4.0,
+      pairing: '튀김',
       nickName: '어렵네',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -78,8 +79,8 @@ export default function SmallCardController() {
 
   return (
     <div className="grid grid-cols-2 gap-3 px-3">
-      {smallCardList?.map((props: SmallCardInfo) => (
-        <SmallCard {...props} key={props.id} />
+      {smallPairingList?.map((props: SmallPairingCardInfo) => (
+        <SmallPairingCard {...props} key={props.id} />
       ))}
     </div>
   );
