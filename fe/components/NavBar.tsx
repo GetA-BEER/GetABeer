@@ -6,8 +6,8 @@ import { BiUser } from 'react-icons/bi';
 export default function NavBar() {
   return (
     <>
-      <nav className="w-full absolute bottom-0 z-20 ">
-        <div className="max-w-4xl grid grid-cols-5 px-5 bg-y-gray text-y-black text-center py-1">
+      <nav className="w-full fixed bottom-0 z-20">
+        <div className="max-w-4xl grid grid-cols-5 px-5 bg-white text-y-black text-center py-1">
           <div className="hover:text-y-brown">
             <AiOutlineTrophy className="m-auto text-3xl py-[1px]" />
             <div className="text-[5px]">이달의 맥주</div>
