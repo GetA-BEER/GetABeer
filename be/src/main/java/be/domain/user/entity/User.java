@@ -51,31 +51,31 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserBeerTag> userBeerTags;
 
-    /* BeerWishlist 1:N 양방향 매핑 */
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<BeerWishlist> beerWishlists;
-
-    /* BeerComment 1:N 양방향 매핑 */
-    @OneToMany(mappedBy = "user")
-    private List<BeerComment> beerComments;
-
-    /* BeerRecomment 1:N 양방향 매핑 */
-    @OneToMany(mappedBy = "user")
-    private List<BeerRecomment> beerRecomments;
-
-    /* Pairing 1:N 양방향 매핑 */
-    @OneToMany(mappedBy = "user")
-    private List<Pairing> pairings;
-
-    /* PairingRecomment 1:N 양방향 매핑 */
-    @OneToMany(mappedBy = "user")
-    private List<PairingRecomment> pairingRecomments;
-
-    /* ChatRoom 1:1 양방향 매핑 */
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private ChatRoom chatRoom;
-
-    /* ChatMessage 1:N 양방향 매핑 */
-    @OneToMany(mappedBy = "user")
-    private List<ChatMessage> chatMessages;
+//    /* BeerWishlist 1:N 양방향 매핑 */
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+//    private List<BeerWishlist> beerWishlists;
+//
+//    /* BeerComment 1:N 양방향 매핑 */
+//    @OneToMany(mappedBy = "user")
+//    private List<BeerComment> beerComments;
+//
+//    /* BeerRecomment 1:N 양방향 매핑 */
+//    @OneToMany(mappedBy = "user")
+//    private List<BeerRecomment> beerRecomments;
+//
+//    /* Pairing 1:N 양방향 매핑 */
+//    @OneToMany(mappedBy = "user")
+//    private List<Pairing> pairings;
+//
+//    /* PairingRecomment 1:N 양방향 매핑 */
+//    @OneToMany(mappedBy = "user")
+//    private List<PairingRecomment> pairingRecomments;
+//
+//    /* ChatRoom 1:1 양방향 매핑 */
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+//    private ChatRoom chatRoom;
+//
+//    /* ChatMessage 1:N 양방향 매핑 */
+//    @OneToMany(mappedBy = "user")
+//    private List<ChatMessage> chatMessages;
 }
