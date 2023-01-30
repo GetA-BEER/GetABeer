@@ -28,7 +28,7 @@ public class User extends BaseTimeEntity {
     private String email;
 
     @Column(nullable = false)
-    private String nickName;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
@@ -42,9 +42,9 @@ public class User extends BaseTimeEntity {
     @Column
     private int age;
 
-    public User(String email, String nickName) {
+    public User(String email, String nickname) {
         this.email = email;
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 
     /* UserBeerTag Join */

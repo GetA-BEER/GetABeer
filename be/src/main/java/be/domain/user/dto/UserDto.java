@@ -17,7 +17,7 @@ public class UserDto {
         private String email;
 
         @NotBlank
-        private String nickName;
+        private String nickname;
 
         @NotBlank
         private String password;
