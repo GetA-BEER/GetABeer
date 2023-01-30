@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
@@ -10,6 +11,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['GmarketSansMedium', 'Arial', 'sans-serif'],
+        // sans가 제일 기본 상속 폰트이므로 전체 폰트바꾸려면 sans재지정후 맨앞에 원하는 폰트 넣기
+      },
       colors: {
         'y-brown': '#CD5F03',
         'y-cream': '#FCF2E9',
