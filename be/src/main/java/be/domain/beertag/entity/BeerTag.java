@@ -4,6 +4,7 @@ import be.domain.beer.entity.BeerBeerTag;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.entity.MonthlyBeerBeerCategory;
 import be.domain.beer.entity.MonthlyBeerBeerTag;
+import be.domain.user.entity.UserBeerTag;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -25,8 +26,12 @@ public class BeerTag {
     @Enumerated(EnumType.STRING)
     private BeerTagType beerTagType;
     private Long count;
+
     @OneToMany(mappedBy = "beerTag")
     private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "beerTag")
+    private List<UserBeerTag> userBeerTags = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "beerTag")
@@ -36,6 +41,13 @@ public class BeerTag {
         this.beerBeerTags.add(beerBeerTag);
         if (beerBeerTag.getBeerTag() != this) {
             beerBeerTag.addBeerTag(this);
+        }
+    }
+
+    public void addMonthlyBeerBeerTag(MonthlyBeerBeerTag monthlyBeerBeerTag) {
+        this.monthlyBeerBeerTags.add(monthlyBeerBeerTag);
+        if (monthlyBeerBeerTag.getBeerTag() != this) {
+            monthlyBeerBeerTag.addBeerTag(this);
         }
     }
 }

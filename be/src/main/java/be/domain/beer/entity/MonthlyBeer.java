@@ -1,14 +1,23 @@
 package be.domain.beer.entity;
 
-import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beertag.entity.BeerTag;
 import be.global.BaseTimeEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -33,6 +42,20 @@ public class MonthlyBeer extends BaseTimeEntity {
     private List<MonthlyBeerBeerCategory> monthlyBeerBeerCategories = new ArrayList<>();
     @OneToMany(mappedBy = "monthlyBeer", cascade = CascadeType.PERSIST)
     private List<MonthlyBeerBeerTag> monthlyBeerBeerTags = new ArrayList<>();
+
+    public void addMonthlyBeerBeerCategory(MonthlyBeerBeerCategory monthlyBeerBeerCategory) {
+        this.monthlyBeerBeerCategories.add(monthlyBeerBeerCategory);
+        if (monthlyBeerBeerCategory.getMonthlyBeer() != this) {
+            monthlyBeerBeerCategory.addMonthlyBeer(this);
+        }
+    }
+
+    public void addMonthlyBeerBeerTag(MonthlyBeerBeerTag monthlyBeerBeerTag) {
+        this.monthlyBeerBeerTags.add(monthlyBeerBeerTag);
+        if (monthlyBeerBeerTag.getMonthlyBeer() != this) {
+            monthlyBeerBeerTag.addMonthlyBeer(this);
+        }
+    }
 
     public void create(Beer beer, List<BeerTag> beerTags) {
         this.id = beer.getId();

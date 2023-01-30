@@ -1,7 +1,6 @@
 package be.domain.beer.entity;
 
 import be.domain.beercategory.entity.BeerCategory;
-import be.domain.beertag.entity.BeerTag;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,5 +39,19 @@ public class MonthlyBeerBeerCategory {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_category_id")
     private BeerCategory beerCategory;
+
+    public void addMonthlyBeer(MonthlyBeer monthlyBeer) {
+        this.monthlyBeer = monthlyBeer;
+        if (!this.monthlyBeer.getMonthlyBeerBeerCategories().contains(this)) {
+            this.monthlyBeer.getMonthlyBeerBeerCategories().add(this);
+        }
+    }
+
+    public void addBeerCategory(BeerCategory beerCategory) {
+        this.beerCategory = beerCategory;
+        if (!this.beerCategory.getMonthlyBeerBeerCategories().contains(this)) {
+            this.beerCategory.addMonthlyBeerBeerCategory(this);
+        }
+    }
 
 }
