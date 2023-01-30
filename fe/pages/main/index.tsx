@@ -72,7 +72,7 @@ export default function Main() {
         <div>
           <main className="m-auto border-2 pb-14">
             <div className="py-2 bg-gray-200 text-black">상단헤더</div>
-            <BigInput props="ddd" placeholder="ddd" />
+            <BigInput placeholder="페어링을 추천하는 이유를 적어주세요" />
             <Image
               className="m-auto"
               src="/images/adv.jpg"
