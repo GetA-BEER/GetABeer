@@ -1,11 +1,17 @@
 import { BeerInfo } from './SmallBeerController';
 import Image from 'next/image';
 
-export default function SmallBeer(props: BeerInfo, idx: number) {
-  console.log({ idx });
+export default function SmallBeer(props: BeerInfo) {
+  {
+    console.log('props.idx', props.idx);
+    //index 로 사용하는 법 알아오기..
+  }
+
   return (
-    <div className="rounded-2xl w-5/12 m-2 bg-white text-y-black drop-shadow-xl text-xs border">
-      <div className={`${idx % 2 === 1 ? 'bg-y-cream' : 'bg-y-lemon'} p-4`}>
+    <div className="rounded-2xl w-full m-2 bg-white text-y-black drop-shadow-xl text-[5px] border">
+      <div
+        className={`${props.id % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'} p-4`}
+      >
         <div className="text-base font-semibold">{props.title}</div>
         <div>{`${props.category} / ${props.country} ${props.level}% ${props.ibu}IBU`}</div>
       </div>

@@ -91,7 +91,7 @@ export default function Main() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
     },
     {
-      id: 1,
+      id: 4,
       title: '가든 바이젠',
       category: '에일',
       country: '한국',
@@ -100,22 +100,13 @@ export default function Main() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
     },
     {
-      id: 2,
+      id: 5,
       title: '필라이트',
       category: '에일',
       country: '한국',
       level: 4.1,
       ibu: 17.5,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-    {
-      id: 3,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
     },
   ];
   https: return (
@@ -128,7 +119,7 @@ export default function Main() {
       </Head>
       <div className="h-screen m-auto max-w-4xl">
         <div>
-          <main className="m-auto border-2 pb-14">
+          <main className="m-auto border-2">
             <div className="py-2 bg-gray-200 text-black">상단헤더</div>
             <BigInput placeholder="페어링을 추천하는 이유를 적어주세요" />
             <Advertise />
@@ -141,6 +132,7 @@ export default function Main() {
               <SmallBeerController beerProps={beerProps} />
             </div>
           </main>
+          <div className="pb-32"></div>
           <NavBar />
         </div>
       </div>
