@@ -1,5 +1,6 @@
 package be.domain.comment.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,10 @@ public class BeerCommentService {
 
 	/* 맥주 코멘트 등록 */
 	public BeerComment create(BeerComment beerComment) {
+
+		/* 기본 설정 저장하기 */
+		beerComment.saveDefault(0, 0, new ArrayList<>());
+
 		beerCommentRepository.save(beerComment);
 
 		return beerComment;
