@@ -51,9 +51,9 @@ public class Users extends BaseTimeEntity {
     @OneToMany(mappedBy = "users")
     private List<UserBeerTag> userBeerTags;
 
-//    /* BeerWishlist 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
-//    private List<BeerWishlist> beerWishlists;
+    /* BeerWishlist 1:N 양방향 매핑 */
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+    private List<BeerWishlist> beerWishlists;
 //
 //    /* BeerComment 1:N 양방향 매핑 */
 //    @OneToMany(mappedBy = "users")
