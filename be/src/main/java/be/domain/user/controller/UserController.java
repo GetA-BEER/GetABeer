@@ -1,23 +1,36 @@
 package be.domain.user.controller;
 
+import be.domain.user.dto.UserDto;
+import be.domain.user.entity.User;
+import be.domain.user.mapper.UserMapper;
+import be.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Validated
 @RestController
-@RequestMapping
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
+    private final UserMapper userMapper;
+    private final UserService userService;
 
-    public ResponseEntity post() {
-        return null;
+    @PostMapping("/signup")
+    public ResponseEntity<UserDto.Response> postUser(@Valid @RequestBody UserDto.Post post) {
+        User user = userService.createUser(userMapper.postToUser(post));
+        return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-    public ResponseEntity patch() {
-        return null;
+    @PatchMapping
+    public ResponseEntity<UserDto.Response> patchUser(@Valid @RequestBody UserDto.Patch patch) {
+        User user = userService.update(patch.getEmail(), patch);
+        return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
     public ResponseEntity read() {
