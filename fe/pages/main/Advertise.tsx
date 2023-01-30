@@ -7,10 +7,9 @@ import { Pagination, Navigation } from 'swiper';
 export default function Advertise() {
   return (
     <Swiper
-      pagination={{
-        dynamicBullets: true,
-      }}
+      pagination={true}
       // navigation={true}
+      loop={true}
       modules={[Pagination, Navigation]}
       className="mySwiper"
     >
