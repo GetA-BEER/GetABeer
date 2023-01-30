@@ -16,10 +16,10 @@ public class BeerBeerTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "beer_beer_tag_id")
     private Long id;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_id")
     private Beer beer;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_tag_id")
     private BeerTag beerTag;
 

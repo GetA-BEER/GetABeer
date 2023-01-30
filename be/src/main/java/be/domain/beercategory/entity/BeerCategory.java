@@ -2,10 +2,28 @@ package be.domain.beercategory.entity;
 
 import be.domain.beer.entity.BeerBeerCategory;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.entity.MonthlyBeerBeerCategory;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +38,16 @@ public class BeerCategory {
     @Column(name = "beer_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long quantity;
-
     @Enumerated(EnumType.STRING)
     private BeerCategoryType beerCategoryType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "monthly_beer_id")
-    private MonthlyBeer monthlyBeer;
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "beerCategory")
     private List<BeerBeerCategory> beerBeerCategories = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "beerCategory")
+    private List<MonthlyBeerBeerCategory> monthlyBeerBeerCategories = new ArrayList<>();
 
     public void addBeerBeerCategory(BeerBeerCategory beerBeerCategory) {
         this.beerBeerCategories.add(beerBeerCategory);
@@ -40,9 +57,8 @@ public class BeerCategory {
     }
 
     @QueryProjection
-    public BeerCategory(Long id, Long quantity, BeerCategoryType beerCategoryType) {
+    public BeerCategory(Long id, BeerCategoryType beerCategoryType) {
         this.id = id;
-        this.quantity = quantity;
         this.beerCategoryType = beerCategoryType;
     }
 }

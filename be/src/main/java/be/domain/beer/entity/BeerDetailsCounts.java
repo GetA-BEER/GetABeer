@@ -11,13 +11,18 @@ import javax.persistence.Embeddable;
 @RequiredArgsConstructor
 public class BeerDetailsCounts {
 
-    private Integer starCount;
+    private Integer totalStarCount;
+    private Integer femaleStarCount;
+    private Integer maleStarCount;
     private Integer commentCount;
     private Integer pairingCount;
 
     @Builder
-    public BeerDetailsCounts(Integer starCount, Integer commentCount, Integer pairingCount) {
-        this.starCount = starCount;
+    public BeerDetailsCounts(Integer totalStarCount, Integer femaleStarCount, Integer maleStarCount,
+                             Integer commentCount, Integer pairingCount) {
+        this.totalStarCount = totalStarCount;
+        this.femaleStarCount = femaleStarCount;
+        this.maleStarCount = maleStarCount;
         this.commentCount = commentCount;
         this.pairingCount = pairingCount;
     }

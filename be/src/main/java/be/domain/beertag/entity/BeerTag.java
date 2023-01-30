@@ -1,6 +1,10 @@
 package be.domain.beertag.entity;
 
 import be.domain.beer.entity.BeerBeerTag;
+import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.entity.MonthlyBeerBeerCategory;
+import be.domain.beer.entity.MonthlyBeerBeerTag;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,8 +24,13 @@ public class BeerTag {
     private Long id;
     @Enumerated(EnumType.STRING)
     private BeerTagType beerTagType;
+    private Long count;
     @OneToMany(mappedBy = "beerTag")
     private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "beerTag")
+    private List<MonthlyBeerBeerTag> monthlyBeerBeerTags = new ArrayList<>();
 
     public void addBeerBeerTag(BeerBeerTag beerBeerTag) {
         this.beerBeerTags.add(beerBeerTag);

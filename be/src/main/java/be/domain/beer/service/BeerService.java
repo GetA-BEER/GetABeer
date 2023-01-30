@@ -3,6 +3,7 @@ package be.domain.beer.service;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerBeerCategory;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.repository.BeerBeerCategoryQueryRepository;
 import be.domain.beer.repository.BeerBeerCategoryRepository;
 import be.domain.beer.repository.BeerQueryRepository;
 import be.domain.beer.repository.BeerRepository;
@@ -10,6 +11,7 @@ import be.domain.beer.repository.MonthlyBeerQueryRepository;
 import be.domain.beer.repository.MonthlyBeerRepository;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
+import be.domain.beertag.entity.BeerTag;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class BeerService {
     private final MonthlyBeerQueryRepository monthlyBeerQueryRepository;
     private final BeerCategoryService beerCategoryService;
     private final BeerBeerCategoryRepository beerBeerCategoryRepository;
+    private final BeerBeerCategoryQueryRepository beerBeerCategoryQueryRepository;
 
     @Transactional
     public Beer createBeer(Beer beer) {
@@ -39,7 +42,6 @@ public class BeerService {
         Beer savedBeer = Beer.builder().build();
 
         savedBeer.create(beer);
-
         saveBeerBeerCategories(savedBeer, beer);
 
         return beerRepository.save(savedBeer);
@@ -52,6 +54,8 @@ public class BeerService {
 
         findBeer.update(beer);
 
+        beerBeerCategoryQueryRepository.deleteAllByBeerId(beerId);
+//        deleteBeerBeerCategories(findBeer);
         saveBeerBeerCategories(findBeer, beer);
 
         return beerRepository.save(findBeer);
@@ -80,6 +84,9 @@ public class BeerService {
 
         Optional<List<MonthlyBeer>> monthlyBeers = monthlyBeerQueryRepository.findMonthlyBeer();
 
+        /*
+         * Monthly Beer 아직 생성되지 않은 경우 만들어주기
+         */
         if (monthlyBeers.isEmpty()) {
 
             List<MonthlyBeer> monthlyBeersTemp = new ArrayList<>();
@@ -87,14 +94,22 @@ public class BeerService {
 
             findBeers.forEach(beer -> {
                 MonthlyBeer monthlyBeer = MonthlyBeer.builder().build();
-                monthlyBeer.create(beer);
+                List<BeerTag> beerTags = beerQueryRepository.findTop4BeerTag(beer);
+
+                monthlyBeer.create(beer, beerTags);
+
                 monthlyBeersTemp.add(monthlyBeer);
                     });
 
             return monthlyBeerRepository.saveAll(monthlyBeersTemp);
         }
-
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public List<BeerTag> findTop4BeerTags(Beer beer) {
+
+        return beerQueryRepository.findTop4BeerTag(beer);
     }
 
     @Transactional(readOnly = true)
@@ -131,5 +146,12 @@ public class BeerService {
                                     .build();
                     beerBeerCategoryRepository.save(savedBeerBeerCategory);
                 });
+    }
+
+    private void deleteBeerBeerCategories(Beer findBeer) {
+        findBeer.getBeerBeerCategories().forEach(beerBeerCategory -> {
+            beerBeerCategory.remove(findBeer, beerBeerCategory.getBeerCategory());
+            beerBeerCategoryQueryRepository.delete(beerBeerCategory);
+        });
     }
 }

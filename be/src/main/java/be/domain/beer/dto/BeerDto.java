@@ -2,9 +2,10 @@ package be.domain.beer.dto;
 
 import be.domain.beer.entity.BeerDetailsBasic;
 import be.domain.beer.entity.BeerDetailsCounts;
-import be.domain.beer.entity.BeerDetailsRatings;
+import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategoryType;
+import be.domain.beertag.dto.BeerTagDto;
 import be.domain.beertag.entity.BeerTagType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,10 +35,10 @@ public class BeerDto {
         @NotNull
         private List<BeerCategoryDto.Response> beerCategories;
         @NotBlank
-        private Long thumbnail;
-        @NotBlank
+        private String  thumbnail;
+        @NotNull
         private Double abv;
-        @NotBlank
+        @NotNull
         private Integer ibu;
 
 
@@ -53,7 +54,7 @@ public class BeerDto {
         private String engName;
         private String country;
         private List<BeerCategoryDto.Response> beerCategories;
-        private Long thumbnail;
+        private String thumbnail;
         private Double abv;
         private Integer ibu;
 
@@ -71,7 +72,7 @@ public class BeerDto {
         private List<BeerCategoryDto.Response> beerCategories;
         private Double averageRating;
         private Integer starCount;
-        private Long thumbnail;
+        private String thumbnail;
         private Double abv;
         private Integer ibu;
 
@@ -88,9 +89,10 @@ public class BeerDto {
         private String korName;
         private String country;
         private List<BeerCategoryDto.Response> beerCategories;
-        private Double averageRating;
+        private List<BeerTagDto.Response> beerTags;
+        private Double averageStar;
         private Integer starCount;
-        private Long thumbnail;
+        private String thumbnail;
         private Double abv;
         private Integer ibu;
 
@@ -114,7 +116,7 @@ public class BeerDto {
 
         private Long beerId;
         private String korName;
-        private Double myRating;
+        private Double myStar;
 
     }
 
@@ -130,7 +132,7 @@ public class BeerDto {
         private List<BeerCategoryDto.Response> beerCategories;
         private Double averageRating;
         private Integer starCount;
-        private Long thumbnail;
+        private String thumbnail;
         private Double abv;
         private Integer ibu;
 
@@ -142,13 +144,14 @@ public class BeerDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DetailsResponse {
 
+        private Long beerId;
         private BeerDetailsBasic beerDetailsBasic;
-        private BeerDetailsRatings beerDetailsRatings;
         private BeerDetailsCounts beerDetailsCounts;
+        private BeerDetailsStars beerDetailsStars;
         private Boolean isWishListed;
-        List<SimilarResponse> similarBeers;
-        List<BeerCategoryType> beerCategories;
+        List<BeerCategoryType> beerCategoryTypes;
         List<BeerTagType> beerTags;
+        List<SimilarResponse> similarBeers;
 
     }
 }

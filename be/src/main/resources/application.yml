@@ -85,3 +85,7 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
+webdriver:
+  chrome:
+    driverid: webdriver.chrome.driver
+    location: "/Users/gnidinger/Documents/GetABeer/chromedriver_mac_arm64/chromedriver"
