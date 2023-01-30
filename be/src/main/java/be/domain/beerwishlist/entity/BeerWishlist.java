@@ -1,6 +1,8 @@
 package be.domain.beerwishlist.entity;
 
 import be.domain.beer.entity.Beer;
+import be.domain.user.entity.Users;
+import be.global.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerWishlist {
+public class BeerWishlist extends BaseTimeEntity {
 
     @Id
     @Column(name = "beer_wishlist_id")
@@ -22,9 +24,9 @@ public class BeerWishlist {
     @JoinColumn(name = "beer_id")
     private Beer beer;
 
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id")
+    private Users users;
 
     public void addBeer(Beer beer) {
         this.beer = beer;

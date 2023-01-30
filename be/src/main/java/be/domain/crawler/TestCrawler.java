@@ -22,7 +22,8 @@ public class TestCrawler {
     private String driverId;
     @Value("${webdriver.chrome.location}")
     private String driverPath;
-    public static final String targetUrl = "https://www.ratebeer.com/beer/jeju-pellong-ale/784135";
+    public static final String targetUrl = "https://www.ratebeer.com/beer/stella-artois/1478";
+//    public static final String targetUrl = "https://www.ratebeer.com/beer/jeju-pellong-ale/784135";
     public static final String companyCategoryTargetSelector = "//*[@id=\"styleLink\"]";
     public static final String infoTargetSelector = "//*[@id=\"root\"]/div[2]/div[2]/div/div/div/div[2]/div[1]/div[1]";
     public static final String targetSelector = "//*[@id=\"root\"]/div[2]/div[2]/div/div/div/div[2]/div[1]/div/div[2]/div[1]/div/div[2]/div[3]/div[2]/div[2]/text()";

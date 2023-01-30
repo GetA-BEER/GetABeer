@@ -64,6 +64,9 @@ public class Beer extends BaseTimeEntity {
         this.beerBeerCategories = beerBeerCategories;
     }
 
+    /*
+     * STUB DATA 생성을 위한 메서드
+     */
     public void addBeerDetailsCounts(BeerDetailsCounts beerDetailsCounts) {
         this.beerDetailsCounts = beerDetailsCounts;
     }
@@ -71,6 +74,8 @@ public class Beer extends BaseTimeEntity {
     public void addBeerDetailsStars(BeerDetailsStars beerDetailsStars) {
         this.beerDetailsStars = beerDetailsStars;
     }
+
+//    ------------------------------------------------------------------------
 
     public void addBeerBeerCategory(BeerBeerCategory beerBeerCategory) {
         this.beerBeerCategories.add(beerBeerCategory);

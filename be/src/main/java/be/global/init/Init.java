@@ -3,9 +3,6 @@ package be.global.init;
 import be.domain.beer.controller.BeerController;
 import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
-import be.domain.beer.entity.BeerBeerCategory;
-import be.domain.beer.entity.BeerBeerTag;
-import be.domain.beer.entity.BeerDetailsBasic;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.repository.BeerBeerCategoryRepository;
@@ -16,7 +13,6 @@ import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.entity.BeerCategoryType;
 import be.domain.beercategory.repository.BeerCategoryRepository;
-import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.repository.BeerTagRepository;
@@ -28,7 +24,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration

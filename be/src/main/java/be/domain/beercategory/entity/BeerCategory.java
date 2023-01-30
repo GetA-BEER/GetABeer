@@ -56,6 +56,13 @@ public class BeerCategory {
         }
     }
 
+    public void addMonthlyBeerBeerCategory(MonthlyBeerBeerCategory monthlyBeerBeerCategory) {
+        this.monthlyBeerBeerCategories.add(monthlyBeerBeerCategory);
+        if (monthlyBeerBeerCategory.getBeerCategory() != this) {
+            monthlyBeerBeerCategory.addBeerCategory(this);
+        }
+    }
+
     @QueryProjection
     public BeerCategory(Long id, BeerCategoryType beerCategoryType) {
         this.id = id;
