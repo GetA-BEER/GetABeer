@@ -3,8 +3,63 @@ import Image from 'next/image';
 import NavBar from '@/components/NavBar';
 import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallpairingController from '@/components/smallCards/SmallpairingController';
+import BigInput from '@/components/inputs/BigInput';
 
 export default function Main() {
+  const cardProps = [
+    {
+      id: 1,
+      star: 4.0,
+      nickName: '유진님',
+      description:
+        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+      date: '2023.41.30',
+      comments: 5,
+      thumbs: 10,
+    },
+    {
+      id: 2,
+      star: 4.0,
+      nickName: '테스트',
+      description:
+        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+      date: '2023.41.30',
+      comments: 5,
+      thumbs: 10,
+    },
+  ];
+  const pairingProps = [
+    {
+      id: 1,
+      pairing: '튀김',
+      nickName: '유진님',
+      description:
+        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+      date: '2023.41.30',
+      comments: 5,
+      thumbs: 10,
+    },
+    {
+      id: 2,
+      pairing: '구이',
+      nickName: '테스트',
+      description:
+        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+      date: '2023.41.30',
+      comments: 5,
+      thumbs: 10,
+    },
+    {
+      id: 3,
+      pairing: '견과류',
+      nickName: '어렵네',
+      description:
+        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+      date: '2023.41.30',
+      comments: 5,
+      thumbs: 10,
+    },
+  ];
   return (
     <>
       <Head>
@@ -17,6 +72,7 @@ export default function Main() {
         <div>
           <main className="m-auto border-2 pb-14">
             <div className="py-2 bg-gray-200 text-black">상단헤더</div>
+            <BigInput props="ddd" placeholder="ddd" />
             <Image
               className="m-auto"
               src="/images/adv.jpg"
@@ -27,9 +83,9 @@ export default function Main() {
             />
             <div className="m-auto">
               레이팅 소 카드
-              <SmallCardController />
+              <SmallCardController cardProps={cardProps} />
               페어링 소 카드
-              <SmallpairingController />
+              <SmallpairingController pairingProps={pairingProps} />
             </div>
           </main>
           <NavBar />
