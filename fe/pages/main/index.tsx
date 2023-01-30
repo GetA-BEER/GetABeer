@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import NavBar from '@/components/NavBar';
-import SmallCardController from '@/components/SmallCardController';
-import SmallpairingController from '@/components/SmallpairingController';
+import SmallCardController from '@/components/smallCards/SmallCardController';
+import SmallpairingController from '@/components/smallCards/SmallpairingController';
 
 export default function Main() {
   return (

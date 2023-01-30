@@ -21,7 +21,7 @@ export default function SmallCard(props: SmallCardInfo) {
         </span>
         <span className="flex justify-center items-center">
           {props.nickName}
-          <BiUser className="ml-1 bg-y-brown text-white rounded-full" />
+          <BiUser className="ml-1 bg-y-brown text-white rounded-full w-4 h-4" />
         </span>
       </div>
       {/* 설명 */}
