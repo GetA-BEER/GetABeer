@@ -83,4 +83,10 @@ public class BeerComment extends BaseTimeEntity {
 	public void updateStar(Double star) {
 		this.star = star;
 	}
+
+	public void saveDefault(Integer likeCount, Integer recommentCount, List<BeerRecomment> beerRecommentList) {
+		this.likeCount = likeCount;
+		this.recommentCount = recommentCount;
+		this.beerRecommentList = beerRecommentList;
+	}
 }
