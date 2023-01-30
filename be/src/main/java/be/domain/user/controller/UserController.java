@@ -1,7 +1,7 @@
 package be.domain.user.controller;
 
 import be.domain.user.dto.UserDto;
-import be.domain.user.entity.Users;
+import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
 import be.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +23,13 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<UserDto.Response> postUser(@Valid @RequestBody UserDto.Post post) {
-        Users user = userService.createUser(userMapper.postToUser(post));
+        User user = userService.createUser(userMapper.postToUser(post));
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
     @PatchMapping
     public ResponseEntity<UserDto.Response> patchUser(@Valid @RequestBody UserDto.Patch patch) {
-        Users user = userService.update(patch.getEmail(), patch);
+        User user = userService.update(patch.getEmail(), patch);
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
