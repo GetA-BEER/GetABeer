@@ -11,7 +11,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="w-full fixed bottom-0 z-20">
+      <nav className="w-full fixed bottom-0 z-20 border-t border-gray-200">
         <div className="max-w-4xl grid grid-cols-5 px-5 bg-white text-center py-1">
           <div
             onClick={() => onNavChange(1)}
