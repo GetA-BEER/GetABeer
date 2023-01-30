@@ -1,6 +1,7 @@
 package be.domain.beerwishlist.entity;
 
 import be.domain.beer.entity.Beer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +21,10 @@ public class BeerWishlist {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_id")
     private Beer beer;
+
+//    @ManyToOne(cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     public void addBeer(Beer beer) {
         this.beer = beer;

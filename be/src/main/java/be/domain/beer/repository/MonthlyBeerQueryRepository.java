@@ -20,7 +20,7 @@ public class MonthlyBeerQueryRepository {
 
         return Optional.ofNullable(jpaQueryFactory.selectFrom(monthlyBeer)
                 .where(monthlyBeer.createdAt.month().eq(LocalDateTime.now().getMonthValue()))
-                .orderBy(monthlyBeer.totalAverageRating.desc())
+                .orderBy(monthlyBeer.averageStar.desc())
                 .fetch());
     }
 }

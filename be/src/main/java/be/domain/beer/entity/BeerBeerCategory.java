@@ -2,6 +2,8 @@ package be.domain.beer.entity;
 
 import be.domain.beercategory.entity.BeerCategory;
 import lombok.*;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 
@@ -16,8 +18,9 @@ public class BeerBeerCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "beer_beer_category_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @NotFound(action = NotFoundAction.IGNORE)
     private Beer beer;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_category_id")
@@ -35,5 +38,10 @@ public class BeerBeerCategory {
         if (!this.beerCategory.getBeerBeerCategories().contains(this)) {
             this.beerCategory.addBeerBeerCategory(this);
         }
+    }
+
+    public void remove(Beer beer, BeerCategory beerCategory) {
+        this.beer = null;
+        this.beerCategory = null;
     }
 }

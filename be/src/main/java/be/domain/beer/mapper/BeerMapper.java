@@ -5,10 +5,11 @@ import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerBeerCategory;
 import be.domain.beer.entity.BeerDetailsBasic;
 import be.domain.beer.entity.BeerDetailsCounts;
-import be.domain.beer.entity.BeerDetailsRatings;
+import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
+import be.domain.beertag.entity.BeerTag;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface BeerMapper {
 
-    default Beer beerPostToBeerTest(BeerDto.Post postBeer) {
+    default Beer beerPostToBeer(BeerDto.Post postBeer) {
 
         BeerDetailsBasic beerDetailsBasic = postBeerToBeerDetailsBasic(postBeer);
         List<BeerBeerCategory> beerBeerCategories = getBeerBeerCategoriesFromResponseDto(postBeer.getBeerCategories());
@@ -41,17 +42,18 @@ public interface BeerMapper {
                 .build();
     }
 
-    default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer) {
+    default BeerDto.DetailsResponse beerToPostDetailsResponse(Beer beer) {
 
         BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
 
+        detailsResponse.beerId(beer.getId());
         detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
-        detailsResponse.beerDetailsRatings(beer.getBeerDetailsRatings());
+        detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
         detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
         detailsResponse.isWishListed(beer.getIsWishListed());
         detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
-        detailsResponse.beerCategories(beer.getBeerBeerCategories().stream()
-                .map(a -> a.getBeerCategory()
+        detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
+                .map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
                         .getBeerCategoryType())
                 .collect(Collectors.toList()));
 //        detailsResponse.beerTags(beersToSimilarBeerResponse(beer.getSimilarBeers()));
@@ -59,30 +61,27 @@ public interface BeerMapper {
         return detailsResponse.build();
     }
 
-//    default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer) {
-//
-//        BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
-//
-//        detailsResponse.id(beer.getId());
-//        detailsResponse.korName(beer.getKorName());
-//        detailsResponse.engName(beer.getEngName());
-//        detailsResponse.country(beer.getCountry());
-//        detailsResponse.thumbnail(beer.getThumbnail());
-//        detailsResponse.abv(beer.getAbv());
-//        detailsResponse.ibu(beer.getIbu());
-//        detailsResponse.ratingCount(beer.getRatingCount());
-//        detailsResponse.commentCount(beer.getCommentCount());
-//        detailsResponse.pairingCount(beer.getPairingCount());
-//        detailsResponse.isWishListed(beer.getIsWishListed());
-//        detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
-//        detailsResponse.beerCategories(beer.getBeerBeerCategories().stream()
-//                .map(a -> a.getBeerCategory()
-//                        .getBeerCategoryType())
-//                .collect(Collectors.toList()));
-////        detailsResponse.beerTags(beersToSimilarBeerResponse(beer.getSimilarBeers()));
-//
-//        return detailsResponse.build();
-//    }
+    default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer, List<BeerTag> beerTags) {
+
+        BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
+
+        detailsResponse.beerId(beer.getId());
+        detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
+        detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
+        detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
+        detailsResponse.isWishListed(beer.getIsWishListed());
+        detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+        detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
+                .map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
+                        .getBeerCategoryType())
+                .collect(Collectors.toList()));
+        detailsResponse.beerTags(beerTags.stream()
+                .map(BeerTag::getBeerTagType)
+                .collect(Collectors.toList()));
+//        detailsResponse.beerTags(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+
+        return detailsResponse.build();
+    }
 
     List<BeerDto.MonthlyBestResponse> beersToMonthlyBestBeerResponse(List<MonthlyBeer> beerList);
 
@@ -132,22 +131,24 @@ public interface BeerMapper {
         return beerDetailsBasic.build();
     }
 
-    private static BeerDetailsRatings beerToBeerDetailsRatings(Beer beer) {
+    private static BeerDetailsStars beerToBeerDetailsRatings(Beer beer) {
 
-        BeerDetailsRatings.BeerDetailsRatingsBuilder beerDetailsRatings = BeerDetailsRatings.builder();
+        BeerDetailsStars.BeerDetailsStarsBuilder beerDetailsStars = BeerDetailsStars.builder();
 
-        beerDetailsRatings.totalAverageRating(beer.getBeerDetailsRatings().getTotalAverageRating());
-        beerDetailsRatings.femaleAverageRating(beer.getBeerDetailsRatings().getFemaleAverageRating());
-        beerDetailsRatings.maleAverageRating(beer.getBeerDetailsRatings().getMaleAverageRating());
+        beerDetailsStars.totalAverageStars(beer.getBeerDetailsStars().getTotalAverageStars());
+        beerDetailsStars.femaleAverageStars(beer.getBeerDetailsStars().getFemaleAverageStars());
+        beerDetailsStars.maleAverageStars(beer.getBeerDetailsStars().getMaleAverageStars());
 
-        return beerDetailsRatings.build();
+        return beerDetailsStars.build();
     }
 
     private static BeerDetailsCounts beerToBeerDetailsCounts(Beer beer) {
 
         BeerDetailsCounts.BeerDetailsCountsBuilder beerDetailsCounts = BeerDetailsCounts.builder();
 
-        beerDetailsCounts.starCount(beer.getBeerDetailsCounts().getStarCount());
+        beerDetailsCounts.totalStarCount(beer.getBeerDetailsCounts().getTotalStarCount());
+        beerDetailsCounts.femaleStarCount(beer.getBeerDetailsCounts().getFemaleStarCount());
+        beerDetailsCounts.maleStarCount(beer.getBeerDetailsCounts().getMaleStarCount());
         beerDetailsCounts.commentCount(beer.getBeerDetailsCounts().getCommentCount());
         beerDetailsCounts.pairingCount(beer.getBeerDetailsCounts().getPairingCount());
 

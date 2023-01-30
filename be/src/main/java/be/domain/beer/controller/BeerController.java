@@ -5,6 +5,7 @@ import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.service.BeerService;
+import be.domain.beertag.entity.BeerTag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Validated
@@ -35,10 +37,10 @@ public class BeerController {
     @PostMapping("/add")
     public ResponseEntity<BeerDto.DetailsResponse> postBeer(@Valid @RequestBody BeerDto.Post postBeer) {
 
-        Beer beer = beerMapper.beerPostToBeerTest(postBeer);
+        Beer beer = beerMapper.beerPostToBeer(postBeer);
         Beer createdBeer = beerService.createBeer(beer);
-        createdBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response 전용
-        BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(createdBeer);
+        createdBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
+        BeerDto.DetailsResponse response = beerMapper.beerToPostDetailsResponse(createdBeer);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -49,17 +51,19 @@ public class BeerController {
 
         Beer beer = beerMapper.beerPatchToBeer(patchBeer);
         Beer updatedBeer = beerService.updateBeer(beer, beerId);
-        BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(updatedBeer);
+        List<BeerTag> beerTags = beerService.findTop4BeerTags(updatedBeer);
+        updatedBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
+        BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(updatedBeer, beerTags);
 
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{beer_id}")
-    public ResponseEntity<BeerDto.DetailsResponse> getBeer(@PathVariable("beer_id") Long beerId,
-                                                           @Valid @RequestBody BeerDto.Patch patchBeer) {
+    public ResponseEntity<BeerDto.DetailsResponse> getBeer(@PathVariable("beer_id") Long beerId) {
 
         Beer beer = beerService.findVerifiedBeer(beerId);
-        BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer);
+        List<BeerTag> beerTags = beerService.findTop4BeerTags(beer);
+        BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer, beerTags);
 
         return ResponseEntity.ok().body(response);
     }

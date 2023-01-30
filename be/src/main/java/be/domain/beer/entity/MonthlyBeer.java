@@ -1,10 +1,12 @@
 package be.domain.beer.entity;
 
 import be.domain.beercategory.entity.BeerCategory;
+import be.domain.beertag.entity.BeerTag;
 import be.global.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,25 +24,24 @@ public class MonthlyBeer extends BaseTimeEntity {
     private Long id;
     private String korName;
     private String country;
-    private Long thumbnail;
+    private String thumbnail;
     private Double abv;
     private Integer ibu;
-    private Double totalAverageRating;
+    private Double averageStar;
     private Integer starCount;
-    @OneToMany(mappedBy = "monthlyBeer")
-    private List<BeerCategory> beerCategories;
+    @OneToMany(mappedBy = "monthlyBeer", cascade = CascadeType.PERSIST)
+    private List<MonthlyBeerBeerCategory> monthlyBeerBeerCategories = new ArrayList<>();
+    @OneToMany(mappedBy = "monthlyBeer", cascade = CascadeType.PERSIST)
+    private List<MonthlyBeerBeerTag> monthlyBeerBeerTags = new ArrayList<>();
 
-    public void create(Beer beer) {
+    public void create(Beer beer, List<BeerTag> beerTags) {
         this.id = beer.getId();
         this.korName = beer.getBeerDetailsBasic().getKorName();
         this.country = beer.getBeerDetailsBasic().getCountry();
         this.thumbnail = beer.getBeerDetailsBasic().getThumbnail();
         this.abv = beer.getBeerDetailsBasic().getAbv();
         this.ibu = beer.getBeerDetailsBasic().getIbu();
-        this.totalAverageRating = beer.getBeerDetailsRatings().getTotalAverageRating();
-        this.starCount = beer.getBeerDetailsCounts().getStarCount();
-        this.beerCategories = beer.getBeerBeerCategories().stream()
-                .map(BeerBeerCategory::getBeerCategory)
-                .collect(Collectors.toList());
+        this.averageStar = beer.getBeerDetailsStars().getTotalAverageStars();
+        this.starCount = beer.getBeerDetailsCounts().getTotalStarCount();
     }
 }

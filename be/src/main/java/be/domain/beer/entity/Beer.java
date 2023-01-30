@@ -9,8 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Singular;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
@@ -28,7 +26,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,7 +39,7 @@ public class Beer extends BaseTimeEntity {
     @Embedded
     private BeerDetailsBasic beerDetailsBasic;
     @Embedded
-    private BeerDetailsRatings beerDetailsRatings;
+    private BeerDetailsStars beerDetailsStars;
     @Embedded
     private BeerDetailsCounts beerDetailsCounts;
     private Boolean isWishListed;
@@ -52,31 +49,37 @@ public class Beer extends BaseTimeEntity {
     private Beer similarBeer;
     @OneToMany(mappedBy = "similarBeer")
     private List<Beer> similarBeers = new ArrayList<>();
-    @Singular
-    @OneToMany(mappedBy = "beer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
     private List<BeerBeerCategory> beerBeerCategories = new ArrayList<>();
-    @Singular
-    @OneToMany(mappedBy = "beer", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
     private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
     @OneToMany(mappedBy = "beer", cascade = CascadeType.REMOVE)
     private List<BeerWishlist> beerWishlists = new ArrayList<>();
-    @OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
     private List<BeerComment> beerCommentList = new ArrayList<>();
-    @OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
     private List<Pairing> pairingList = new ArrayList<>();
 
     public void addBeerBeerCategories(List<BeerBeerCategory> beerBeerCategories) {
         this.beerBeerCategories = beerBeerCategories;
     }
 
-    public void addBeerBeerCategories(BeerBeerCategory beerBeerCategory) {
+    public void addBeerDetailsCounts(BeerDetailsCounts beerDetailsCounts) {
+        this.beerDetailsCounts = beerDetailsCounts;
+    }
+
+    public void addBeerDetailsStars(BeerDetailsStars beerDetailsStars) {
+        this.beerDetailsStars = beerDetailsStars;
+    }
+
+    public void addBeerBeerCategory(BeerBeerCategory beerBeerCategory) {
         this.beerBeerCategories.add(beerBeerCategory);
         if (beerBeerCategory.getBeer() != this) {
             beerBeerCategory.addBeer(this);
         }
     }
 
-    public void addBeerBeerTags(BeerBeerTag beerBeerTag) {
+    public void addBeerBeerTag(BeerBeerTag beerBeerTag) {
         this.beerBeerTags.add(beerBeerTag);
         if (beerBeerTag.getBeer() != this) {
             beerBeerTag.addBeer(this);
@@ -110,9 +113,9 @@ public class Beer extends BaseTimeEntity {
         this.beerDetailsBasic = beer.getBeerDetailsBasic();
     }
 
-	public void update(Beer beer) {
+    public void update(Beer beer) {
         this.beerDetailsBasic = beer.getBeerDetailsBasic();
-	}
+    }
 
 
 }
