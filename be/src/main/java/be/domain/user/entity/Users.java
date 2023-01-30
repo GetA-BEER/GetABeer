@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseTimeEntity {
+public class Users extends BaseTimeEntity {
 
     @Id
     @Column(name = "user_id")
@@ -42,40 +42,40 @@ public class User extends BaseTimeEntity {
     @Column
     private int age;
 
-    public User(String email, String nickname) {
+    public Users(String email, String nickname) {
         this.email = email;
         this.nickname = nickname;
     }
 
     /* UserBeerTag Join */
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "users")
     private List<UserBeerTag> userBeerTags;
 
 //    /* BeerWishlist 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+//    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
 //    private List<BeerWishlist> beerWishlists;
 //
 //    /* BeerComment 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user")
+//    @OneToMany(mappedBy = "users")
 //    private List<BeerComment> beerComments;
 //
 //    /* BeerRecomment 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user")
+//    @OneToMany(mappedBy = "users")
 //    private List<BeerRecomment> beerRecomments;
 //
 //    /* Pairing 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user")
+//    @OneToMany(mappedBy = "users")
 //    private List<Pairing> pairings;
 //
 //    /* PairingRecomment 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user")
+//    @OneToMany(mappedBy = "users")
 //    private List<PairingRecomment> pairingRecomments;
 //
 //    /* ChatRoom 1:1 양방향 매핑 */
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+//    @OneToOne(mappedBy = "users", cascade = CascadeType.REMOVE)
 //    private ChatRoom chatRoom;
 //
 //    /* ChatMessage 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user")
+//    @OneToMany(mappedBy = "users")
 //    private List<ChatMessage> chatMessages;
 }

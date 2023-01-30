@@ -19,16 +19,16 @@ public class UserBeerTag {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_tag_id")
     private BeerTag beerTag;
 
-    public void addUser(User user) {
-        this.user = user;
-        if (!this.user.getUserBeerTags().contains(this)) {
-            this.user.getUserBeerTags().add(this);
+    public void addUser(Users users) {
+        this.users = users;
+        if (!this.users.getUserBeerTags().contains(this)) {
+            this.users.getUserBeerTags().add(this);
         }
     }
 }
