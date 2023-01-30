@@ -20,12 +20,13 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    // 임시 유저 CRUD
+    /* 임시 유저 Create */
     public Users createUser(Users user) {
         verifyExistEmail(user.getEmail());
         return userRepository.save(user);
     }
 
+    /* 임시 유저 update */
     public Users update(String email, UserDto.Patch patch) {
         Users user = userRepository.findById(findUserId(email)).orElseThrow(()
                 -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));

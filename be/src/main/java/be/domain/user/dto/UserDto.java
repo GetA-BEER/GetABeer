@@ -28,6 +28,10 @@ public class UserDto {
     @Getter
     @Builder
     public static class Patch {
+
+        @NotBlank
+        private String email;
+
         @NotBlank
         private String nickname;
     }
