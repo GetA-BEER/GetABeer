@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 
 export default function SortgBox() {
+  const sortList = ['추천순', '최신순', '댓글 많은 순'];
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [category, setCategory] = useState('카테고리');
+  const [category, setCategory] = useState('Sort');
   const onCategoryChange = (select: string) => {
     setChecked(true);
     setCategory(select);
@@ -25,30 +26,17 @@ export default function SortgBox() {
       {showModal ? (
         <div className="relative w-32 h-0">
           <ul className="bg-white border-2 w-full text-xs rounded-lg x-20 z-20 absolute right-0">
-            <li
-              onClick={() => {
-                onCategoryChange('추천순');
-              }}
-              className="pl-3 py-1"
-            >
-              추천순
-            </li>
-            <li
-              onClick={() => {
-                onCategoryChange('최신순');
-              }}
-              className="pl-3 py-1"
-            >
-              최신순
-            </li>
-            <li
-              onClick={() => {
-                onCategoryChange('댓글 많은 순');
-              }}
-              className="pl-3 py-1"
-            >
-              댓글 많은 순
-            </li>
+            {sortList.map((el: string, idx: number) => (
+              <li
+                key={idx}
+                onClick={() => {
+                  onCategoryChange(el);
+                }}
+                className="pl-3 py-1"
+              >
+                {el}
+              </li>
+            ))}
           </ul>
           <button
             className="inset-0 fixed cursor-default"
