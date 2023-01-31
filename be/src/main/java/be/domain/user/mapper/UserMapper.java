@@ -6,13 +6,13 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    default User postToUser(UserDto.Post post) {
-        return User.builder()
-                .email(post.getEmail())
-                .password(post.getPassword())
-                .nickname(post.getNickname())
-                .build();
-    }
+	default User postToUser(UserDto.Post post) {
+		return User.builder()
+				.email(post.getEmail())
+				.password(post.getPassword())
+				.nickname(post.getNickname())
+				.build();
+	}
 
-    UserDto.Response userToResponse(User user);
+	UserDto.Response userToResponse(User user);
 }
