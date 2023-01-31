@@ -10,7 +10,9 @@ export default function PopularBeer(props: BeerInfo) {
   return (
     <div className="rounded-2xl w-full m-2 bg-white text-y-black drop-shadow-xl text-[5px] border">
       <div
-        className={`${props.id % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'} p-4`}
+        className={`${
+          props.id % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'
+        } p-4 rounded-t-2xl`}
       >
         <div className="text-base font-semibold">{props.title}</div>
         <div>{`${props.category} / ${props.country} ${props.level}% ${props.ibu}IBU`}</div>

@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import Advertise from './Advertise';
-import Image from 'next/image';
 import NavBar from '@/components/NavBar';
 import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallpairingController from '@/components/smallCards/SmallpairingController';
 import BigInput from '@/components/inputs/BigInput';
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
+import SortBox from '@/components/selectBox/SortBox';
+import PairingBox from '@/components/selectBox/PairingBox';
 
 export default function Main() {
   const cardProps = [
@@ -110,7 +111,7 @@ export default function Main() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
   ];
-  https: return (
+  return (
     <>
       <Head>
         <title>GetABeer</title>
@@ -124,14 +125,23 @@ export default function Main() {
             <div className="py-2 bg-gray-200 text-black">상단헤더</div>
 
             <Advertise />
+
             <BigInput placeholder="페어링을 추천하는 이유를 적어주세요" />
             <div className="m-auto">
               레이팅 소 카드
               <SmallCardController cardProps={cardProps} />
+              <br />
+              셀렉박스
+              <SortBox />
+              페어링 셀렉박스
+              <PairingBox />
+              <br />
               페어링 소 카드
               <SmallpairingController pairingProps={pairingProps} />
+              <br />
               작은 맥주 카드
               <PopularBeerController beerProps={beerProps} />
+              <br />
               <SimilarBeerController beerProps={beerProps} />
             </div>
           </main>
