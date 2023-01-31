@@ -51,7 +51,6 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
-
     public void edit(String nickname) {
         this.nickname = nickname;
     }
@@ -60,9 +59,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<UserBeerTag> userBeerTags;
 
-//    /* BeerWishlist 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<BeerWishlist> beerWishlists;
+    /* BeerWishlist 1:N 양방향 매핑 */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<BeerWishlist> beerWishlists;
 //
 //    /* BeerComment 1:N 양방향 매핑 */
 //    @OneToMany(mappedBy = "user")

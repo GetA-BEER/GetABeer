@@ -4,8 +4,10 @@ import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
 import be.domain.user.service.UserService;
+import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,18 +29,17 @@ public class UserController {
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-    @PatchMapping
-    public ResponseEntity<UserDto.Response> patchUser(@Valid @RequestBody UserDto.Patch patch) {
-        User user = userService.update(patch.getEmail(), patch);
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDto.Response> patchUser(@PathVariable Long id,
+                                                      @Valid @RequestBody UserDto.Patch patch) {
+        User user = userService.updateUser(id, patch);
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-    public ResponseEntity read() {
-        return null;
-    }
-
-    public ResponseEntity readAll() {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto.Response> readUser(@PathVariable Long id) {
+        User user = userService.getUser(id);
+        return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
     public ResponseEntity<String> delete() {

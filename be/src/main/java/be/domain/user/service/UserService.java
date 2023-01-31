@@ -7,6 +7,9 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,34 +18,34 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
     /* 임시 유저 Create */
+    @Transactional
     public User createUser(User user) {
         verifyExistEmail(user.getEmail());
         return userRepository.save(user);
     }
 
     /* 임시 유저 update */
-    public User update(String email, UserDto.Patch patch) {
-        User user = userRepository.findById(findUserId(email)).orElseThrow(()
+    @Transactional
+    public User updateUser(Long id, UserDto.Patch patch) {
+        User user = userRepository.findById(id).orElseThrow(()
                 -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         Optional.ofNullable(patch.getNickname()).ifPresent(user::edit);
         return userRepository.save(user);
     }
 
-    public User getUser() {
-        return null;
+    @Transactional(readOnly = true)
+    public User getUser(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
-    public List<User> getUserList() {
-        return null;
-    }
-
+    @Transactional
     public String delete() {
         return null;
     }

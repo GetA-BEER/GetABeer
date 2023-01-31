@@ -1,7 +1,7 @@
 package be.domain.beerwishlist.entity;
 
 import be.domain.beer.entity.Beer;
-import be.domain.user.entity.Users;
+import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
@@ -26,7 +26,7 @@ public class BeerWishlist extends BaseTimeEntity {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
-    private Users users;
+    private User user;
 
     public void addBeer(Beer beer) {
         this.beer = beer;
