@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -53,16 +54,16 @@ public class Pairing extends BaseTimeEntity {
 	@ColumnDefault("0")
 	private Integer recommentCount;
 
-	/* 🧡 페어링 - 페어링 이미지 일대다 연관관계 */
-	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	private List<PairingImage> paringImageList = new ArrayList<>();
+	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 */
+	@OneToOne(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private PairingImage paringImage;
 
-	/* 🧡 페어링 - 페어링 이미지 일대다 연관관계 편의 메서드 */
-	public void addPairingImage(PairingImage image) {
-		paringImageList.add(image);
+	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 편의 메서드 */
+	public void oneToOneByPairingImage(PairingImage paringImage) {
+		this.paringImage = paringImage;
 
-		if (image.getPairing() != this) {
-			image.belongToPairing(this);
+		if (paringImage.getPairing() != this) {
+			paringImage.oneToOneByPairing(this);
 		}
 	}
 
@@ -81,7 +82,7 @@ public class Pairing extends BaseTimeEntity {
 	private List<PairingRecomment> pairingRecommentList = new ArrayList<>();
 
 	/* 💚 페어링 - 페어링 대댓글 일대다 연관관계 편의 메서드 */
-	public void addPairingReommentList(PairingRecomment pairingRecomment) {
+	public void addPairingRecommentList(PairingRecomment pairingRecomment) {
 		pairingRecommentList.add(pairingRecomment);
 
 		if (pairingRecomment.getPairing() != this) {
@@ -89,9 +90,9 @@ public class Pairing extends BaseTimeEntity {
 		}
 	}
 
-	public void saveDefault(List<PairingImage> paringImageList, List<PairingRecomment> pairingRecommentList,
+	public void saveDefault(PairingImage paringImage, List<PairingRecomment> pairingRecommentList,
 		Integer likeCount, Integer recommentCount) {
-		this.paringImageList = paringImageList;
+		this.paringImage = paringImage;
 		this.pairingRecommentList = pairingRecommentList;
 		this.likeCount = likeCount;
 		this.recommentCount = recommentCount;

@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingCategory;
+import be.domain.pairing.entity.PairingImage;
+import be.domain.pairing.repository.PairingImageRepository;
 import be.domain.pairing.repository.PairingRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
@@ -15,17 +18,23 @@ import be.global.exception.ExceptionCode;
 @Service
 public class PairingService {
 	private final PairingRepository pairingRepository;
+	private final PairingImageRepository paringImageRepository;
 
-	public PairingService(PairingRepository pairingRepository) {
+	public PairingService(PairingRepository pairingRepository, PairingImageRepository paringImageRepository) {
 		this.pairingRepository = pairingRepository;
+		this.paringImageRepository = paringImageRepository;
 	}
 
 	/* 페어링 등록 */
-	public Pairing create(Pairing pairing, String category) {
+	@Transactional
+	public Pairing create(Pairing pairing, PairingImage pairingImage, String category) {
 		pairing.updateCategory(findCategory(category));
 
-		/* 이미지를 어떻게 저장할지 해결되면, 이 부분은 바뀔 예정 */
-		pairing.saveDefault(new ArrayList<>(), new ArrayList<>(), 0, 0);
+		/* 이미지 저장하기 */
+		paringImageRepository.save(pairingImage);
+
+		/* 페어링 등록하기 */
+		pairing.saveDefault(pairingImage, new ArrayList<>(), 0, 0);
 		pairingRepository.save(pairing);
 
 		return pairing;

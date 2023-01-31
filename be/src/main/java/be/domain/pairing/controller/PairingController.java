@@ -32,9 +32,11 @@ public class PairingController {
 	/* 페어링 등록 */
 	@PostMapping
 	public ResponseEntity<PairingDto.Response> post(@RequestBody PairingDto.Post post) {
-		Pairing pairing = pairingService.create(mapper.pairingPostDtoToPairing(post), post.getCategory());
+		Pairing pairing = pairingService.create(mapper.pairingPostDtoToPairing(post),
+			mapper.pairingPostDtoToPairingImage(post), post.getCategory());
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.pairingToPairingResponseDto(pairing));
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(mapper.pairingToPairingResponseDto(pairing, post.getBeerId()));
 	}
 
 	/* 페어링 수정 */
@@ -43,14 +45,15 @@ public class PairingController {
 		@RequestBody PairingDto.Patch patch) {
 		Pairing pairing = pairingService.update(mapper.pairingPatchDtoToPairing(patch), pairingId, patch.getCategory());
 
-		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing));
+		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, patch.getBeerId()));
 	}
 
 	/* 특정 페어링 상세 조회 */
 	@GetMapping("/{pairingId}")
 	public ResponseEntity<PairingDto.Response> getPairing(@PathVariable @Positive Long pairingId) {
+		Pairing pairing = pairingService.getPairing(pairingId);
 
-		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairingService.getPairing(pairingId)));
+		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
 	}
 
 	/* 페어링 페이지 조회 */
