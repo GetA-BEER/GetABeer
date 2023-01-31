@@ -27,21 +27,21 @@ public class UserController {
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-    @PatchMapping
-    public ResponseEntity<UserDto.Response> patchUser(@Valid @RequestBody UserDto.Patch patch) {
-        User user = userService.update(patch.getEmail(), patch);
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDto.Response> patchUser(@PathVariable Long id,
+                                                      @Valid @RequestBody UserDto.Patch patch) {
+        User user = userService.updateUser(id, patch);
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-    public ResponseEntity read() {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto.Response> readUser(@PathVariable Long id) {
+        User user = userService.getUser(id);
+        return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-    public ResponseEntity readAll() {
-        return null;
-    }
-
-    public ResponseEntity<String> delete() {
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.delete(id));
     }
 }

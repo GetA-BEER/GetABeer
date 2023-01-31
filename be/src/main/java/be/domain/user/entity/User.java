@@ -8,10 +8,13 @@ import be.domain.pairing.entity.Pairing;
 import be.domain.recomment.entity.BeerRecomment;
 import be.domain.recomment.entity.PairingRecomment;
 import be.domain.user.dto.UserDto;
+import be.domain.user.entity.enums.Age;
+import be.domain.user.entity.enums.Gender;
 import be.global.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,10 +43,13 @@ public class User extends BaseTimeEntity {
     private String imageUrl;
 
     @Column
-    private String gender;
+    private String provider;
 
-    @Column
-    private int age;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private Age age;
 
     public User(String email, String nickname, String password) {
         this.email = email;
@@ -51,18 +57,20 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
-
     public void edit(String nickname) {
         this.nickname = nickname;
     }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     /* UserBeerTag Join */
     @OneToMany(mappedBy = "user")
     private List<UserBeerTag> userBeerTags;
 
-//    /* BeerWishlist 1:N 양방향 매핑 */
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<BeerWishlist> beerWishlists;
+    /* BeerWishlist 1:N 양방향 매핑 */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<BeerWishlist> beerWishlists;
 //
 //    /* BeerComment 1:N 양방향 매핑 */
 //    @OneToMany(mappedBy = "user")

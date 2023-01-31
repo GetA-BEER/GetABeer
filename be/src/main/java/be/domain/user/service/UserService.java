@@ -7,6 +7,9 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,36 +18,38 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
     /* 임시 유저 Create */
+    @Transactional
     public User createUser(User user) {
         verifyExistEmail(user.getEmail());
         return userRepository.save(user);
     }
 
     /* 임시 유저 update */
-    public User update(String email, UserDto.Patch patch) {
-        User user = userRepository.findById(findUserId(email)).orElseThrow(()
+    @Transactional
+    public User updateUser(Long id, UserDto.Patch patch) {
+        User user = userRepository.findById(id).orElseThrow(()
                 -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         Optional.ofNullable(patch.getNickname()).ifPresent(user::edit);
         return userRepository.save(user);
     }
 
-    public User getUser() {
-        return null;
+    /* 임시 유저 get */
+    @Transactional(readOnly = true)
+    public User getUser(Long id) {
+        return findVerifiedUser(id);
     }
 
-    public List<User> getUserList() {
-        return null;
-    }
-
-    public String delete() {
-        return null;
+    /* 임시 유저 delete */
+    @Transactional
+    public String delete(Long id) {
+        userRepository.delete(findVerifiedUser(id));
+        return "삭제 성공";
     }
 
     /* 이미 가입한 유저인지 확인 */
@@ -58,5 +63,11 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(email);
         User findUser = user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return findUser.getId();
+    }
+
+    /* 존재하는 유저인지 확인 후 유저 반환 */
+    private User findVerifiedUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 }

@@ -1,15 +1,15 @@
 buildscript {
-	ext {
-		queryDslVersion = "5.0.0"
-	}
+    ext {
+        queryDslVersion = "5.0.0"
+    }
 }
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.8'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id "org.asciidoctor.jvm.convert" version "3.3.2" // Asciidoctor
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //Query DSL
+    id 'java'
+    id 'org.springframework.boot' version '2.7.8'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "org.asciidoctor.jvm.convert" version "3.3.2" // Asciidoctor
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //Query DSL
 }
 
 group = 'be'
@@ -17,28 +17,28 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	asciidoctorExtensions
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExtensions
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+    set('snippetsDir', file("build/generated-snippets"))
 }
 
 configurations {
-	asciidoctorExtensions // Spring Rest Docs
+    asciidoctorExtensions // Spring Rest Docs
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // OAuth 2.0
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-aop' // Spring AOP
@@ -70,52 +70,52 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
 //	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2' // 내장 Redis
 //    runtimeOnly 'mysql:mysql-connector-java' // MySQL
-	//    --------------------------------------------------------------------------------------------
+    //    --------------------------------------------------------------------------------------------
 //	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2' // AWS S3 이미지 업로드
-	implementation 'com.github.downgoon:marvin:1.5.5' // 이미지 리사이징
-	implementation 'com.github.downgoon:MarvinPlugins:1.5.5' // 이미지 리사이징
-	implementation 'org.springframework.boot:spring-boot-starter-hateoas' // 하이퍼링크
-	implementation 'commons-io:commons-io:2.11.0' // 사진 업로드
-	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4' // 사진 업로드
-	//    ------------------------------------Lombok && Mapstruct--------------------------------------
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.projectlombok:lombok:1.18.24'
-	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-	//    --------------------------------------------------------------------------------------------
-	implementation 'org.springframework.boot:spring-boot-starter-test' // JUnit4 Test
-	testImplementation 'org.springframework.security:spring-security-test' // Spring Security Test
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // Spring Rest Docs
-	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor' // Spring Rest Docs, Asciidoctor
+    implementation 'com.github.downgoon:marvin:1.5.5' // 이미지 리사이징
+    implementation 'com.github.downgoon:MarvinPlugins:1.5.5' // 이미지 리사이징
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas' // 하이퍼링크
+    implementation 'commons-io:commons-io:2.11.0' // 사진 업로드
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4' // 사진 업로드
+    //    ------------------------------------Lombok && Mapstruct--------------------------------------
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    //    --------------------------------------------------------------------------------------------
+    implementation 'org.springframework.boot:spring-boot-starter-test' // JUnit4 Test
+    testImplementation 'org.springframework.security:spring-security-test' // Spring Security Test
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // Spring Rest Docs
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor' // Spring Rest Docs, Asciidoctor
 }
 
 tasks.named('test') {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
+    outputs.dir snippetsDir
+    useJUnitPlatform()
 }
 
 tasks.named('asciidoctor') {
-	configurations "asciidoctorExtensions"
-	inputs.dir snippetsDir
-	dependsOn test
+    configurations "asciidoctorExtensions"
+    inputs.dir snippetsDir
+    dependsOn test
 }
 
 task copyDocument(type: Copy) {
-	dependsOn asciidoctor
-	from file("${asciidoctor.outputDir}")
-	into file("src/main/resources/static/docs")
+    dependsOn asciidoctor
+    from file("${asciidoctor.outputDir}")
+    into file("src/main/resources/static/docs")
 }
 
 build {
-	dependsOn copyDocument
+    dependsOn copyDocument
 }
 
 bootJar {
-	dependsOn copyDocument
-	from("${asciidoctor.outputDir}") {
-		into 'static/docs'
-	}
+    dependsOn copyDocument
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
 }
 
 //test { // 빌드시 테스트 제외
@@ -128,24 +128,24 @@ def querydslDir = "$buildDir/generated/'querydsl'"
 
 // JPA 사용여부 및 사용 경로 설정
 querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
+    jpa = true
+    querydslSourcesDir = querydslDir
 }
 
 // Build시 사용할 sourceSet 추가 설정
 sourceSets {
-	main.java.srcDir querydslDir
+    main.java.srcDir querydslDir
 }
 
 // Query DSL 컴파일 시 사용할 옵션 설정
 compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
+    options.annotationProcessorPath = configurations.querydsl
 }
 
 // Query DSL이 compileClassPath를 상속하도록 설정
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	querydsl.extendsFrom compileClasspath
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
 }
