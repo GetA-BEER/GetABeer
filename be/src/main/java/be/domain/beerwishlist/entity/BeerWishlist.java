@@ -3,10 +3,21 @@ package be.domain.beerwishlist.entity;
 import be.domain.beer.entity.Beer;
 import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
@@ -20,6 +31,7 @@ public class BeerWishlist extends BaseTimeEntity {
     @Column(name = "beer_wishlist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "beer_id")
     private Beer beer;
@@ -34,4 +46,11 @@ public class BeerWishlist extends BaseTimeEntity {
             this.beer.getBeerWishlists().add(this);
         }
     }
+
+//    public void addUser(User user) {
+//        this.user = user;
+//        if (!this.user.getBeerWishlists().contains(this)) {
+//            this.user.getBeerWishlists().add(this);
+//        }
+//    }
 }
