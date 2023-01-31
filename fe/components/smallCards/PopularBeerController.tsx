@@ -1,4 +1,4 @@
-import SmallBeer from './SmallBeer';
+import PopularBeer from './PopularBeer';
 import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -18,7 +18,7 @@ export interface BeerInfo {
   image: string;
 }
 
-export default function SmallBeerController({ beerProps }: any) {
+export default function PopularBeerController({ beerProps }: any) {
   const [beerList, setBeerList] = useState<BeerInfo[]>(beerProps);
   return (
     <>
@@ -35,9 +35,9 @@ export default function SmallBeerController({ beerProps }: any) {
           {beerList?.map((props: BeerInfo, index: number) => (
             <>
               <SwiperSlide key={props.id}>
-                <SmallBeer {...props} key={props.id} />
+                <PopularBeer {...props} key={props.id} />
               </SwiperSlide>
-              {(props.idx = index)}
+              {/* {(props.idx = index)} */}
             </>
           ))}
         </Swiper>
