@@ -39,15 +39,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /* 임시 유저 get */
     @Transactional(readOnly = true)
     public User getUser(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        return optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        return findVerifiedUser(id);
     }
 
+    /* 임시 유저 delete */
     @Transactional
-    public String delete() {
-        return null;
+    public String delete(Long id) {
+        userRepository.delete(findVerifiedUser(id));
+        return "삭제 성공";
     }
 
     /* 이미 가입한 유저인지 확인 */
@@ -61,5 +63,11 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(email);
         User findUser = user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return findUser.getId();
+    }
+
+    /* 존재하는 유저인지 확인 후 유저 반환 */
+    private User findVerifiedUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 }

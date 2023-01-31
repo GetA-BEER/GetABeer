@@ -4,10 +4,8 @@ import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
 import be.domain.user.service.UserService;
-import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +40,8 @@ public class UserController {
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-    public ResponseEntity<String> delete() {
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.delete(id));
     }
 }
