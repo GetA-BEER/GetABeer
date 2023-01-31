@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import be.domain.comment.entity.BeerComment;
+import be.domain.rating.entity.Rating;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,10 +37,10 @@ public class BeerRecomment extends BaseTimeEntity {
 	/* 💜 맥주 대댓글 - 맥주 댓글 다대일 연관관계 */
 	@ManyToOne
 	@JoinColumn(name = "beer_comment_id")
-	private BeerComment beerComment;
+	private Rating beerComment;
 
 	/* 💜 맥주 대댓글 - 맥주 댓글 다대일 연관관계 편의 메서드 */
-	public void belongToBeerComment(BeerComment beerComment) {
+	public void belongToBeerComment(Rating beerComment) {
 		this.beerComment = beerComment;
 	}
 }

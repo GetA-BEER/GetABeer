@@ -1,4 +1,4 @@
-package be.domain.comment.entity;
+package be.domain.rating.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import org.hibernate.validator.constraints.Range;
 
 import be.domain.beer.entity.Beer;
 import be.domain.recomment.entity.BeerRecomment;
+import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerComment extends BaseTimeEntity {
+public class Rating extends BaseTimeEntity {
 
 	@Id
 	@Column(name = "beer_comment_id")
@@ -53,21 +54,31 @@ public class BeerComment extends BaseTimeEntity {
 	@ColumnDefault("0")
 	private Integer recommentCount;
 
-	/* 💛 맥주 코멘트 - 맥주 다대일 연관관계 */
+	/* 🤎 맥주 평가 - 회원 다대일 연관관계 */
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	/* 🤎 맥주 평가 - 회원 다대일 연관관계 편의 메서드 */
+	public void belongToUser(User user) {
+		this.user = user;
+	}
+
+	/* 💛 맥주 평가 - 맥주 다대일 연관관계 */
 	@ManyToOne
 	@JoinColumn(name = "beer_id")
 	private Beer beer;
 
-	/* 💛 맥주 코멘트 - 맥주 다대일 연관관계 편의 메서드 */
+	/* 💛 맥주 평가 - 맥주 다대일 연관관계 편의 메서드 */
 	public void belongToBeer(Beer beer) {
 		this.beer = beer;
 	}
 
-	/* 💜 맥주 댓글 - 맥주 대댓글 일대다 연관관계 */
+	/* 💜 맥주 평가 - 맥주 대댓글 일대다 연관관계 */
 	@OneToMany(mappedBy = "beerComment", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<BeerRecomment> beerRecommentList = new ArrayList<>();
 
-	/* 💜 맥주 댓글 - 맥주 대댓글 일대다 연관관계 편의 메서드 */
+	/* 💜 맥주 평가 - 맥주 대댓글 일대다 연관관계 편의 메서드 */
 	public void addBeerRecommentList(BeerRecomment beerRecomment) {
 		beerRecommentList.add(beerRecomment);
 

@@ -2,12 +2,11 @@ package be.domain.beer.repository;
 
 import be.domain.beer.entity.Beer;
 import static be.domain.beer.entity.QBeer.beer;
-import static be.domain.beer.entity.QBeerBeerCategory.beerBeerCategory;
 import static be.domain.beer.entity.QBeerBeerTag.beerBeerTag;
-import static be.domain.beercategory.entity.QBeerCategory.beerCategory;
+
 import be.domain.beertag.entity.BeerTag;
 import static be.domain.beertag.entity.QBeerTag.beerTag;
-import static be.domain.comment.entity.QBeerComment.beerComment;
+import static be.domain.rating.entity.QBeerComment.beerComment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

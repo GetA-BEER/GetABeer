@@ -1,4 +1,4 @@
-package be.domain.comment.controller;
+package be.domain.rating.controller;
 
 import javax.validation.constraints.Positive;
 
@@ -13,34 +13,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.domain.comment.dto.BeerCommentDto;
-import be.domain.comment.entity.BeerComment;
-import be.domain.comment.mapper.BeerCommentMapper;
-import be.domain.comment.service.BeerCommentService;
+import be.domain.rating.dto.RatingDto;
+import be.domain.rating.entity.Rating;
+import be.domain.rating.mapper.RatingMapper;
+import be.domain.rating.service.RatingService;
 
 @RestController
-@RequestMapping("/comments")
-public class BeerCommentController {
-	private final BeerCommentService beerCommentService;
-	private final BeerCommentMapper mapper;
+@RequestMapping("/rating")
+public class RatingController {
+	private final RatingService ratingService;
+	private final RatingMapper mapper;
 
-	public BeerCommentController(BeerCommentService beerCommentService, BeerCommentMapper mapper) {
-		this.beerCommentService = beerCommentService;
+	public RatingController(RatingService ratingService, RatingMapper mapper) {
+		this.ratingService = ratingService;
 		this.mapper = mapper;
 	}
 
 	/* 맥주 코멘트 등록 */
 	@PostMapping
-	public ResponseEntity<BeerCommentDto.Response> post(@RequestBody BeerCommentDto.Post post) {
-		BeerComment beerComment = beerCommentService.create(mapper.beerCommentPostDtoToBeerComment(post));
+	public ResponseEntity<RatingDto.Response> post(@RequestBody RatingDto.Post post) {
+		Rating beerComment = ratingService.create(mapper.beerCommentPostDtoToBeerComment(post));
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.beerCommentToBeerCommentResponse(beerComment));
 	}
 
 	/* 맥주 코멘트 수정 */
 	@PatchMapping("/{beerCommentId}")
-	public ResponseEntity patch(@PathVariable @Positive Long beerCommentId, @RequestBody BeerCommentDto.Patch patch) {
-		BeerComment beerComment = beerCommentService.update(mapper.beerCommentPatchDtoToBeerComment(patch),
+	public ResponseEntity patch(@PathVariable @Positive Long beerCommentId, @RequestBody RatingDto.Patch patch) {
+		Rating beerComment = ratingService.update(mapper.beerCommentPatchDtoToBeerComment(patch),
 			beerCommentId);
 
 		return ResponseEntity.ok(mapper.beerCommentToBeerCommentResponse(beerComment));
@@ -50,7 +50,7 @@ public class BeerCommentController {
 	@GetMapping("/{beerCommentId}")
 	public ResponseEntity getComment(@PathVariable @Positive Long beerCommentId) {
 
-		return ResponseEntity.ok(mapper.beerCommentToBeerCommentResponse(beerCommentService.getComment(beerCommentId)));
+		return ResponseEntity.ok(mapper.beerCommentToBeerCommentResponse(ratingService.getComment(beerCommentId)));
 	}
 
 	/* 맥주 코멘트 페이지 조회 */
@@ -62,6 +62,6 @@ public class BeerCommentController {
 	@DeleteMapping("/{beerCommentId}")
 	public ResponseEntity<String> delete(@PathVariable @Positive Long beerCommentId) {
 
-		return ResponseEntity.ok(beerCommentService.delete(beerCommentId));
+		return ResponseEntity.ok(ratingService.delete(beerCommentId));
 	}
 }

@@ -1,4 +1,4 @@
-package be.domain.comment.dto;
+package be.domain.rating.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,7 +7,7 @@ import be.domain.recomment.entity.BeerRecomment;
 import lombok.Builder;
 import lombok.Getter;
 
-public class BeerCommentDto {
+public class RatingDto {
 
 	@Getter
 	@Builder
