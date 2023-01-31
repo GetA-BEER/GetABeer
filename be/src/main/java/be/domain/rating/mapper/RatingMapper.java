@@ -13,20 +13,20 @@ public interface RatingMapper {
 
 	Rating ratingPatchDtoToRating(RatingDto.Patch patch);
 
-	default RatingDto.Response ratingToRatingResponse(Rating rating) {
+	default RatingDto.Response ratingToRatingResponse(Rating rating, Long beerId) {
 		if (rating == null) {
 			return null;
 		}
 
 		RatingDto.Response response = RatingDto.Response.builder()
-			.beerId(rating.getBeer().getId())
-			.beerCommentId(rating.getId())
+			.beerId(beerId)
+			.ratingId(rating.getId())
 			.nickname(rating.getNickname())
 			.content(rating.getContent())
 			.star(rating.getStar())
 			.likeCount(rating.getLikeCount())
-			.recommentCount(rating.getRecommentCount())
-			.beerRecommentList(rating.getBeerRecommentList())
+			.commentCount(rating.getCommentCount())
+			.ratingCommentList(rating.getRatingCommentList())
 			.createdAt(rating.getCreatedAt())
 			.modifiedAt(rating.getModifiedAt())
 			.build();

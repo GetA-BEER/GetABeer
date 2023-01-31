@@ -3,7 +3,7 @@ package be.domain.rating.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import be.domain.recomment.entity.BeerRecomment;
+import be.domain.comment.entity.RatingComment;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,13 +30,13 @@ public class RatingDto {
 	public static class Response {
 		private Long beerId;
 
-		private Long beerCommentId;
+		private Long ratingId;
 		private String nickname;
 		private String content;
 		private Double star;
 		private Integer likeCount;
-		private Integer recommentCount;
-		private List<BeerRecomment> beerRecommentList;
+		private Integer commentCount;
+		private List<RatingComment> ratingCommentList;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
@@ -44,18 +44,18 @@ public class RatingDto {
 		}
 
 		@Builder
-		public Response(Long beerId, Long beerCommentId, String nickname, String content, Double star,
+		public Response(Long beerId, Long ratingId, String nickname, String content, Double star,
 			Integer likeCount,
-			Integer recommentCount, List<BeerRecomment> beerRecommentList, LocalDateTime createdAt,
+			Integer commentCount, List<RatingComment> ratingCommentList, LocalDateTime createdAt,
 			LocalDateTime modifiedAt) {
 			this.beerId = beerId;
-			this.beerCommentId = beerCommentId;
+			this.ratingId = ratingId;
 			this.nickname = nickname;
 			this.content = content;
 			this.star = star;
 			this.likeCount = likeCount;
-			this.recommentCount = recommentCount;
-			this.beerRecommentList = beerRecommentList;
+			this.commentCount = commentCount;
+			this.ratingCommentList = ratingCommentList;
 			this.createdAt = createdAt;
 			this.modifiedAt = modifiedAt;
 		}

@@ -19,7 +19,8 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.ColumnDefault;
 
 import be.domain.beer.entity.Beer;
-import be.domain.recomment.entity.PairingRecomment;
+import be.domain.comment.entity.PairingComment;
+import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -52,7 +53,7 @@ public class Pairing extends BaseTimeEntity {
 	private Integer likeCount;
 
 	@ColumnDefault("0")
-	private Integer recommentCount;
+	private Integer commentCount;
 
 	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 */
 	@OneToOne(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -79,23 +80,33 @@ public class Pairing extends BaseTimeEntity {
 
 	/* 💚 페어링 - 페어링 대댓글 일대다 연관관계 */
 	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	private List<PairingRecomment> pairingRecommentList = new ArrayList<>();
+	private List<PairingComment> pairingCommentList = new ArrayList<>();
 
 	/* 💚 페어링 - 페어링 대댓글 일대다 연관관계 편의 메서드 */
-	public void addPairingRecommentList(PairingRecomment pairingRecomment) {
-		pairingRecommentList.add(pairingRecomment);
+	public void addPairingCommentList(PairingComment pairingComment) {
+		pairingCommentList.add(pairingComment);
 
-		if (pairingRecomment.getPairing() != this) {
-			pairingRecomment.belongToPairing(this);
+		if (pairingComment.getPairing() != this) {
+			pairingComment.belongToPairing(this);
 		}
 	}
 
-	public void saveDefault(PairingImage paringImage, List<PairingRecomment> pairingRecommentList,
-		Integer likeCount, Integer recommentCount) {
+	/* 🖤 페어링 - 회원 다대일 연관관계 */
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	/* 🖤 페어링 - 회원 다대일 연관관계 편의 메서드 */
+	public void bndUser(User user) {
+		this.user = user;
+	}
+
+	public void saveDefault(PairingImage paringImage, List<PairingComment> pairingCommentList,
+		Integer likeCount, Integer commentCount) {
 		this.paringImage = paringImage;
-		this.pairingRecommentList = pairingRecommentList;
+		this.pairingCommentList = pairingCommentList;
 		this.likeCount = likeCount;
-		this.recommentCount = recommentCount;
+		this.commentCount = commentCount;
 	}
 
 	public void updateContent(String content) {

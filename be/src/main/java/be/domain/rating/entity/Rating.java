@@ -17,7 +17,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Range;
 
 import be.domain.beer.entity.Beer;
-import be.domain.recomment.entity.BeerRecomment;
+import be.domain.comment.entity.RatingComment;
 import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -52,7 +52,7 @@ public class Rating extends BaseTimeEntity {
 	private Integer likeCount;
 
 	@ColumnDefault("0")
-	private Integer recommentCount;
+	private Integer commentCount;
 
 	/* 🤎 맥주 평가 - 회원 다대일 연관관계 */
 	@ManyToOne
@@ -60,7 +60,7 @@ public class Rating extends BaseTimeEntity {
 	private User user;
 
 	/* 🤎 맥주 평가 - 회원 다대일 연관관계 편의 메서드 */
-	public void belongToUser(User user) {
+	public void bndUser(User user) {
 		this.user = user;
 	}
 
@@ -74,16 +74,16 @@ public class Rating extends BaseTimeEntity {
 		this.beer = beer;
 	}
 
-	/* 💜 맥주 평가 - 맥주 대댓글 일대다 연관관계 */
-	@OneToMany(mappedBy = "beerComment", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	private List<BeerRecomment> beerRecommentList = new ArrayList<>();
+	/* 💜 맥주 평가 - 맥주 댓글 일대다 연관관계 */
+	@OneToMany(mappedBy = "rating", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<RatingComment> ratingCommentList = new ArrayList<>();
 
-	/* 💜 맥주 평가 - 맥주 대댓글 일대다 연관관계 편의 메서드 */
-	public void addBeerRecommentList(BeerRecomment beerRecomment) {
-		beerRecommentList.add(beerRecomment);
+	/* 💜 맥주 평가 - 맥주 댓글 일대다 연관관계 편의 메서드 */
+	public void addRatingCommentList(RatingComment ratingComment) {
+		ratingCommentList.add(ratingComment);
 
-		if (beerRecomment.getBeerComment() != this) {
-			beerRecomment.belongToBeerComment(this);
+		if (ratingComment.getRating() != this) {
+			ratingComment.belongToRating(this);
 		}
 	}
 
@@ -95,9 +95,9 @@ public class Rating extends BaseTimeEntity {
 		this.star = star;
 	}
 
-	public void saveDefault(Integer likeCount, Integer recommentCount, List<BeerRecomment> beerRecommentList) {
+	public void saveDefault(Integer likeCount, Integer commentCount, List<RatingComment> ratingCommentList) {
 		this.likeCount = likeCount;
-		this.recommentCount = recommentCount;
-		this.beerRecommentList = beerRecommentList;
+		this.commentCount = commentCount;
+		this.ratingCommentList = ratingCommentList;
 	}
 }

@@ -33,7 +33,7 @@ public interface PairingMapper {
 			.imageList(getPairingImageDto(pairing))
 			.category(pairing.getPairingCategory())
 			.likeCount(pairing.getLikeCount())
-			.recommentCount(pairing.getRecommentCount())
+			.commentCount(pairing.getCommentCount())
 			.createdAt(pairing.getCreatedAt())
 			.modifiedAt(pairing.getModifiedAt())
 			.build();

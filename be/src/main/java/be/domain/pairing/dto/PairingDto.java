@@ -41,7 +41,7 @@ public class PairingDto {
 		private List<PairingImageDto.Response> imageList;
 		private PairingCategory category;
 		private Integer likeCount;
-		private Integer recommentCount;
+		private Integer commentCount;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
@@ -51,7 +51,7 @@ public class PairingDto {
 		@Builder
 		public Response(Long beerId, Long pairingId, String nickname, String content,
 			List<PairingImageDto.Response> imageList,
-			PairingCategory category, Integer likeCount, Integer recommentCount, LocalDateTime createdAt,
+			PairingCategory category, Integer likeCount, Integer commentCount, LocalDateTime createdAt,
 			LocalDateTime modifiedAt) {
 			this.beerId = beerId;
 			this.pairingId = pairingId;
@@ -60,7 +60,7 @@ public class PairingDto {
 			this.imageList = imageList;
 			this.category = category;
 			this.likeCount = likeCount;
-			this.recommentCount = recommentCount;
+			this.commentCount = commentCount;
 			this.createdAt = createdAt;
 			this.modifiedAt = modifiedAt;
 		}

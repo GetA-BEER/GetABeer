@@ -1,4 +1,4 @@
-package be.domain.recomment.dto;
+package be.domain.comment.dto;
 
 import java.time.LocalDateTime;
 
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
-public class ParingRecommentDto {
+public class RatingCommentDto {
 
 	@Getter
 	@Builder
@@ -30,8 +30,8 @@ public class ParingRecommentDto {
 
 	@Getter
 	public static class Response {
-		private Long pairingId;
-		private Long pairingRecommentId;
+		private Long ratingId;
+		private Long ratingCommentId;
 		private String nickname;
 		private String content;
 		private LocalDateTime createdAt;
@@ -41,11 +41,10 @@ public class ParingRecommentDto {
 		}
 
 		@Builder
-		public Response(Long pairingId, Long pairingRecommentId, String nickname, String content,
-			LocalDateTime createdAt,
-			LocalDateTime modifiedAt) {
-			this.pairingId = pairingId;
-			this.pairingRecommentId = pairingRecommentId;
+		public Response(Long ratingId, Long ratingCommentId, String nickname, String content,
+			LocalDateTime createdAt, LocalDateTime modifiedAt) {
+			this.ratingId = ratingId;
+			this.ratingCommentId = ratingCommentId;
 			this.nickname = nickname;
 			this.content = content;
 			this.createdAt = createdAt;

@@ -29,39 +29,41 @@ public class RatingController {
 		this.mapper = mapper;
 	}
 
-	/* 맥주 코멘트 등록 */
+	/* 맥주 평가 등록 */
 	@PostMapping
 	public ResponseEntity<RatingDto.Response> post(@RequestBody RatingDto.Post post) {
 		Rating rating = ratingService.create(mapper.ratingPostDtoToRating(post));
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.ratingToRatingResponse(rating));
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.body(mapper.ratingToRatingResponse(rating, rating.getBeer().getId()));
 	}
 
-	/* 맥주 코멘트 수정 */
+	/* 맥주 평가 수정 */
 	@PatchMapping("/{ratingId}")
 	public ResponseEntity patch(@PathVariable @Positive Long ratingId, @RequestBody RatingDto.Patch patch) {
 		Rating rating = ratingService.update(mapper.ratingPatchDtoToRating(patch),
 			ratingId);
 
-		return ResponseEntity.ok(mapper.ratingToRatingResponse(rating));
+		return ResponseEntity.ok(mapper.ratingToRatingResponse(rating, rating.getBeer().getId()));
 	}
 
-	/* 특정 맥주 코멘트 상세 조회 */
-	@GetMapping("/{beerCommentId}")
-	public ResponseEntity getComment(@PathVariable @Positive Long beerCommentId) {
+	/* 특정 맥주 평가 상세 조회 */
+	@GetMapping("/{ratingId}")
+	public ResponseEntity getRating(@PathVariable @Positive Long ratingId) {
+		Rating rating = ratingService.getRating(ratingId);
 
-		return ResponseEntity.ok(mapper.ratingToRatingResponse(ratingService.getRating(beerCommentId)));
+		return ResponseEntity.ok(mapper.ratingToRatingResponse(rating, rating.getBeer().getId()));
 	}
 
-	/* 맥주 코멘트 페이지 조회 */
-	public ResponseEntity getCommentPage() {
+	/* 맥주 평가 페이지 조회 */
+	public ResponseEntity getRatingPage() {
 		return null;
 	}
 
 	/* 맥주 코멘트 삭제 */
-	@DeleteMapping("/{beerCommentId}")
-	public ResponseEntity<String> delete(@PathVariable @Positive Long beerCommentId) {
+	@DeleteMapping("/{ratingId}")
+	public ResponseEntity<String> delete(@PathVariable @Positive Long ratingId) {
 
-		return ResponseEntity.ok(ratingService.delete(beerCommentId));
+		return ResponseEntity.ok(ratingService.delete(ratingId));
 	}
 }

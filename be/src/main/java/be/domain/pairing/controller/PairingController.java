@@ -36,7 +36,7 @@ public class PairingController {
 			mapper.pairingPostDtoToPairingImage(post), post.getCategory());
 
 		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(mapper.pairingToPairingResponseDto(pairing, post.getBeerId()));
+			.body(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
 	}
 
 	/* 페어링 수정 */
@@ -45,7 +45,7 @@ public class PairingController {
 		@RequestBody PairingDto.Patch patch) {
 		Pairing pairing = pairingService.update(mapper.pairingPatchDtoToPairing(patch), pairingId, patch.getCategory());
 
-		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, patch.getBeerId()));
+		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
 	}
 
 	/* 특정 페어링 상세 조회 */
