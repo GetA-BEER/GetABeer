@@ -12,6 +12,7 @@ public class RatingDto {
 	@Getter
 	@Builder
 	public static class Post {
+		private Long beerId;
 		private String nickname;
 		private String content;
 		private Double star;
@@ -20,12 +21,14 @@ public class RatingDto {
 	@Getter
 	@Builder
 	public static class Patch {
+		private Long beerId;
 		private String content;
 		private Double star;
 	}
 
 	@Getter
 	public static class Response {
+		private Long beerId;
 
 		private Long beerCommentId;
 		private String nickname;
@@ -41,9 +44,11 @@ public class RatingDto {
 		}
 
 		@Builder
-		public Response(Long beerCommentId, String nickname, String content, Double star, Integer likeCount,
+		public Response(Long beerId, Long beerCommentId, String nickname, String content, Double star,
+			Integer likeCount,
 			Integer recommentCount, List<BeerRecomment> beerRecommentList, LocalDateTime createdAt,
 			LocalDateTime modifiedAt) {
+			this.beerId = beerId;
 			this.beerCommentId = beerCommentId;
 			this.nickname = nickname;
 			this.content = content;

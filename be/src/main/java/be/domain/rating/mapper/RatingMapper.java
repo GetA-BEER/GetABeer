@@ -9,29 +9,30 @@ import be.domain.rating.entity.Rating;
 
 @Mapper(componentModel = "spring")
 public interface RatingMapper {
-	Rating beerCommentPostDtoToBeerComment(RatingDto.Post post);
+	Rating ratingPostDtoToRating(RatingDto.Post post);
 
-	Rating beerCommentPatchDtoToBeerComment(RatingDto.Patch patch);
+	Rating ratingPatchDtoToRating(RatingDto.Patch patch);
 
-	default RatingDto.Response beerCommentToBeerCommentResponse(Rating beerComment) {
-		if (beerComment == null) {
+	default RatingDto.Response ratingToRatingResponse(Rating rating) {
+		if (rating == null) {
 			return null;
 		}
 
 		RatingDto.Response response = RatingDto.Response.builder()
-			.beerCommentId(beerComment.getId())
-			.nickname(beerComment.getNickname())
-			.content(beerComment.getContent())
-			.star(beerComment.getStar())
-			.likeCount(beerComment.getLikeCount())
-			.recommentCount(beerComment.getRecommentCount())
-			.beerRecommentList(beerComment.getBeerRecommentList())
-			.createdAt(beerComment.getCreatedAt())
-			.modifiedAt(beerComment.getModifiedAt())
+			.beerId(rating.getBeer().getId())
+			.beerCommentId(rating.getId())
+			.nickname(rating.getNickname())
+			.content(rating.getContent())
+			.star(rating.getStar())
+			.likeCount(rating.getLikeCount())
+			.recommentCount(rating.getRecommentCount())
+			.beerRecommentList(rating.getBeerRecommentList())
+			.createdAt(rating.getCreatedAt())
+			.modifiedAt(rating.getModifiedAt())
 			.build();
 
 		return response;
 	}
 
-	List<RatingDto.Response> beerCommentToBeerCommentResponse(List<Rating> beerCommentList);
+	List<RatingDto.Response> ratingToRatingResponse(List<Rating> ratingList);
 }

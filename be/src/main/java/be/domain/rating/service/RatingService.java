@@ -31,10 +31,10 @@ public class RatingService {
 	}
 
 	/* 맥주 코멘트 수정 */
-	public Rating update(Rating beerComment, long beerCommentId) {
+	public Rating update(Rating beerComment, long ratingId) {
 
 		/* 존재하는 맥주 코멘트인지 확인 및 해당 맥주 코멘트 정보 가져오기 */
-		Rating findBeerComment = findVerifiedBeerComment(beerCommentId);
+		Rating findBeerComment = findVerifiedRating(ratingId);
 
 		/* 수정할 내용이 존재하면, 해당 정보 수정 후 저장*/
 		Optional.ofNullable(beerComment.getContent()).ifPresent(findBeerComment::updateContent);
@@ -45,29 +45,29 @@ public class RatingService {
 	}
 
 	/* 특정 맥주 코멘트 상세 조회 */
-	public Rating getComment(long beerCommentId) {
+	public Rating getRating(long ratingId) {
 
-		return findVerifiedBeerComment(beerCommentId);
+		return findVerifiedRating(ratingId);
 	}
 
 	/* 맥주 코멘트 페이지 조회 -> Query Dsl 사용 예정 */
-	public List<Rating> getCommentPage(int page, int size) {
+	public List<Rating> getRatingPage(int page, int size) {
 
 		return null;
 	}
 
 	/* 맥주 코멘트 삭제 */
-	public String delete(long beerCommentId) {
-		Rating beerComment = findVerifiedBeerComment(beerCommentId);
+	public String delete(long ratingId) {
+		Rating beerComment = findVerifiedRating(ratingId);
 		ratingRepository.delete(beerComment);
 
 		return "해당 맥주 코멘트가 삭제되었습니다.";
 	}
 
 	/* 존재하는 맥주 코멘트인지 확인 -> 존재하면 해당 맥주 코멘트 반환 */
-	private Rating findVerifiedBeerComment(long beerCommentId) {
+	private Rating findVerifiedRating(long ratingId) {
 
-		return ratingRepository.findById(beerCommentId)
+		return ratingRepository.findById(ratingId)
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BEER_COMMENT_NOT_FOUND));
 	}
 }
