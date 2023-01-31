@@ -122,10 +122,6 @@ export default function Main() {
       <div className="h-screen m-auto max-w-4xl">
         <div>
           <main className="m-auto border-2">
-            <div className="py-2 bg-gray-200 text-black">상단헤더</div>
-
-            <Advertise />
-
             <BigInput placeholder="페어링을 추천하는 이유를 적어주세요" />
             <div className="m-auto">
               레이팅 소 카드
@@ -138,9 +134,6 @@ export default function Main() {
               <br />
               페어링 소 카드
               <SmallpairingController pairingProps={pairingProps} />
-              <br />
-              작은 맥주 카드
-              <PopularBeerController beerProps={beerProps} />
               <br />
               <SimilarBeerController beerProps={beerProps} />
             </div>

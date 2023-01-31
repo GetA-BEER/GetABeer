@@ -63,7 +63,6 @@ export default function Main() {
       <div className="h-screen m-auto max-w-4xl">
         <div>
           <main className="m-auto">
-            <div className="py-2 bg-gray-200 text-black">상단헤더</div>
             <Advertise />
             <div className="m-auto">
               <BeerCategoryBtn />
