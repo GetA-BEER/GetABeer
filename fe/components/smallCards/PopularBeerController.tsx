@@ -22,7 +22,7 @@ export default function PopularBeerController({ beerProps }: any) {
   const [beerList, setBeerList] = useState<BeerInfo[]>(beerProps);
   return (
     <>
-      <div className="m-4 text-base font-semibold">
+      <div className="mx-3 mt-6 mb-2 text-base font-semibold">
         인기 많은 <span className="text-y-brown">맥주</span>
       </div>
       <div className="w-full">

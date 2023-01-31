@@ -22,7 +22,7 @@ export default function PopularBeer(props: BeerInfo) {
         alt="Beer"
         src={`${props.image}`}
         width={300}
-        height={300}
+        height={200}
       />
     </div>
   );

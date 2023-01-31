@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Advertise from './Advertise';
+import Advertise from '../../components/mainComponents/Advertise';
 import NavBar from '@/components/NavBar';
 import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallpairingController from '@/components/smallCards/SmallpairingController';
