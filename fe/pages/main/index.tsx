@@ -1,9 +1,13 @@
 import Head from 'next/head';
-import Image from 'next/image';
+import Advertise from './Advertise';
 import NavBar from '@/components/NavBar';
 import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallpairingController from '@/components/smallCards/SmallpairingController';
 import BigInput from '@/components/inputs/BigInput';
+import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
+import PopularBeerController from '@/components/smallCards/PopularBeerController';
+import SortBox from '@/components/selectBox/SortBox';
+import PairingBox from '@/components/selectBox/PairingBox';
 
 export default function Main() {
   const cardProps = [
@@ -60,6 +64,53 @@ export default function Main() {
       thumbs: 10,
     },
   ];
+  const beerProps = [
+    {
+      id: 1,
+      title: '가든 바이젠',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
+    },
+    {
+      id: 2,
+      title: '필라이트',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
+    },
+    {
+      id: 3,
+      title: '가든 바이젠',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
+    },
+    {
+      id: 4,
+      title: '가든 바이젠',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
+    },
+    {
+      id: 5,
+      title: '필라이트',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
+    },
+  ];
   return (
     <>
       <Head>
@@ -70,24 +121,31 @@ export default function Main() {
       </Head>
       <div className="h-screen m-auto max-w-4xl">
         <div>
-          <main className="m-auto border-2 pb-14">
+          <main className="m-auto border-2">
             <div className="py-2 bg-gray-200 text-black">상단헤더</div>
+
+            <Advertise />
+
             <BigInput placeholder="페어링을 추천하는 이유를 적어주세요" />
-            <Image
-              className="m-auto"
-              src="/images/adv.jpg"
-              alt="adv"
-              width={500}
-              height={500}
-              priority
-            />
             <div className="m-auto">
               레이팅 소 카드
               <SmallCardController cardProps={cardProps} />
+              <br />
+              셀렉박스
+              <SortBox />
+              페어링 셀렉박스
+              <PairingBox />
+              <br />
               페어링 소 카드
               <SmallpairingController pairingProps={pairingProps} />
+              <br />
+              작은 맥주 카드
+              <PopularBeerController beerProps={beerProps} />
+              <br />
+              <SimilarBeerController beerProps={beerProps} />
             </div>
           </main>
+          <div className="pb-32"></div>
           <NavBar />
         </div>
       </div>

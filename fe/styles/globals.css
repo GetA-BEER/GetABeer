@@ -142,13 +142,3 @@ a {
 }
 
 */
-
-#lineClapm {
-  display: -webkit-box;
-  word-wrap: break-word;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  height: 54px;
-}
