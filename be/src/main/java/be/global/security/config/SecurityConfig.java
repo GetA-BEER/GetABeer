@@ -12,21 +12,21 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-				.headers().frameOptions().sameOrigin()
+			.headers().frameOptions().sameOrigin()
 
-				.and()
-				.csrf().disable()
-				.cors()
+			.and()
+			.csrf().disable()
+			.cors()
 
-				.and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-				.and()
-				.formLogin().disable()
-				.httpBasic().disable()
-				.authorizeRequests()
-				.anyRequest()
-				.permitAll();
+			.and()
+			.formLogin().disable()
+			.httpBasic().disable()
+			.authorizeRequests()
+			.anyRequest()
+			.permitAll();
 
 		return http.build();
 	}

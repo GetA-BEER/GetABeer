@@ -1,11 +1,11 @@
 package be.global.security.auth.utils;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class CustomAuthorityUtils {

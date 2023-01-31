@@ -1,11 +1,7 @@
 package be.domain.user.controller;
 
-import be.domain.user.dto.UserDto;
-import be.domain.user.entity.User;
-import be.domain.user.mapper.UserMapper;
-import be.domain.user.service.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import be.domain.user.dto.UserDto;
+import be.domain.user.entity.User;
+import be.domain.user.mapper.UserMapper;
+import be.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Validated

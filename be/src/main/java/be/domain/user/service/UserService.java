@@ -1,5 +1,10 @@
 package be.domain.user.service;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
@@ -7,10 +12,6 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,8 +29,8 @@ public class UserService {
 	/* 임시 유저 update */
 	@Transactional
 	public User updateUser(Long id, UserDto.Patch patch) {
-		User user = userRepository.findById(id).orElseThrow(()
-				-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+		User user = userRepository.findById(id)
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
 		Optional.ofNullable(patch.getNickname()).ifPresent(user::edit);
 		return userRepository.save(user);

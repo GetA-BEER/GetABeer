@@ -1,5 +1,14 @@
 package be.global.security.auth.jwt;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -7,14 +16,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
 
 @Component
 public class JwtTokenizer {
@@ -43,12 +44,12 @@ public class JwtTokenizer {
 		Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
 		return Jwts.builder()
-				.setClaims(claims)
-				.setSubject(subject)
-				.setIssuedAt(Calendar.getInstance().getTime())
-				.setExpiration(expiration)
-				.signWith(key)
-				.compact();
+			.setClaims(claims)
+			.setSubject(subject)
+			.setIssuedAt(Calendar.getInstance().getTime())
+			.setExpiration(expiration)
+			.signWith(key)
+			.compact();
 	}
 
 	public String generateRefreshToken(String subject,
@@ -58,11 +59,11 @@ public class JwtTokenizer {
 		Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
 		return Jwts.builder()
-				.setSubject(subject)
-				.setIssuedAt(Calendar.getInstance().getTime())
-				.setExpiration(expiration)
-				.signWith(key)
-				.compact();
+			.setSubject(subject)
+			.setIssuedAt(Calendar.getInstance().getTime())
+			.setExpiration(expiration)
+			.signWith(key)
+			.compact();
 	}
 
 	private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
@@ -75,9 +76,9 @@ public class JwtTokenizer {
 		Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
 		return Jwts.parserBuilder()
-				.setSigningKey(key)
-				.build()
-				.parseClaimsJws(jws);
+			.setSigningKey(key)
+			.build()
+			.parseClaimsJws(jws);
 	}
 
 	public void verifySignature(String jws, String base64EncodedSecretKey) {
@@ -85,9 +86,9 @@ public class JwtTokenizer {
 		Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
 		Jwts.parserBuilder()
-				.setSigningKey(key)
-				.build()
-				.parseClaimsJws(jws);
+			.setSigningKey(key)
+			.build()
+			.parseClaimsJws(jws);
 	}
 
 	public Date getTokenExpiration(int expirationMinutes) {
