@@ -27,7 +27,7 @@ export default function Beer() {
       thumbs: 10,
     },
   ];
-  const pairingProps = [
+  const pairProps = [
     {
       id: 1,
       pairing: '튀김',
@@ -120,7 +120,7 @@ export default function Beer() {
       <div className="h-screen m-auto max-w-4xl">
         {/* <RatingTitle ratingCount={ratingCount} /> */}
         <SmallCardController cardProps={cardProps} />
-        <SmallPairingController pairingProps={pairingProps} />
+        <SmallPairingController pairProps={pairProps} />
         <SimilarBeerController beerProps={beerProps} />
       </div>
     </>

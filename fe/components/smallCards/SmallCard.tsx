@@ -4,7 +4,7 @@ import { FiThumbsUp } from 'react-icons/fi';
 import { SmallCardInfo } from './SmallCardController';
 import Image from 'next/image';
 
-export default function SmallCard(props: SmallCardInfo) {
+export default function SmallCard(props: { cardProps: SmallCardInfo }) {
   return (
     <div className="w-full rounded-lg bg-white text-y-black drop-shadow-xl text-xs">
       {/* 별점,닉네임 */}
@@ -17,28 +17,29 @@ export default function SmallCard(props: SmallCardInfo) {
             height={20}
             className="mr-1 mb-[3px] text-y-gold drop-shadow-md"
           />
-          {props.star}
+          {props.cardProps.star}
         </span>
         <span className="flex justify-center items-center">
-          {props.nickName}
+          {props.cardProps.nickName}
           <BiUser className="ml-1 bg-y-brown text-white rounded-full w-4 h-4" />
         </span>
       </div>
       {/* 설명 */}
       <p className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
-        {props.description}.....<span className="text-y-gold">더보기</span>
+        {props.cardProps.description}.....
+        <span className="text-y-gold">더보기</span>
       </p>
       {/* 날짜,코멘트수,엄지수 */}
       <div className="p-2 flex justify-between items-center">
-        <div className="text-y-gray">{props.date}</div>
+        <div className="text-y-gray">{props.cardProps.date}</div>
         <div className="flex">
           <span className="flex justify-center items-center ">
             <FaRegCommentDots className="mr-[2px]" />
-            {props.comments}
+            {props.cardProps.comments}
           </span>
           <span className="ml-1 flex justify-center items-center">
             <FiThumbsUp />
-            {props.thumbs}
+            {props.cardProps.thumbs}
           </span>
         </div>
       </div>
