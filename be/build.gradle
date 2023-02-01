@@ -38,7 +38,7 @@ configurations {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // OAuth 2.0
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-aop' // Spring AOP
@@ -54,7 +54,12 @@ dependencies {
     //    ----------------------------------------- CRAWLING------------------------------------------
     implementation 'org.seleniumhq.selenium:selenium-java:4.1.2' // Crawling
     implementation group: 'org.apache.poi', name: 'poi', version: '5.0.0' // 데이터 <-> 문서
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0' //
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0' // 데이터 <-> 문서
+//    implementation 'com.google.cloud:google-cloud-vision'
+//    compile 'com.google.cloud:google-cloud-vision:0.25.0-beta'
+    implementation platform('com.google.cloud:libraries-bom:26.4.0')
+//    implementation 'com.google.cloud:google-cloud-bigquery'
+    implementation('com.google.cloud:spring-cloud-gcp-starter-vision:3.2.1') // Google Vision API
     //    --------------------------------------------JWT---------------------------------------------
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
