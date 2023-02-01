@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -96,5 +98,12 @@ public class JwtTokenizer {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MINUTE, expirationMinutes);
 		return calendar.getTime();
+	}
+
+	public Map<String, Object> verifyJws(HttpServletRequest request) {
+		String jws = request.getHeader("Authorization").replace("Bearer ", "");
+		String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+		return getClaims(jws, base64EncodedSecretKey).getBody();
 	}
 }
