@@ -1,5 +1,4 @@
 import SmallCard from './SmallCard';
-// import SmallCardInfo from '@/pages/main';
 import React, { useState } from 'react';
 
 export interface SmallCardInfo {

@@ -1,3 +1,4 @@
+// import React from 'react';
 import { useState } from 'react';
 
 type InputProps = {
@@ -5,9 +6,9 @@ type InputProps = {
 };
 
 export default function BigInput({ placeholder }: InputProps) {
-  const [inputState, setInputState] = useState();
-  const [inputLen, setInputLen] = useState(0);
-  const onInputChange = (e: any) => {
+  const [inputState, setInputState] = useState<string | undefined>();
+  const [inputLen, setInputLen] = useState<number | undefined>(0);
+  const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputState(e.target.value);
     setInputLen(e.target.value.length);
     console.log(inputState);

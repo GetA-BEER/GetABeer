@@ -11,8 +11,8 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="w-full fixed bottom-0 z-20 border-t border-gray-200">
-        <div className="max-w-4xl grid grid-cols-5 px-5 bg-white text-center py-1">
+      <nav className="w-full m-auto fixed bottom-0 z-20  border-gray-200">
+        <div className="max-w-4xl border-t grid grid-cols-5 px-5 bg-white text-center py-1">
           <div
             onClick={() => onNavChange(1)}
             className={`${navState === 1 ? 'text-y-brown' : 'text-y-black'}`}

@@ -16,8 +16,39 @@ export interface BeerInfo {
   image: string;
 }
 
-export default function SimilarBeerController({ beerProps }: any) {
-  const [beerList, setBeerList] = useState<BeerInfo[]>(beerProps);
+export default function SimilarBeerController(props: {
+  beerProps: BeerInfo[];
+}) {
+  const BeerList = [
+    {
+      id: 1,
+      title: '가든 바이젠',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
+    },
+    {
+      id: 2,
+      title: '필라이트',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
+    },
+    {
+      id: 3,
+      title: '가든 바이젠',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
+    },
+  ];
+  const [beerList, setBeerList] = useState<BeerInfo[]>(props.beerProps);
   return (
     <>
       <div className="m-4 text-base font-semibold">비슷한 맥주</div>
@@ -28,12 +59,11 @@ export default function SimilarBeerController({ beerProps }: any) {
           spaceBetween={20}
           modules={[Pagination]}
         >
-          {beerList?.map((props: BeerInfo, index: number) => (
+          {beerList?.map((similarBeer: BeerInfo, idx: number) => (
             <>
-              <SwiperSlide key={props.id}>
-                <SimilarBeer {...props} key={props.id} />
+              <SwiperSlide key={similarBeer.id}>
+                <SimilarBeer key={idx} similarBeer={similarBeer} />
               </SwiperSlide>
-              {/* {(props.idx = index)} */}
             </>
           ))}
         </Swiper>

@@ -60,19 +60,16 @@ export default function Main() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <div className="h-screen m-auto max-w-4xl">
-        <div>
-          <main className="m-auto">
-            <Advertise />
-            <div className="m-auto">
-              <BeerCategoryBtn />
-              <PopularBeerController beerProps={beerProps} />
-            </div>
-          </main>
-          <div className="pb-14"></div>
-          <NavBar />
+
+      <main className="m-auto h-screen max-w-4xl">
+        <Advertise />
+        <div className="m-auto">
+          <BeerCategoryBtn />
+          <PopularBeerController beerProps={beerProps} />
         </div>
-      </div>
+        <div className="pb-14"></div>
+        <NavBar />
+      </main>
     </>
   );
 }
