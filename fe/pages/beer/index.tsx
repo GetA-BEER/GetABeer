@@ -3,6 +3,7 @@ import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallPairingController from '@/components/smallCards/SmallpairingController';
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
 import RatingTitle from './RatingTitle';
+import PairingTitle from './PairingTitle';
 
 export default function Beer() {
   const cardProps = [
@@ -42,16 +43,6 @@ export default function Beer() {
       id: 2,
       pairing: '구이',
       nickName: '테스트',
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
-      date: '2023.41.30',
-      comments: 5,
-      thumbs: 10,
-    },
-    {
-      id: 3,
-      pairing: '견과류',
-      nickName: '어렵네',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
       date: '2023.41.30',
@@ -108,6 +99,7 @@ export default function Beer() {
   ];
 
   let ratingCount = 35;
+  let paringCount = 35;
 
   return (
     <>
@@ -117,12 +109,15 @@ export default function Beer() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <div className="h-screen m-auto max-w-4xl">
-        {/* <RatingTitle ratingCount={ratingCount} /> */}
-        <SmallCardController cardProps={cardProps} />
-        <SmallPairingController pairProps={pairProps} />
-        <SimilarBeerController beerProps={beerProps} />
-      </div>
+      <main>
+        <div className="h-screen m-auto max-w-4xl">
+          <RatingTitle ratingCount={ratingCount} />
+          <SmallCardController cardProps={cardProps} />
+          <PairingTitle paringCount={paringCount} />
+          <SmallPairingController pairProps={pairProps} />
+          <SimilarBeerController beerProps={beerProps} />
+        </div>
+      </main>
     </>
   );
 }

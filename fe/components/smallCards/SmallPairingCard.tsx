@@ -7,7 +7,7 @@ export default function SmallPairingCard(props: {
   pairingProps: PairingCardInfo;
 }) {
   return (
-    <div className="w-full rounded-lg bg-white text-y-black drop-shadow-xl text-xs">
+    <div className="w-full rounded-lg bg-white text-y-black drop-shadow-xl text-xs border">
       {/* 페어링,닉네임 */}
       <div className="flex justify-between py-1 px-2">
         <span className="flex justify-center items-center px-3 py-[2px] rounded-md bg-y-gold text-white">
@@ -24,15 +24,15 @@ export default function SmallPairingCard(props: {
         <span className="text-y-gold">더보기</span>
       </p>
       {/* 날짜,코멘트수,엄지수 */}
-      <div className="p-2 flex justify-between items-center">
+      <div className="p-2 flex justify-between items-center text-[8px]">
         <div className="text-y-gray">{props.pairingProps.date}</div>
         <div className="flex">
-          <span className="flex justify-center items-center ">
-            <FaRegCommentDots className="mr-[2px]" />
+          <span className="flex justify-center">
+            <FaRegCommentDots className="mr-[2px] mt-[1px] w-3 h-3" />
             {props.pairingProps.comments}
           </span>
-          <span className="ml-1 flex justify-center items-center">
-            <FiThumbsUp />
+          <span className="ml-1 flex justify-center">
+            <FiThumbsUp className="w-3 h-3 mt-[1px]" />
             {props.pairingProps.thumbs}
           </span>
         </div>
