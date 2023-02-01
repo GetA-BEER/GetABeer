@@ -95,7 +95,8 @@ public class Rating extends BaseTimeEntity {
 		this.star = star;
 	}
 
-	public void saveDefault(Integer likeCount, Integer commentCount, List<RatingComment> ratingCommentList) {
+	public void saveDefault(Beer beer, Integer likeCount, Integer commentCount, List<RatingComment> ratingCommentList) {
+		this.beer = beer;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
 		this.ratingCommentList = ratingCommentList;

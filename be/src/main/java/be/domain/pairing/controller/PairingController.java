@@ -33,7 +33,7 @@ public class PairingController {
 	@PostMapping
 	public ResponseEntity<PairingDto.Response> post(@RequestBody PairingDto.Post post) {
 		Pairing pairing = pairingService.create(mapper.pairingPostDtoToPairing(post),
-			mapper.pairingPostDtoToPairingImage(post), post.getCategory());
+			mapper.pairingPostDtoToPairingImage(post), post.getCategory(), post.getBeerId());
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));

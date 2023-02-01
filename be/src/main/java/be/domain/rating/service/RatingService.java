@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import be.domain.beer.entity.Beer;
+import be.domain.beer.service.BeerService;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.repository.RatingRepository;
 import be.global.exception.BusinessLogicException;
@@ -14,16 +16,20 @@ import be.global.exception.ExceptionCode;
 @Service
 public class RatingService {
 	private final RatingRepository ratingRepository;
+	private final BeerService beerService;
 
-	public RatingService(RatingRepository ratingRepository) {
+	public RatingService(RatingRepository ratingRepository, BeerService beerService) {
 		this.ratingRepository = ratingRepository;
+		this.beerService = beerService;
 	}
 
 	/* 맥주 코멘트 등록 */
-	public Rating create(Rating rating) {
+	public Rating create(Rating rating, Long beerId) {
+		/* 존재하는 맥주인지 확인 */
+		Beer beer = beerService.findVerifiedBeer(beerId);
 
 		/* 기본 설정 저장하기 */
-		rating.saveDefault(0, 0, new ArrayList<>());
+		rating.saveDefault(beer, 0, 0, new ArrayList<>());
 
 		ratingRepository.save(rating);
 

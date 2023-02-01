@@ -101,8 +101,9 @@ public class Pairing extends BaseTimeEntity {
 		this.user = user;
 	}
 
-	public void saveDefault(PairingImage paringImage, List<PairingComment> pairingCommentList,
+	public void saveDefault(Beer beer, PairingImage paringImage, List<PairingComment> pairingCommentList,
 		Integer likeCount, Integer commentCount) {
+		this.beer = beer;
 		this.paringImage = paringImage;
 		this.pairingCommentList = pairingCommentList;
 		this.likeCount = likeCount;

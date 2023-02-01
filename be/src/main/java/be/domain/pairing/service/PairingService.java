@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.domain.beer.entity.Beer;
+import be.domain.beer.service.BeerService;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.entity.PairingImage;
@@ -19,22 +21,28 @@ import be.global.exception.ExceptionCode;
 public class PairingService {
 	private final PairingRepository pairingRepository;
 	private final PairingImageRepository paringImageRepository;
+	private final BeerService beerService;
 
-	public PairingService(PairingRepository pairingRepository, PairingImageRepository paringImageRepository) {
+	public PairingService(PairingRepository pairingRepository, PairingImageRepository paringImageRepository,
+		BeerService beerService) {
 		this.pairingRepository = pairingRepository;
 		this.paringImageRepository = paringImageRepository;
+		this.beerService = beerService;
 	}
 
 	/* 페어링 등록 */
 	@Transactional
-	public Pairing create(Pairing pairing, PairingImage pairingImage, String category) {
+	public Pairing create(Pairing pairing, PairingImage pairingImage, String category, Long beerId) {
+		/* 존재하는 맥주인지 확인 */
+		Beer beer = beerService.findVerifiedBeer(beerId);
+
 		pairing.updateCategory(findCategory(category));
 
 		/* 이미지 저장하기 */
 		paringImageRepository.save(pairingImage);
 
 		/* 페어링 등록하기 */
-		pairing.saveDefault(pairingImage, new ArrayList<>(), 0, 0);
+		pairing.saveDefault(beer, pairingImage, new ArrayList<>(), 0, 0);
 		pairingRepository.save(pairing);
 
 		return pairing;

@@ -32,7 +32,7 @@ public class RatingController {
 	/* 맥주 평가 등록 */
 	@PostMapping
 	public ResponseEntity<RatingDto.Response> post(@RequestBody RatingDto.Post post) {
-		Rating rating = ratingService.create(mapper.ratingPostDtoToRating(post));
+		Rating rating = ratingService.create(mapper.ratingPostDtoToRating(post), post.getBeerId());
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(mapper.ratingToRatingResponse(rating, rating.getBeer().getId()));
