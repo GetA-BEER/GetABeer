@@ -2,7 +2,6 @@ package be.global.security.auth.handler;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,8 +17,8 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request,
 										HttpServletResponse response,
-										Authentication authentication) throws IOException, ServletException {
+										Authentication authentication) throws IOException {
 
-		log.info("로그인 성공~");
+		log.info("# Login Successful");
 	}
 }
