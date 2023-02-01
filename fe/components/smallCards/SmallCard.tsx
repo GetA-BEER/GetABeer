@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function SmallCard(props: { cardProps: SmallCardInfo }) {
   return (
-    <div className="w-full rounded-lg bg-white text-y-black drop-shadow-xl text-xs border">
+    <div className="w-full rounded-lg bg-white text-y-black drop-shadow-lg text-xs border">
       {/* 별점,닉네임 */}
       <div className="flex justify-between py-1 px-2">
         <span className="flex justify-center items-center">

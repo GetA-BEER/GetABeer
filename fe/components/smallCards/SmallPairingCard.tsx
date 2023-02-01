@@ -7,7 +7,7 @@ export default function SmallPairingCard(props: {
   pairingProps: PairingCardInfo;
 }) {
   return (
-    <div className="w-full rounded-lg bg-white text-y-black drop-shadow-xl text-xs border">
+    <div className="w-full rounded-lg bg-white text-y-black drop-shadow-lg text-xs border">
       {/* 페어링,닉네임 */}
       <div className="flex justify-between py-1 px-2">
         <span className="flex justify-center items-center px-3 py-[2px] rounded-md bg-y-gold text-white">

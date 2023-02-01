@@ -51,7 +51,7 @@ export default function SimilarBeerController(props: {
   const [beerList, setBeerList] = useState<BeerInfo[]>(props.beerProps);
   return (
     <>
-      <div className="flex justify-between mx-5 my-4 font-semibold text-sm">
+      <div className="flex justify-between mx-5 mb-4 mt-6 font-semibold text-sm">
         비슷한 맥주
       </div>
       <div className="w-full">
