@@ -5,11 +5,11 @@ spring:
     console:
       enabled: true
       path: /h2
-#  cache:
-#    type: redis
-#  redis:
-#    host: localhost
-#    port: 6379
+  #  cache:
+  #    type: redis
+  #  redis:
+  #    host: localhost
+  #    port: 6379
   datasource:
     url: jdbc:h2:mem:test
   jpa:
@@ -61,6 +61,11 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
+  cloud:
+    gcp:
+      credentials:
+        #        location: file:/Users/gnidinger/Documents/GetABeer/vision-api-test-376507-ca040b30c071.json
+        location: classpath:/getabeer-376509-6310d68578f1.json
 cloud:
   aws:
     credentials:

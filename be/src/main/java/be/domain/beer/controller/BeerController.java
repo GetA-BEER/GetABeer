@@ -1,12 +1,9 @@
 package be.domain.beer.controller;
 
-import be.domain.beer.dto.BeerDto;
-import be.domain.beer.entity.Beer;
-import be.domain.beer.entity.MonthlyBeer;
-import be.domain.beer.mapper.BeerMapper;
-import be.domain.beer.service.BeerService;
-import be.domain.beertag.entity.BeerTag;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
@@ -22,92 +19,97 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import be.domain.beer.dto.BeerDto;
+import be.domain.beer.entity.Beer;
+import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.mapper.BeerMapper;
+import be.domain.beer.service.BeerService;
+import be.domain.beertag.entity.BeerTag;
+import lombok.RequiredArgsConstructor;
 
 @Validated
 @RestController
 @RequestMapping({"/beers", ""})
 @RequiredArgsConstructor
 public class BeerController {
-    private final BeerMapper beerMapper;
-    private final BeerService beerService;
+	private final BeerMapper beerMapper;
+	private final BeerService beerService;
 
-    @PostMapping("/add")
-    public ResponseEntity<BeerDto.DetailsResponse> postBeer(@Valid @RequestBody BeerDto.Post postBeer) {
+	@PostMapping("/add")
+	public ResponseEntity<BeerDto.DetailsResponse> postBeer(@Valid @RequestBody BeerDto.Post postBeer) {
 
-        Beer beer = beerMapper.beerPostToBeer(postBeer);
-        Beer createdBeer = beerService.createBeer(beer);
-        createdBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
-        BeerDto.DetailsResponse response = beerMapper.beerToPostDetailsResponse(createdBeer);
+		Beer beer = beerMapper.beerPostToBeer(postBeer);
+		Beer createdBeer = beerService.createBeer(beer);
+		createdBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
+		BeerDto.DetailsResponse response = beerMapper.beerToPostDetailsResponse(createdBeer);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
 
-    @PatchMapping("/{beer_id}/edit")
-    public ResponseEntity<BeerDto.DetailsResponse> patchBeer(@PathVariable("beer_id") Long beerId,
-                                                             @Valid @RequestBody BeerDto.Patch patchBeer) {
+	@PatchMapping("/{beer_id}/edit")
+	public ResponseEntity<BeerDto.DetailsResponse> patchBeer(@PathVariable("beer_id") Long beerId,
+		@Valid @RequestBody BeerDto.Patch patchBeer) {
 
-        Beer beer = beerMapper.beerPatchToBeer(patchBeer);
-        Beer updatedBeer = beerService.updateBeer(beer, beerId);
-        List<BeerTag> beerTags = beerService.findTop4BeerTags(updatedBeer);
-        updatedBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
-        BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(updatedBeer, beerTags);
+		Beer beer = beerMapper.beerPatchToBeer(patchBeer);
+		Beer updatedBeer = beerService.updateBeer(beer, beerId);
+		List<BeerTag> beerTags = beerService.findTop4BeerTags(updatedBeer);
+		updatedBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
+		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(updatedBeer, beerTags);
 
-        return ResponseEntity.ok().body(response);
-    }
+		return ResponseEntity.ok().body(response);
+	}
 
-    @GetMapping("/{beer_id}")
-    public ResponseEntity<BeerDto.DetailsResponse> getBeer(@PathVariable("beer_id") Long beerId) {
+	@GetMapping("/{beer_id}")
+	public ResponseEntity<BeerDto.DetailsResponse> getBeer(@PathVariable("beer_id") Long beerId) {
 
-        Beer beer = beerService.findVerifiedBeer(beerId);
-        List<BeerTag> beerTags = beerService.findTop4BeerTags(beer);
-        BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer, beerTags);
+		Beer beer = beerService.findVerifiedBeer(beerId);
+		List<BeerTag> beerTags = beerService.findTop4BeerTags(beer);
+		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer, beerTags);
 
-        return ResponseEntity.ok().body(response);
-    }
+		return ResponseEntity.ok().body(response);
+	}
 
-    @DeleteMapping("/{beer_id}/delete")
-    public ResponseEntity<String> deleteBeer(@PathVariable("beer_id") Long beerId) {
+	@DeleteMapping("/{beer_id}/delete")
+	public ResponseEntity<String> deleteBeer(@PathVariable("beer_id") Long beerId) {
 
-        beerService.deleteBeer(beerId);
+		beerService.deleteBeer(beerId);
 
-        return ResponseEntity.noContent().build();
-    }
+		return ResponseEntity.noContent().build();
+	}
 
-    //    -----------------------------------------조회 API 세분화---------------------------------------------------
+	//    -----------------------------------------조회 API 세분화---------------------------------------------------
 
-    @GetMapping("/monthly")
-    public ResponseEntity<List<BeerDto.MonthlyBestResponse>> getMonthlyBeer() {
+	@GetMapping("/monthly")
+	public ResponseEntity<List<BeerDto.MonthlyBestResponse>> getMonthlyBeer() {
 
-        List<MonthlyBeer> monthlyBeerList = beerService.findMonthlyBeers();
-        List<BeerDto.MonthlyBestResponse> responses = beerMapper.beersToMonthlyBestBeerResponse(monthlyBeerList);
+		List<MonthlyBeer> monthlyBeerList = beerService.findMonthlyBeers();
+		List<BeerDto.MonthlyBestResponse> responses = beerMapper.beersToMonthlyBestBeerResponse(monthlyBeerList);
 
-        return ResponseEntity.ok().body(responses);
-    }
+		return ResponseEntity.ok().body(responses);
+	}
 
-    @GetMapping("/weekly")
-    public ResponseEntity<List<BeerDto.WeeklyBestResponse>> getWeeklyBeer() {
-        return null;
-    }
+	@GetMapping("/weekly")
+	public ResponseEntity<List<BeerDto.WeeklyBestResponse>> getWeeklyBeer() {
+		return null;
+	}
 
-    @GetMapping("/similar")
-    public ResponseEntity<List<BeerDto.SimilarResponse>> getSimilarBeer(Beer beer) {
+	@GetMapping("/similar")
+	public ResponseEntity<List<BeerDto.SimilarResponse>> getSimilarBeer(Beer beer) {
 
-        List<Beer> beerList = beerService.findSimilarBeers(beer);
-        List<BeerDto.SimilarResponse> responses = beerMapper.beersToSimilarBeerResponse(beerList);
+		List<Beer> beerList = beerService.findSimilarBeers(beer);
+		List<BeerDto.SimilarResponse> responses = beerMapper.beersToSimilarBeerResponse(beerList);
 
-        return ResponseEntity.ok().body(responses);
-    }
+		return ResponseEntity.ok().body(responses);
+	}
 
-    @GetMapping("/users/mypage/beers")
-    public ResponseEntity<PageImpl<BeerDto.MyPageResponse>> getMyPageBeer(@RequestParam(name = "page", defaultValue = "1") Integer page) {
+	@GetMapping("/users/mypage/beers")
+	public ResponseEntity<PageImpl<BeerDto.MyPageResponse>> getMyPageBeer(
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 
-        Page<Beer> beerPage = beerService.findMyPageBeers(page);
-        PageImpl<BeerDto.MyPageResponse> responses = beerMapper.beersToMyPageResponse(beerPage);
+		Page<Beer> beerPage = beerService.findMyPageBeers(page);
+		PageImpl<BeerDto.MyPageResponse> responses = beerMapper.beersToMyPageResponse(beerPage);
 
-        return ResponseEntity.ok().body(responses);
-    }
+		return ResponseEntity.ok().body(responses);
+	}
 
 }

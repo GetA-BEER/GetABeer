@@ -43,6 +43,10 @@ public class Beer extends BaseTimeEntity {
 	private BeerDetailsStars beerDetailsStars;
 	@Embedded
 	private BeerDetailsCounts beerDetailsCounts;
+	@Embedded
+	private BeerDetailsTopTags beerDetailsTopTags;
+	@Embedded
+	private BeerDetailsBestRating beerDetailsBestRating;
 	private Boolean isWishListed;
 
 	@ManyToOne
