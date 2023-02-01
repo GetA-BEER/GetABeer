@@ -7,6 +7,7 @@ public enum ExceptionCode {
 	/* Comment 관련 예외 */
 	RATING_NOT_FOUND(404, "맥주 평가 정보를 찾을 수 없습니다."),
 	PAIRING_NOT_FOUND(404, "페어링 정보를 찾을 수 없습니다."),
+	TAG_IS_WRONG(400, "태그 요청이 잘못 되었습니다."),
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),
