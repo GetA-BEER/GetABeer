@@ -1,9 +1,11 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallPairingController from '@/components/smallCards/SmallpairingController';
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
 import RatingTitle from './RatingTitle';
 import PairingTitle from './PairingTitle';
+import NavBar from '@/components/NavBar';
 
 export default function Beer() {
   const cardProps = [
@@ -19,7 +21,7 @@ export default function Beer() {
     },
     {
       id: 2,
-      star: 4.0,
+      star: 4.222,
       nickName: '테스트',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -97,9 +99,8 @@ export default function Beer() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
   ];
-
   let ratingCount = 35;
-  let paringCount = 35;
+  let paringCount = 3;
 
   return (
     <>
@@ -109,14 +110,31 @@ export default function Beer() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main>
-        <div className="h-screen m-auto max-w-4xl">
-          <RatingTitle ratingCount={ratingCount} />
-          <SmallCardController cardProps={cardProps} />
-          <PairingTitle paringCount={paringCount} />
-          <SmallPairingController pairProps={pairProps} />
-          <SimilarBeerController beerProps={beerProps} />
+
+      <main className="m-auto h-screen max-w-4xl relative">
+        {/* <div className="bg-scroll h-full bg-opacity-50 bg-gradient-to-b from-[rgba(205,95,3)] via-[rgba(241,179,28,20)] to-transparent "></div> */}
+
+        <Image
+          className="w-full h-screen left-0 top-0 fixed -z-10"
+          src="/images/background.png"
+          alt="bg"
+          width={500}
+          height={500}
+          priority
+        />
+
+        <div className="h-40 bg-white m-2 rounded-lg max-w-4xl">
+          제주슬라이스
         </div>
+
+        <RatingTitle ratingCount={ratingCount} />
+        <SmallCardController cardProps={cardProps} />
+
+        <PairingTitle paringCount={paringCount} />
+        <SmallPairingController pairProps={pairProps} />
+
+        <SimilarBeerController beerProps={beerProps} />
+        <NavBar />
       </main>
     </>
   );

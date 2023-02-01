@@ -3,8 +3,21 @@ import { FaRegCommentDots } from 'react-icons/fa';
 import { FiThumbsUp } from 'react-icons/fi';
 import { SmallCardInfo } from './SmallCardController';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function SmallCard(props: { cardProps: SmallCardInfo }) {
+  const [starScore, setStarScore] = useState<number | undefined>(
+    props?.cardProps?.star
+  );
+  useEffect(() => {
+    if (starScore) {
+      const starNum = Number(starScore?.toFixed(2));
+      setStarScore(starNum);
+    } else {
+      setStarScore(0);
+    }
+  }, [starScore]);
+
   return (
     <div className="w-full rounded-lg bg-white text-y-black drop-shadow-lg text-xs border">
       {/* 별점,닉네임 */}
@@ -17,7 +30,7 @@ export default function SmallCard(props: { cardProps: SmallCardInfo }) {
             height={20}
             className="mr-1 mb-[3px] text-y-gold drop-shadow-md"
           />
-          {props.cardProps.star}
+          {starScore}
         </span>
         <span className="flex justify-center items-center">
           {props.cardProps.nickName}
