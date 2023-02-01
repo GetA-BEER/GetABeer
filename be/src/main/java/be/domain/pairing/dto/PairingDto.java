@@ -23,12 +23,29 @@ public class PairingDto {
 
 	@Getter
 	@Builder
+	public static class Post2 {
+		private String nickname;
+		private String content;
+		private List<String> image;
+		private String category;
+	}
+
+	@Getter
+	@Builder
 	public static class Patch {
 		private Long beerId;
 		private String content;
 		private String imageUrl1;
 		private String imageUrl2;
 		private String imageUrl3;
+		private String category;
+	}
+
+	@Getter
+	@Builder
+	public static class Patch2 {
+		private String content;
+		private List<String> image;
 		private String category;
 	}
 
@@ -54,6 +71,38 @@ public class PairingDto {
 			PairingCategory category, Integer likeCount, Integer commentCount, LocalDateTime createdAt,
 			LocalDateTime modifiedAt) {
 			this.beerId = beerId;
+			this.pairingId = pairingId;
+			this.nickname = nickname;
+			this.content = content;
+			this.imageList = imageList;
+			this.category = category;
+			this.likeCount = likeCount;
+			this.commentCount = commentCount;
+			this.createdAt = createdAt;
+			this.modifiedAt = modifiedAt;
+		}
+	}
+
+	@Getter
+	public static class Response2 {
+		private Long pairingId;
+		private String nickname;
+		private String content;
+		private List<PairingImageDto.Response2> imageList;
+		private PairingCategory category;
+		private Integer likeCount;
+		private Integer commentCount;
+		private LocalDateTime createdAt;
+		private LocalDateTime modifiedAt;
+
+		protected Response2() {
+		}
+
+		@Builder
+		public Response2(Long pairingId, String nickname, String content,
+			List<PairingImageDto.Response2> imageList,
+			PairingCategory category, Integer likeCount, Integer commentCount, LocalDateTime createdAt,
+			LocalDateTime modifiedAt) {
 			this.pairingId = pairingId;
 			this.nickname = nickname;
 			this.content = content;

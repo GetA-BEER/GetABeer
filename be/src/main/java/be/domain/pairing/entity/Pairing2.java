@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class Pairing extends BaseTimeEntity {
+public class Pairing2 extends BaseTimeEntity {
 
 	@Id
 	@Column(name = "paring_id")
@@ -55,58 +55,22 @@ public class Pairing extends BaseTimeEntity {
 	@ColumnDefault("0")
 	private Integer commentCount;
 
-	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 */
-	@OneToOne
-	@JoinColumn(name = "pairing_image_id")
-	private PairingImage pairingImage;
-
-	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 편의 메서드 */
-	public void oneToOneByPairingImage(PairingImage pairingImage) {
-		this.pairingImage = pairingImage;
-
-		if (pairingImage.getPairing() != this) {
-			pairingImage.oneToOneByPairing(this);
-		}
-	}
-
-	/* 💙 페어링 - 맥주 다대일 연관관계 */
-	@ManyToOne
-	@JoinColumn(name = "beer_id")
-	private Beer beer;
-
-	/* 💙 페어링 - 맥주 다대일 연관관계 편의 메서드 */
-	public void belongToBeer(Beer beer) {
-		this.beer = beer;
-	}
-
-	/* 💚 페어링 - 페어링 대댓글 일대다 연관관계 */
+	/* 🧡 페어링 - 페어링 이미지 일대다 연관관계 */
 	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	private List<PairingComment> pairingCommentList = new ArrayList<>();
+	private List<PairingImage2> paringImageList;
 
-	/* 💚 페어링 - 페어링 대댓글 일대다 연관관계 편의 메서드 */
-	public void addPairingCommentList(PairingComment pairingComment) {
-		pairingCommentList.add(pairingComment);
+	/* 🧡 페어링 - 페어링 이미지 일대다 연관관계 편의 메서드 */
+	public void addPairingImageList(PairingImage2 paringImage) {
+		paringImageList.add(paringImage);
 
-		if (pairingComment.getPairing() != this) {
-			pairingComment.belongToPairing(this);
+		if (paringImage.getPairing() != this) {
+			paringImage.belongToPairing(this);
 		}
 	}
 
-	/* 🖤 페어링 - 회원 다대일 연관관계 */
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-
-	/* 🖤 페어링 - 회원 다대일 연관관계 편의 메서드 */
-	public void bndUser(User user) {
-		this.user = user;
-	}
-
-	public void saveDefault(Beer beer, PairingImage pairingImage, List<PairingComment> pairingCommentList,
+	public void saveDefault(List<PairingComment> pairingCommentList,
 		Integer likeCount, Integer commentCount) {
-		this.beer = beer;
-		this.pairingImage = pairingImage;
-		this.pairingCommentList = pairingCommentList;
+		// this.paringImageList = paringImageList;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
 	}
@@ -117,9 +81,5 @@ public class Pairing extends BaseTimeEntity {
 
 	public void updateCategory(PairingCategory pairingCategory) {
 		this.pairingCategory = pairingCategory;
-	}
-
-	public void saveImage(PairingImage pairingImage) {
-		this.pairingImage = pairingImage;
 	}
 }

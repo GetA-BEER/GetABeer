@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.domain.rating.dto.RatingDto;
+import be.domain.rating.dto.RatingTagDto;
 import be.domain.rating.entity.Rating;
+import be.domain.rating.entity.RatingTag;
 import be.domain.rating.mapper.RatingMapper;
 import be.domain.rating.service.RatingService;
 
@@ -32,7 +34,10 @@ public class RatingController {
 	/* 맥주 평가 등록 */
 	@PostMapping
 	public ResponseEntity<RatingDto.Response> post(@RequestBody RatingDto.Post post) {
-		Rating rating = ratingService.create(mapper.ratingPostDtoToRating(post), post.getBeerId());
+		ratingService.checkVerifiedTag(post.getColor(), post.getTaste(), post.getFlavor(), post.getCarbonation());
+
+		RatingTag ratingTag = mapper.ratingPostDtoToRatingTag(post);
+		Rating rating = ratingService.create(mapper.ratingPostDtoToRating(post), post.getBeerId(), ratingTag);
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(mapper.ratingToRatingResponse(rating, rating.getBeer().getId()));

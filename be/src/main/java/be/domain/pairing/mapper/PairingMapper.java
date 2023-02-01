@@ -20,6 +20,8 @@ public interface PairingMapper {
 
 	Pairing pairingPatchDtoToPairing(PairingDto.Patch patch);
 
+	PairingImage pairingPatchDtoToPairingImage(PairingDto.Patch patch);
+
 	default PairingDto.Response pairingToPairingResponseDto(Pairing pairing, Long beerId) {
 		if (pairing == null) {
 			return null;
@@ -42,13 +44,13 @@ public interface PairingMapper {
 	}
 
 	private List<PairingImageDto.Response> getPairingImageDto(Pairing pairing) {
-		if (pairing.getParingImage() == null) {
+		if (pairing.getPairingImage() == null) {
 			return null;
 		}
 		PairingImageDto.Response response = PairingImageDto.Response.builder()
-			.imageUrl1(pairing.getParingImage().getImageUrl1())
-			.imageUrl2(pairing.getParingImage().getImageUrl2())
-			.imageUrl3(pairing.getParingImage().getImageUrl3())
+			.imageUrl1(pairing.getPairingImage().getImageUrl1())
+			.imageUrl2(pairing.getPairingImage().getImageUrl2())
+			.imageUrl3(pairing.getPairingImage().getImageUrl3())
 			.build();
 
 		return List.of(response);

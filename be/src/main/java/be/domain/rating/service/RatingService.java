@@ -5,31 +5,43 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
+import be.domain.beertag.entity.BeerTagType;
+import be.domain.rating.dto.RatingTagDto;
 import be.domain.rating.entity.Rating;
+import be.domain.rating.entity.RatingTag;
 import be.domain.rating.repository.RatingRepository;
+import be.domain.rating.repository.RatingTagRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class RatingService {
 	private final RatingRepository ratingRepository;
 	private final BeerService beerService;
+	private final RatingTagRepository tagRepository;
 
-	public RatingService(RatingRepository ratingRepository, BeerService beerService) {
+	public RatingService(RatingRepository ratingRepository, BeerService beerService,
+		RatingTagRepository tagRepository) {
 		this.ratingRepository = ratingRepository;
 		this.beerService = beerService;
+		this.tagRepository = tagRepository;
 	}
 
 	/* 맥주 코멘트 등록 */
-	public Rating create(Rating rating, Long beerId) {
+	@Transactional
+	public Rating create(Rating rating, Long beerId, RatingTag ratingTag) {
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
 		/* 기본 설정 저장하기 */
-		rating.saveDefault(beer, 0, 0, new ArrayList<>());
+		tagRepository.save(ratingTag);
+		rating.saveDefault(beer, ratingTag, 0, 0, new ArrayList<>());
 
 		ratingRepository.save(rating);
 
@@ -75,5 +87,33 @@ public class RatingService {
 
 		return ratingRepository.findById(ratingId)
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RATING_NOT_FOUND));
+	}
+
+	/* 평가 태그 입력 확인 */
+	public void checkVerifiedTag(String color, String taste, String flavor, String carbonation) {
+
+		if (!color.equalsIgnoreCase("STRAW") && !color.equalsIgnoreCase("GOLD")
+			&& !color.equalsIgnoreCase("BROWN") && !color.equalsIgnoreCase("BLACK")) {
+			log.error("색 태그가 잘못 요청 되었음.");
+			throw new BusinessLogicException(ExceptionCode.TAG_IS_WRONG);
+		}
+
+		if (!taste.equalsIgnoreCase("SWEET") && !taste.equalsIgnoreCase("SOUR")
+			&& !taste.equalsIgnoreCase("BITTER") && !taste.equalsIgnoreCase("ROUGH")) {
+			log.error("맛 태그가 잘못 요청 되었음.");
+			throw new BusinessLogicException(ExceptionCode.TAG_IS_WRONG);
+		}
+
+		if (!flavor.equalsIgnoreCase("FRUITY") && !flavor.equalsIgnoreCase("FLOWER")
+			&& !flavor.equalsIgnoreCase("MALTY") && !flavor.equalsIgnoreCase("HOPPY")) {
+			log.error("향 태그가 잘못 요청 되었음.");
+			throw new BusinessLogicException(ExceptionCode.TAG_IS_WRONG);
+		}
+
+		if (!carbonation.equalsIgnoreCase("WEAK") && !carbonation.equalsIgnoreCase("MIDDLE")
+			&& !carbonation.equalsIgnoreCase("STRONG") && !carbonation.equalsIgnoreCase("NO_CARBONATION")) {
+			log.error("탄산 태그가 잘못 요청 되었음.");
+			throw new BusinessLogicException(ExceptionCode.TAG_IS_WRONG);
+		}
 	}
 }
