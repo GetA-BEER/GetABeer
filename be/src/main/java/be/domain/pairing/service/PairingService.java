@@ -49,7 +49,8 @@ public class PairingService {
 	}
 
 	/* 페어링 수정 */
-	public Pairing update(Pairing pairing, long pairingId, String category) {
+	@Transactional
+	public Pairing update(Pairing pairing, PairingImage pairingImage, long pairingId, String category) {
 
 		/* 존재하는 페어링인지 확인 및 해당 페어링 정보 가져오기 */
 		Pairing findPairing = findVerifiedPairing(pairingId);
@@ -59,6 +60,19 @@ public class PairingService {
 		if (category != null) {
 			findPairing.updateCategory(findCategory(category));
 		}
+
+		Optional<PairingImage> optional = paringImageRepository.findById(findPairing.getPairingImage().getId());
+
+		if (optional.isEmpty()) {
+			paringImageRepository.save(pairingImage);
+			findPairing.saveImage(pairingImage);
+		} else {
+			PairingImage findImage = findPairing.getPairingImage();
+			findImage.updateImage(pairingImage);
+			paringImageRepository.save(findImage);
+			findPairing.saveImage(findImage);
+		}
+
 		pairingRepository.save(findPairing);
 
 		return findPairing;

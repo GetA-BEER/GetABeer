@@ -56,15 +56,16 @@ public class Pairing extends BaseTimeEntity {
 	private Integer commentCount;
 
 	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 */
-	@OneToOne(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	private PairingImage paringImage;
+	@OneToOne
+	@JoinColumn(name = "pairing_image_id")
+	private PairingImage pairingImage;
 
 	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 편의 메서드 */
-	public void oneToOneByPairingImage(PairingImage paringImage) {
-		this.paringImage = paringImage;
+	public void oneToOneByPairingImage(PairingImage pairingImage) {
+		this.pairingImage = pairingImage;
 
-		if (paringImage.getPairing() != this) {
-			paringImage.oneToOneByPairing(this);
+		if (pairingImage.getPairing() != this) {
+			pairingImage.oneToOneByPairing(this);
 		}
 	}
 
@@ -101,10 +102,10 @@ public class Pairing extends BaseTimeEntity {
 		this.user = user;
 	}
 
-	public void saveDefault(Beer beer, PairingImage paringImage, List<PairingComment> pairingCommentList,
+	public void saveDefault(Beer beer, PairingImage pairingImage, List<PairingComment> pairingCommentList,
 		Integer likeCount, Integer commentCount) {
 		this.beer = beer;
-		this.paringImage = paringImage;
+		this.pairingImage = pairingImage;
 		this.pairingCommentList = pairingCommentList;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
@@ -116,5 +117,9 @@ public class Pairing extends BaseTimeEntity {
 
 	public void updateCategory(PairingCategory pairingCategory) {
 		this.pairingCategory = pairingCategory;
+	}
+
+	public void saveImage(PairingImage pairingImage) {
+		this.pairingImage = pairingImage;
 	}
 }

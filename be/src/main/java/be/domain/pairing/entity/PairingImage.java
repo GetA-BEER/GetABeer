@@ -1,5 +1,6 @@
 package be.domain.pairing.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,15 +34,14 @@ public class PairingImage {
 	private String imageUrl3;
 
 	/* 🧡 페어링 이미지 - 페어링 일대일 연관관계 */
-	@OneToOne
-	@JoinColumn(name = "pairing_id")
+	@OneToOne(mappedBy = "pairingImage", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private Pairing pairing;
 
 	/* 🧡 페어링 이미지 - 페어링 다대일 연관관계 편의 메서드 */
 	public void oneToOneByPairing(Pairing pairing) {
 		this.pairing = pairing;
 
-		if (pairing.getParingImage() != this) {
+		if (pairing.getPairingImage() != this) {
 			pairing.oneToOneByPairingImage(this);
 		}
 	}
@@ -52,5 +52,11 @@ public class PairingImage {
 		this.imageUrl1 = imageUrl1;
 		this.imageUrl2 = imageUrl2;
 		this.imageUrl3 = imageUrl3;
+	}
+
+	public void updateImage(PairingImage pairingImage) {
+		this.imageUrl1 = pairingImage.getImageUrl1();
+		this.imageUrl2 = pairingImage.getImageUrl2();
+		this.imageUrl3 = pairingImage.getImageUrl3();
 	}
 }

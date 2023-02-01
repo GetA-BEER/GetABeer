@@ -43,7 +43,8 @@ public class PairingController {
 	@PatchMapping("/{pairingId}")
 	public ResponseEntity<PairingDto.Response> patch(@PathVariable @Positive Long pairingId,
 		@RequestBody PairingDto.Patch patch) {
-		Pairing pairing = pairingService.update(mapper.pairingPatchDtoToPairing(patch), pairingId, patch.getCategory());
+		Pairing pairing = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
+			mapper.pairingPatchDtoToPairingImage(patch), pairingId, patch.getCategory());
 
 		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
 	}
