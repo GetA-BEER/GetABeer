@@ -1,13 +1,13 @@
-package be.domain.pairing.dto;
+package be.domain.rating.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import be.domain.pairing.entity.PairingCategory;
+import be.domain.comment.entity.RatingComment;
 import lombok.Builder;
 import lombok.Getter;
 
-public class PairingDto {
+public class RatingDto {
 
 	@Getter
 	@Builder
@@ -15,10 +15,7 @@ public class PairingDto {
 		private Long beerId;
 		private String nickname;
 		private String content;
-		private String imageUrl1;
-		private String imageUrl2;
-		private String imageUrl3;
-		private String category;
+		private Double star;
 	}
 
 	@Getter
@@ -26,22 +23,20 @@ public class PairingDto {
 	public static class Patch {
 		private Long beerId;
 		private String content;
-		private String imageUrl1;
-		private String imageUrl2;
-		private String imageUrl3;
-		private String category;
+		private Double star;
 	}
 
 	@Getter
 	public static class Response {
 		private Long beerId;
-		private Long pairingId;
+
+		private Long ratingId;
 		private String nickname;
 		private String content;
-		private List<PairingImageDto.Response> imageList;
-		private PairingCategory category;
+		private Double star;
 		private Integer likeCount;
 		private Integer commentCount;
+		private List<RatingComment> ratingCommentList;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
@@ -49,18 +44,18 @@ public class PairingDto {
 		}
 
 		@Builder
-		public Response(Long beerId, Long pairingId, String nickname, String content,
-			List<PairingImageDto.Response> imageList,
-			PairingCategory category, Integer likeCount, Integer commentCount, LocalDateTime createdAt,
+		public Response(Long beerId, Long ratingId, String nickname, String content, Double star,
+			Integer likeCount,
+			Integer commentCount, List<RatingComment> ratingCommentList, LocalDateTime createdAt,
 			LocalDateTime modifiedAt) {
 			this.beerId = beerId;
-			this.pairingId = pairingId;
+			this.ratingId = ratingId;
 			this.nickname = nickname;
 			this.content = content;
-			this.imageList = imageList;
-			this.category = category;
+			this.star = star;
 			this.likeCount = likeCount;
 			this.commentCount = commentCount;
+			this.ratingCommentList = ratingCommentList;
 			this.createdAt = createdAt;
 			this.modifiedAt = modifiedAt;
 		}
