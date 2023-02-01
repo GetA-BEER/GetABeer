@@ -1,19 +1,30 @@
-import { BeerInfo } from './SimilarBeerController';
+// import { BeerInfo } from './SimilarBeerController';
 import Image from 'next/image';
 
-export default function SimilarBeer(props: BeerInfo) {
+interface BeerInfo {
+  id: number;
+  idx?: number;
+  title: string;
+  category: string;
+  country: string;
+  level: number;
+  ibu: number;
+  image: string;
+}
+
+export default function SimilarBeer(props: { similarBeer: BeerInfo }) {
   return (
-    <div className="rounded-2xl w-full m-2 bg-white text-y-black drop-shadow-xl text-[5px] border">
+    <div className="rounded-2xl w-full mx-2 bg-white text-y-black drop-shadow-xl border mb-16">
       <div className="border-b-2 p-4">
-        <div className="text-base font-semibold">{props.title}</div>
-        <div>{`${props.category} / ${props.country} ${props.level}% ${props.ibu}IBU`}</div>
+        <div className="text-sm font-semibold">{props.similarBeer.title}</div>
+        <div className="text-[8px]">{`${props.similarBeer.category}/${props.similarBeer.country} ${props.similarBeer.level}% ${props.similarBeer.ibu}IBU`}</div>
       </div>
       <Image
         className="pt-3 rounded-2xl m-auto"
         alt="Beer"
-        src={`${props.image}`}
-        width={300}
-        height={300}
+        src={`${props.similarBeer.image}`}
+        width={100}
+        height={100}
       />
     </div>
   );

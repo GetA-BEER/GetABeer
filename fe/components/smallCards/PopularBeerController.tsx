@@ -18,11 +18,13 @@ export interface BeerInfo {
   image: string;
 }
 
-export default function PopularBeerController({ beerProps }: any) {
-  const [beerList, setBeerList] = useState<BeerInfo[]>(beerProps);
+export default function PopularBeerController(props: {
+  beerProps: BeerInfo[];
+}) {
+  const [beerList, setBeerList] = useState<BeerInfo[]>(props.beerProps);
   return (
     <>
-      <div className="m-4 text-base font-semibold">
+      <div className="mx-3 mt-6 mb-2 text-base font-semibold">
         인기 많은 <span className="text-y-brown">맥주</span>
       </div>
       <div className="w-full">
@@ -32,13 +34,10 @@ export default function PopularBeerController({ beerProps }: any) {
           spaceBetween={20}
           modules={[Pagination]}
         >
-          {beerList?.map((props: BeerInfo, index: number) => (
-            <>
-              <SwiperSlide key={props.id}>
-                <PopularBeer {...props} key={props.id} />
-              </SwiperSlide>
-              {/* {(props.idx = index)} */}
-            </>
+          {beerList?.map((popularBeer: BeerInfo, idx: number) => (
+            <SwiperSlide key={popularBeer.id}>
+              <PopularBeer popularBeer={popularBeer} idx={idx} />
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>

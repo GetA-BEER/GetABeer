@@ -1,3 +1,4 @@
+// import React from 'react';
 import { useState } from 'react';
 
 type InputProps = {
@@ -5,9 +6,9 @@ type InputProps = {
 };
 
 export default function BigInput({ placeholder }: InputProps) {
-  const [inputState, setInputState] = useState();
-  const [inputLen, setInputLen] = useState(0);
-  const onInputChange = (e: any) => {
+  const [inputState, setInputState] = useState<string | undefined>();
+  const [inputLen, setInputLen] = useState<number | undefined>(0);
+  const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputState(e.target.value);
     setInputLen(e.target.value.length);
     console.log(inputState);
@@ -16,9 +17,7 @@ export default function BigInput({ placeholder }: InputProps) {
   return (
     <div className="m-5">
       <form className="font-light">
-        <span className="block text-sm text-slate-700 font-medium ">
-          큰 Input창
-        </span>
+        <div className="mt-6 mb-2 text-base font-semibold">설명</div>
         <textarea
           className="w-full h-32 rounded-xl p-2 border border-y-gray focus:outline-y-gold placeholder-slate-300 resize-none"
           placeholder={placeholder}

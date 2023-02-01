@@ -2,6 +2,15 @@ import { useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 
 export default function PairingBox() {
+  const pairingList = [
+    '튀김/부침',
+    '구이/오븐',
+    '생식/회',
+    '마른안주/견과',
+    '과자/디저트',
+    '국/찜/찌개/탕',
+    '기타',
+  ];
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
   const [category, setCategory] = useState('카테고리');
@@ -12,7 +21,8 @@ export default function PairingBox() {
     console.log(checked);
   };
   return (
-    <>
+    <div className="m-5">
+      <div className="mt-6 mb-2 text-base font-semibold">페어링 카테고리</div>
       <button
         onClick={() => setShowModal(!showModal)}
         className={`${
@@ -25,62 +35,17 @@ export default function PairingBox() {
       {showModal ? (
         <div className="relative w-32 h-0">
           <ul className="bg-white border-2 w-full text-xs rounded-lg x-20 z-20 absolute right-0">
-            <li
-              onClick={() => {
-                onCategoryChange('튀김/부침');
-              }}
-              className="pl-3 py-1"
-            >
-              튀김/부침
-            </li>
-            <li
-              onClick={() => {
-                onCategoryChange('구이/오븐');
-              }}
-              className="pl-3 py-1"
-            >
-              구이/오븐
-            </li>
-            <li
-              onClick={() => {
-                onCategoryChange('생식/회');
-              }}
-              className="pl-3 py-1"
-            >
-              생식/회
-            </li>
-            <li
-              onClick={() => {
-                onCategoryChange('마른안주/견과');
-              }}
-              className="pl-3 py-1"
-            >
-              마른안주/견과
-            </li>
-            <li
-              onClick={() => {
-                onCategoryChange('과자/디저트');
-              }}
-              className="pl-3 py-1"
-            >
-              과자/디저트
-            </li>
-            <li
-              onClick={() => {
-                onCategoryChange('국/찜/찌개/탕');
-              }}
-              className="pl-3 py-1"
-            >
-              국/찜/찌개/탕
-            </li>{' '}
-            <li
-              onClick={() => {
-                onCategoryChange('기타');
-              }}
-              className="pl-3 py-1"
-            >
-              기타
-            </li>
+            {pairingList.map((el: string, idx: number) => (
+              <li
+                key={idx.toString()}
+                onClick={() => {
+                  onCategoryChange(el);
+                }}
+                className="pl-3 py-1"
+              >
+                {el}
+              </li>
+            ))}
           </ul>
           <button
             className="inset-0 fixed cursor-default"
@@ -90,6 +55,6 @@ export default function PairingBox() {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 }

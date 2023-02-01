@@ -1,15 +1,13 @@
 import Head from 'next/head';
-import Advertise from './Advertise';
-import NavBar from '@/components/NavBar';
+import Image from 'next/image';
 import SmallCardController from '@/components/smallCards/SmallCardController';
-import SmallpairingController from '@/components/smallCards/SmallpairingController';
-import BigInput from '@/components/inputs/BigInput';
+import SmallPairingController from '@/components/smallCards/SmallpairingController';
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
-import PopularBeerController from '@/components/smallCards/PopularBeerController';
-import SortBox from '@/components/selectBox/SortBox';
-import PairingBox from '@/components/selectBox/PairingBox';
+import RatingTitle from './RatingTitle';
+import PairingTitle from './PairingTitle';
+import NavBar from '@/components/NavBar';
 
-export default function Main() {
+export default function Beer() {
   const cardProps = [
     {
       id: 1,
@@ -23,7 +21,7 @@ export default function Main() {
     },
     {
       id: 2,
-      star: 4.0,
+      star: 4.222,
       nickName: '테스트',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
@@ -32,7 +30,7 @@ export default function Main() {
       thumbs: 10,
     },
   ];
-  const pairingProps = [
+  const pairProps = [
     {
       id: 1,
       pairing: '튀김',
@@ -47,16 +45,6 @@ export default function Main() {
       id: 2,
       pairing: '구이',
       nickName: '테스트',
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
-      date: '2023.41.30',
-      comments: 5,
-      thumbs: 10,
-    },
-    {
-      id: 3,
-      pairing: '견과류',
-      nickName: '어렵네',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
       date: '2023.41.30',
@@ -111,6 +99,9 @@ export default function Main() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
   ];
+  let ratingCount = 35;
+  let paringCount = 3;
+
   return (
     <>
       <Head>
@@ -119,36 +110,32 @@ export default function Main() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <div className="h-screen m-auto max-w-4xl">
-        <div>
-          <main className="m-auto border-2">
-            <div className="py-2 bg-gray-200 text-black">상단헤더</div>
 
-            <Advertise />
+      <main className="m-auto h-screen max-w-4xl relative">
+        {/* <div className="bg-scroll h-full bg-opacity-50 bg-gradient-to-b from-[rgba(205,95,3)] via-[rgba(241,179,28,20)] to-transparent "></div> */}
 
-            <BigInput placeholder="페어링을 추천하는 이유를 적어주세요" />
-            <div className="m-auto">
-              레이팅 소 카드
-              <SmallCardController cardProps={cardProps} />
-              <br />
-              셀렉박스
-              <SortBox />
-              페어링 셀렉박스
-              <PairingBox />
-              <br />
-              페어링 소 카드
-              <SmallpairingController pairingProps={pairingProps} />
-              <br />
-              작은 맥주 카드
-              <PopularBeerController beerProps={beerProps} />
-              <br />
-              <SimilarBeerController beerProps={beerProps} />
-            </div>
-          </main>
-          <div className="pb-32"></div>
-          <NavBar />
+        <Image
+          className="w-full h-screen left-0 top-0 fixed -z-10"
+          src="/images/background.png"
+          alt="bg"
+          width={500}
+          height={500}
+          priority
+        />
+
+        <div className="h-40 bg-white m-2 rounded-lg max-w-4xl">
+          제주슬라이스
         </div>
-      </div>
+
+        <RatingTitle ratingCount={ratingCount} />
+        <SmallCardController cardProps={cardProps} />
+
+        <PairingTitle paringCount={paringCount} />
+        <SmallPairingController pairProps={pairProps} />
+
+        <SimilarBeerController beerProps={beerProps} />
+        <NavBar />
+      </main>
     </>
   );
 }
