@@ -35,15 +35,9 @@ export default function PopularBeerController(props: {
           modules={[Pagination]}
         >
           {beerList?.map((popularBeer: BeerInfo, idx: number) => (
-            <>
-              <SwiperSlide key={popularBeer.id}>
-                <PopularBeer
-                  popularBeer={popularBeer}
-                  idx={idx}
-                  key={popularBeer.id}
-                />
-              </SwiperSlide>
-            </>
+            <SwiperSlide key={popularBeer.id}>
+              <PopularBeer popularBeer={popularBeer} idx={idx} />
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>

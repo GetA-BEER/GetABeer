@@ -15,7 +15,7 @@ export default function BeerCategoryBtn() {
       <div className="grid grid-cols-6 mx-2 gap-2 items-center font-bold">
         {beerCategoryList.map((el: string, idx: number) => (
           <div
-            key={idx}
+            key={idx.toString()}
             className="flex justify-center items-center h-[54px] lg:h-32 md:h-28 sm:h-24  bg-y-gold text-[8px] lg:text-lg rounded-xl"
           >
             {el}

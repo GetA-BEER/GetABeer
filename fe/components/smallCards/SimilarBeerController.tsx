@@ -62,11 +62,9 @@ export default function SimilarBeerController(props: {
           modules={[Pagination]}
         >
           {beerList?.map((similarBeer: BeerInfo, idx: number) => (
-            <>
-              <SwiperSlide key={similarBeer.id}>
-                <SimilarBeer key={idx} similarBeer={similarBeer} />
-              </SwiperSlide>
-            </>
+            <SwiperSlide key={similarBeer.id}>
+              <SimilarBeer similarBeer={similarBeer} />
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>

@@ -28,7 +28,7 @@ export default function SortgBox() {
           <ul className="bg-white border-2 w-full text-xs rounded-lg x-20 z-20 absolute right-0">
             {sortList.map((el: string, idx: number) => (
               <li
-                key={idx}
+                key={idx.toString()}
                 onClick={() => {
                   onCategoryChange(el);
                 }}
