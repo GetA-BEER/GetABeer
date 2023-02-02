@@ -60,7 +60,6 @@ export default function Main() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-
       <main className="m-auto h-screen max-w-4xl">
         <Advertise />
         <div className="m-auto">
