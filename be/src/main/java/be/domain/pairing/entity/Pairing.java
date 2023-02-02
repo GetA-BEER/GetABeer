@@ -20,6 +20,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import be.domain.beer.entity.Beer;
 import be.domain.comment.entity.PairingComment;
+import be.domain.pairing.dto.PairingImageDto;
 import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -55,17 +56,16 @@ public class Pairing extends BaseTimeEntity {
 	@ColumnDefault("0")
 	private Integer commentCount;
 
-	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 */
-	@OneToOne
-	@JoinColumn(name = "pairing_image_id")
-	private PairingImage pairingImage;
+	/* 🧡 페어링 - 페어링 이미지 일대다 연관관계 */
+	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<PairingImage> pairingImageList;
 
-	/* 🧡 페어링 - 페어링 이미지 일대일 연관관계 편의 메서드 */
-	public void oneToOneByPairingImage(PairingImage pairingImage) {
-		this.pairingImage = pairingImage;
+	/* 🧡 페어링 - 페어링 이미지 일대다 연관관계 편의 메서드 */
+	public void addPairingImageList(PairingImage pairingImage) {
+		pairingImageList.add(pairingImage);
 
 		if (pairingImage.getPairing() != this) {
-			pairingImage.oneToOneByPairing(this);
+			pairingImage.belongToPairing(this);
 		}
 	}
 
@@ -79,11 +79,11 @@ public class Pairing extends BaseTimeEntity {
 		this.beer = beer;
 	}
 
-	/* 💚 페어링 - 페어링 대댓글 일대다 연관관계 */
+	/* 💚 페어링 - 페어링 댓글 일대다 연관관계 */
 	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<PairingComment> pairingCommentList = new ArrayList<>();
 
-	/* 💚 페어링 - 페어링 대댓글 일대다 연관관계 편의 메서드 */
+	/* 💚 페어링 - 페어링 댓글 일대다 연관관계 편의 메서드 */
 	public void addPairingCommentList(PairingComment pairingComment) {
 		pairingCommentList.add(pairingComment);
 
@@ -102,10 +102,11 @@ public class Pairing extends BaseTimeEntity {
 		this.user = user;
 	}
 
-	public void saveDefault(Beer beer, PairingImage pairingImage, List<PairingComment> pairingCommentList,
+	public void saveDefault(Beer beer, List<PairingImage> pairingImageList,
+		List<PairingComment> pairingCommentList,
 		Integer likeCount, Integer commentCount) {
 		this.beer = beer;
-		this.pairingImage = pairingImage;
+		this.pairingImageList = pairingImageList;
 		this.pairingCommentList = pairingCommentList;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
@@ -119,7 +120,7 @@ public class Pairing extends BaseTimeEntity {
 		this.pairingCategory = pairingCategory;
 	}
 
-	public void saveImage(PairingImage pairingImage) {
-		this.pairingImage = pairingImage;
+	public void updateImageList(List<PairingImage> pairingImageList) {
+		this.pairingImageList = pairingImageList;
 	}
 }

@@ -1,38 +1,33 @@
 package be.domain.pairing.mapper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import be.domain.pairing.dto.PairingDto;
 import be.domain.pairing.dto.PairingImageDto;
+import be.domain.pairing.dto.PairingRequestDto;
+import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingImage;
-import be.global.dto.SingleResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface PairingMapper {
-	Pairing pairingPostDtoToPairing(PairingDto.Post post);
+	Pairing pairingPostDtoToPairing(PairingRequestDto.Post post);
 
-	PairingImage pairingPostDtoToPairingImage(PairingDto.Post post);
+	Pairing pairingPatchDtoToPairing(PairingRequestDto.Patch patch);
 
-	Pairing pairingPatchDtoToPairing(PairingDto.Patch patch);
-
-	PairingImage pairingPatchDtoToPairingImage(PairingDto.Patch patch);
-
-	default PairingDto.Response pairingToPairingResponseDto(Pairing pairing, Long beerId) {
+	default PairingResponseDto.Detail pairingToPairingResponseDto(Pairing pairing, Long beerId) {
 		if (pairing == null) {
 			return null;
 		}
 
-		PairingDto.Response response = PairingDto.Response.builder()
+		PairingResponseDto.Detail response = PairingResponseDto.Detail.builder()
 			.beerId(beerId)
 			.pairingId(pairing.getId())
 			.nickname(pairing.getNickname())
 			.content(pairing.getContent())
-			.imageList(getPairingImageDto(pairing))
+			.imageList(getPairingImageList(pairing.getPairingImageList()))
 			.category(pairing.getPairingCategory())
 			.likeCount(pairing.getLikeCount())
 			.commentCount(pairing.getCommentCount())
@@ -43,18 +38,22 @@ public interface PairingMapper {
 		return response;
 	}
 
-	private List<PairingImageDto.Response> getPairingImageDto(Pairing pairing) {
-		if (pairing.getPairingImage() == null) {
-			return null;
+	private List<PairingImageDto.Response> getPairingImageList(List<PairingImage> pairingImages) {
+		if (pairingImages == null) {
+			return new ArrayList<>();
 		}
-		PairingImageDto.Response response = PairingImageDto.Response.builder()
-			.imageUrl1(pairing.getPairingImage().getImageUrl1())
-			.imageUrl2(pairing.getPairingImage().getImageUrl2())
-			.imageUrl3(pairing.getPairingImage().getImageUrl3())
-			.build();
 
-		return List.of(response);
+		List<PairingImageDto.Response> result = new ArrayList<>();
+
+		for (int i = 0; i < pairingImages.size(); i++) {
+			PairingImageDto.Response response = PairingImageDto.Response.builder()
+				.pairingImageId(pairingImages.get(i).getId())
+				.imageUrl(pairingImages.get(i).getImageUrl())
+				.build();
+
+			result.add(response);
+		}
+
+		return result;
 	}
-
-	List<PairingDto.Response> pairingToPairingResponseDto(List<Pairing> pairingList);
 }
