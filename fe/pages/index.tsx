@@ -52,6 +52,7 @@ export default function Main() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
   ];
+
   return (
     <>
       <Head>
