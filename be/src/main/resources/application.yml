@@ -7,9 +7,9 @@ spring:
       path: /h2
   #  cache:
   #    type: redis
-  #  redis:
-  #    host: localhost
-  #    port: 6379
+  redis:
+    host: localhost
+    port: 6379
   datasource:
     url: jdbc:h2:mem:test
   jpa:
@@ -94,3 +94,6 @@ webdriver:
   chrome:
     driverid: webdriver.chrome.driver
     location: "/Users/gnidinger/Documents/GetABeer/chromedriver_mac_arm64/chromedriver"
+elasticsearch:
+  host: localhost
+  port: 9200

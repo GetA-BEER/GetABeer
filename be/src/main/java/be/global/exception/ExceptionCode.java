@@ -19,8 +19,13 @@ public enum ExceptionCode {
 
 	/* BEER 관련 예외 */
 	BEER_NOT_FOUND(404, "Beer Not Found"),
-	BEER_CATEGORY_NOT_FOUND(404, "Beer Category Not Found");
+	BEER_CATEGORY_NOT_FOUND(404, "Beer Category Not Found"),
 
+	/* EMBEDDED REDIS 관련 예외 */
+	EMBEDDED_REDIS_EXCEPTION(500, "redis server error"),
+	CAN_NOT_EXECUTE_GREP(500, "can not execute grep process command"),
+	CAN_NOT_EXECUTE_REDIS_SERVER(500, "can not execute redis server"),
+	NOT_FOUND_AVAILABLE_PORT(500, "not found available port");
 	@Getter
 	private int status;
 	@Getter

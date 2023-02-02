@@ -55,10 +55,7 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.1.2' // Crawling
     implementation group: 'org.apache.poi', name: 'poi', version: '5.0.0' // 데이터 <-> 문서
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0' // 데이터 <-> 문서
-//    implementation 'com.google.cloud:google-cloud-vision'
-//    compile 'com.google.cloud:google-cloud-vision:0.25.0-beta'
-    implementation platform('com.google.cloud:libraries-bom:26.4.0')
-//    implementation 'com.google.cloud:google-cloud-bigquery'
+    implementation platform('com.google.cloud:libraries-bom:26.4.0') // Google Cloud
     implementation('com.google.cloud:spring-cloud-gcp-starter-vision:3.2.1') // Google Vision API
     //    --------------------------------------------JWT---------------------------------------------
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -72,8 +69,8 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     //    --------------------------------------------------------------------------------------------
     implementation "com.h2database:h2" // h2
-//	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
-//	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2' // 내장 Redis
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
+    implementation 'it.ozimov:embedded-redis:0.7.2' // 내장 Redis
 //    runtimeOnly 'mysql:mysql-connector-java' // MySQL
     //    --------------------------------------------------------------------------------------------
 //	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2' // AWS S3 이미지 업로드
@@ -123,9 +120,9 @@ bootJar {
     }
 }
 
-//test { // 빌드시 테스트 제외
-//	exclude '**/*'
-//}
+test { // 빌드시 테스트 제외
+    exclude '**/*'
+}
 
 //    ---------------------------------------Query DSL--------------------------------------------
 // 경로 지정

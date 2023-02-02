@@ -97,7 +97,6 @@ public class SeleniumStarter {
 
 	}
 
-	@SuppressWarnings("checkstyle:NeedBraces")
 	public List<CrawledInfo> createCrawledInfo() throws InterruptedException {
 
 		List<CrawledInfo> crawledInfos = new ArrayList<>();

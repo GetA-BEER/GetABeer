@@ -29,4 +29,11 @@ public class BeerDetailsTopTags {
 	public List<String> createList() {
 		return List.of(tag1, tag2, tag3, tag4);
 	}
+
+	public void changeTags(List<String> beerTagTypes) {
+		this.tag1 = beerTagTypes.get(0);
+		this.tag2 = beerTagTypes.get(1);
+		this.tag3 = beerTagTypes.get(2);
+		this.tag4 = beerTagTypes.get(3);
+	}
 }
