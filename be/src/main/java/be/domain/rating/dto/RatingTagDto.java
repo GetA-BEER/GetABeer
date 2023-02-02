@@ -1,5 +1,7 @@
 package be.domain.rating.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+
 import be.domain.beertag.entity.BeerTagType;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +15,7 @@ public class RatingTagDto {
 		private BeerTagType carbonation;
 
 		@Builder
+		@QueryProjection
 		public Response(BeerTagType color, BeerTagType taste, BeerTagType flavor, BeerTagType carbonation) {
 			this.color = color;
 			this.taste = taste;
