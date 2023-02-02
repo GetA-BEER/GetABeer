@@ -10,7 +10,7 @@ export default function BeerCategoryBtn() {
   return (
     <div className="my-4">
       <div className="mx-3 mt-6 mb-2 font-bold">
-        맥주<span className="text-y-gold ml-1">카테고리</span>
+        맥주<span className="text-y-brown ml-1">카테고리</span>
       </div>
       <div className="grid grid-cols-6 mx-2 gap-2 items-center font-bold">
         {beerCategoryList.map((el: string, idx: number) => (

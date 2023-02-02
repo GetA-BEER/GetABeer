@@ -3,8 +3,8 @@ import Image from 'next/image';
 import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallPairingController from '@/components/smallCards/SmallpairingController';
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
-import RatingTitle from './RatingTitle';
-import PairingTitle from './PairingTitle';
+import RatingTitle from '@/components/beerPage/RatingTitle';
+import PairingTitle from '@/components/beerPage/PairingTitle';
 import NavBar from '@/components/NavBar';
 
 export default function Beer() {
@@ -100,7 +100,7 @@ export default function Beer() {
     },
   ];
   let ratingCount = 35;
-  let paringCount = 3;
+  let pairngCount = 3;
 
   return (
     <>
@@ -130,7 +130,7 @@ export default function Beer() {
         <RatingTitle ratingCount={ratingCount} />
         <SmallCardController cardProps={cardProps} />
 
-        <PairingTitle paringCount={paringCount} />
+        <PairingTitle pairngCount={pairngCount} />
         <SmallPairingController pairProps={pairProps} />
 
         <SimilarBeerController beerProps={beerProps} />

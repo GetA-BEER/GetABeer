@@ -1,11 +1,9 @@
 import Head from 'next/head';
-import Advertise from '@/components/mainPage/Advertise';
 import NavBar from '@/components/NavBar';
-import PopularBeerController from '@/components/smallCards/PopularBeerController';
-import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
+import WishCardController from '@/components/wish/WishCardController';
 
-export default function Main() {
-  const beerProps = [
+export default function Wish() {
+  const wishProps = [
     {
       id: 1,
       title: '가든 바이젠',
@@ -13,6 +11,7 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
+      heart: 1,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
     },
     {
@@ -22,6 +21,7 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
+      heart: 0,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
     {
@@ -31,6 +31,7 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
+      heart: 1,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
     },
     {
@@ -40,6 +41,7 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
+      heart: 1,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
     },
     {
@@ -49,6 +51,7 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
+      heart: 0,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
   ];
@@ -60,14 +63,16 @@ export default function Main() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-4xl">
-        <Advertise />
-        <div className="m-auto">
-          <BeerCategoryBtn />
-          <PopularBeerController beerProps={beerProps} />
+
+      <main className="m-auto h-screen mx-4">
+        <div className=" max-w-4xl m-auto">
+          <div className="text-lg my-10 text-center font-semibold">
+            유미님의 위시 맥주
+          </div>
+          <WishCardController wishProps={wishProps} />
+          <div className="pb-14"></div>
+          <NavBar />
         </div>
-        <div className="pb-14"></div>
-        <NavBar />
       </main>
     </>
   );
