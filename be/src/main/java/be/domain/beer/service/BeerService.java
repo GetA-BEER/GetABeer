@@ -1,9 +1,12 @@
 package be.domain.beer.service;
 
+import static be.global.config.CacheConstant.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -56,7 +59,7 @@ public class BeerService {
 		findBeer.update(beer);
 
 		beerBeerCategoryQueryRepository.deleteAllByBeerId(beerId);
-		//        deleteBeerBeerCategories(findBeer);
+
 		saveBeerBeerCategories(findBeer, beer);
 
 		return beerRepository.save(findBeer);
@@ -80,36 +83,18 @@ public class BeerService {
 	//        return null;
 	//    }
 
+	@Cacheable(MONTHLY_BEER)
 	@Transactional(readOnly = true)
 	public List<MonthlyBeer> findMonthlyBeers() {
 
 		Optional<List<MonthlyBeer>> monthlyBeers = monthlyBeerQueryRepository.findMonthlyBeer();
 
-		/*
-		 * Monthly Beer 아직 생성되지 않은 경우 만들어주기
-		 */
-		if (monthlyBeers.isEmpty()) {
-
-			List<MonthlyBeer> monthlyBeersTemp = new ArrayList<>();
-			List<Beer> findBeers = beerQueryRepository.findMonthlyBeer();
-
-			findBeers.forEach(beer -> {
-				MonthlyBeer monthlyBeer = MonthlyBeer.builder().build();
-				List<BeerTag> beerTags = beerQueryRepository.findTop4BeerTag(beer);
-
-				monthlyBeer.create(beer, beerTags);
-
-				monthlyBeersTemp.add(monthlyBeer);
-			});
-
-			return monthlyBeerRepository.saveAll(monthlyBeersTemp);
-		}
 		return null;
 	}
 
+	@Cacheable(TOP_FOUR_BEER_TAG)
 	@Transactional(readOnly = true)
 	public List<BeerTag> findTop4BeerTags(Beer beer) {
-
 		return beerQueryRepository.findTop4BeerTag(beer);
 	}
 
@@ -155,5 +140,21 @@ public class BeerService {
 			beerBeerCategory.remove(findBeer, beerBeerCategory.getBeerCategory());
 			beerBeerCategoryQueryRepository.delete(beerBeerCategory);
 		});
+	}
+
+	public void createMonthlyBeer() {
+
+		List<MonthlyBeer> monthlyBeersTemp = new ArrayList<>();
+		List<Beer> findBeers = beerQueryRepository.findMonthlyBeer();
+
+		findBeers.forEach(beer -> {
+			MonthlyBeer monthlyBeer = MonthlyBeer.builder().build();
+
+			monthlyBeer.create(beer);
+
+			monthlyBeersTemp.add(monthlyBeer);
+		});
+
+		monthlyBeerRepository.saveAll(monthlyBeersTemp);
 	}
 }

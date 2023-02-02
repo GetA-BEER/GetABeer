@@ -1,12 +1,13 @@
 package be.domain.beercategory.repository;
 
-import be.domain.beercategory.entity.BeerCategory;
-import be.domain.beercategory.entity.BeerCategoryType;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import be.domain.beercategory.entity.BeerCategory;
+import be.domain.beercategory.entity.BeerCategoryType;
 
 public interface BeerCategoryRepository extends JpaRepository<BeerCategory, Long> {
 
-    Optional<BeerCategory> findBeerCategoryByBeerCategoryType(BeerCategoryType beerCategoryType);
+	Optional<BeerCategory> findBeerCategoryByBeerCategoryType(BeerCategoryType beerCategoryType);
 }
