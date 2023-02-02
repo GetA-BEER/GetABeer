@@ -33,7 +33,7 @@ public class PairingController {
 	@PostMapping
 	public ResponseEntity<PairingDto.Response> post(@RequestBody PairingDto.Post post) {
 		Pairing pairing = pairingService.create(mapper.pairingPostDtoToPairing(post),
-			mapper.pairingPostDtoToPairingImage(post), post.getCategory(), post.getBeerId());
+			post.getImage(), post.getCategory(), post.getBeerId());
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
@@ -44,7 +44,7 @@ public class PairingController {
 	public ResponseEntity<PairingDto.Response> patch(@PathVariable @Positive Long pairingId,
 		@RequestBody PairingDto.Patch patch) {
 		Pairing pairing = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
-			mapper.pairingPatchDtoToPairingImage(patch), pairingId, patch.getCategory());
+			pairingId, patch.getCategory(), patch.getImage());
 
 		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
 	}

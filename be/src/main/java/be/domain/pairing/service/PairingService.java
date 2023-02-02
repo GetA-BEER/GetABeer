@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
+import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.entity.PairingImage;
@@ -32,25 +33,47 @@ public class PairingService {
 
 	/* 페어링 등록 */
 	@Transactional
-	public Pairing create(Pairing pairing, PairingImage pairingImage, String category, Long beerId) {
+	public Pairing create(Pairing pairing, List<String> image, String category, Long beerId) {
+
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
 		pairing.updateCategory(findCategory(category));
 
 		/* 이미지 저장하기 */
-		paringImageRepository.save(pairingImage);
+		if (image.size() > 3) {
+			throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
+		}
+
+		List<PairingImage> pairingImages = new ArrayList<>();
+
+		for (int i = 0; i < image.size(); i++) {
+			PairingImage pairingImage = PairingImage.builder()
+				.imageUrl(image.get(i))
+				.pairing(pairing)
+				.build();
+			paringImageRepository.save(pairingImage);
+			pairingImages.add(pairingImage);
+		}
 
 		/* 페어링 등록하기 */
-		pairing.saveDefault(beer, pairingImage, new ArrayList<>(), 0, 0);
+		pairing.saveDefault(beer, pairingImages, new ArrayList<>(), 0, 0);
 		pairingRepository.save(pairing);
 
 		return pairing;
 	}
 
-	/* 페어링 수정 */
-	@Transactional
-	public Pairing update(Pairing pairing, PairingImage pairingImage, long pairingId, String category) {
+	/* 일대다 이미지 리스트 가져오기 */
+	public List<PairingImageDto.Response> getImageDtoList(Long pairingId) {
+		return pairingRepository.findPairingImageList(pairingId);
+	}
+
+	public List<PairingImage> getImageList(Long pairingId) {
+		return pairingRepository.findPairingImage(pairingId);
+	}
+
+	/* 페어링 수정 v2 -> 어떻게하면 더 효과적으로 이미지를 바꿀 수 있지? */
+	public Pairing update(Pairing pairing, long pairingId, String category, List<String> image) {
 
 		/* 존재하는 페어링인지 확인 및 해당 페어링 정보 가져오기 */
 		Pairing findPairing = findVerifiedPairing(pairingId);
@@ -61,16 +84,41 @@ public class PairingService {
 			findPairing.updateCategory(findCategory(category));
 		}
 
-		Optional<PairingImage> optional = paringImageRepository.findById(findPairing.getPairingImage().getId());
+		/* 이미지 수정 */
+		List<PairingImage> list = getImageList(pairingId);
 
-		if (optional.isEmpty()) {
-			paringImageRepository.save(pairingImage);
-			findPairing.saveImage(pairingImage);
+		if (image.size() == list.size()) {
+			for (int i = 0; i < image.size(); i++) {
+				PairingImage pairingImage = list.get(i);
+				pairingImage.updateImage(image.get(i));
+				paringImageRepository.save(pairingImage);
+			}
+		} else if (image.size() > list.size()) {
+			for (int i = 0; i < list.size(); i++) {
+				PairingImage pairingImage = list.get(i);
+				pairingImage.updateImage(image.get(i));
+				paringImageRepository.save(pairingImage);
+			}
+
+			for (int i = list.size(); i <= image.size() - list.size(); i++) {
+				PairingImage pairingImage = PairingImage.builder()
+					.imageUrl(image.get(i))
+					.pairing(findPairing)
+					.build();
+
+				paringImageRepository.save(pairingImage);
+			}
 		} else {
-			PairingImage findImage = findPairing.getPairingImage();
-			findImage.updateImage(pairingImage);
-			paringImageRepository.save(findImage);
-			findPairing.saveImage(findImage);
+			for (int i = 0; i < image.size(); i++) {
+				PairingImage pairingImage = list.get(i);
+				pairingImage.updateImage(image.get(i));
+				paringImageRepository.save(pairingImage);
+			}
+
+			for (int i = image.size(); i <= list.size() - image.size(); i++) {
+				PairingImage pairingImage = list.get(i);
+				paringImageRepository.delete(pairingImage);
+			}
 		}
 
 		pairingRepository.save(findPairing);
