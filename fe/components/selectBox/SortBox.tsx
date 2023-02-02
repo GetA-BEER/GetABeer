@@ -13,7 +13,7 @@ export default function SortgBox() {
     console.log(checked);
   };
   return (
-    <>
+    <div className="m-2">
       <button
         onClick={() => setShowModal(!showModal)}
         className={`${
@@ -46,6 +46,6 @@ export default function SortgBox() {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 }

@@ -1,10 +1,8 @@
 import Head from 'next/head';
 import NavBar from '@/components/NavBar';
-import BigInput from '@/components/inputs/BigInput';
 import SortBox from '@/components/selectBox/SortBox';
-import PairingBox from '@/components/selectBox/PairingBox';
 
-export default function Main() {
+export default function Mypairing() {
   return (
     <>
       <Head>
@@ -15,12 +13,8 @@ export default function Main() {
       </Head>
       <div className="h-screen m-auto max-w-4xl">
         <main className="m-auto border-2">
-          <BigInput placeholder="페어링을 추천하는 이유를 적어주세요" />
-          <div className="m-auto">
-            셀렉박스
-            <SortBox />
-            페어링 셀렉박스
-            <PairingBox />
+          <div className="m-auto flex">
+            <SortBox /> <SortBox />
           </div>
         </main>
         <div className="pb-32"></div>

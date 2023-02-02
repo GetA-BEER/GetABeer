@@ -21,8 +21,7 @@ export default function PairingBox() {
     console.log(checked);
   };
   return (
-    <div className="m-5">
-      <div className="mt-6 mb-2 text-base font-semibold">페어링 카테고리</div>
+    <div className="m-2">
       <button
         onClick={() => setShowModal(!showModal)}
         className={`${

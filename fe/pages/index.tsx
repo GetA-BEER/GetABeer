@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import Advertise from '@/components/mainComponents/Advertise';
+import Advertise from '@/components/mainPage/Advertise';
 import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
-import BeerCategoryBtn from '@/components/mainComponents/BeerCategoryBtn';
+import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
 
 export default function Main() {
   const beerProps = [
