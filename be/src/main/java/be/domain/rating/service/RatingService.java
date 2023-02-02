@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
-import be.domain.beertag.entity.BeerTagType;
+import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.dto.RatingTagDto;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
@@ -33,7 +36,7 @@ public class RatingService {
 		this.tagRepository = tagRepository;
 	}
 
-	/* 맥주 코멘트 등록 */
+	/* 맥주 평가 등록 */
 	@Transactional
 	public Rating create(Rating rating, Long beerId, RatingTag ratingTag) {
 		/* 존재하는 맥주인지 확인 */
@@ -48,8 +51,8 @@ public class RatingService {
 		return rating;
 	}
 
-	/* 맥주 코멘트 수정 */
-	public Rating update(Rating rating, long ratingId) {
+	/* 맥주 평가 수정 */
+	public Rating update(Rating rating, Long ratingId, RatingTag ratingTag) {
 
 		/* 존재하는 맥주 코멘트인지 확인 및 해당 맥주 코멘트 정보 가져오기 */
 		Rating findRating = findVerifiedRating(ratingId);
@@ -57,24 +60,71 @@ public class RatingService {
 		/* 수정할 내용이 존재하면, 해당 정보 수정 후 저장*/
 		Optional.ofNullable(rating.getContent()).ifPresent(findRating::updateContent);
 		Optional.ofNullable(rating.getStar()).ifPresent(findRating::updateStar);
+
+		RatingTag findTag = findRating.getRatingTag();
+		Optional.ofNullable(ratingTag.getColor()).ifPresent(findTag::updateColor);
+		Optional.ofNullable(ratingTag.getTaste()).ifPresent(findTag::updateTaste);
+		Optional.ofNullable(ratingTag.getFlavor()).ifPresent(findTag::updateFlavor);
+		Optional.ofNullable(ratingTag.getCarbonation()).ifPresent(findTag::updateCarbonation);
+
 		ratingRepository.save(findRating);
 
 		return findRating;
 	}
 
-	/* 특정 맥주 코멘트 상세 조회 */
-	public Rating getRating(long ratingId) {
+	/* 특정 맥주 평가 상세 조회 */
+	public RatingResponseDto.Detail getRatingResponse(Long ratingId) {
+		RatingResponseDto.Detail response = ratingRepository.findDetailRatingResponse(ratingId);
 
-		return findVerifiedRating(ratingId);
+		response.addTag(ratingRepository.findTagResponse(ratingId));
+		response.addComment(ratingRepository.findRatingCommentResponse(ratingId));
+
+		return response;
 	}
 
-	/* 맥주 코멘트 페이지 조회 -> Query Dsl 사용 예정 */
-	public List<Rating> getRatingPage(int page, int size) {
+	/* 맥주 평가 페이지 조회 : 최신순 */
+	public Page<RatingResponseDto.Total> getRatingPageOrderByRecent(Long beerId, Integer page, Integer size) {
+		Page<RatingResponseDto.Total> responsePage = ratingRepository.findRatingTotalResponseOrderByRecent(beerId,
+			PageRequest.of(page - 1, size));
+		List<RatingResponseDto.Total> responses = responsePage.getContent();
 
-		return null;
+		responses.forEach(rating -> {
+			List<RatingTagDto.Response> tags = ratingRepository.findTagResponse(rating.getRatingId());
+			rating.addTag(tags);
+		});
+
+		return PageableExecutionUtils.getPage(responses, responsePage.getPageable(), responses::size);
 	}
 
-	/* 맥주 코멘트 삭제 */
+	/* 맥주 평가 페이지 조회 : 추천 순 */
+	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreLikes(Long beerId, Integer page, Integer size) {
+		Page<RatingResponseDto.Total> responsePage = ratingRepository.findRatingTotalResponseOrderByLikes(beerId,
+			PageRequest.of(page - 1, size));
+		List<RatingResponseDto.Total> responses = responsePage.getContent();
+
+		responses.forEach(rating -> {
+			List<RatingTagDto.Response> tags = ratingRepository.findTagResponse(rating.getRatingId());
+			rating.addTag(tags);
+		});
+
+		return PageableExecutionUtils.getPage(responses, responsePage.getPageable(), responses::size);
+	}
+
+	/* 맥주 평가 페이지 조회 : 댓글 많은 순 */
+	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreComments(Long beerId, Integer page, Integer size) {
+		Page<RatingResponseDto.Total> responsePage = ratingRepository.findRatingTotalResponseOrderByComments(beerId,
+			PageRequest.of(page - 1, size));
+		List<RatingResponseDto.Total> responses = responsePage.getContent();
+
+		responses.forEach(rating -> {
+			List<RatingTagDto.Response> tags = ratingRepository.findTagResponse(rating.getRatingId());
+			rating.addTag(tags);
+		});
+
+		return PageableExecutionUtils.getPage(responses, responsePage.getPageable(), responses::size);
+	}
+
+	/* 맥주 평가 삭제 */
 	public String delete(long ratingId) {
 		Rating rating = findVerifiedRating(ratingId);
 		ratingRepository.delete(rating);

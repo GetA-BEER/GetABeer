@@ -1,42 +1,28 @@
 package be.domain.rating.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import be.domain.beertag.entity.BeerTagType;
-import be.domain.rating.dto.RatingDto;
+import be.domain.comment.dto.RatingCommentDto;
+import be.domain.rating.dto.RatingRequestDto;
+import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.dto.RatingTagDto;
 import be.domain.rating.entity.Rating;
-import be.domain.rating.entity.RatingTag;
 
 @Mapper(componentModel = "spring")
 public interface RatingMapper {
-	Rating ratingPostDtoToRating(RatingDto.Post post);
+	Rating ratingPostDtoToRating(RatingRequestDto.Post post);
 
-	default RatingTag ratingPostDtoToRatingTag(RatingDto.Post post) {
-		if (post == null) {
-			return null;
-		}
+	Rating ratingPatchDtoToRating(RatingRequestDto.Patch patch);
 
-		RatingTag ratingTag = RatingTag.builder()
-			.color(BeerTagType.valueOf(post.getColor()))
-			.taste(BeerTagType.valueOf(post.getTaste()))
-			.flavor(BeerTagType.valueOf(post.getFlavor()))
-			.carbonation(BeerTagType.valueOf(post.getCarbonation()))
-			.build();
-
-		return ratingTag;
-	}
-
-	Rating ratingPatchDtoToRating(RatingDto.Patch patch);
-
-	default RatingDto.Response ratingToRatingResponse(Rating rating, Long beerId) {
+	default RatingResponseDto.Detail ratingToRatingResponse(Rating rating, Long beerId) {
 		if (rating == null) {
 			return null;
 		}
 
-		RatingDto.Response response = RatingDto.Response.builder()
+		RatingResponseDto.Detail response = RatingResponseDto.Detail.builder()
 			.beerId(beerId)
 			.ratingId(rating.getId())
 			.nickname(rating.getNickname())
@@ -45,7 +31,7 @@ public interface RatingMapper {
 			.star(rating.getStar())
 			.likeCount(rating.getLikeCount())
 			.commentCount(rating.getCommentCount())
-			.ratingCommentList(rating.getRatingCommentList())
+			.ratingCommentList(getRatingCommentResponse(rating))
 			.createdAt(rating.getCreatedAt())
 			.modifiedAt(rating.getModifiedAt())
 			.build();
@@ -68,5 +54,26 @@ public interface RatingMapper {
 		return List.of(response);
 	}
 
-	// List<RatingDto.Response> ratingToRatingResponse(List<Rating> ratingList);
+	private List<RatingCommentDto.Response> getRatingCommentResponse(Rating rating) {
+		if (rating.getRatingCommentList().size() == 0) {
+			return new ArrayList<>();
+		}
+
+		List<RatingCommentDto.Response> result = new ArrayList<>();
+
+		for (int i = 0; i <= rating.getRatingCommentList().size(); i++) {
+			RatingCommentDto.Response response = RatingCommentDto.Response.builder()
+				.ratingId(rating.getId())
+				.ratingCommentId(rating.getRatingCommentList().get(i).getId())
+				.nickname(rating.getRatingCommentList().get(i).getNickname())
+				.content(rating.getRatingCommentList().get(i).getContent())
+				.createdAt(rating.getRatingCommentList().get(i).getCreatedAt())
+				.modifiedAt(rating.getRatingCommentList().get(i).getModifiedAt())
+				.build();
+
+			result.add(response);
+		}
+
+		return result;
+	}
 }

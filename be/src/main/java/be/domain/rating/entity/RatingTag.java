@@ -59,4 +59,20 @@ public class RatingTag {
 		this.carbonation = carbonation;
 		this.rating = rating;
 	}
+
+	public void updateColor(BeerTagType color) {
+		this.color = color;
+	}
+
+	public void updateTaste(BeerTagType taste) {
+		this.taste = taste;
+	}
+
+	public void updateFlavor(BeerTagType flavor) {
+		this.flavor = flavor;
+	}
+
+	public void updateCarbonation(BeerTagType carbonation) {
+		this.carbonation = carbonation;
+	}
 }
