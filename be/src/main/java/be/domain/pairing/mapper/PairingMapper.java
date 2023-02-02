@@ -5,23 +5,24 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import be.domain.pairing.dto.PairingDto;
 import be.domain.pairing.dto.PairingImageDto;
+import be.domain.pairing.dto.PairingRequestDto;
+import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingImage;
 
 @Mapper(componentModel = "spring")
 public interface PairingMapper {
-	Pairing pairingPostDtoToPairing(PairingDto.Post post);
+	Pairing pairingPostDtoToPairing(PairingRequestDto.Post post);
 
-	Pairing pairingPatchDtoToPairing(PairingDto.Patch patch);
+	Pairing pairingPatchDtoToPairing(PairingRequestDto.Patch patch);
 
-	default PairingDto.Response pairingToPairingResponseDto(Pairing pairing, Long beerId) {
+	default PairingResponseDto.Detail pairingToPairingResponseDto(Pairing pairing, Long beerId) {
 		if (pairing == null) {
 			return null;
 		}
 
-		PairingDto.Response response = PairingDto.Response.builder()
+		PairingResponseDto.Detail response = PairingResponseDto.Detail.builder()
 			.beerId(beerId)
 			.pairingId(pairing.getId())
 			.nickname(pairing.getNickname())

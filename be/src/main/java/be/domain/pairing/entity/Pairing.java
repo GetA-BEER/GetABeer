@@ -119,4 +119,8 @@ public class Pairing extends BaseTimeEntity {
 	public void updateCategory(PairingCategory pairingCategory) {
 		this.pairingCategory = pairingCategory;
 	}
+
+	public void updateImageList(List<PairingImage> pairingImageList) {
+		this.pairingImageList = pairingImageList;
+	}
 }
