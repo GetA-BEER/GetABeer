@@ -100,7 +100,7 @@ export default function Beer() {
     },
   ];
   let ratingCount = 35;
-  let paringCount = 3;
+  let pairngCount = 3;
 
   return (
     <>
@@ -130,7 +130,7 @@ export default function Beer() {
         <RatingTitle ratingCount={ratingCount} />
         <SmallCardController cardProps={cardProps} />
 
-        <PairingTitle paringCount={paringCount} />
+        <PairingTitle pairngCount={pairngCount} />
         <SmallPairingController pairProps={pairProps} />
 
         <SimilarBeerController beerProps={beerProps} />
