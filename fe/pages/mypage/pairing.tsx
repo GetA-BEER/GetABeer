@@ -48,8 +48,8 @@ export default function Pairing() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl border">
-        <div className="mt-4 text-center bg-white rounded-lg max-w-4xl font-semibold">
-          제주슬라이스
+        <div className="my-4 text-center text-lg bg-white rounded-lg max-w-4xl font-semibold">
+          유미님의 페어링
         </div>
         <div className="m-auto flex">
           <PairingBox />

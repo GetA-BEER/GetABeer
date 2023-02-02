@@ -13,7 +13,7 @@ export default function Advertise() {
       modules={[Pagination, Navigation]}
       className="mySwiper"
     >
-      <SwiperSlide className="">
+      <SwiperSlide className="w-full">
         <Image
           className="w-full"
           src="https://t1.daumcdn.net/cfile/tistory/99D743505B5482502A"
