@@ -3,8 +3,8 @@ import Image from 'next/image';
 import SmallCardController from '@/components/smallCards/SmallCardController';
 import SmallPairingController from '@/components/smallCards/SmallpairingController';
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
-import RatingTitle from './RatingTitle';
-import PairingTitle from './PairingTitle';
+import RatingTitle from '@/components/beerPage/RatingTitle';
+import PairingTitle from '@/components/beerPage/PairingTitle';
 import NavBar from '@/components/NavBar';
 
 export default function Beer() {
