@@ -1,14 +1,14 @@
-export default function ColorTag() {
-  const colorList = ['짚색', '금색', '갈색', '흑색'];
+export default function SparkleTag() {
+  const sparkleList = ['탄산 약', '탄산 중', '탄산 강', '탄산 無'];
 
   return (
     <div className="my-4">
       <div className="grid grid-cols-4 mx-2 gap-2 items-center">
-        {colorList.map((el: string, idx: number) => (
+        {sparkleList.map((el: string, idx: number) => (
           <div key={idx.toString()}>
             <input
               type="radio"
-              name="color"
+              name="sparkl"
               id={el}
               value={el}
               className="peer hidden"
