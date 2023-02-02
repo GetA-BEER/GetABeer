@@ -3,7 +3,6 @@ import Advertise from '@/components/mainComponents/Advertise';
 import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainComponents/BeerCategoryBtn';
-
 export default function Main() {
   const beerProps = [
     {
@@ -60,7 +59,6 @@ export default function Main() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-
       <main className="m-auto h-screen max-w-4xl">
         <Advertise />
         <div className="m-auto">
