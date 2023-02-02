@@ -3,6 +3,9 @@ import Advertise from '@/components/mainPage/Advertise';
 import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
+import { Input } from '@/components/inputs/Input';
+import SubmitBtn from '@/components/button/SubmitBtn';
+import CloseBtn from '@/components/button/CloseBtn';
 
 export default function Main() {
   const beerProps = [
@@ -52,6 +55,10 @@ export default function Main() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
   ];
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    console.log(event.target);
+    console.log(event.currentTarget);
+  };
   return (
     <>
       <Head>
@@ -62,6 +69,13 @@ export default function Main() {
       </Head>
       <main className="m-auto h-screen max-w-4xl">
         <Advertise />
+        <Input type="email" placeholder="email@gmail.com" />
+        <Input type="password" placeholder="비밀번호를 입력하세요." />
+        <div className="grid grid-cols-2 gap-2 items-center">
+          <SubmitBtn onClick={handleClick}> 등록하기 </SubmitBtn>
+          <CloseBtn onClick={handleClick}> 나가기 </CloseBtn>
+        </div>
+        <SubmitBtn onClick={handleClick}> 등록하기 </SubmitBtn>
         <div className="m-auto">
           <BeerCategoryBtn />
           <PopularBeerController beerProps={beerProps} />
