@@ -52,10 +52,7 @@ export default function Main() {
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
     },
   ];
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event.target);
-    console.log(event.currentTarget);
-  };
+
   return (
     <>
       <Head>
