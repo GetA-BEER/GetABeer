@@ -2,12 +2,11 @@ import SubmitBtn from '@/components/button/SubmitBtn';
 import NavBar from '@/components/NavBar';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
-import { IoClose, IoArrowForwardOutline } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
+import { FcGoogle } from 'react-icons/fc';
+import { RiKakaoTalkFill } from 'react-icons/ri';
 export default function Login() {
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event.target);
-    console.log(event.currentTarget);
-  };
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
   return (
     <>
       <Head>
@@ -16,21 +15,43 @@ export default function Login() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-4xl">
+      <main className="m-auto h-screen max-w-md">
         <button className="m-4">
           <IoClose className="w-6 h-6" />
         </button>
-        <div className="my-7 text-center text-lg bg-white rounded-lg max-w-4xl font-semibold">
+        <div className="my-6 text-center text-lg bg-white rounded-lg font-semibold">
           로그인
         </div>
-        <div className="m-2 border-b-1 border-y-gray">
+        <div className="mx-2 my-4">
           <Input type="email" placeholder="email@gmail.com" />
           <Input type="password" placeholder="비밀번호를 입력하세요." />
           <SubmitBtn onClick={handleClick}> 로그인 </SubmitBtn>
-          <div className="m-4 flex justify-center gap-1.5 text-sm">
-            <div className="text-y-gray">만약 계정이 없다면?</div>
+          <div className="my-3 flex justify-center gap-1.5 text-sm">
+            <div className="text-y-gray font-light">만약 계정이 없다면?</div>
             <button className="flex text-y-brown">회원가입</button>
           </div>
+        </div>
+        <div className="flex items-center justify-center space-x-2 my-6">
+          <span className="h-px w-3/12  bg-gray-200"></span>
+          <span className="text-y-gray text-sm font-light">
+            소셜 계정 로그인
+          </span>
+          <span className="h-px w-3/12 bg-gray-200"></span>
+        </div>
+        <div className="flex justify-center gap-5">
+          <button className="flex justify-center items-center w-11 h-11 rounded-full bg-yellow-400 hover:bg-yellow-200 text-xs">
+            <RiKakaoTalkFill className="w-6 h-6" />
+          </button>
+
+          <button className="flex justify-center items-center w-11 h-11 rounded-full bg-green-500 hover:bg-green-700 text-xs">
+            <div className="w-6 h-6 text-white text-center text-xl font-black leading-6">
+              N
+            </div>
+          </button>
+
+          <button className="flex justify-center items-center w-11 h-11 rounded-full border border-y-gray hover:bg-gray-200 text-xs">
+            <FcGoogle className="w-6 h-6" />
+          </button>
         </div>
         <NavBar />
       </main>

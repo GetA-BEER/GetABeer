@@ -5,7 +5,7 @@ type InputProps = {
   placeholder: string;
 };
 
-const inputContainerClassName = 'text-sm font-light block m-2';
+const inputContainerClassName = 'text-sm font-light block mx-2 my-4';
 const inputClassName =
   'border border-y-gray rounded-xl focus:outline-y-gold focus:ring-1 block w-full p-2.5 placeholder-slate-300';
 
