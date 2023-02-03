@@ -5,7 +5,7 @@ export interface SmallCardInfo {
   id: number;
   star: number;
   nickName: string;
-  description: string;
+  description?: string;
   date: string;
   comments: number;
   thumbs: number;

@@ -9,7 +9,7 @@ export interface PairingCardInfo {
   comment: number;
   thumb: number;
   image?: string;
-  description: string;
+  description?: string;
 }
 
 export default function PairingCardController(props: {

@@ -4,10 +4,20 @@ import { FiThumbsUp } from 'react-icons/fi';
 import { PairingCardInfo } from './PairingCardController';
 import ProfileCard from './ProfileCard';
 import Image from 'next/image';
+import { useRecoilValue } from 'recoil';
+import { noReview } from '@/atoms/noReview';
+import { NoReviewTypes } from '@/atoms/noReview';
+import { useEffect, useState } from 'react';
 
 export default function PairingCard(props: {
   pairingCardProps: PairingCardInfo;
 }) {
+  const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
+  const [randomNum, setRandomNum] = useState(0);
+  useEffect(() => {
+    let randomTmp: number = Math.floor(Math.random() * 3);
+    setRandomNum(randomTmp);
+  }, []);
   return (
     <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2 mt-3">
       {/*닉네임, 날짜*/}
@@ -30,8 +40,16 @@ export default function PairingCard(props: {
             />
           )}
           <div className="p-2 h-28 overflow-hidden w-full leading-6">
-            {props.pairingCardProps.description}.....
-            <span className="text-y-gold">더보기</span>
+            {props?.pairingCardProps?.description === undefined ? (
+              <div className="text-y-gray">
+                {noReviewState[randomNum]?.contents}
+              </div>
+            ) : (
+              <>
+                {props.pairingCardProps?.description}...
+                <span className="text-y-gold">더보기</span>
+              </>
+            )}
           </div>
         </div>
       </div>

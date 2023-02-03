@@ -31,7 +31,6 @@ export default function DetailCard(props: { pairingProps: PairingInfo }) {
         </div>
       </div>
       {/* 사진,설명 */}
-
       <div>
         <div className="w-full px-2">
           {props?.pairingProps?.image === undefined ? (
@@ -44,7 +43,9 @@ export default function DetailCard(props: { pairingProps: PairingInfo }) {
               {props.pairingProps.category}
             </div>
             {props.pairingProps.description === undefined ? (
-              <div>{noReviewState[randomNum]?.contents}</div>
+              <div className="text-y-gray">
+                {noReviewState[randomNum]?.contents}
+              </div>
             ) : (
               <>{props.pairingProps.description}</>
             )}

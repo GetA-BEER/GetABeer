@@ -35,8 +35,6 @@ export default function Pairing() {
       comment: 40,
       thumb: 170,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
     },
   ];
   return (

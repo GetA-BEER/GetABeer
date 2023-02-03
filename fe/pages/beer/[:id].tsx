@@ -13,8 +13,6 @@ export default function Beer() {
       id: 1,
       star: 4.0,
       nickName: '유진님',
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
@@ -45,8 +43,6 @@ export default function Beer() {
       id: 2,
       pairing: '구이',
       nickName: '테스트',
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,

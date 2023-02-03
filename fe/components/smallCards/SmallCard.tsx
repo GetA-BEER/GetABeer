@@ -4,12 +4,20 @@ import { FiThumbsUp } from 'react-icons/fi';
 import { SmallCardInfo } from './SmallCardController';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { noReview } from '@/atoms/noReview';
+import { NoReviewTypes } from '@/atoms/noReview';
 
 export default function SmallCard(props: { cardProps: SmallCardInfo }) {
   const [starScore, setStarScore] = useState<number | undefined>(
     props?.cardProps?.star
   );
+  const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
+  const [randomNum, setRandomNum] = useState(0);
   useEffect(() => {
+    let randomTmp: number = Math.floor(Math.random() * 3);
+    setRandomNum(randomTmp);
+
     if (starScore) {
       const starNum = Number(starScore?.toFixed(2));
       setStarScore(starNum);
@@ -39,8 +47,13 @@ export default function SmallCard(props: { cardProps: SmallCardInfo }) {
       </div>
       {/* 설명 */}
       <div className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
-        {props.cardProps.description}.....
-        <span className="text-y-gold">더보기</span>
+        {props.cardProps.description === undefined ? (
+          <div className="text-y-gray">
+            {noReviewState[randomNum]?.contents}
+          </div>
+        ) : (
+          <>{props.cardProps.description}</>
+        )}
       </div>
       {/* 날짜,코멘트수,엄지수 */}
       <div className="p-2 flex justify-between items-center text-[8px]">
