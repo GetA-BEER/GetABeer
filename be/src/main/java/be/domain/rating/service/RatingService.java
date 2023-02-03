@@ -82,54 +82,52 @@ public class RatingService {
 		return response;
 	}
 
-	/* 맥주 평가 페이지 조회 : 최신순 */
-	public Page<RatingResponseDto.Total> getRatingPageOrderByRecent(Long beerId, Integer page, Integer size) {
-		Page<RatingResponseDto.Total> responsePage = ratingRepository.findRatingTotalResponseOrderByRecent(beerId,
-			PageRequest.of(page - 1, size));
-		List<RatingResponseDto.Total> responses = responsePage.getContent();
-
-		responses.forEach(rating -> {
-			List<RatingTagDto.Response> tags = ratingRepository.findTagResponse(rating.getRatingId());
-			rating.addTag(tags);
-		});
-
-		return PageableExecutionUtils.getPage(responses, responsePage.getPageable(), responses::size);
-	}
-
-	/* 맥주 평가 페이지 조회 : 추천 순 */
-	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreLikes(Long beerId, Integer page, Integer size) {
-		Page<RatingResponseDto.Total> responsePage = ratingRepository.findRatingTotalResponseOrderByLikes(beerId,
-			PageRequest.of(page - 1, size));
-		List<RatingResponseDto.Total> responses = responsePage.getContent();
-
-		responses.forEach(rating -> {
-			List<RatingTagDto.Response> tags = ratingRepository.findTagResponse(rating.getRatingId());
-			rating.addTag(tags);
-		});
-
-		return PageableExecutionUtils.getPage(responses, responsePage.getPageable(), responses::size);
-	}
-
-	/* 맥주 평가 페이지 조회 : 댓글 많은 순 */
-	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreComments(Long beerId, Integer page, Integer size) {
-		Page<RatingResponseDto.Total> responsePage = ratingRepository.findRatingTotalResponseOrderByComments(beerId,
-			PageRequest.of(page - 1, size));
-		List<RatingResponseDto.Total> responses = responsePage.getContent();
-
-		responses.forEach(rating -> {
-			List<RatingTagDto.Response> tags = ratingRepository.findTagResponse(rating.getRatingId());
-			rating.addTag(tags);
-		});
-
-		return PageableExecutionUtils.getPage(responses, responsePage.getPageable(), responses::size);
-	}
-
 	/* 맥주 평가 삭제 */
 	public String delete(long ratingId) {
 		Rating rating = findVerifiedRating(ratingId);
 		ratingRepository.delete(rating);
 
 		return "해당 맥주 코멘트가 삭제되었습니다.";
+	}
+
+	// ------------------------------------------- 조회 세분화 --------------------------------------------------------
+
+	/* 맥주 평가 페이지 조회 : 최신순 */
+	public Page<RatingResponseDto.Total> getRatingPageOrderByRecent(Long beerId, Integer page, Integer size) {
+		Page<RatingResponseDto.Total> responses = ratingRepository.findRatingTotalResponseOrderByRecent(beerId,
+			PageRequest.of(page - 1, size));
+
+		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
+
+		return responses;
+	}
+
+	/* 맥주 평가 페이지 조회 : 추천 순 */
+	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreLikes(Long beerId, Integer page, Integer size) {
+		Page<RatingResponseDto.Total> responses = ratingRepository.findRatingTotalResponseOrderByLikes(beerId,
+			PageRequest.of(page - 1, size));
+
+		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
+
+		return responses;
+	}
+
+	/* 맥주 평가 페이지 조회 : 댓글 많은 순 */
+	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreComments(Long beerId, Integer page, Integer size) {
+		Page<RatingResponseDto.Total> responses = ratingRepository.findRatingTotalResponseOrderByComments(beerId,
+			PageRequest.of(page - 1, size));
+
+		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
+
+		return responses;
+	}
+
+	//-------------------------------------------------------------------------------------------------------------
+
+	/* 태그 리스트 가져오기 */
+	private List<RatingTagDto.Response> getRatingTagList(Long ratingId) {
+
+		return ratingRepository.findTagResponse(ratingId);
 	}
 
 	/* 존재하는 맥주 코멘트인지 확인 -> 존재하면 해당 맥주 코멘트 반환 */
