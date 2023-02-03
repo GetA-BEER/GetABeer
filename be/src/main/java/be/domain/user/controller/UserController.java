@@ -23,15 +23,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/users")
+@RequestMapping
 @RequiredArgsConstructor
 public class UserController {
 	private final UserMapper userMapper;
 	private final UserService userService;
 
-	@PostMapping("/signup")
+	@PostMapping("/register/info")
 	public ResponseEntity<UserDto.Response> postUser(@Valid @RequestBody UserDto.Post post) {
-		User user = userService.createUser(userMapper.postToUser(post));
+		User user = userService.registerUser(userMapper.postToUser(post));
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 

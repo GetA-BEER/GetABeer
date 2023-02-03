@@ -58,7 +58,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
 	private void setAuthenticationToConText(Map<String, Object> claims) {
 		String email = (String)claims.get("email");
-		CustomAuthorityUtils authorityUtils;
 		List<GrantedAuthority> authorities = customAuthorityUtils.createAuthorities((List)claims.get("roles"));
 		Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
