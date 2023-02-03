@@ -4,6 +4,11 @@ import lombok.Getter;
 
 public enum ExceptionCode {
 
+	/* 이미지 업로드 관련 예외 */
+	NOT_IMAGE_EXTENSION(400, "업로드 할 수 없는 확장자입니다."),
+	CHECK_IMAGE_NAME(400, "이미지는 공백 제외 1글자 이상의 문자열이어야 합니다."),
+	TOO_BIG_SIZE(400, "이미지 사이즈가 너무 큽니다."),
+
 	/* Comment 관련 예외 */
 	RATING_NOT_FOUND(404, "맥주 평가 정보를 찾을 수 없습니다."),
 	PAIRING_NOT_FOUND(404, "페어링 정보를 찾을 수 없습니다."),

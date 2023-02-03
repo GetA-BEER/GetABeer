@@ -14,7 +14,7 @@ spring:
     url: jdbc:h2:mem:test
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     open-in-view: true
     properties:
@@ -69,10 +69,11 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey:
-      secretKey:
+      accessKey: # ${AWS_ACCESS_KEY}
+      secretKey: # ${AWS_SECRET_KEY}
     s3:
-      bucket:
+      bucket: getabeer
+      dir: image
     region:
       static: ap-northeast-2
     stack:
