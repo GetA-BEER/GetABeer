@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PairingCard from './pairingCard';
+import PairingCard from './PairingCard';
 
 export interface PairingCardInfo {
   id: number;

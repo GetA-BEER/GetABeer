@@ -1,7 +1,8 @@
 import { BiUser } from 'react-icons/bi';
 import { FaRegCommentDots } from 'react-icons/fa';
 import { FiThumbsUp } from 'react-icons/fi';
-import { PairingCardInfo } from './pairingCardController';
+import { PairingCardInfo } from './PairingCardController';
+import ProfileCard from './ProfileCard';
 import Image from 'next/image';
 
 export default function PairingCard(props: {
@@ -10,15 +11,10 @@ export default function PairingCard(props: {
   return (
     <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2 mt-3">
       {/*닉네임, 날짜*/}
-      <div className="px-4 pt-4 pb-2 flex items-center">
-        <BiUser className="mr-1 p-[2px] bg-y-brown text-white rounded-full w-6 h-6" />
-        <div>
-          <div className="text-xs">{props.pairingCardProps.nickname}</div>
-          <div className="text-y-gray text-[5px] -my-1 font-light">
-            {props.pairingCardProps.date}
-          </div>
-        </div>
-      </div>
+      <ProfileCard
+        nickname={props.pairingCardProps.nickname}
+        date={props.pairingCardProps.date}
+      />
       {/* 사진,설명 */}
       <div>
         <div className="flex items-center px-2">
@@ -33,10 +29,10 @@ export default function PairingCard(props: {
               className="mx-2 border"
             />
           )}
-          <p className="p-2 h-28 overflow-hidden w-full leading-6">
+          <div className="p-2 h-28 overflow-hidden w-full leading-6">
             {props.pairingCardProps.description}.....
             <span className="text-y-gold">더보기</span>
-          </p>
+          </div>
         </div>
       </div>
       {/* 코멘트수,엄지수 */}

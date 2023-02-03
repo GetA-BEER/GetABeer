@@ -38,10 +38,10 @@ export default function SmallCard(props: { cardProps: SmallCardInfo }) {
         </span>
       </div>
       {/* 설명 */}
-      <p className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
+      <div className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
         {props.cardProps.description}.....
         <span className="text-y-gold">더보기</span>
-      </p>
+      </div>
       {/* 날짜,코멘트수,엄지수 */}
       <div className="p-2 flex justify-between items-center text-[8px]">
         <div className="text-y-gray">{props.cardProps.date}</div>
