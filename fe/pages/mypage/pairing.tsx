@@ -2,7 +2,7 @@ import Head from 'next/head';
 import NavBar from '@/components/NavBar';
 // import SortBox from '@/components/selectBox/SortBox';
 import PairingBox from '@/components/selectBox/PairingBox';
-import PairingCardController from '@/components/pairing/pairingCardController';
+import PairingCardController from '@/components/pairing/PairingCardController';
 
 export default function Pairing() {
   const pairingCardProps = [

@@ -5,7 +5,7 @@ export interface PairingCardInfo {
   id: number;
   pairing: string;
   nickName: string;
-  description: string;
+  description?: string;
   date: string;
   comments: number;
   thumbs: number;

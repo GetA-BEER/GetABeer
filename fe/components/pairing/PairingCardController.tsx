@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PairingCard from './pairingCard';
+import PairingCard from './PairingCard';
 
 export interface PairingCardInfo {
   id: number;
@@ -9,7 +9,7 @@ export interface PairingCardInfo {
   comment: number;
   thumb: number;
   image?: string;
-  description: string;
+  description?: string;
 }
 
 export default function PairingCardController(props: {
