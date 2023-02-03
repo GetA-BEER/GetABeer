@@ -2,9 +2,9 @@ package be.global.image;
 
 import java.io.IOException;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +17,8 @@ public class ImageUploadController {
 	}
 
 	@PostMapping("/upload")
-	@ResponseBody
-	public String upload(@RequestParam("image") MultipartFile multipartFile) throws IOException {
+	public ResponseEntity upload(@RequestParam("image") MultipartFile multipartFile) throws IOException {
 
-		return s3UploadService.upload(multipartFile);
+		return ResponseEntity.ok(s3UploadService.upload(multipartFile));
 	}
 }
