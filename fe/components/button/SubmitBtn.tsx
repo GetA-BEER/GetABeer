@@ -8,7 +8,7 @@ export default function SubmitBtn({ children, onClick }: ButtonProps) {
     <div className="m-2">
       <button
         onClick={onClick}
-        className="flex justify-center items-center w-full h-11 rounded-xl bg-y-gold hover:bg-orange-400 text-sm"
+        className="flex justify-center items-center w-full h-11 rounded-xl bg-y-gold hover:bg-orange-400 text-xs"
       >
         {children}
       </button>
