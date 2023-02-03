@@ -3,8 +3,10 @@ import NavBar from '@/components/NavBar';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoClose } from 'react-icons/io5';
-import { FcGoogle } from 'react-icons/fc';
-import { RiKakaoTalkFill } from 'react-icons/ri';
+import KakaoBtn from '@/components/login/kakaoBtn';
+import NaverBtn from '@/components/login/NaverBtn';
+import GoogleBtn from '@/components/login/Googlebtn';
+
 export default function Login() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
   return (
@@ -39,19 +41,9 @@ export default function Login() {
           <span className="h-px w-3/12 bg-gray-200"></span>
         </div>
         <div className="flex justify-center gap-5">
-          <button className="flex justify-center items-center w-11 h-11 rounded-full bg-yellow-400 hover:bg-yellow-200 text-xs">
-            <RiKakaoTalkFill className="w-6 h-6" />
-          </button>
-
-          <button className="flex justify-center items-center w-11 h-11 rounded-full bg-green-500 hover:bg-green-700 text-xs">
-            <div className="w-6 h-6 text-white text-center text-xl font-black leading-6">
-              N
-            </div>
-          </button>
-
-          <button className="flex justify-center items-center w-11 h-11 rounded-full border border-y-gray hover:bg-gray-200 text-xs">
-            <FcGoogle className="w-6 h-6" />
-          </button>
+          <KakaoBtn onClick={handleClick} />
+          <NaverBtn onClick={handleClick} />
+          <GoogleBtn onClick={handleClick} />
         </div>
         <NavBar />
       </main>
