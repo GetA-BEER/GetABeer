@@ -12,6 +12,7 @@ import be.domain.beer.entity.Beer;
 import be.domain.beer.repository.BeerRepository;
 import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.beertag.entity.BeerTagType;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import lombok.RequiredArgsConstructor;

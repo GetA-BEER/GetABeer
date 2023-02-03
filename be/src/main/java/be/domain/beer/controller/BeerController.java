@@ -56,7 +56,7 @@ public class BeerController {
 		updatedBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
 		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(updatedBeer, beerTags);
 
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{beer_id}")
@@ -66,7 +66,7 @@ public class BeerController {
 		List<BeerTag> beerTags = beerService.findTop4BeerTags(beer);
 		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer, beerTags);
 
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/{beer_id}/delete")
@@ -85,7 +85,7 @@ public class BeerController {
 		List<MonthlyBeer> monthlyBeerList = beerService.findMonthlyBeers();
 		List<BeerDto.MonthlyBestResponse> responses = beerMapper.beersToMonthlyBestBeerResponse(monthlyBeerList);
 
-		return ResponseEntity.ok().body(responses);
+		return ResponseEntity.ok(responses);
 	}
 
 	@GetMapping("/weekly")
@@ -99,7 +99,7 @@ public class BeerController {
 		List<Beer> beerList = beerService.findSimilarBeers(beer);
 		List<BeerDto.SimilarResponse> responses = beerMapper.beersToSimilarBeerResponse(beerList);
 
-		return ResponseEntity.ok().body(responses);
+		return ResponseEntity.ok(responses);
 	}
 
 	@GetMapping("/users/mypage/beers")
@@ -109,7 +109,7 @@ public class BeerController {
 		Page<Beer> beerPage = beerService.findMyPageBeers(page);
 		PageImpl<BeerDto.MyPageResponse> responses = beerMapper.beersToMyPageResponse(beerPage);
 
-		return ResponseEntity.ok().body(responses);
+		return ResponseEntity.ok(responses);
 	}
 
 }

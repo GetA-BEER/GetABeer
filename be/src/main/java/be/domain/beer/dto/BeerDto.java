@@ -1,5 +1,6 @@
 package be.domain.beer.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import be.domain.beer.entity.BeerDetailsBasic;
 import be.domain.beer.entity.BeerDetailsCounts;
 import be.domain.beer.entity.BeerDetailsStars;
+import be.domain.beer.entity.BeerDetailsTopTags;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategoryType;
 import be.domain.beertag.dto.BeerTagDto;
@@ -69,7 +71,7 @@ public class BeerDto {
 
 		private Long beerId;
 		private String korName;
-		private List<String> topTags;
+		private BeerDetailsTopTags beerDetailsTopTags;
 		private Double averageStar;
 		private Integer totalStarCount;
 		private String thumbnail;
@@ -143,11 +145,11 @@ public class BeerDto {
 
 		private Long beerId;
 		private BeerDetailsBasic beerDetailsBasic;
-		private BeerDetailsCounts beerDetailsCounts;
-		private BeerDetailsStars beerDetailsStars;
-		private Boolean isWishListed;
 		List<BeerCategoryType> beerCategoryTypes;
-		List<BeerTagType> beerTags;
+		private BeerDetailsTopTags beerDetailsTopTags;
+		private BeerDetailsStars beerDetailsStars;
+		private BeerDetailsCounts beerDetailsCounts;
+		private Boolean isWishListed;
 		List<SimilarResponse> similarBeers;
 
 	}

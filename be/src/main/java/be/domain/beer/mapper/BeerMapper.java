@@ -71,14 +71,12 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
+		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
 		detailsResponse.isWishListed(beer.getIsWishListed());
 		detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
 				.getBeerCategoryType())
-			.collect(Collectors.toList()));
-		detailsResponse.beerTags(beerTags.stream()
-			.map(BeerTag::getBeerTagType)
 			.collect(Collectors.toList()));
 		//        detailsResponse.beerTags(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 
@@ -98,7 +96,7 @@ public interface BeerMapper {
 
 				searchResponseBuilder.beerId(beer.getId());
 				searchResponseBuilder.korName(beer.getBeerDetailsBasic().getKorName());
-				searchResponseBuilder.topTags(beer.getBeerDetailsTopTags().createList());
+				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
 				searchResponseBuilder.averageStar(beer.getBeerDetailsStars().getTotalAverageStars());
 				searchResponseBuilder.totalStarCount(beer.getBeerDetailsCounts().getTotalStarCount());
 				searchResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
