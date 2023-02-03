@@ -1,5 +1,7 @@
 package be.domain.rating.entity;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -74,5 +76,9 @@ public class RatingTag {
 
 	public void updateCarbonation(BeerTagType carbonation) {
 		this.carbonation = carbonation;
+	}
+
+	public List<BeerTagType> createBeerTagTypeList() {
+		return List.of(color, taste, flavor, carbonation);
 	}
 }

@@ -11,7 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.beer.entity.Beer;
+import be.domain.beer.entity.BeerBeerTag;
+import be.domain.beer.repository.BeerBeerTagRepository;
 import be.domain.beer.service.BeerService;
+import be.domain.beertag.entity.BeerTag;
+import be.domain.beertag.entity.BeerTagType;
+import be.domain.beertag.service.BeerTagService;
 import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.dto.RatingTagDto;
 import be.domain.rating.entity.Rating;
@@ -27,12 +32,16 @@ import lombok.extern.slf4j.Slf4j;
 public class RatingService {
 	private final RatingRepository ratingRepository;
 	private final BeerService beerService;
+	private final BeerTagService beerTagService;
+	private final BeerBeerTagRepository beerBeerTagRepository;
 	private final RatingTagRepository tagRepository;
 
-	public RatingService(RatingRepository ratingRepository, BeerService beerService,
-		RatingTagRepository tagRepository) {
+	public RatingService(RatingRepository ratingRepository, BeerService beerService, BeerTagService beerTagService,
+		BeerBeerTagRepository beerBeerTagRepository, RatingTagRepository tagRepository) {
 		this.ratingRepository = ratingRepository;
 		this.beerService = beerService;
+		this.beerTagService = beerTagService;
+		this.beerBeerTagRepository = beerBeerTagRepository;
 		this.tagRepository = tagRepository;
 	}
 
@@ -45,6 +54,9 @@ public class RatingService {
 		/* 기본 설정 저장하기 */
 		tagRepository.save(ratingTag);
 		rating.saveDefault(beer, ratingTag, 0, 0, new ArrayList<>());
+
+		/* 다대다 연관관계 생성 및 저장 */
+		saveBeerBeerCategories(beer, ratingTag.createBeerTagTypeList());
 
 		ratingRepository.save(rating);
 
@@ -163,5 +175,22 @@ public class RatingService {
 			log.error("탄산 태그가 잘못 요청 되었음.");
 			throw new BusinessLogicException(ExceptionCode.TAG_IS_WRONG);
 		}
+	}
+
+	private void saveBeerBeerCategories(Beer findBeer, List<BeerTagType> beerTagTypeList) {
+
+		beerTagTypeList
+			.forEach(beerTagType -> {
+
+				BeerTag beerTag = beerTagService.findVerifiedBeerTagByBeerTagType(beerTagType);
+
+				BeerBeerTag createdBeerBeerTag =
+					BeerBeerTag.builder()
+						.beer(findBeer)
+						.beerTag(beerTag)
+						.build();
+
+				beerBeerTagRepository.save(createdBeerBeerTag);
+			});
 	}
 }
