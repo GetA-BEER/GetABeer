@@ -1,7 +1,9 @@
 package be.domain.user.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +12,7 @@ import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
+import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,12 +21,25 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder passwordEncoder;
+	private final CustomAuthorityUtils authorityUtils;
 
-	/* 임시 유저 Create */
+	/* 2차 유저 Create */
 	@Transactional
-	public User createUser(User user) {
+	public User registerUser(User user) {
 		verifyExistEmail(user.getEmail());
-		return userRepository.save(user);
+
+		String encryptPW = passwordEncoder.encode(user.getPassword());
+		List<String> roles = authorityUtils.createRoles(user.getEmail());
+
+		User saved = User.builder()
+			.id(user.getId())
+			.password(encryptPW)
+			.nickname(user.getNickname())
+			.roles(roles)
+			.build();
+
+		return userRepository.save(saved);
 	}
 
 	/* 임시 유저 update */

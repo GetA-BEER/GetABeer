@@ -58,6 +58,12 @@ public class User extends BaseTimeEntity {
 	@Column
 	private String provider;
 
+	@Column
+	private Integer mailAuth;
+
+	@Column
+	private String mailKey;
+
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 

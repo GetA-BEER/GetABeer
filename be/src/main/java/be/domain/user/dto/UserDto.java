@@ -1,6 +1,5 @@
 package be.domain.user.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -15,10 +14,6 @@ public class UserDto {
 	@Getter
 	@Builder
 	public static class Post {
-
-		@NotBlank
-		@Email(message = "이메일 형식이 올바르지 않습니다.")
-		private String email;
 
 		@NotBlank
 		private String nickname;

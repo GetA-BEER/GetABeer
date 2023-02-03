@@ -13,7 +13,8 @@ public enum ExceptionCode {
 	USER_ID_EXISTS(409, "User ID Exists"),
 	NICKNAME_EXISTS(409, "Nickname Exists"),
 	UNAUTHORIZED(401, "Unauthorized"), // 인증이 필요한 상태
-	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는 상태
+	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는
+	WRONG_CODE(400, "Code is wrong"),
 
 	/* BEER 관련 예외 */
 	BEER_NOT_FOUND(404, "Beer Not Found"),
