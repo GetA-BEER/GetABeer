@@ -13,7 +13,7 @@ export default function PairingBox() {
   ];
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [category, setCategory] = useState('카테고리');
+  const [category, setCategory] = useState('Category');
   const onCategoryChange = (select: string) => {
     setChecked(true);
     setCategory(select);

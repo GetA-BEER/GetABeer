@@ -18,7 +18,7 @@ export default function DetailCard(props: { pairingProps: PairingInfo }) {
   }, []);
 
   return (
-    <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2 mt-3">
+    <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
       {/*닉네임, 날짜*/}
       <div className="flex justify-between items-center">
         <ProfileCard
