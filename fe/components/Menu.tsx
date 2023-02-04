@@ -40,7 +40,7 @@ export default function Menu() {
               </li>
             ))}
           </ul>
-          <div className="text-xl font-bold py-3 border-t-2">pairing</div>
+          <div className="text-xl font-bold py-3 border-t-2">Pairing</div>
           <ul className="list-disc pl-4 py-1">
             {pairingList.map((el: string, idx: number) => (
               <li key={idx.toString()} className="py-1">
