@@ -1,10 +1,11 @@
 import { AiOutlineTrophy } from 'react-icons/ai';
 import { FiCamera, FiMapPin } from 'react-icons/fi';
-import { HiMenu } from 'react-icons/hi';
 import { BiUser } from 'react-icons/bi';
 import { useState } from 'react';
+import Munu from '@/components/Menu';
 export default function NavBar() {
   const [navState, setNavState] = useState(0);
+
   const onNavChange = (state: number): void => {
     setNavState(state);
   };
@@ -45,7 +46,7 @@ export default function NavBar() {
             onClick={() => onNavChange(5)}
             className={`${navState === 5 ? 'text-y-brown' : 'text-y-black'}`}
           >
-            <HiMenu className="m-auto text-3xl py-[1px]" />
+            <Munu />
             <div className="text-[8px]">메뉴</div>
           </div>
         </div>
