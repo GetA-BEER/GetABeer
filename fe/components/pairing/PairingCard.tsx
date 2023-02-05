@@ -1,4 +1,3 @@
-import { BiUser } from 'react-icons/bi';
 import { FaRegCommentDots } from 'react-icons/fa';
 import { FiThumbsUp } from 'react-icons/fi';
 import { PairingCardInfo } from './PairingCardController';
@@ -27,19 +26,21 @@ export default function PairingCard(props: {
       />
       {/* 사진,설명 */}
       <div>
-        <div className="flex items-center px-2">
+        <div className="grid grid-cols-3 gap-2 px-3 h-24">
           {props?.pairingCardProps?.image === undefined ? (
             <></>
           ) : (
-            <Image
-              src={props?.pairingCardProps?.image}
-              alt="star"
-              width={100}
-              height={100}
-              className="mx-2 border"
-            />
+            <div className="h-24 border bg-auto">
+              <Image
+                src={props?.pairingCardProps?.image}
+                className="h-full m-auto"
+                alt="star"
+                width={200}
+                height={100}
+              />
+            </div>
           )}
-          <div className="p-2 h-28 overflow-hidden w-full leading-6">
+          <div className="col-span-2 h-24 text-[8px] overflow-hidden w-full leading-5">
             {props?.pairingCardProps?.description === undefined ? (
               <div className="text-y-gray">
                 {noReviewState[randomNum]?.contents}
@@ -54,7 +55,7 @@ export default function PairingCard(props: {
         </div>
       </div>
       {/* 코멘트수,엄지수 */}
-      <div className="py-2 px-5 flex justify-end items-center text-[8px]">
+      <div className="py-2 px-2 flex justify-end items-center text-[8px]">
         <div className="flex">
           <span className="flex justify-center">
             <FaRegCommentDots className="mr-1 mt-[1px] w-3 h-3" />

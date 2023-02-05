@@ -66,7 +66,7 @@ export default function Wish() {
 
       <main className="m-auto h-screen mx-4">
         <div className=" max-w-4xl m-auto">
-          <div className="text-lg my-10 text-center font-semibold">
+          <div className="text-xl my-10 text-center font-semibold">
             유미님의 위시 맥주
           </div>
           <WishCardController wishProps={wishProps} />

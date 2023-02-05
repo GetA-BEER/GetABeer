@@ -24,9 +24,9 @@ export default function WishCard(props: { wishProps: WishInfo; idx: number }) {
           <div className="text-base font-semibold">{props.wishProps.title}</div>
           <div onClick={onHeart}>
             {heart === 1 ? (
-              <AiFillHeart className="w-7 h-7 text-y-brown" />
+              <AiFillHeart className="w-7 h-7 -mr-2 text-y-brown" />
             ) : (
-              <AiOutlineHeart className="w-7 h-7" />
+              <AiOutlineHeart className="w-7 h-7 -mr-2" />
             )}
           </div>
         </div>

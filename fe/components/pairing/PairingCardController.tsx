@@ -19,13 +19,13 @@ export default function PairingCardController(props: {
     props.pairingCardProps
   );
   return (
-    <div className="border">
+    <>
       {cardPropsList?.map((pairingCardProps: PairingCardInfo) => (
         <PairingCard
           pairingCardProps={pairingCardProps}
           key={pairingCardProps.id.toString()}
         />
       ))}
-    </div>
+    </>
   );
 }
