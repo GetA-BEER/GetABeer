@@ -36,7 +36,6 @@ export default function Email() {
             <button className="flex text-y-brown">로그인</button>
           </div>
         </div>
-        <NavBar />
       </main>
     </>
   );
