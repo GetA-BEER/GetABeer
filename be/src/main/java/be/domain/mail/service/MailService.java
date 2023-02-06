@@ -3,18 +3,18 @@ package be.domain.mail.service;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
+import be.global.redis.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,15 +22,22 @@ import lombok.RequiredArgsConstructor;
 public class MailService {
 	private final JavaMailSender javaMailSender;
 	private final UserRepository userRepository;
+	private final RedisUtil redisUtil;
 
 	private MimeMessage createMessage(String code, String email) throws Exception {
 		MimeMessage message = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
 
-		message.addRecipients(Message.RecipientType.TO, email);
-		message.setSubject("Get A Beer 이메일 인증 번호입니다.");
-		message.setText("이메일 인증코드: " + code);
+		// message.addRecipients(Message.RecipientType.TO, email);
+		// message.setSubject("Get A Beer 이메일 인증 코드입니다.");
+		// message.setText("이메일 인증코드: " + code);
+		//
+		// message.setFrom(new InternetAddress("getabeer0310@gmail.com"));
 
-		message.setFrom(new InternetAddress("getabeer0310@gmail.com"));
+		helper.setTo(email);
+		helper.setSubject("Get A Beer 이메일 인증 코드입니다.");
+		helper.setText("이메일 인증 코드: " + code, true);
+		helper.setFrom("getabeer0310@gmail.com", "Get A Beer");
 
 		return message;
 	}
@@ -43,12 +50,14 @@ public class MailService {
 			mailException.printStackTrace();
 			throw new IllegalAccessException();
 		}
+
+		redisUtil.setDataExpire(code, email, 60 * 5L);
 	}
 
 	public String sendCertificationMail(String email) throws BusinessLogicException {
-		// if(nullUser(email).isPresent()) {
-		// 	throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
-		// }
+		if (nullUser(email).isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
+		}
 
 		try {
 			String code = UUID.randomUUID().toString().substring(0, 6);
