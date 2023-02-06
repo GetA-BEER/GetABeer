@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import { BiSearch } from 'react-icons/bi';
 export default function Header() {
@@ -10,7 +10,7 @@ export default function Header() {
     setInputState(e.target.value);
   };
   const inputRef = useRef<HTMLInputElement>(null);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (inputRef.current !== null) inputRef.current.focus();
   });
   return (
