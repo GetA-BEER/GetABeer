@@ -1,24 +1,30 @@
 import SmallPairingCard from './SmallPairingCard';
 import React, { useState } from 'react';
 
-export interface SmallPairingCardInfo {
+export interface PairingCardInfo {
   id: number;
   pairing: string;
   nickName: string;
-  description: string;
+  description?: string;
   date: string;
   comments: number;
   thumbs: number;
 }
 
-export default function SmallCardController({ pairingProps }: any) {
-  const [smallPairingList, setSmallPairingList] =
-    useState<SmallPairingCardInfo[]>(pairingProps);
+export default function SmallCardController(props: {
+  pairProps: PairingCardInfo[];
+}) {
+  const [smallPairingList, setSmallPairingList] = useState<PairingCardInfo[]>(
+    props.pairProps
+  );
 
   return (
     <div className="grid grid-cols-2 gap-3 px-3">
-      {smallPairingList?.map((props: SmallPairingCardInfo) => (
-        <SmallPairingCard {...props} key={props.id} />
+      {smallPairingList?.map((pairingProps: PairingCardInfo) => (
+        <SmallPairingCard
+          pairingProps={pairingProps}
+          key={pairingProps.id.toString()}
+        />
       ))}
     </div>
   );
