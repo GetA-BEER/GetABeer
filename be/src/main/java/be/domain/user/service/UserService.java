@@ -1,14 +1,14 @@
 package be.domain.user.service;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
+import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository userRepository;
-	private final BCryptPasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 	private final CustomAuthorityUtils authorityUtils;
 
 	/* 2차 유저 Create */
@@ -29,14 +29,13 @@ public class UserService {
 	public User registerUser(User user) {
 		verifyExistEmail(user.getEmail());
 
-		String encryptPW = passwordEncoder.encode(user.getPassword());
-		List<String> roles = authorityUtils.createRoles(user.getEmail());
-
 		User saved = User.builder()
 			.id(user.getId())
-			.password(encryptPW)
+			.email(user.getEmail())
+			.password(passwordEncoder.encode(user.getPassword()))
 			.nickname(user.getNickname())
-			.roles(roles)
+			.roles(authorityUtils.createRoles(user.getEmail()))
+			.provider(String.valueOf(ProviderType.LOCAL))
 			.build();
 
 		return userRepository.save(saved);

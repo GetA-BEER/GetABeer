@@ -9,9 +9,12 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+
 @Component
 public class CustomAuthorityUtils {
 
+	@Getter
 	@Value("${mail.address.admin}")
 	private String adminMailAddress;
 

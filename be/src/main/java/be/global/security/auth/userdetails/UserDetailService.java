@@ -14,7 +14,9 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UserDetailService implements UserDetailsService {
@@ -34,10 +36,10 @@ public class UserDetailService implements UserDetailsService {
 		UserDetailsImpl(User user) {
 			User.builder()
 				.id(user.getId())
-				.age(user.getAge())
+				// .age(user.getAge())
 				.roles(user.getRoles())
 				.email(user.getEmail())
-				.gender(user.getGender())
+				// .gender(user.getGender())
 				.nickname(user.getNickname())
 				.password(user.getPassword())
 				.build();

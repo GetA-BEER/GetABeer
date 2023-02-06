@@ -9,7 +9,7 @@ import be.domain.user.entity.User;
 public interface UserMapper {
 	default User postToUser(UserDto.Post post) {
 		return User.builder()
-			// .email(post.getEmail())
+			.email(post.getEmail())
 			.password(post.getPassword())
 			.nickname(post.getNickname())
 			.build();

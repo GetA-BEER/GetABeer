@@ -29,25 +29,26 @@ public class UserController {
 	private final UserMapper userMapper;
 	private final UserService userService;
 
+	/* 회원가입 */
 	@PostMapping("/register/info")
 	public ResponseEntity<UserDto.Response> postUser(@Valid @RequestBody UserDto.Post post) {
 		User user = userService.registerUser(userMapper.postToUser(post));
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 
-	@PatchMapping("/{id}")
+	@PatchMapping("/user/{id}")
 	public ResponseEntity<UserDto.Response> patchUser(@PathVariable Long id, @Valid @RequestBody UserDto.Patch patch) {
 		User user = userService.updateUser(id, patch);
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/user/{id}")
 	public ResponseEntity<UserDto.Response> readUser(@PathVariable Long id) {
 		User user = userService.getUser(id);
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/user/{id}")
 	public ResponseEntity<String> delete(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.delete(id));
 	}

@@ -16,6 +16,9 @@ public class UserDto {
 	public static class Post {
 
 		@NotBlank
+		private String email;
+
+		@NotBlank
 		private String nickname;
 
 		@NotBlank

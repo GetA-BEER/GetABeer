@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,12 +25,15 @@ import be.domain.user.entity.User;
 import be.global.security.auth.jwt.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenizer jwtTokenizer;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
 	@SneakyThrows
@@ -54,6 +59,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		String accessToken = delegateAccessToken(user);
 		String refreshToken = delegateRefreshToken(user);
+
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
+			redisTemplate.delete(user.getEmail());
+		}
+		redisTemplate.opsForValue()
+			.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+
 		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 			.maxAge(7 * 24 * 60 * 60)
 			.path("/")
