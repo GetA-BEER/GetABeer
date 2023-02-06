@@ -3,9 +3,9 @@ import NavBar from '@/components/NavBar';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoClose } from 'react-icons/io5';
-import KakaoBtn from '@/components/login/kakaoBtn';
 import NaverBtn from '@/components/login/NaverBtn';
 import GoogleBtn from '@/components/login/Googlebtn';
+import KakaoBtn from '@/components/login/KakaoBtn';
 
 export default function Login() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
