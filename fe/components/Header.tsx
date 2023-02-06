@@ -14,7 +14,7 @@ export default function Header() {
     if (inputRef.current !== null) inputRef.current.focus();
   });
   return (
-    <div className="flex justify-between items-center h-20 border-b border-y-lightGray">
+    <div className="flex justify-between items-center h-20 border-b border-y-lightGray bg-white sticky top-0 z-10">
       <Link href={'/'}>
         <Image
           alt="logo"
