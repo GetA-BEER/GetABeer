@@ -18,7 +18,7 @@ export default function BigInput({ placeholder }: InputProps) {
     <>
       <form className="font-light">
         <textarea
-          className="w-full h-32 rounded-xl p-2 border border-y-gray focus:outline-y-gold placeholder-slate-300 resize-none"
+          className="w-full h-32 rounded-xl p-2 border border-y-gray focus:outline-y-gold placeholder-y-gray resize-none"
           placeholder={placeholder}
           value={inputState}
           maxLength={1000}

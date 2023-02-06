@@ -38,6 +38,9 @@ export default function PairingDetail() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
+        <div className="text-xl mt-4 mb-3 text-center font-semibold">
+          페어링
+        </div>
         <DetailCard pairingProps={pairingProps} />
       </main>
     </>

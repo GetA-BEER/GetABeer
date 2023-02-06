@@ -34,7 +34,7 @@ export default function Pairing() {
       date: '2023.41.30',
       comment: 40,
       thumb: 170,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
+      image: 'https://t1.daumcdn.net/cfile/tistory/99D743505B5482502A',
       description:
         '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
     },
@@ -47,8 +47,8 @@ export default function Pairing() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-4xl border">
-        <div className="my-4 text-center text-lg bg-white rounded-lg max-w-4xl font-semibold">
+      <main className="m-auto h-screen max-w-4xl">
+        <div className="my-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
           유미님의 페어링
         </div>
         <div className="m-auto flex">
