@@ -6,12 +6,12 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerBeerTag;
+import be.domain.beer.repository.BeerBeerTagQueryRepository;
 import be.domain.beer.repository.BeerBeerTagRepository;
 import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
@@ -33,14 +33,17 @@ public class RatingService {
 	private final BeerService beerService;
 	private final BeerTagService beerTagService;
 	private final BeerBeerTagRepository beerBeerTagRepository;
+	private final BeerBeerTagQueryRepository beerBeerTagQueryRepository;
 	private final RatingTagRepository tagRepository;
 
 	public RatingService(RatingRepository ratingRepository, BeerService beerService, BeerTagService beerTagService,
-		BeerBeerTagRepository beerBeerTagRepository, RatingTagRepository tagRepository) {
+		BeerBeerTagRepository beerBeerTagRepository, BeerBeerTagQueryRepository beerBeerTagQueryRepository,
+		RatingTagRepository tagRepository) {
 		this.ratingRepository = ratingRepository;
 		this.beerService = beerService;
 		this.beerTagService = beerTagService;
 		this.beerBeerTagRepository = beerBeerTagRepository;
+		this.beerBeerTagQueryRepository = beerBeerTagQueryRepository;
 		this.tagRepository = tagRepository;
 	}
 
@@ -55,7 +58,7 @@ public class RatingService {
 		rating.saveDefault(beer, ratingTag, 0, 0, new ArrayList<>());
 
 		/* 다대다 연관관계 생성 및 저장 */
-		saveBeerBeerCategories(beer, ratingTag.createBeerTagTypeList());
+		saveBeerBeerTags(beer, ratingTag.createBeerTagTypeList());
 
 		ratingRepository.save(rating);
 
@@ -68,6 +71,12 @@ public class RatingService {
 		/* 존재하는 맥주 코멘트인지 확인 및 해당 맥주 코멘트 정보 가져오기 */
 		Rating findRating = findVerifiedRating(ratingId);
 
+		/* 레이팅 아이디로 맥주 조회 */
+		Beer findBeer = beerService.findBeerByRatingId(ratingId);
+
+		/* BeerBeerTag 찾아서 맥주/맥주 태그 연관 관계 끊고 삭제 */
+		deleteBeerBeerTags(findBeer, findRating.getRatingTag().createBeerTagTypeList());
+
 		/* 수정할 내용이 존재하면, 해당 정보 수정 후 저장*/
 		Optional.ofNullable(rating.getContent()).ifPresent(findRating::updateContent);
 		Optional.ofNullable(rating.getStar()).ifPresent(findRating::updateStar);
@@ -77,6 +86,10 @@ public class RatingService {
 		tagRepository.save(findTag);
 
 		findRating.updateTag(findTag);
+
+    /* 새로운 BeerBeerTag 생성 및 저장 */
+		saveBeerBeerTags(findBeer, ratingTag.createBeerTagTypeList());
+
 		ratingRepository.save(findRating);
 
 		return "맥주에 대한 평가가 성공적으로 수정되었습니다.";
@@ -95,6 +108,10 @@ public class RatingService {
 	/* 맥주 평가 삭제 */
 	public String delete(long ratingId) {
 		Rating rating = findVerifiedRating(ratingId);
+		Beer findBeer = beerService.findBeerByRatingId(ratingId);
+
+		deleteBeerBeerTags(findBeer, rating.getRatingTag().createBeerTagTypeList());
+
 		ratingRepository.delete(rating);
 
 		return "맥주에 대한 평가가 성공적으로 삭제되었습니다.";
@@ -148,7 +165,7 @@ public class RatingService {
 	}
 
 	/* 존재하는 맥주 코멘트인지 확인 -> 존재하면 해당 맥주 코멘트 반환 */
-	private Rating findVerifiedRating(long ratingId) {
+	public Rating findVerifiedRating(long ratingId) {
 
 		return ratingRepository.findById(ratingId)
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RATING_NOT_FOUND));
@@ -182,20 +199,39 @@ public class RatingService {
 		}
 	}
 
-	private void saveBeerBeerCategories(Beer findBeer, List<BeerTagType> beerTagTypeList) {
+	private void saveBeerBeerTags(Beer findBeer, List<BeerTagType> beerTagTypeList) {
 
 		beerTagTypeList
 			.forEach(beerTagType -> {
 
-				BeerTag beerTag = beerTagService.findVerifiedBeerTagByBeerTagType(beerTagType);
+				BeerTag findBeerTag = beerTagService.findVerifiedBeerTagByBeerTagType(beerTagType);
 
 				BeerBeerTag createdBeerBeerTag =
 					BeerBeerTag.builder()
 						.beer(findBeer)
-						.beerTag(beerTag)
+						.beerTag(findBeerTag)
 						.build();
 
 				beerBeerTagRepository.save(createdBeerBeerTag);
 			});
+	}
+
+	private void deleteBeerBeerTags(Beer findBeer, List<BeerTagType> beerTagTypeList) {
+
+		beerTagTypeList
+			.forEach(beerTagType -> {
+
+				BeerTag findBeerTag = beerTagService.findVerifiedBeerTagByBeerTagType(beerTagType);
+
+				findBeerTag.subtractDailyCount(); // 카운트 빼주기
+
+				BeerBeerTag beerBeerTag = beerBeerTagQueryRepository
+					.findBeerBeerTagByBeerAndBeerTagType(findBeer, beerTagType);
+
+				beerBeerTag.remove(findBeer, findBeerTag);
+
+				beerBeerTagRepository.delete(beerBeerTag);
+			});
+
 	}
 }

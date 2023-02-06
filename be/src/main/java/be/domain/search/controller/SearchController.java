@@ -31,7 +31,7 @@ public class SearchController {
 	@GetMapping
 	public ResponseEntity<PageImpl<BeerDto.SearchResponse>> getSearchResult(
 		@RequestParam("query") String queryParam,
-		@RequestParam("page") Integer page) {
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 
 		Page<Beer> beerPage = searchService.findBeersPageByQueryParam(queryParam, page);
 

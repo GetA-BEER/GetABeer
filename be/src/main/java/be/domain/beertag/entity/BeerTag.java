@@ -34,7 +34,7 @@ public class BeerTag implements Serializable {
 	private Long id;
 	@Enumerated(EnumType.STRING)
 	private BeerTagType beerTagType;
-	private Long count;
+	private Long dailyCount;
 
 	@OneToMany(mappedBy = "beerTag")
 	private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
@@ -46,6 +46,18 @@ public class BeerTag implements Serializable {
 		this.beerBeerTags.add(beerBeerTag);
 		if (beerBeerTag.getBeerTag() != this) {
 			beerBeerTag.addBeerTag(this);
+		}
+	}
+
+	public void addDailyCount() {
+		this.dailyCount++;
+	}
+
+	public void subtractDailyCount() {
+		if (this.dailyCount != 0L) {
+			this.dailyCount--;
+		} else {
+			this.dailyCount = 0L;
 		}
 	}
 

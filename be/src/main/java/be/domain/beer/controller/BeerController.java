@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @Validated
 @RestController
-@RequestMapping({"/beers", ""})
+@RequestMapping({"/api/beers", "/api"})
 @RequiredArgsConstructor
 public class BeerController {
 	private final BeerMapper beerMapper;

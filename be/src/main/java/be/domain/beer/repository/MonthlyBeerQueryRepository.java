@@ -19,11 +19,11 @@ public class MonthlyBeerQueryRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public Optional<List<MonthlyBeer>> findMonthlyBeer() {
+	public List<MonthlyBeer> findMonthlyBeer() {
 
-		return Optional.ofNullable(jpaQueryFactory.selectFrom(monthlyBeer)
+		return jpaQueryFactory.selectFrom(monthlyBeer)
 			.where(monthlyBeer.createdAt.month().eq(LocalDateTime.now().getMonthValue()))
 			.orderBy(monthlyBeer.averageStar.desc())
-			.fetch());
+			.fetch();
 	}
 }
