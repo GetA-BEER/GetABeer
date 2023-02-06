@@ -23,7 +23,7 @@ export default function Information() {
         <div className="my-8 text-center text-lg bg-white rounded-lg font-semibold">
           회원 정보 입력
         </div>
-        <div className="m-auto max-w-md ">
+        <div className="m-auto max-w-md mb-10  ">
           <div className="mb-4">
             <GenderBtn />
             <AgeBox />
@@ -31,7 +31,7 @@ export default function Information() {
             <InterestTag />
           </div>
           <SubmitBtn onClick={handleClick}>등록하기</SubmitBtn>
-          <div className="my-3 flex justify-center gap-1.5 text-sm">
+          <div className="mt-3 pb-10 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">
               나중에 입력하고 싶다면?
             </div>
