@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 
-export default function SortgBox() {
+export default function SortBox() {
   const sortList = ['추천순', '최신순', '댓글 많은 순'];
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
