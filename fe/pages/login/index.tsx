@@ -17,14 +17,14 @@ export default function Login() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-md">
+      <main className="m-auto h-screen max-w-4xl">
         <button className="m-4">
           <IoClose className="w-6 h-6" />
         </button>
-        <div className="my-6 text-center text-lg bg-white rounded-lg font-semibold">
+        <div className="my-8 text-center text-lg bg-white rounded-lg font-semibold">
           로그인
         </div>
-        <div className="mx-2 my-4">
+        <div className="m-auto max-w-md">
           <Input type="email" placeholder="email@gmail.com" />
           <Input type="password" placeholder="비밀번호를 입력하세요." />
           <SubmitBtn onClick={handleClick}> 로그인 </SubmitBtn>
