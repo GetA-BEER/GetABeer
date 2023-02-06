@@ -18,7 +18,6 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.service.BeerTagService;
 import be.domain.rating.dto.RatingResponseDto;
-import be.domain.rating.dto.RatingTagDto;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.repository.RatingRepository;
@@ -50,7 +49,7 @@ public class RatingService {
 
 	/* 맥주 평가 등록 */
 	@Transactional
-	public Rating create(Rating rating, Long beerId, RatingTag ratingTag) {
+	public String create(Rating rating, Long beerId, RatingTag ratingTag) {
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
@@ -63,11 +62,11 @@ public class RatingService {
 
 		ratingRepository.save(rating);
 
-		return rating;
+		return "맥주에 대한 평가가 성공적으로 등록되었습니다.";
 	}
 
 	/* 맥주 평가 수정 */
-	public Rating update(Rating rating, Long ratingId, RatingTag ratingTag) {
+	public String update(Rating rating, Long ratingId, RatingTag ratingTag) {
 
 		/* 존재하는 맥주 코멘트인지 확인 및 해당 맥주 코멘트 정보 가져오기 */
 		Rating findRating = findVerifiedRating(ratingId);
@@ -83,24 +82,24 @@ public class RatingService {
 		Optional.ofNullable(rating.getStar()).ifPresent(findRating::updateStar);
 
 		RatingTag findTag = findRating.getRatingTag();
-		Optional.ofNullable(ratingTag.getColor()).ifPresent(findTag::updateColor);
-		Optional.ofNullable(ratingTag.getTaste()).ifPresent(findTag::updateTaste);
-		Optional.ofNullable(ratingTag.getFlavor()).ifPresent(findTag::updateFlavor);
-		Optional.ofNullable(ratingTag.getCarbonation()).ifPresent(findTag::updateCarbonation);
+		findTag.updateRatingTag(ratingTag);
+		tagRepository.save(findTag);
 
-		/* 새로운 BeerBeerTag 생성 및 저장 */
+		findRating.updateTag(findTag);
+
+    /* 새로운 BeerBeerTag 생성 및 저장 */
 		saveBeerBeerTags(findBeer, ratingTag.createBeerTagTypeList());
 
 		ratingRepository.save(findRating);
 
-		return findRating;
+		return "맥주에 대한 평가가 성공적으로 수정되었습니다.";
 	}
 
 	/* 특정 맥주 평가 상세 조회 */
 	public RatingResponseDto.Detail getRatingResponse(Long ratingId) {
 		RatingResponseDto.Detail response = ratingRepository.findDetailRatingResponse(ratingId);
 
-		response.addTag(ratingRepository.findTagResponse(ratingId));
+		response.addTag(getRatingTagList(ratingId));
 		response.addComment(ratingRepository.findRatingCommentResponse(ratingId));
 
 		return response;
@@ -115,7 +114,7 @@ public class RatingService {
 
 		ratingRepository.delete(rating);
 
-		return "해당 맥주 코멘트가 삭제되었습니다.";
+		return "맥주에 대한 평가가 성공적으로 삭제되었습니다.";
 	}
 
 	// ------------------------------------------- 조회 세분화 --------------------------------------------------------
@@ -153,9 +152,16 @@ public class RatingService {
 	//-------------------------------------------------------------------------------------------------------------
 
 	/* 태그 리스트 가져오기 */
-	private List<RatingTagDto.Response> getRatingTagList(Long ratingId) {
+	private List<BeerTagType> getRatingTagList(Long ratingId) {
 
-		return ratingRepository.findTagResponse(ratingId);
+		RatingTag ratingTag = ratingRepository.findTagResponse(ratingId);
+		List<BeerTagType> tag = new ArrayList<>();
+		tag.add(ratingTag.getColor());
+		tag.add(ratingTag.getTaste());
+		tag.add(ratingTag.getFlavor());
+		tag.add(ratingTag.getCarbonation());
+
+		return tag;
 	}
 
 	/* 존재하는 맥주 코멘트인지 확인 -> 존재하면 해당 맥주 코멘트 반환 */

@@ -37,29 +37,28 @@ public class RatingController {
 		this.tagMapper = tagMapper;
 	}
 
-	/* 맥주 평가 등록 */
+	/* 맥주 평가 등록 -> 성공 실패 여부만 리턴 */
 	@PostMapping
-	public ResponseEntity<RatingResponseDto.Detail> post(@RequestBody RatingRequestDto.Post post) {
+	public ResponseEntity<String> post(@RequestBody RatingRequestDto.Post post) {
 		ratingService.checkVerifiedTag(post.getColor(), post.getTaste(), post.getFlavor(), post.getCarbonation());
 
 		RatingTag ratingTag = tagMapper.ratingPostDtoToRatingTag(post);
-		Rating rating = ratingService.create(ratingMapper.ratingPostDtoToRating(post), post.getBeerId(), ratingTag);
+		String message = ratingService.create(ratingMapper.ratingPostDtoToRating(post), post.getBeerId(), ratingTag);
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(ratingMapper.ratingToRatingResponse(rating, rating.getBeer().getId()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}
 
-	/* 맥주 평가 수정 */
+	/* 맥주 평가 수정 -> 성공 실패 여부만 리턴 */
 	@PatchMapping("/{ratingId}")
-	public ResponseEntity<RatingResponseDto.Detail> patch(@PathVariable @Positive Long ratingId,
+	public ResponseEntity<String> patch(@PathVariable @Positive Long ratingId,
 		@RequestBody RatingRequestDto.Patch patch) {
 
 		RatingTag ratingTag = tagMapper.ratingPatchDtoToRatingTag(patch);
 
-		Rating rating = ratingService.update(ratingMapper.ratingPatchDtoToRating(patch),
+		String message = ratingService.update(ratingMapper.ratingPatchDtoToRating(patch),
 			ratingId, ratingTag);
 
-		return ResponseEntity.ok(ratingMapper.ratingToRatingResponse(rating, rating.getBeer().getId()));
+		return ResponseEntity.ok(message);
 	}
 
 	/* 맥주 코멘트 삭제 */

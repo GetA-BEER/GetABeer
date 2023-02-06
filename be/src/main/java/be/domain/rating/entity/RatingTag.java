@@ -62,20 +62,11 @@ public class RatingTag {
 		this.rating = rating;
 	}
 
-	public void updateColor(BeerTagType color) {
-		this.color = color;
-	}
-
-	public void updateTaste(BeerTagType taste) {
-		this.taste = taste;
-	}
-
-	public void updateFlavor(BeerTagType flavor) {
-		this.flavor = flavor;
-	}
-
-	public void updateCarbonation(BeerTagType carbonation) {
-		this.carbonation = carbonation;
+	public void updateRatingTag(RatingTag ratingTag) {
+		this.color = ratingTag.getColor();
+		this.taste = ratingTag.getTaste();
+		this.flavor = ratingTag.getFlavor();
+		this.carbonation = ratingTag.getCarbonation();
 	}
 
 	public List<BeerTagType> createBeerTagTypeList() {

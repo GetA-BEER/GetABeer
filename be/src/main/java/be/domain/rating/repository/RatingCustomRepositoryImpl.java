@@ -15,9 +15,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import be.domain.comment.dto.QRatingCommentDto_Response;
 import be.domain.comment.dto.RatingCommentDto;
-import be.domain.rating.dto.QRatingTagDto_Response;
 import be.domain.rating.dto.RatingResponseDto;
-import be.domain.rating.dto.RatingTagDto;
+import be.domain.rating.entity.RatingTag;
 
 public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 	private final JPAQueryFactory queryFactory;
@@ -47,17 +46,12 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 	}
 
 	@Override
-	public List<RatingTagDto.Response> findTagResponse(Long ratingId) {
-		var list = queryFactory
-			.select(new QRatingTagDto_Response(
-				ratingTag.color,
-				ratingTag.taste,
-				ratingTag.flavor,
-				ratingTag.carbonation
-			)).from(ratingTag).where(ratingTag.rating.id.eq(ratingId))
-			.fetch();
+	public RatingTag findTagResponse(Long ratingId) {
+		var response = queryFactory.selectFrom(ratingTag)
+			.where(ratingTag.rating.id.eq(ratingId))
+			.fetchFirst();
 
-		return list;
+		return response;
 	}
 
 	@Override

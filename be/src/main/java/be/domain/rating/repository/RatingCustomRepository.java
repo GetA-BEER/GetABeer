@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 
 import be.domain.comment.dto.RatingCommentDto;
 import be.domain.rating.dto.RatingResponseDto;
-import be.domain.rating.dto.RatingTagDto;
+import be.domain.rating.entity.RatingTag;
 
 public interface RatingCustomRepository {
 	RatingResponseDto.Detail findDetailRatingResponse(Long ratingId);
 
-	List<RatingTagDto.Response> findTagResponse(Long ratingId);
+	RatingTag findTagResponse(Long ratingId);
 
 	List<RatingCommentDto.Response> findRatingCommentResponse(Long ratingId);
 
