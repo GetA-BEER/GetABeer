@@ -1,5 +1,4 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
-import NavBar from '@/components/NavBar';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoClose } from 'react-icons/io5';
@@ -45,7 +44,6 @@ export default function Login() {
           <NaverBtn onClick={handleClick} />
           <GoogleBtn onClick={handleClick} />
         </div>
-        <NavBar />
       </main>
     </>
   );

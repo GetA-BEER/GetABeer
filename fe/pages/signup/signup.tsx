@@ -1,5 +1,4 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
-import NavBar from '@/components/NavBar';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoChevronBack } from 'react-icons/io5';
@@ -32,7 +31,6 @@ export default function Signup() {
             <button className="flex text-y-brown">로그인</button>
           </div>
         </div>
-        <NavBar />
       </main>
     </>
   );

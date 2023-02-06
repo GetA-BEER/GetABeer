@@ -1,10 +1,10 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
-import NavBar from '@/components/NavBar';
-import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoChevronBack } from 'react-icons/io5';
 import GenderBtn from '@/components/signup/GenderBtn';
 import AgeBox from '@/components/signup/AgeBox';
+import InterestTag from '@/components/signup/ InterestTag';
+import BeerCategory from '@/components/signup/BeerCategory';
 
 export default function Information() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
@@ -23,14 +23,12 @@ export default function Information() {
         <div className="my-8 text-center text-lg bg-white rounded-lg font-semibold">
           회원 정보 입력
         </div>
-        <div className="m-auto max-w-md">
-          <div className="flex justify-between">
-            <div className="m-3 self-center">성별</div>
+        <div className="m-auto max-w-md ">
+          <div className="mb-4">
             <GenderBtn />
-          </div>
-          <div className="flex justify-between">
-            <div className="m-3 self-center">연령</div>
             <AgeBox />
+            <BeerCategory />
+            <InterestTag />
           </div>
           <SubmitBtn onClick={handleClick}>등록하기</SubmitBtn>
           <div className="my-3 flex justify-center gap-1.5 text-sm">
@@ -40,7 +38,6 @@ export default function Information() {
             <button className="flex text-y-brown">Skip</button>
           </div>
         </div>
-        <NavBar />
       </main>
     </>
   );
