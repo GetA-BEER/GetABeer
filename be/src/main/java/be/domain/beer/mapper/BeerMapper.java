@@ -96,11 +96,14 @@ public interface BeerMapper {
 
 				searchResponseBuilder.beerId(beer.getId());
 				searchResponseBuilder.korName(beer.getBeerDetailsBasic().getKorName());
+				searchResponseBuilder.engName(beer.getBeerDetailsBasic().getEngName());
 				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
 				searchResponseBuilder.averageStar(beer.getBeerDetailsStars().getTotalAverageStars());
 				searchResponseBuilder.totalStarCount(beer.getBeerDetailsCounts().getTotalStarCount());
 				searchResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
-				searchResponseBuilder.bestRating(beer.getBeerDetailsBestRating().createRating());
+				if (beer.getBeerDetailsBestRating() != null) {
+					searchResponseBuilder.bestRating(beer.getBeerDetailsBestRating().createRating());
+				}
 
 				return searchResponseBuilder.build();
 			})

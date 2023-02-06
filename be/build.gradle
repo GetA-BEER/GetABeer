@@ -50,14 +50,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools:' // DevTools
     implementation 'org.springframework.boot:spring-boot-starter-mail' // Email 전송
     implementation 'com.google.code.gson:gson' // Serialization, Deserialization
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.6.2' // Elastic Search
-    //    ----------------------------------------- CRAWLING------------------------------------------
+    //    ------------------------------ DATA COLLECTING AND ANALYSIS---------------------------------
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.6.2' // Elasticsearch
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // Prometheus
+    //    --------------------------------------- CRAWLING--------------------------------------------
     implementation 'org.seleniumhq.selenium:selenium-java:4.1.2' // Crawling
     implementation group: 'org.apache.poi', name: 'poi', version: '5.0.0' // 데이터 <-> 문서
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0' // 데이터 <-> 문서
     implementation platform('com.google.cloud:libraries-bom:26.4.0') // Google Cloud
     implementation('com.google.cloud:spring-cloud-gcp-starter-vision:3.2.1') // Google Vision API
-    //    --------------------------------------------JWT---------------------------------------------
+    //    ------------------------------------------JWT-----------------------------------------------
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'

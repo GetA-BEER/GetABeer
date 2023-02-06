@@ -7,7 +7,7 @@ import static be.domain.rating.entity.QRating.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,13 +22,16 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import be.domain.beer.entity.Beer;
 import be.domain.beertag.entity.BeerTag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class BeerQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	public List<Beer> findMonthlyBeer() {
+
 		return jpaQueryFactory.selectFrom(beer)
 			.join(beer.ratingList, rating)
 			.where(rating.createdAt.month().eq(LocalDateTime.now().getMonthValue() - 1))
@@ -49,6 +52,15 @@ public class BeerQueryRepository {
 			.fetch();
 	}
 
+	public Beer findBeerByRatingId(Long ratingId) {
+
+		return jpaQueryFactory
+			.selectFrom(beer)
+			.join(beer.ratingList, rating)
+			.where(rating.id.eq(ratingId))
+			.fetchFirst();
+	}
+
 	public Page<Beer> findBeersPageByQueryParam(String queryParam, Pageable pageable) {
 
 		List<Beer> resultList = new ArrayList<>();
@@ -57,9 +69,14 @@ public class BeerQueryRepository {
 		StringPath korName = beer.beerDetailsBasic.korName;
 		StringPath engName = beer.beerDetailsBasic.engName;
 
+		log.info("####: " + queryParam);
+
 		List<Beer> fullTextResultList = jpaQueryFactory.selectFrom(beer)
-			.where(korName.containsIgnoreCase(queryParam).or(engName.containsIgnoreCase(queryParam)))
+			.where(korName.containsIgnoreCase(queryParam)
+				.or(engName.containsIgnoreCase(queryParam)))
 			.fetch();
+
+		log.info("#####: " + fullTextResultList);
 
 		for (String query : queryParamArr) {
 
