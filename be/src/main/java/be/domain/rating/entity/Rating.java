@@ -118,4 +118,8 @@ public class Rating extends BaseTimeEntity {
 		this.commentCount = commentCount;
 		this.ratingCommentList = ratingCommentList;
 	}
+
+	public void updateTag(RatingTag ratingTag) {
+		this.ratingTag = ratingTag;
+	}
 }

@@ -3,6 +3,7 @@ package be.domain.rating.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import be.domain.beertag.entity.BeerTagType;
 import be.domain.comment.dto.RatingCommentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class RatingResponseDto {
 		private Long ratingId;
 		private String nickname;
 		private String content;
-		private List<RatingTagDto.Response> ratingTag;
+		private List<BeerTagType> ratingTag;
 		private Double star;
 		private Integer likeCount;
 		private Integer commentCount;
@@ -29,7 +30,7 @@ public class RatingResponseDto {
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
-		public void addTag(List<RatingTagDto.Response> ratingTag) {
+		public void addTag(List<BeerTagType> ratingTag) {
 			this.ratingTag = ratingTag;
 		}
 
@@ -49,14 +50,14 @@ public class RatingResponseDto {
 		private Long ratingId;
 		private String nickname;
 		private String content;
-		private List<RatingTagDto.Response> ratingTag;
+		private List<BeerTagType> ratingTag;
 		private Double star;
 		private Integer likeCount;
 		private Integer commentCount;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
-		public void addTag(List<RatingTagDto.Response> ratingTag) {
+		public void addTag(List<BeerTagType> ratingTag) {
 			this.ratingTag = ratingTag;
 		}
 	}
