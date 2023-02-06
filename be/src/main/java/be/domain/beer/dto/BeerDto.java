@@ -71,6 +71,7 @@ public class BeerDto {
 
 		private Long beerId;
 		private String korName;
+		private String engName;
 		private BeerDetailsTopTags beerDetailsTopTags;
 		private Double averageStar;
 		private Integer totalStarCount;

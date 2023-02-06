@@ -27,6 +27,7 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.repository.BeerTagRepository;
 import be.domain.beertag.service.BeerTagService;
+import be.domain.rating.dto.RatingRequestDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
@@ -64,7 +65,7 @@ public class Init {
 		 * BEER STUB DATA
 		 */
 
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 30; i++) {
 
 			int rand7 = (int)(Math.random() * 7);
 
@@ -100,6 +101,26 @@ public class Init {
 
 			beerRepository.save(findBeer);
 		}
+
+		/*
+		 * RATING STUB DATA
+		 */
+		// for (int i = 1; i <= 100; i++) {
+		//
+		// 	RatingRequestDto.Post ratingPost = RatingRequestDto.Post
+		// 		.builder()
+		// 		.beerId((long)(Math.random() * 30) + 1)
+		// 		.
+		//
+		// 	private Long beerId;
+		// 	private String nickname;
+		// 	private String content;
+		// 	private Double star;
+		// 	private String color;
+		// 	private String taste;
+		// 	private String flavor;
+		// 	private String carbonation;
+		// }
 
 		/*
 		 * USER STUB DATA
