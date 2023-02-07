@@ -9,11 +9,12 @@ public enum ExceptionCode {
 	CHECK_IMAGE_NAME(400, "이미지는 공백 제외 1글자 이상의 문자열이어야 합니다."),
 	TOO_BIG_SIZE(400, "이미지 사이즈가 너무 큽니다."),
 
-	/* Comment 관련 예외 */
+	/* 평가, 페어링 관련 예외 */
 	RATING_NOT_FOUND(404, "맥주 평가 정보를 찾을 수 없습니다."),
 	PAIRING_NOT_FOUND(404, "페어링 정보를 찾을 수 없습니다."),
 	TAG_IS_WRONG(400, "태그 요청이 잘못 되었습니다."),
 	IMAGE_SIZE_OVER(400, "이미지는 세 장까지만 등록이 가능합니다."),
+	COMMENT_NOT_FOUND(404, "댓글이 존재하지 않습니다."),
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),
