@@ -35,8 +35,8 @@ public class RatingCommentController {
 	/* 맥주 댓글 등록 */
 	@PostMapping
 	public ResponseEntity<RatingCommentDto.Response> post(@RequestBody RatingCommentDto.Post post) {
-		RatingComment ratingComment =
-			ratingCommentService.create(mapper.ratingCommentPostDtoToRatingComment(post), post.getRatingId());
+		RatingComment ratingComment = ratingCommentService
+			.create(mapper.ratingCommentPostDtoToRatingComment(post), post.getRatingId(), post.getUserId());
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(mapper.ratingCommentToRatingCommentResponse(ratingComment));

@@ -41,7 +41,6 @@ public class Rating extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
 	private String nickname;
 
 	@Column(columnDefinition = "TEXT")
@@ -77,8 +76,7 @@ public class Rating extends BaseTimeEntity {
 		this.beer = beer;
 	}
 
-	@OneToOne
-	@JoinColumn(name = "rating_tag_id")
+	@OneToOne(mappedBy = "rating", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private RatingTag ratingTag;
 
 	public void oneToOneByRatingTag(RatingTag ratingTag) {
@@ -110,9 +108,11 @@ public class Rating extends BaseTimeEntity {
 		this.star = star;
 	}
 
-	public void saveDefault(Beer beer, RatingTag ratingTag, Integer likeCount, Integer commentCount,
-		List<RatingComment> ratingCommentList) {
+	public void saveDefault(Beer beer, User user, RatingTag ratingTag, String nickname,
+		Integer likeCount, Integer commentCount, List<RatingComment> ratingCommentList) {
 		this.beer = beer;
+		this.user = user;
+		this.nickname = nickname;
 		this.ratingTag = ratingTag;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
@@ -121,5 +121,8 @@ public class Rating extends BaseTimeEntity {
 
 	public void updateTag(RatingTag ratingTag) {
 		this.ratingTag = ratingTag;
+	}
+	public void calculateComments(Integer commentCount) {
+		this.commentCount = commentCount;
 	}
 }

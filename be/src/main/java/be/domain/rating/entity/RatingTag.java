@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import be.domain.beertag.entity.BeerTagType;
@@ -40,7 +41,8 @@ public class RatingTag {
 	@Enumerated(EnumType.STRING)
 	private BeerTagType carbonation;
 
-	@OneToOne(mappedBy = "ratingTag", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	@OneToOne
+	@JoinColumn(name = "rating_id")
 	private Rating rating;
 
 	public void oneToOneByRating(Rating rating) {
@@ -67,6 +69,10 @@ public class RatingTag {
 		this.taste = ratingTag.getTaste();
 		this.flavor = ratingTag.getFlavor();
 		this.carbonation = ratingTag.getCarbonation();
+	}
+
+	public void saveRating(Rating rating) {
+		this.rating = rating;
 	}
 
 	public List<BeerTagType> createBeerTagTypeList() {
