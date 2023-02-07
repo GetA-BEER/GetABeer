@@ -32,16 +32,16 @@ public class UserController {
 	/* 회원가입 */
 	@PostMapping("/register/user")
 	public ResponseEntity<UserDto.Response> registerUser(@Valid @RequestBody UserDto.RegisterPost post) {
-
 		User user = userService.registerUser(userMapper.postToUser(post));
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 
 	/* 유저 정보 입력(연령대, 나이) */
-	// @PostMapping("/register/user/info")
-	// public ResponseEntity postUserInfo() {
-	//
-	// }
+	@PostMapping("/register/user/info")
+	public ResponseEntity<String> postUserInfo(@Valid @RequestBody UserDto.UserInfoPost infoPost) {
+		userService.postUserInfo(infoPost);
+		return ResponseEntity.ok("회원가입을 환영합니다.");
+	}
 
 	@PatchMapping("/user/{id}")
 	public ResponseEntity<UserDto.Response> patchUser(@PathVariable Long id, @Valid @RequestBody UserDto.Patch patch) {

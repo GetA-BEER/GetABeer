@@ -1,6 +1,7 @@
 package be.domain.user.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import be.domain.user.entity.enums.Age;
@@ -34,10 +35,17 @@ public class UserDto {
 	public static class UserInfoPost {
 
 		@NotBlank
+		private String email;
+
+		@NotNull
 		private Gender gender;
 
-		@NotBlank
+		@NotNull
 		private Age age;
+
+		// @NotEmpty
+		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		// private List<UserBeerTag> userBeerTags;
 	}
 
 	@Getter

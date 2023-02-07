@@ -21,6 +21,7 @@ import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
+import be.domain.user.dto.UserDto;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
 import be.global.BaseTimeEntity;
@@ -33,7 +34,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Table(name = "users")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
@@ -70,8 +70,27 @@ public class User extends BaseTimeEntity {
 		this.password = password;
 	}
 
+	@Builder
+	public User(Long id, String email, String nickname,
+				String password, List<String> roles,
+				String provider, String imageUrl) {
+		this.id = id;
+		this.email = email;
+		this.nickname = nickname;
+		this.password = password;
+		this.roles = roles;
+		this.provider = provider;
+		this.imageUrl = imageUrl;
+	}
+
 	public void edit(String nickname) {
 		this.nickname = nickname;
+	}
+
+	public void setUserInfo(UserDto.UserInfoPost post) {
+		this.age = post.getAge();
+		this.gender = post.getGender();
+		// this.userBeerTags = post.getUserBeerTags();
 	}
 
 	@ElementCollection(fetch = FetchType.EAGER)

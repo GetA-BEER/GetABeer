@@ -1,9 +1,14 @@
 package be.domain.user.service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +31,7 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final CustomAuthorityUtils authorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
+	private final EntityManager em;
 
 	/* 유저 회원가입 */
 	@Transactional
@@ -33,23 +39,34 @@ public class UserService {
 		verifyExistEmail(user.getEmail());
 		verifiedEmail(user.getEmail());
 
+		// String imageUrl =
+		String password = passwordEncoder.encode(user.getPassword());
+		List<String> roles = authorityUtils.createRoles(user.getEmail());
+
 		User saved = User.builder()
 			.id(user.getId())
 			.email(user.getEmail())
-			.password(passwordEncoder.encode(user.getPassword()))
+			.roles(roles)
+			.password(password)
 			.nickname(user.getNickname())
-			.roles(authorityUtils.createRoles(user.getEmail()))
 			.provider(String.valueOf(ProviderType.LOCAL))
+			.imageUrl("임시이미지인척하는 스트링")
 			.build();
+
+		redisTemplate.delete(user.getEmail());
 
 		return userRepository.save(saved);
 	}
 
-	/* 유저 정보 입력 */
-	// @Transactional
-	// public User postUserInfo() {
-	//
-	// }
+	/* 유저 정보 입력 - 연령, 성별 */
+	@Transactional
+	public void postUserInfo(UserDto.UserInfoPost post) {
+		User user = userRepository.findByEmail(post.getEmail())
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+		user.setUserInfo(post);
+		em.flush();
+	}
 
 	/* 임시 유저 update */
 	@Transactional
@@ -103,5 +120,17 @@ public class UserService {
 		if (Objects.equals(redisTemplate.opsForValue().get(email), "false")) {
 			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_EMAIL);
 		}
+	}
+
+	/* 로그인 유저 반환 */
+	public User getLoginUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication == null) {
+			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+		}
+
+		return userRepository.findByEmail(authentication.getName())
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 	}
 }
