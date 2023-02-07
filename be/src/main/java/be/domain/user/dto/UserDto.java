@@ -37,7 +37,6 @@ public class UserDto {
 	}
 
 	@Getter
-	@Builder
 	public static class UserInfoPost {
 
 		@NotBlank
@@ -49,13 +48,13 @@ public class UserDto {
 		@NotNull
 		private Age age;
 
-		@NotEmpty
-		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
-		private List<UserBeerCategory> userBeerCategories;
+		// @NotEmpty
+		// @Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
+		// private List<UserBeerCategory> userBeerCategories;
 
-		@NotEmpty
-		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		private List<UserBeerTag> userBeerTags;
+		// @NotNull
+		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		// private List<UserBeerTag> userBeerTags;
 	}
 
 	@Getter
@@ -70,10 +69,30 @@ public class UserDto {
 
 		private Age age;
 
-		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
-		private List<UserBeerCategory> userBeerCategories;
-		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		private List<UserBeerTag> userBeerTags;
+		// @Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
+		// private List<UserBeerCategory> userBeerCategories;
+
+		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		// private List<UserBeerTag> userBeerTags;
+	}
+
+	@Getter
+	@Builder
+	public static class EditPassword {
+
+		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
+				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+		private String oldPassword;
+
+		@NotBlank
+		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
+				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+		private String newPassword;
+
+		@NotBlank
+		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
+				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+		private String newVerifyPassword;
 	}
 
 	@Getter
@@ -90,11 +109,11 @@ public class UserDto {
 
 		private Age age;
 
-		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
-		private List<UserBeerCategory> userBeerCategories;
+		// @Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
+		// private List<UserBeerCategory> userBeerCategories;
 
-		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		private List<UserBeerTag> userBeerTags;
+		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		// private List<UserBeerTag> userBeerTags;
 	}
 
 	@Getter

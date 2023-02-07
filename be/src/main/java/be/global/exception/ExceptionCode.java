@@ -25,6 +25,9 @@ public enum ExceptionCode {
 	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는
 	WRONG_CODE(400, "Code is wrong"),
 	UNAUTHORIZED_EMAIL(401, "인증되지 않은 이메일입니다."),
+	WITHDRAWN_USER(400, "탈퇴한 회원입니다."),
+	SLEEP_USER(403, "휴면 계정입니다. 휴면 해제가 필요합니다."),
+	WRONG_PASSWORD(404, "비밀번호가 일치하지 않습니다."),
 
 	/* BEER 관련 예외 */
 	BEER_NOT_FOUND(404, "Beer Not Found"),

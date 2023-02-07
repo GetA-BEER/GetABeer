@@ -36,7 +36,7 @@ public class PairingCommentService {
 		// User loginUser = userService.getLoginUser();
 		// checkUser(userId, loginUser.getId());
 
-		User user = userService.getUser(userId);
+		User user = userService.getUser();
 		Pairing pairing = pairingService.getPairing(pairingId);
 		pairingComment.saveDefault(user, pairing);
 		pairingCommentRepository.save(pairingComment);

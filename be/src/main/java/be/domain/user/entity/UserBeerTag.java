@@ -42,4 +42,11 @@ public class UserBeerTag {
 			this.user.getUserBeerTags().add(this);
 		}
 	}
+
+	public void addBeerTag(BeerTag beerTag) {
+		this.beerTag = beerTag;
+		if (!this.user.getUserBeerTags().contains(this)) {
+			this.user.getUserBeerTags().add(this);
+		}
+	}
 }
