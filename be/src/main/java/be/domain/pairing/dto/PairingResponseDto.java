@@ -3,6 +3,8 @@ package be.domain.pairing.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import be.domain.comment.dto.PairingCommentDto;
+import be.domain.comment.entity.PairingComment;
 import be.domain.pairing.entity.PairingCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +24,7 @@ public class PairingResponseDto {
 		private String nickname;
 		private String content;
 		private List<PairingImageDto.Response> imageList;
-		/* 페어링 댓글 들어갈 예정 */
+		private List<PairingCommentDto.Response> commentList;
 		private PairingCategory category;
 		private Integer likeCount;
 		private Integer commentCount;

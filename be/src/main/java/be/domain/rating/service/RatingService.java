@@ -223,7 +223,7 @@ public class RatingService {
 
 				BeerTag findBeerTag = beerTagService.findVerifiedBeerTagByBeerTagType(beerTagType);
 
-				findBeerTag.subtractDailyCount(); // 카운트 빼주기
+				// findBeerTag.subtractDailyCount(); // 카운트 빼주기
 
 				BeerBeerTag beerBeerTag = beerBeerTagQueryRepository
 					.findBeerBeerTagByBeerAndBeerTagType(findBeer, beerTagType);
