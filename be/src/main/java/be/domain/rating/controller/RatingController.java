@@ -25,7 +25,7 @@ import be.domain.rating.service.RatingService;
 import be.global.dto.MultiResponseDto;
 
 @RestController
-@RequestMapping("/ratings")
+@RequestMapping("/api/ratings")
 public class RatingController {
 	private final RatingService ratingService;
 	private final RatingMapper ratingMapper;

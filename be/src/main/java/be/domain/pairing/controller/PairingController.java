@@ -23,7 +23,7 @@ import be.domain.pairing.service.PairingService;
 import be.global.dto.MultiResponseDto;
 
 @RestController
-@RequestMapping("/pairings")
+@RequestMapping("/api/pairings")
 public class PairingController {
 	private final PairingService pairingService;
 	private final PairingMapper mapper;
