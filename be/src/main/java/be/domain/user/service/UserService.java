@@ -37,7 +37,7 @@ public class UserService {
 	@Transactional
 	public User registerUser(User user) {
 		verifyExistEmail(user.getEmail());
-		verifiedEmail(user.getEmail());
+		// verifiedEmail(user.getEmail()); // 이메일인증된 유저만 회원가입 가능
 
 		// String imageUrl =
 		String password = passwordEncoder.encode(user.getPassword());
