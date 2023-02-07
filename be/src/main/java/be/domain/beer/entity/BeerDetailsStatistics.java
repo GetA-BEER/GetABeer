@@ -2,6 +2,8 @@ package be.domain.beer.entity;
 
 import javax.persistence.Embeddable;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BeerDetailsStatistics {
 
+	@ColumnDefault("0")
 	private Long dailyViewCount;
+	@ColumnDefault("0")
 	private Long dailyRatingCount;
 
 	@Builder
@@ -26,5 +30,10 @@ public class BeerDetailsStatistics {
 
 	public void addDailyRatingCount() {
 		this.dailyRatingCount++;
+	}
+
+	public void resetStatistic() {
+		this.dailyViewCount = 0L;
+		this.dailyRatingCount = 0L;
 	}
 }

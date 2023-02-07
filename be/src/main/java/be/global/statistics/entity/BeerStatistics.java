@@ -10,15 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 import org.springframework.data.annotation.CreatedDate;
 
 import be.domain.beer.entity.Beer;
-import be.domain.beer.entity.BeerBeerCategory;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.BeerDetailsTopTags;
-import be.global.BaseTimeEntity;
-import ch.qos.logback.core.joran.conditional.IfAction;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

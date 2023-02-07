@@ -1,5 +1,7 @@
 package be.domain.beer.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToOne;
 
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beertag.entity.BeerTag;
+import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +26,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerBeerTag {
+public class BeerBeerTag extends BaseTimeEntity implements Serializable {
+
+	private static final long serialVersionUID = 6494678977089006639L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

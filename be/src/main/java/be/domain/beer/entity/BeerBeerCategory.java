@@ -1,5 +1,7 @@
 package be.domain.beer.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import be.domain.beercategory.entity.BeerCategory;
+import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +28,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerBeerCategory {
+public class BeerBeerCategory extends BaseTimeEntity implements Serializable {
+
+	private static final long serialVersionUID = 6494678977089006639L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

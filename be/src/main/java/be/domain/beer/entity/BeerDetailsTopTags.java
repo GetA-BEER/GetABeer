@@ -7,6 +7,7 @@ import javax.persistence.Embeddable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Embeddable
@@ -28,6 +29,17 @@ public class BeerDetailsTopTags {
 
 	public List<String> createList() {
 		return List.of(tag1, tag2, tag3, tag4);
+	}
+
+	public void createTags(List<String> beerTagTypes) {
+
+		BeerDetailsTopTags beerDetailsTopTags =
+			BeerDetailsTopTags.builder()
+				.tag1(beerTagTypes.get(0))
+				.tag2(beerTagTypes.get(1))
+				.tag3(beerTagTypes.get(2))
+				.tag4(beerTagTypes.get(3))
+				.build();
 	}
 
 	public void changeTags(List<String> beerTagTypes) {
