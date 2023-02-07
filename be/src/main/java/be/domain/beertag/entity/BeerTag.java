@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import be.domain.beer.entity.BeerBeerTag;
 import be.domain.user.entity.UserBeerTag;
 import lombok.AccessLevel;
@@ -28,13 +30,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BeerTag implements Serializable {
 
+	private static final long serialVersionUID = 6494678977089006639L;
+
 	@Id
 	@Column(name = "beer_tag_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Enumerated(EnumType.STRING)
 	private BeerTagType beerTagType;
-	private Long dailyCount;
+	@ColumnDefault("0")
+	private long dailyCount;
 
 	@OneToMany(mappedBy = "beerTag")
 	private List<BeerBeerTag> beerBeerTags = new ArrayList<>();

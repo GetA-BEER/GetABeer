@@ -19,6 +19,7 @@ public class StatisticsService {
 	private final PairingCategoryStatisticsQueryRepository pairingCategoryStatisticsQueryRepository;
 
 	public void createTotalStatistics() {
+		beerStatisticsQueryRepository.createAndSaveDailyBeerStatistics();
 
 	}
 
@@ -35,6 +36,6 @@ public class StatisticsService {
 	}
 
 	public void createPairingCategoryStatistics() {
-		
+
 	}
 }

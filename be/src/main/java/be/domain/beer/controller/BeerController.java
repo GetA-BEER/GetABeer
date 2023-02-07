@@ -6,6 +6,9 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -104,7 +107,8 @@ public class BeerController {
 
 	@GetMapping("/users/mypage/beers")
 	public ResponseEntity<PageImpl<BeerDto.MyPageResponse>> getMyPageBeer(
-		@RequestParam(name = "page", defaultValue = "1") Integer page) {
+		@RequestParam(name = "page", defaultValue = "1") Integer page,
+		@PageableDefault(size = 10, sort = "username", direction = Sort.Direction.DESC) Pageable pageable) {
 
 		Page<Beer> beerPage = beerService.findMyPageBeers(page);
 		PageImpl<BeerDto.MyPageResponse> responses = beerMapper.beersToMyPageResponse(beerPage);

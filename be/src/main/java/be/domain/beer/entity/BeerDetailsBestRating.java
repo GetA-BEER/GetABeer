@@ -12,25 +12,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BeerDetailsBestRating {
 
-	private Long ratingId;
-	private String nickname;
-	private Double star;
-	private String content;
+	private Long bestRatingId;
+	private String bestNickname;
+	private Double bestStar;
+	private String bestContent;
 
 	@Builder
-	public BeerDetailsBestRating(Long ratingId, String nickname, Double star, String content) {
-		this.ratingId = ratingId;
-		this.nickname = nickname;
-		this.star = star;
-		this.content = content;
+	public BeerDetailsBestRating(Long bestRatingId, String bestNickname, Double bestStar, String bestContent) {
+		this.bestRatingId = bestRatingId;
+		this.bestNickname = bestNickname;
+		this.bestStar = bestStar;
+		this.bestContent = bestContent;
 	}
 
 	public Rating createRating() {
 		return Rating.builder()
-			.id(ratingId)
-			.nickname(nickname)
-			.star(star)
-			.content(content)
+			.id(bestRatingId)
+			.nickname(bestNickname)
+			.star(bestStar)
+			.content(bestContent)
 			.build();
 	}
+
 }

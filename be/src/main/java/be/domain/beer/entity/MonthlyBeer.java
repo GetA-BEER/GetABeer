@@ -28,6 +28,8 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 
+	private static final long serialVersionUID = 6494678977089006639L;
+
 	@Id
 	@Column(name = "monthly_beer_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
