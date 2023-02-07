@@ -53,4 +53,12 @@ public class RatingComment extends BaseTimeEntity {
 	public void bndUser(User user) {
 		this.user = user;
 	}
+
+	public void updateContent(String content) {
+		this.content = content;
+	}
+
+	public void saveDefault(Rating rating) {
+		this.rating = rating;
+	}
 }
