@@ -21,7 +21,7 @@ export default function Mypage() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl ">
-        <div className="my-6 text-center text-lg bg-white font-semibold">
+        <div className="my-4 text-center text-lg bg-white font-semibold">
           마이 페이지
         </div>
         <div className="flex flex-col items-center my-6">

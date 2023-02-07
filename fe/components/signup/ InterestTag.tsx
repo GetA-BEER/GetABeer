@@ -21,7 +21,7 @@ export default function InterestTag() {
   return (
     <div className="px-2 pt-2">
       <div className="text-sm">관심 태그 (최대 4개까지 선택 가능)</div>
-      <div className="grid grid-cols-4 my-2 gap-2 w-full items-center">
+      <div className="grid grid-cols-4 my-2 gap-1 w-full items-center">
         {interestList.map((el: string, idx: number) => (
           <div key={idx.toString()}>
             <input

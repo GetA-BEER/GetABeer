@@ -21,7 +21,7 @@ export default function MyEdit() {
         <button className="m-4">
           <IoChevronBack className="w-6 h-6" />
         </button>
-        <div className="my-8 text-center text-lg bg-white rounded-lg font-semibold">
+        <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           회원정보 수정
         </div>
         <div className="flex flex-col items-center my-6">
