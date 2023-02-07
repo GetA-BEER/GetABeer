@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import be.domain.beertag.entity.BeerTag;
+import be.domain.beercategory.entity.BeerCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +21,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserBeerTag {
+public class UserBeerCategory {
 
 	@Id
-	@Column(name = "user_beer_tag_id")
+	@Column(name = "user_beer_category_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -33,20 +33,13 @@ public class UserBeerTag {
 	private User user;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "beer_tag_id")
-	private BeerTag beerTag;
+	@JoinColumn(name = "beer_category_id")
+	private BeerCategory beerCategory;
 
 	public void addUser(User user) {
 		this.user = user;
-		if (!this.user.getUserBeerTags().contains(this)) {
-			this.user.getUserBeerTags().add(this);
-		}
-	}
-
-	public void addBeerTag(BeerTag beerTag) {
-		this.beerTag = beerTag;
-		if (!this.user.getUserBeerTags().contains(this)) {
-			this.user.getUserBeerTags().add(this);
+		if (!this.user.getUserBeerCategories().contains(this)) {
+			this.user.getUserBeerCategories().add(this);
 		}
 	}
 }

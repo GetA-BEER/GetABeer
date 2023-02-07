@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.beer.controller.BeerController;
@@ -27,11 +28,12 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.repository.BeerTagRepository;
 import be.domain.beertag.service.BeerTagService;
-import be.domain.rating.dto.RatingRequestDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
+import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.Role;
+import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.UserBeerTagRepository;
 import be.domain.user.repository.UserRepository;
 
@@ -39,6 +41,12 @@ import be.domain.user.repository.UserRepository;
 public class Init {
 
 	private static final Logger log = LoggerFactory.getLogger(Init.class);
+
+	private final PasswordEncoder passwordEncoder;
+
+	public Init(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	@Bean
 	@Transactional
@@ -129,12 +137,15 @@ public class Init {
 
 			User user = User.builder()
 				.email("e" + i + "@mail.com")
+				.provider("LOCAL")
 				.nickname("닉네임" + i)
-				.password("1234")
-				.gender(Gender.values()[(int)(Math.random() * 3)])
-				.age(Age.values()[(int)(Math.random() * 6)])
 				.roles(List.of(Role.ROLE_USER.toString()))
+				.password(passwordEncoder.encode("1234"))
+				.status(UserStatus.values()[(int)(Math.random() * 3)].getStatus())
+				.imageUrl(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
 				.build();
+
+			user.setUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.values()[(int)(Math.random() * 3)]);
 
 			// UserBeerTag userBeerTag =
 			// 	UserBeerTag.builder()
