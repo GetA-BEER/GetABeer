@@ -121,11 +121,31 @@ public class UserService {
 		}
 	}
 
-	/* 유저 조회 */
+	/* 유저 정보 조회 */
 	@Transactional(readOnly = true)
-	public User getUser() {
-		User user = getLoginUser();
+	public User getUser(Long id) {
+		User user = userRepository.findById(id)
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 		return findVerifiedUser(user.getId());
+	}
+
+	/* 로그인 유저 반환 */
+	public User getLoginUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication == null) {
+			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+		}
+
+		return userRepository.findByEmail(authentication.getName())
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+	}
+  
+    /* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
+	public void checkUser(Long userId, Long loginUserId) {
+		if (!userId.equals(loginUserId)) {
+			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
+		}
 	}
 
 	/* 유저 탈퇴 */
@@ -142,25 +162,6 @@ public class UserService {
 		User user = getLoginUser();
 		userRepository.delete(user);
 		return "유저 완전 삭제 성공";
-	}
-
-	/* 로그인 유저 반환 */
-	public User getLoginUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		if (authentication == null) {
-			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
-		}
-
-		return userRepository.findByEmail(authentication.getName())
-			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-	}
-  
-  /* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별*/
-	public void checkUser(Long userId, Long loginUserId) {
-		if (!userId.equals(loginUserId)) {
-			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
-		}
 	}
 
 	/* 유저 상태 : 활동중, 휴면, 탈퇴유저 구분 */
@@ -181,24 +182,14 @@ public class UserService {
 	/* 로그아웃 */
 	public void logout(HttpServletRequest request, String email) {
 		redisTemplate.opsForValue()
-			.set(request.getHeader("Authorization"), "logout", 30 * 60 * 1000L, TimeUnit.MILLISECONDS);
+			.set(request.getHeader("Authorization"),
+				 "logout",
+				 30 * 60 * 1000L,
+				 TimeUnit.MILLISECONDS);
 		redisTemplate.delete(email);
 	}
 
-	/* setBeerTags */
-	// private void setUserBeerTags(User user, UserDto.UserInfoPost post) {
-	// 	post.getUserBeerTags()
-	// 		.forEach(userBeerTag -> {
-	// 			BeerTag beerTag = beerTagService.findVerifiedBeerTag(userBeerTag.getBeerTag().getId());
-	// 			UserBeerTag saved = UserBeerTag.builder()
-	// 				.user(user)
-	// 				.beerTag(beerTag)
-	// 				.build();
-	// 			userBeerTagRepository.save(saved);
-	// 		});
-	// }
-
-	/* 이미 가입한 유저인지 확인 */
+	/* 이미 가입한 이메일인지 확인 */
 	private void verifyExistEmail(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
@@ -228,4 +219,17 @@ public class UserService {
 			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_EMAIL);
 		}
 	}
+
+	/* setBeerTags */
+	// private void setUserBeerTags(User user, UserDto.UserInfoPost post) {
+	// 	post.getUserBeerTags()
+	// 		.forEach(userBeerTag -> {
+	// 			BeerTag beerTag = beerTagService.findVerifiedBeerTag(userBeerTag.getBeerTag().getId());
+	// 			UserBeerTag saved = UserBeerTag.builder()
+	// 				.user(user)
+	// 				.beerTag(beerTag)
+	// 				.build();
+	// 			userBeerTagRepository.save(saved);
+	// 		});
+	// }
 }
