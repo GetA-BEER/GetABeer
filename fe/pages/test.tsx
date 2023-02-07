@@ -23,7 +23,7 @@ export default function Test() {
   return (
     <div>
       <MiddleCard cardProps={testBeer} />
-      <MonthlyCard cardProps={testBeer} />
+      <MonthlyCard cardProps={testBeer} idx={1} />
       <BigCard cardProps={testBeer} />
       <div>코멘트 input</div>
       <CommentInput />
