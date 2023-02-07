@@ -58,7 +58,7 @@ public class UserService {
 		return userRepository.save(saved);
 	}
 
-	/* 유저 정보 입력 - 연령, 성별 */
+	/* 회원가입 유저 정보 입력 - 연령, 성별 */
 	@Transactional
 	public void postUserInfo(UserDto.UserInfoPost post) {
 		User user = userRepository.findByEmail(post.getEmail())
@@ -68,14 +68,15 @@ public class UserService {
 		em.flush();
 	}
 
-	/* 임시 유저 update */
+	/* 유저 정보 수정 */
 	@Transactional
-	public User updateUser(Long id, UserDto.Patch patch) {
-		User user = userRepository.findById(id)
-			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+	public User updateUser(UserDto.EditUserInfo edit) {
+		User user = getLoginUser();
 
-		Optional.ofNullable(patch.getNickname()).ifPresent(user::edit);
-		return userRepository.save(user);
+		user.edit(edit);
+		em.flush();
+
+		return userRepository.findById(user.getId()).orElseThrow();
 	}
 
 	/* 임시 유저 get */

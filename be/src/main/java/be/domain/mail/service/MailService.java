@@ -29,12 +29,6 @@ public class MailService {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
 
-		// message.addRecipients(Message.RecipientType.TO, email);
-		// message.setSubject("Get A Beer 이메일 인증 코드입니다.");
-		// message.setText("이메일 인증코드: " + code);
-		//
-		// message.setFrom(new InternetAddress("getabeer0310@gmail.com"));
-
 		helper.setTo(email);
 		helper.setSubject("Get A Beer 이메일 인증 코드입니다.");
 		helper.setText("이메일 인증 코드: " + code, true);

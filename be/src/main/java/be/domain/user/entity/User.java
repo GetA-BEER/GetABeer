@@ -83,8 +83,12 @@ public class User extends BaseTimeEntity {
 		this.imageUrl = imageUrl;
 	}
 
-	public void edit(String nickname) {
-		this.nickname = nickname;
+	public void edit(UserDto.EditUserInfo editUserInfo) {
+		this.imageUrl = editUserInfo.getImageUrl() == null ? this.getImageUrl() : editUserInfo.getImageUrl();
+		this.nickname = editUserInfo.getNickname() == null ? this.getNickname() : editUserInfo.getNickname();
+		this.gender = editUserInfo.getGender() == null ? this.getGender() : editUserInfo.getGender();
+		this.age = editUserInfo.getAge() == null ? this.getAge() : editUserInfo.getAge();
+		// this.userBeerTags = editUserInfo.getUserBeerTags() == null ? this.userBeerTags : editUserInfo.getUserBeerTags();
 	}
 
 	public void setUserInfo(UserDto.UserInfoPost post) {

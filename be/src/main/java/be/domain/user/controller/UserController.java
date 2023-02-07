@@ -36,17 +36,18 @@ public class UserController {
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 
-	/* 유저 정보 입력(연령대, 나이) */
+	/* 유저 정보 입력(성별, 나이) */
 	@PostMapping("/register/user/info")
 	public ResponseEntity<String> postUserInfo(@Valid @RequestBody UserDto.UserInfoPost infoPost) {
 		userService.postUserInfo(infoPost);
 		return ResponseEntity.ok("회원가입을 환영합니다.");
 	}
 
-	@PatchMapping("/user/{id}")
-	public ResponseEntity<UserDto.Response> patchUser(@PathVariable Long id, @Valid @RequestBody UserDto.Patch patch) {
-		User user = userService.updateUser(id, patch);
-		return ResponseEntity.ok(userMapper.userToResponse(user));
+	/* 유저 정보 수정(이미지, 닉네임, 성별, 나이) */
+	@PatchMapping("/mypage/userinfo")
+	public ResponseEntity<UserDto.UserInfoResponse> patchUser(@Valid @RequestBody UserDto.EditUserInfo edit) {
+		User user = userService.updateUser(edit);
+		return ResponseEntity.ok(userMapper.userToInfoResponse(user));
 	}
 
 	@GetMapping("/user/{id}")

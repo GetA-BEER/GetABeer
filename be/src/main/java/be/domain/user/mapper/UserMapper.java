@@ -16,4 +16,5 @@ public interface UserMapper {
 	}
 
 	UserDto.Response userToResponse(User user);
+	UserDto.UserInfoResponse userToInfoResponse(User user);
 }

@@ -50,13 +50,27 @@ public class UserDto {
 
 	@Getter
 	@Builder
-	public static class Patch {
+	public static class EditUserInfo {
 
-		@NotBlank
-		private String email;
-
-		@NotBlank
+		private String imageUrl;
 		private String nickname;
+		private Gender gender;
+		private Age age;
+		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		// private List<UserBeerTag> userBeerTags;
+	}
+
+	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor(access = AccessLevel.PROTECTED)
+	public static class UserInfoResponse {
+		private String imageUrl;
+		private String nickname;
+		private Gender gender;
+		private Age age;
+		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		// private List<UserBeerTag> userBeerTags;
 	}
 
 	@Getter
@@ -66,7 +80,7 @@ public class UserDto {
 	public static class Response {
 		private String email;
 		private String nickname;
-		private String image;
+		private String imageUrl;
 	}
 
 	@Getter
