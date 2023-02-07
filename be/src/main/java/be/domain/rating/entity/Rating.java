@@ -6,12 +6,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Range;
@@ -74,6 +77,18 @@ public class Rating extends BaseTimeEntity {
 		this.beer = beer;
 	}
 
+	@OneToOne
+	@JoinColumn(name = "rating_tag_id")
+	private RatingTag ratingTag;
+
+	public void oneToOneByRatingTag(RatingTag ratingTag) {
+		this.ratingTag = ratingTag;
+
+		if (ratingTag.getRating() != this) {
+			ratingTag.oneToOneByRating(this);
+		}
+	}
+
 	/* 💜 맥주 평가 - 맥주 댓글 일대다 연관관계 */
 	@OneToMany(mappedBy = "rating", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<RatingComment> ratingCommentList = new ArrayList<>();
@@ -95,10 +110,16 @@ public class Rating extends BaseTimeEntity {
 		this.star = star;
 	}
 
-	public void saveDefault(Beer beer, Integer likeCount, Integer commentCount, List<RatingComment> ratingCommentList) {
+	public void saveDefault(Beer beer, RatingTag ratingTag, Integer likeCount, Integer commentCount,
+		List<RatingComment> ratingCommentList) {
 		this.beer = beer;
+		this.ratingTag = ratingTag;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
 		this.ratingCommentList = ratingCommentList;
+	}
+
+	public void updateTag(RatingTag ratingTag) {
+		this.ratingTag = ratingTag;
 	}
 }

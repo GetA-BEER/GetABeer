@@ -3,6 +3,7 @@ package be.domain.beer.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -18,6 +19,7 @@ import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.global.BaseTimeEntity;
+import be.global.statistics.entity.BeerStatistics;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +45,13 @@ public class Beer extends BaseTimeEntity {
 	private BeerDetailsStars beerDetailsStars;
 	@Embedded
 	private BeerDetailsCounts beerDetailsCounts;
+	@Embedded
+	private BeerDetailsTopTags beerDetailsTopTags;
+	@Embedded
+	@Nullable
+	private BeerDetailsBestRating beerDetailsBestRating;
+	@Embedded
+	private BeerDetailsStatistics beerDetailsStatistics;
 	private Boolean isWishListed;
 
 	@ManyToOne

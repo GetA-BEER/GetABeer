@@ -1,53 +1,64 @@
 package be.domain.beertag.entity;
 
-import be.domain.beer.entity.BeerBeerTag;
-import be.domain.beer.entity.MonthlyBeer;
-import be.domain.beer.entity.MonthlyBeerBeerCategory;
-import be.domain.beer.entity.MonthlyBeerBeerTag;
-import be.domain.user.entity.UserBeerTag;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
-
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import be.domain.beer.entity.BeerBeerTag;
+import be.domain.user.entity.UserBeerTag;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerTag {
+public class BeerTag implements Serializable {
 
-    @Id
-    @Column(name = "beer_tag_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Enumerated(EnumType.STRING)
-    private BeerTagType beerTagType;
-    private Long count;
+	@Id
+	@Column(name = "beer_tag_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@Enumerated(EnumType.STRING)
+	private BeerTagType beerTagType;
+	private Long dailyCount;
 
-    @OneToMany(mappedBy = "beerTag")
-    private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
+	@OneToMany(mappedBy = "beerTag")
+	private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "beerTag")
-    private List<UserBeerTag> userBeerTags = new ArrayList<>();
+	@OneToMany(mappedBy = "beerTag")
+	private List<UserBeerTag> userBeerTags = new ArrayList<>();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "beerTag")
-    private List<MonthlyBeerBeerTag> monthlyBeerBeerTags = new ArrayList<>();
+	public void addBeerBeerTag(BeerBeerTag beerBeerTag) {
+		this.beerBeerTags.add(beerBeerTag);
+		if (beerBeerTag.getBeerTag() != this) {
+			beerBeerTag.addBeerTag(this);
+		}
+	}
 
-    public void addBeerBeerTag(BeerBeerTag beerBeerTag) {
-        this.beerBeerTags.add(beerBeerTag);
-        if (beerBeerTag.getBeerTag() != this) {
-            beerBeerTag.addBeerTag(this);
-        }
-    }
+	public void addDailyCount() {
+		this.dailyCount++;
+	}
 
-    public void addMonthlyBeerBeerTag(MonthlyBeerBeerTag monthlyBeerBeerTag) {
-        this.monthlyBeerBeerTags.add(monthlyBeerBeerTag);
-        if (monthlyBeerBeerTag.getBeerTag() != this) {
-            monthlyBeerBeerTag.addBeerTag(this);
-        }
-    }
+	public void subtractDailyCount() {
+		if (this.dailyCount != 0L) {
+			this.dailyCount--;
+		} else {
+			this.dailyCount = 0L;
+		}
+	}
+
 }
