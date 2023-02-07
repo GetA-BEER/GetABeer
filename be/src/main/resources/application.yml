@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: local
+  application:
+    name: Get_A_Beer
   h2:
     console:
       enabled: true
@@ -12,15 +14,22 @@ spring:
     port: 6379
   datasource:
     url: jdbc:h2:mem:test
+    properties:
+      rewriteBatchedStatements: true
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     open-in-view: true
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
+        default_batch_fetch_size: 100
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 100
   security:
     oauth2:
       client:
@@ -77,13 +86,18 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
+  cloud:
+    gcp:
+      credentials:
+        location: classpath:/getabeer-376509-6310d68578f1.json
 cloud:
   aws:
     credentials:
-      accessKey:
-      secretKey:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
     s3:
-      bucket:
+      bucket: getabeer
+      dir: image
     region:
       static: ap-northeast-2
     stack:
@@ -104,4 +118,22 @@ app:
 webdriver:
   chrome:
     driverid: webdriver.chrome.driver
-    location: "/Users/gnidinger/Documents/GetABeer/chromedriver_mac_arm64/chromedriver"
+    location: src/main/java/be/domain/crawler/javaCrawler/chromedriver
+elasticsearch:
+  host: localhost
+  port: 9200
+python:
+  crawler: src/main/java/be/domain/crawler/pycrawler/crawler.py
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}

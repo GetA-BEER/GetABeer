@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class RatingCommentDto {
 	@Getter
 	@Builder
 	public static class Post {
+		private Long ratingId;
 		private String nickname;
 		private String content;
 	}
@@ -41,6 +43,7 @@ public class RatingCommentDto {
 		}
 
 		@Builder
+		@QueryProjection
 		public Response(Long ratingId, Long ratingCommentId, String nickname, String content,
 			LocalDateTime createdAt, LocalDateTime modifiedAt) {
 			this.ratingId = ratingId;

@@ -1,8 +1,10 @@
 package be.domain.beer.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -14,10 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.global.BaseTimeEntity;
+import be.global.statistics.entity.BeerStatistics;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,9 +34,12 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
+@DynamicInsert
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Beer extends BaseTimeEntity {
+public class Beer extends BaseTimeEntity implements Serializable {
+
+	private static final long serialVersionUID = 6494678977089006639L;
 
 	@Id
 	@Column(name = "beer_id")
@@ -43,6 +51,14 @@ public class Beer extends BaseTimeEntity {
 	private BeerDetailsStars beerDetailsStars;
 	@Embedded
 	private BeerDetailsCounts beerDetailsCounts;
+	@Embedded
+	private BeerDetailsTopTags beerDetailsTopTags;
+	@Embedded
+	@Nullable
+	private BeerDetailsBestRating beerDetailsBestRating;
+	@Embedded
+	@Nullable
+	private BeerDetailsStatistics beerDetailsStatistics;
 	private Boolean isWishListed;
 
 	@ManyToOne
@@ -121,7 +137,41 @@ public class Beer extends BaseTimeEntity {
 		this.beerDetailsBasic = beer.getBeerDetailsBasic();
 	}
 
+	public void createTopTags(List<String> beerTagTypes) {
+
+		this.beerDetailsTopTags =
+			BeerDetailsTopTags.builder()
+				.tag1(beerTagTypes.get(0))
+				.tag2(beerTagTypes.get(1))
+				.tag3(beerTagTypes.get(2))
+				.tag4(beerTagTypes.get(3))
+				.build();
+	}
+
+	public List<String> createTopTagList() {
+		return List.of(this.beerDetailsTopTags.getTag1(),
+			this.beerDetailsTopTags.getTag2(),
+			this.beerDetailsTopTags.getTag3(),
+			this.beerDetailsTopTags.getTag4()
+		);
+	}
+
+	public void updateBestRating(Rating rating) {
+		this.beerDetailsBestRating =
+			BeerDetailsBestRating.builder()
+				.bestRatingId(rating.getId())
+				.bestStar(rating.getStar())
+				.bestNickname(rating.getNickname())
+				.bestContent(rating.getContent())
+				.build();
+	}
+
 	public void update(Beer beer) {
 		this.beerDetailsBasic = beer.getBeerDetailsBasic();
 	}
+
+	public void addDailyRatingCount() {
+		this.getBeerDetailsStatistics().addDailyRatingCount();
+	}
+
 }
