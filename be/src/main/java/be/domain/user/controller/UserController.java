@@ -75,7 +75,7 @@ public class UserController {
 	/* 유저정보 조회 */
 	@GetMapping("/user")
 	public ResponseEntity<UserDto.Response> readUser() {
-		User user = userService.getUser();
+		User user = userService.getLoginUser();
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 
