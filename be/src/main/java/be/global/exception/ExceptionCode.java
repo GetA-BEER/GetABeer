@@ -15,6 +15,7 @@ public enum ExceptionCode {
 	TAG_IS_WRONG(400, "태그 요청이 잘못 되었습니다."),
 	IMAGE_SIZE_OVER(400, "이미지는 세 장까지만 등록이 가능합니다."),
 	COMMENT_NOT_FOUND(404, "댓글이 존재하지 않습니다."),
+	NOT_CORRECT_USER(403, "유저 정보가 일치하지 않습니다."),
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),

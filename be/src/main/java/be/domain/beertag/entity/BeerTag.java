@@ -58,12 +58,12 @@ public class BeerTag implements Serializable {
 		this.dailyCount++;
 	}
 
-	public void subtractDailyCount() {
-		if (this.dailyCount != 0L) {
-			this.dailyCount--;
-		} else {
-			this.dailyCount = 0L;
-		}
-	}
+	// public void subtractDailyCount() {
+	// 	if (this.dailyCount != 0L) {
+	// 		this.dailyCount--;
+	// 	} else {
+	// 		this.dailyCount = 0L;
+	// 	}
+	// }
 
 }

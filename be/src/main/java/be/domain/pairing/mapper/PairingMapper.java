@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
+import be.domain.comment.dto.PairingCommentDto;
+import be.domain.comment.entity.PairingComment;
 import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingRequestDto;
 import be.domain.pairing.dto.PairingResponseDto;
@@ -28,6 +30,7 @@ public interface PairingMapper {
 			.nickname(pairing.getNickname())
 			.content(pairing.getContent())
 			.imageList(getPairingImageList(pairing.getPairingImageList()))
+			.commentList(getCommentList(pairing.getPairingCommentList()))
 			.category(pairing.getPairingCategory())
 			.likeCount(pairing.getLikeCount())
 			.commentCount(pairing.getCommentCount())
@@ -49,6 +52,30 @@ public interface PairingMapper {
 			PairingImageDto.Response response = PairingImageDto.Response.builder()
 				.pairingImageId(pairingImages.get(i).getId())
 				.imageUrl(pairingImages.get(i).getImageUrl())
+				.build();
+
+			result.add(response);
+		}
+
+		return result;
+	}
+
+	private List<PairingCommentDto.Response> getCommentList(List<PairingComment> commentList) {
+		if (commentList.size() == 0) {
+			return new ArrayList<>();
+		}
+
+		List<PairingCommentDto.Response> result = new ArrayList<>();
+
+		for (int i = 0; i < commentList.size(); i++) {
+			PairingCommentDto.Response response = PairingCommentDto.Response.builder()
+				.pairingId(commentList.get(i).getPairing().getId())
+				.pairingCommentId(commentList.get(i).getId())
+				.userId(commentList.get(i).getUser().getId())
+				.nickname(commentList.get(i).getUser().getNickname())
+				.content(commentList.get(i).getContent())
+				.createdAt(commentList.get(i).getCreatedAt())
+				.modifiedAt(commentList.get(i).getModifiedAt())
 				.build();
 
 			result.add(response);

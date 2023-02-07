@@ -80,7 +80,7 @@ public class PairingController {
 	}
 
 	/* 페어링 페이지 조회 : 추천 순*/
-	@GetMapping("/likes")
+	@GetMapping("/mostlikes")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByLikes(
 		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
 		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByLikes(beerId, page, size);
@@ -89,7 +89,7 @@ public class PairingController {
 	}
 
 	/* 페어링 페이지 조회 : 댓글 많은 순*/
-	@GetMapping("/comments")
+	@GetMapping("/mostcomments")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByComments(
 		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
 		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByComments(beerId, page, size);
