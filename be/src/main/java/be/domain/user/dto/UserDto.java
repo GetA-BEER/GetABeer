@@ -1,9 +1,15 @@
 package be.domain.user.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+import be.domain.user.entity.UserBeerCategory;
+import be.domain.user.entity.UserBeerTag;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
 import lombok.AccessLevel;
@@ -43,9 +49,13 @@ public class UserDto {
 		@NotNull
 		private Age age;
 
-		// @NotEmpty
-		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		// private List<UserBeerTag> userBeerTags;
+		@NotEmpty
+		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
+		private List<UserBeerCategory> userBeerCategories;
+
+		@NotEmpty
+		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		private List<UserBeerTag> userBeerTags;
 	}
 
 	@Getter
@@ -53,11 +63,17 @@ public class UserDto {
 	public static class EditUserInfo {
 
 		private String imageUrl;
+
 		private String nickname;
+
 		private Gender gender;
+
 		private Age age;
-		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		// private List<UserBeerTag> userBeerTags;
+
+		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
+		private List<UserBeerCategory> userBeerCategories;
+		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		private List<UserBeerTag> userBeerTags;
 	}
 
 	@Getter
@@ -65,12 +81,20 @@ public class UserDto {
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class UserInfoResponse {
+
 		private String imageUrl;
+
 		private String nickname;
+
 		private Gender gender;
+
 		private Age age;
-		// @Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		// private List<UserBeerTag> userBeerTags;
+
+		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
+		private List<UserBeerCategory> userBeerCategories;
+
+		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
+		private List<UserBeerTag> userBeerTags;
 	}
 
 	@Getter

@@ -64,7 +64,7 @@ public class UserService {
 		User user = userRepository.findByEmail(post.getEmail())
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-		user.setUserInfo(post);
+		user.setUserInfo(post.getAge(), post.getGender());
 		em.flush();
 	}
 
@@ -81,8 +81,9 @@ public class UserService {
 
 	/* 임시 유저 get */
 	@Transactional(readOnly = true)
-	public User getUser(Long id) {
-		return findVerifiedUser(id);
+	public User getUser() {
+		User user = getLoginUser();
+		return findVerifiedUser(user.getId());
 	}
 
 	/* 임시 유저 delete */

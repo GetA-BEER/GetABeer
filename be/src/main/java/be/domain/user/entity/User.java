@@ -91,14 +91,18 @@ public class User extends BaseTimeEntity {
 		// this.userBeerTags = editUserInfo.getUserBeerTags() == null ? this.userBeerTags : editUserInfo.getUserBeerTags();
 	}
 
-	public void setUserInfo(UserDto.UserInfoPost post) {
-		this.age = post.getAge();
-		this.gender = post.getGender();
-		// this.userBeerTags = post.getUserBeerTags();
+	public void setUserInfo(Age age, Gender gender) {
+		this.age = age;
+		this.gender = gender;
+		// this.userBeerTags = ;
 	}
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles = new ArrayList<>();
+
+	/* UserBeerCategory Join */
+	@OneToMany(mappedBy = "user")
+	private List<UserBeerCategory> userBeerCategories;
 
 	/* UserBeerTag Join */
 	@OneToMany(mappedBy = "user")

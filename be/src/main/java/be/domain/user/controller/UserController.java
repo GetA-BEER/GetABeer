@@ -50,9 +50,9 @@ public class UserController {
 		return ResponseEntity.ok(userMapper.userToInfoResponse(user));
 	}
 
-	@GetMapping("/user/{id}")
-	public ResponseEntity<UserDto.Response> readUser(@PathVariable Long id) {
-		User user = userService.getUser(id);
+	@GetMapping("/user")
+	public ResponseEntity<UserDto.Response> readUser() {
+		User user = userService.getUser();
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
 
