@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,8 @@ public class PairingCommentDto {
 	@Getter
 	@Builder
 	public static class Post {
-		private String nickname;
+		private Long pairingId;
+		private Long userId;
 		private String content;
 	}
 
@@ -32,6 +34,7 @@ public class PairingCommentDto {
 	public static class Response {
 		private Long pairingId;
 		private Long pairingCommentId;
+		private Long userId;
 		private String nickname;
 		private String content;
 		private LocalDateTime createdAt;
@@ -41,11 +44,13 @@ public class PairingCommentDto {
 		}
 
 		@Builder
-		public Response(Long pairingId, Long pairingCommentId, String nickname, String content,
+		@QueryProjection
+		public Response(Long pairingId, Long pairingCommentId, Long userId, String nickname, String content,
 			LocalDateTime createdAt,
 			LocalDateTime modifiedAt) {
 			this.pairingId = pairingId;
 			this.pairingCommentId = pairingCommentId;
+			this.userId = userId;
 			this.nickname = nickname;
 			this.content = content;
 			this.createdAt = createdAt;

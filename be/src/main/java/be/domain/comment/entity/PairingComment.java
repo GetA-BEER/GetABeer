@@ -30,9 +30,6 @@ public class PairingComment extends BaseTimeEntity {
 	private Long id;
 
 	@Column(nullable = false)
-	private String nickname;
-
-	@Column(nullable = false)
 	private String content;
 
 	/* 💚 페어링 댓글 - 페어링 다대일 연관관계 */
@@ -53,5 +50,14 @@ public class PairingComment extends BaseTimeEntity {
 	/* 💙페어링 댓글 - 회원 다대일 연관관계 편의 메서드 */
 	public void bndUser(User user) {
 		this.user = user;
+	}
+
+	public void saveDefault (User user, Pairing pairing) {
+		this.user = user;
+		this.pairing = pairing;
+	}
+
+	public void updateContent(String content) {
+		this.content = content;
 	}
 }

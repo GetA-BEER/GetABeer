@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import be.domain.comment.entity.PairingComment;
 
 @Repository
-public interface PairinCommentRepository extends JpaRepository<PairingComment, Long> {
+public interface PairingCommentRepository extends JpaRepository<PairingComment, Long>, PairingCommentCustomRepository {
 }

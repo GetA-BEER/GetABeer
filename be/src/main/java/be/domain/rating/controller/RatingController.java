@@ -87,7 +87,7 @@ public class RatingController {
 	}
 
 	/* 맥주 평가 페이지 조회 : 추천 순 */
-	@GetMapping("/likes")
+	@GetMapping("/mostlikes")
 	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByMoreLikes(
 		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
 		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByMoreLikes(beerId, page, size);
@@ -96,7 +96,7 @@ public class RatingController {
 	}
 
 	/* 맥주 평가 페이지 조회 : 댓글 많은 순 */
-	@GetMapping("/comments")
+	@GetMapping("/mostcomments")
 	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByMoreComments(
 		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
 		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByMoreComments(beerId, page, size);
