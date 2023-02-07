@@ -3,6 +3,8 @@ package be.domain.user.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import be.domain.user.entity.enums.Age;
+import be.domain.user.entity.enums.Gender;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +15,7 @@ public class UserDto {
 
 	@Getter
 	@Builder
-	public static class Post {
+	public static class RegisterPost {
 
 		@NotBlank
 		private String email;
@@ -25,6 +27,17 @@ public class UserDto {
 		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
 				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String password;
+	}
+
+	@Getter
+	@Builder
+	public static class UserInfoPost {
+
+		@NotBlank
+		private Gender gender;
+
+		@NotBlank
+		private Age age;
 	}
 
 	@Getter

@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class MailController {
 
@@ -42,6 +42,9 @@ public class MailController {
 		if (!Objects.equals(redisTemplate.opsForValue().get(checkMail.getCode()), checkMail.getEmail())) {
 			throw new BusinessLogicException(ExceptionCode.WRONG_CODE);
 		}
+
+		mailService.setVerifiedEmail(checkMail.getEmail());
+
 		return ResponseEntity.ok(checkMail.getEmail());
 	}
 }

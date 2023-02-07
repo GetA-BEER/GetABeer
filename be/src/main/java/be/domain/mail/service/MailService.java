@@ -8,6 +8,7 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import be.domain.user.entity.User;
@@ -54,10 +55,13 @@ public class MailService {
 		redisUtil.setDataExpire(code, email, 60 * 5L);
 	}
 
+	@Async("threadPoolTaskExecutor-Mail")
 	public String sendCertificationMail(String email) throws BusinessLogicException {
 		if (nullUser(email).isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
 		}
+
+		redisUtil.setData(email, "false");
 
 		try {
 			String code = UUID.randomUUID().toString().substring(0, 6);
@@ -71,5 +75,11 @@ public class MailService {
 
 	public Optional<User> nullUser(String email) {
 		return userRepository.findByEmail(email);
+	}
+
+	/* 인증된 이메일 레디스 저장 */
+	public void setVerifiedEmail(String email) {
+		redisUtil.deleteData(email);
+		redisUtil.setDataExpire(email, "true", 60 * 30L);
 	}
 }

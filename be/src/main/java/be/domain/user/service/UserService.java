@@ -1,7 +1,9 @@
 package be.domain.user.service;
 
+import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +25,13 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final CustomAuthorityUtils authorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
 
-	/* 2차 유저 Create */
+	/* 유저 회원가입 */
 	@Transactional
 	public User registerUser(User user) {
 		verifyExistEmail(user.getEmail());
+		verifiedEmail(user.getEmail());
 
 		User saved = User.builder()
 			.id(user.getId())
@@ -40,6 +44,12 @@ public class UserService {
 
 		return userRepository.save(saved);
 	}
+
+	/* 유저 정보 입력 */
+	// @Transactional
+	// public User postUserInfo() {
+	//
+	// }
 
 	/* 임시 유저 update */
 	@Transactional
@@ -83,5 +93,15 @@ public class UserService {
 	private User findVerifiedUser(Long id) {
 		Optional<User> user = userRepository.findById(id);
 		return user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+	}
+
+	/* 이메일 인증된 유저인지 확인 */
+	private void verifiedEmail(String email) {
+		if (Boolean.FALSE.equals(redisTemplate.hasKey(email))) {
+			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_EMAIL);
+		}
+		if (Objects.equals(redisTemplate.opsForValue().get(email), "false")) {
+			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_EMAIL);
+		}
 	}
 }

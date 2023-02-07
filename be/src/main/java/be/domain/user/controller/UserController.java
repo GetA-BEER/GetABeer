@@ -23,18 +23,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 	private final UserMapper userMapper;
 	private final UserService userService;
 
 	/* 회원가입 */
-	@PostMapping("/register/info")
-	public ResponseEntity<UserDto.Response> postUser(@Valid @RequestBody UserDto.Post post) {
+	@PostMapping("/register/user")
+	public ResponseEntity<UserDto.Response> registerUser(@Valid @RequestBody UserDto.RegisterPost post) {
+
 		User user = userService.registerUser(userMapper.postToUser(post));
 		return ResponseEntity.ok(userMapper.userToResponse(user));
 	}
+
+	/* 유저 정보 입력(연령대, 나이) */
+	// @PostMapping("/register/user/info")
+	// public ResponseEntity postUserInfo() {
+	//
+	// }
 
 	@PatchMapping("/user/{id}")
 	public ResponseEntity<UserDto.Response> patchUser(@PathVariable Long id, @Valid @RequestBody UserDto.Patch patch) {

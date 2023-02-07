@@ -15,6 +15,7 @@ public enum ExceptionCode {
 	UNAUTHORIZED(401, "Unauthorized"), // 인증이 필요한 상태
 	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는
 	WRONG_CODE(400, "Code is wrong"),
+	UNAUTHORIZED_EMAIL(401, "인증되지 않은 이메일입니다."),
 
 	/* BEER 관련 예외 */
 	BEER_NOT_FOUND(404, "Beer Not Found"),

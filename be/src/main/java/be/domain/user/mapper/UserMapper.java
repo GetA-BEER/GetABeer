@@ -7,7 +7,7 @@ import be.domain.user.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-	default User postToUser(UserDto.Post post) {
+	default User postToUser(UserDto.RegisterPost post) {
 		return User.builder()
 			.email(post.getEmail())
 			.password(post.getPassword())
