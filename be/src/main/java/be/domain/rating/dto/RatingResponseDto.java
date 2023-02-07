@@ -20,6 +20,7 @@ public class RatingResponseDto {
 
 		private Long beerId;
 		private Long ratingId;
+		private Long userId;
 		private String nickname;
 		private String content;
 		private List<BeerTagType> ratingTag;
@@ -48,6 +49,7 @@ public class RatingResponseDto {
 
 		private Long beerId;
 		private Long ratingId;
+		private Long userId;
 		private String nickname;
 		private String content;
 		private List<BeerTagType> ratingTag;

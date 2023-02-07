@@ -22,12 +22,16 @@ import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.repository.RatingRepository;
 import be.domain.rating.repository.RatingTagRepository;
+import be.domain.user.entity.User;
+import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RatingService {
 	private final RatingRepository ratingRepository;
 	private final BeerService beerService;
@@ -35,27 +39,25 @@ public class RatingService {
 	private final BeerBeerTagRepository beerBeerTagRepository;
 	private final BeerBeerTagQueryRepository beerBeerTagQueryRepository;
 	private final RatingTagRepository tagRepository;
-
-	public RatingService(RatingRepository ratingRepository, BeerService beerService, BeerTagService beerTagService,
-		BeerBeerTagRepository beerBeerTagRepository, BeerBeerTagQueryRepository beerBeerTagQueryRepository,
-		RatingTagRepository tagRepository) {
-		this.ratingRepository = ratingRepository;
-		this.beerService = beerService;
-		this.beerTagService = beerTagService;
-		this.beerBeerTagRepository = beerBeerTagRepository;
-		this.beerBeerTagQueryRepository = beerBeerTagQueryRepository;
-		this.tagRepository = tagRepository;
-	}
+	private final UserService userService;
 
 	/* 맥주 평가 등록 */
 	@Transactional
-	public String create(Rating rating, Long beerId, RatingTag ratingTag) {
+	public String create(Rating rating, Long beerId, RatingTag ratingTag, Long userId) {
+
+		/* 접근하려는 유저가 로그인 유저와 일치하는 지 확인*/
+		// User loginUser = userService.getLoginUser();
+		// userService.checkUser(userId, loginUser.getId());
+
+		/* 회원 정보 가져오기 */
+		User user = userService.getUser(userId);
+
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
 		/* 기본 설정 저장하기 */
-		tagRepository.save(ratingTag);
-		rating.saveDefault(beer, ratingTag, 0, 0, new ArrayList<>());
+		rating.saveDefault(beer, user, ratingTag, user.getNickname(),0, 0, new ArrayList<>());
+		ratingTag.saveRating(rating);
 
 		/* 다대다 연관관계 생성 및 저장 */
 		saveBeerBeerTags(beer, ratingTag.createBeerTagTypeList());
@@ -66,10 +68,16 @@ public class RatingService {
 	}
 
 	/* 맥주 평가 수정 */
+	@Transactional
 	public String update(Rating rating, Long ratingId, RatingTag ratingTag) {
 
 		/* 존재하는 맥주 코멘트인지 확인 및 해당 맥주 코멘트 정보 가져오기 */
 		Rating findRating = findVerifiedRating(ratingId);
+
+		/* 로그인 한 유저가 평가를 단 유저와 일치하는지 판별 */
+		// User user = findRating.getUser();
+		// User loginUser = userService.getLoginUser();
+		// userService.checkUser(user.getId(), loginUser.getId());
 
 		/* 레이팅 아이디로 맥주 조회 */
 		Beer findBeer = beerService.findBeerByRatingId(ratingId);
@@ -87,7 +95,7 @@ public class RatingService {
 
 		findRating.updateTag(findTag);
 
-    /* 새로운 BeerBeerTag 생성 및 저장 */
+		/* 새로운 BeerBeerTag 생성 및 저장 */
 		saveBeerBeerTags(findBeer, ratingTag.createBeerTagTypeList());
 
 		ratingRepository.save(findRating);
@@ -95,7 +103,8 @@ public class RatingService {
 		return "맥주에 대한 평가가 성공적으로 수정되었습니다.";
 	}
 
-	/* 특정 맥주 평가 상세 조회 */
+	/* 특정 맥주 평가 상세 조회 : 응답 */
+	@Transactional
 	public RatingResponseDto.Detail getRatingResponse(Long ratingId) {
 		RatingResponseDto.Detail response = ratingRepository.findDetailRatingResponse(ratingId);
 
@@ -105,10 +114,23 @@ public class RatingService {
 		return response;
 	}
 
+	/* 특정 맥주 평가 조회 : 맥주 평가 */
+	@Transactional(readOnly = true)
+	public Rating findRating(Long ratingId) {
+
+		return findVerifiedRating(ratingId);
+	}
+
 	/* 맥주 평가 삭제 */
+	@Transactional
 	public String delete(long ratingId) {
 		Rating rating = findVerifiedRating(ratingId);
 		Beer findBeer = beerService.findBeerByRatingId(ratingId);
+
+		/* 삭제하려는 평가의 유저와 로그인한 유저가 일치하는지 확인 */
+		// User user = rating.getUser();
+		// User loginUser = userService.getLoginUser();
+		// userService.checkUser(user.getId(), loginUser.getId());
 
 		deleteBeerBeerTags(findBeer, rating.getRatingTag().createBeerTagTypeList());
 
@@ -165,7 +187,7 @@ public class RatingService {
 	}
 
 	/* 존재하는 맥주 코멘트인지 확인 -> 존재하면 해당 맥주 코멘트 반환 */
-	public Rating findVerifiedRating(long ratingId) {
+	private Rating findVerifiedRating(long ratingId) {
 
 		return ratingRepository.findById(ratingId)
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.RATING_NOT_FOUND));

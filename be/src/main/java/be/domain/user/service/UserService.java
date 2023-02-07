@@ -134,4 +134,11 @@ public class UserService {
 		return userRepository.findByEmail(authentication.getName())
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 	}
+
+	/* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별*/
+	public void checkUser(Long userId, Long loginUserId) {
+		if (!userId.equals(loginUserId)) {
+			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
+		}
+	}
 }

@@ -43,7 +43,8 @@ public class RatingController {
 		ratingService.checkVerifiedTag(post.getColor(), post.getTaste(), post.getFlavor(), post.getCarbonation());
 
 		RatingTag ratingTag = tagMapper.ratingPostDtoToRatingTag(post);
-		String message = ratingService.create(ratingMapper.ratingPostDtoToRating(post), post.getBeerId(), ratingTag);
+		String message = ratingService
+			.create(ratingMapper.ratingPostDtoToRating(post), post.getBeerId(), ratingTag, post.getUserId());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}
@@ -68,7 +69,7 @@ public class RatingController {
 		return ResponseEntity.ok(ratingService.delete(ratingId));
 	}
 
-	//---------------------------------------------- 조회 세분화 --------------------------------------------------------------
+	//---------------------------------------------- 조회 세분화 -------------------------------------------------------
 
 	/* 특정 맥주 평가 상세 조회 */
 	@GetMapping("/{ratingId}")

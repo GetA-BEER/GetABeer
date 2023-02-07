@@ -15,6 +15,7 @@ public class RatingCommentDto {
 	@Builder
 	public static class Post {
 		private Long ratingId;
+		private Long userId;
 		private String nickname;
 		private String content;
 	}
@@ -34,6 +35,7 @@ public class RatingCommentDto {
 	public static class Response {
 		private Long ratingId;
 		private Long ratingCommentId;
+		private Long userId;
 		private String nickname;
 		private String content;
 		private LocalDateTime createdAt;
@@ -44,10 +46,11 @@ public class RatingCommentDto {
 
 		@Builder
 		@QueryProjection
-		public Response(Long ratingId, Long ratingCommentId, String nickname, String content,
+		public Response(Long ratingId, Long ratingCommentId, Long userId, String nickname, String content,
 			LocalDateTime createdAt, LocalDateTime modifiedAt) {
 			this.ratingId = ratingId;
 			this.ratingCommentId = ratingCommentId;
+			this.userId = userId;
 			this.nickname = nickname;
 			this.content = content;
 			this.createdAt = createdAt;

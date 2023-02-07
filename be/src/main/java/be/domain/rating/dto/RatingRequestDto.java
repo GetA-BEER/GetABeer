@@ -9,7 +9,7 @@ public class RatingRequestDto {
 	@Builder
 	public static class Post {
 		private Long beerId;
-		private String nickname;
+		private Long userId;
 		private String content;
 		private Double star;
 		private String color;

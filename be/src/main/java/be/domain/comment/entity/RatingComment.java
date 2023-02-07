@@ -30,9 +30,6 @@ public class RatingComment extends BaseTimeEntity {
 	private Long id;
 
 	@Column(nullable = false)
-	private String nickname;
-
-	@Column(nullable = false)
 	private String content;
 
 	/* 💜 맥주 댓글 - 맥주 평가 다대일 연관관계 */
@@ -58,7 +55,8 @@ public class RatingComment extends BaseTimeEntity {
 		this.content = content;
 	}
 
-	public void saveDefault(Rating rating) {
+	public void saveDefault(Rating rating, User user) {
 		this.rating = rating;
+		this.user = user;
 	}
 }

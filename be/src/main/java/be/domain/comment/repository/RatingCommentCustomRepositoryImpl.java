@@ -24,7 +24,8 @@ public class RatingCommentCustomRepositoryImpl implements RatingCommentCustomRep
 			.select(new QRatingCommentDto_Response(
 				ratingComment.rating.id,
 				ratingComment.id,
-				ratingComment.nickname,
+				ratingComment.user.id,
+				ratingComment.user.nickname,
 				ratingComment.content,
 				ratingComment.createdAt,
 				ratingComment.modifiedAt
