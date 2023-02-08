@@ -21,6 +21,7 @@ public class PairingResponseDto {
 
 		private Long beerId;
 		private Long pairingId;
+		private Long userId;
 		private String nickname;
 		private String content;
 		private List<PairingImageDto.Response> imageList;
@@ -41,6 +42,7 @@ public class PairingResponseDto {
 
 		private Long beerId;
 		private Long pairingId;
+		private Long userId;
 		private String nickname;
 		private String content;
 		private String thumbnail;

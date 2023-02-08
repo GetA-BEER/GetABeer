@@ -11,7 +11,7 @@ public class PairingRequestDto {
 	@Builder
 	public static class Post {
 		private Long beerId;
-		private String nickname;
+		private Long userId;
 		private String content;
 		private List<String> image;
 		private String category;

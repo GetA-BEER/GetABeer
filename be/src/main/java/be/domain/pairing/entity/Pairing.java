@@ -123,4 +123,8 @@ public class Pairing extends BaseTimeEntity {
 	public void updateImageList(List<PairingImage> pairingImageList) {
 		this.pairingImageList = pairingImageList;
 	}
+
+	public void calculateCount(Integer commentCount) {
+		this.commentCount = commentCount;
+	}
 }
