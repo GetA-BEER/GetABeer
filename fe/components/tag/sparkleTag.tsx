@@ -1,6 +1,12 @@
-export default function SparkleTag() {
-  const sparkleList = ['탄산 약', '탄산 중', '탄산 강', '탄산 無'];
+type tagProps = {
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
+};
 
+export default function SparkleTag({ setSelected }: tagProps) {
+  const sparkleList = ['탄산 약', '탄산 중', '탄산 강', '탄산 無'];
+  const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    setSelected((e.target as HTMLInputElement).value);
+  };
   return (
     <div className="my-4">
       <div className="grid grid-cols-4 mx-2 gap-2 items-center">
@@ -11,6 +17,7 @@ export default function SparkleTag() {
               name="sparkl"
               id={el}
               value={el}
+              onClick={onClick}
               className="peer hidden"
             />
             <label
