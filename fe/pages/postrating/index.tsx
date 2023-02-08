@@ -61,10 +61,12 @@ export default function PostRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.post('/api/ratings', reqBody).then((res) => {
-      console.log(res.data);
-      reset();
-    });
+    axios
+      .post('https://server.getabeer.co.kr/api/ratings', reqBody)
+      .then((res) => {
+        console.log(res);
+        reset();
+      });
   };
 
   return (
