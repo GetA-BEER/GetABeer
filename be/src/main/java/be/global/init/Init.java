@@ -140,8 +140,9 @@ public class Init {
 				.provider("LOCAL")
 				.nickname("닉네임" + i)
 				.roles(List.of(Role.ROLE_USER.toString()))
-				.password(passwordEncoder.encode("1234"))
-				.status(UserStatus.values()[(int)(Math.random() * 3)].getStatus())
+				.password(passwordEncoder.encode("password" + i + "!"))
+				// .status(UserStatus.values()[(int)(Math.random() * 3)].getStatus())
+				.status(UserStatus.ACTIVE_USER.getStatus())
 				.imageUrl(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
 				.build();
 
