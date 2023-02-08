@@ -2,6 +2,7 @@ package be.domain.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,9 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
@@ -36,15 +35,17 @@ public class UserController {
 
 	/* 회원가입 */
 	@PostMapping("/register/user")
-	public ResponseEntity<UserDto.Response> registerUser(@Valid @RequestBody UserDto.RegisterPost post) {
+	public ResponseEntity<Long> registerUser(@Valid @RequestBody UserDto.RegisterPost post) {
 		User user = userService.registerUser(userMapper.postToUser(post));
-		return ResponseEntity.ok(userMapper.userToResponse(user));
+		return ResponseEntity.ok(user.getId());
 	}
 
-	/* 유저 정보 입력(성별, 나이) */
-	@PostMapping("/register/user/info")
-	public ResponseEntity<String> postUserInfo(@Valid @RequestBody UserDto.UserInfoPost infoPost) {
-		userService.postUserInfo(infoPost);
+	/* 유저 정보 입력(성별, 나이, 카테고리, 태그) */
+	@PostMapping("/register/user/{user-id}")
+	public ResponseEntity<String> postUserInfo(@PathVariable(name = "user-id") @Positive Long id,
+											   @Valid @RequestBody UserDto.UserInfoPost infoPost) {
+		User user = userMapper.infoPostToUser(id, infoPost);
+		userService.postUserInfo(user);
 		return ResponseEntity.ok("회원가입을 환영합니다.");
 	}
 
@@ -57,11 +58,12 @@ public class UserController {
 		userService.verifyUserStatus(user.getUserStatus());
 	}
 
-	/* 유저 정보 수정(닉네임, 성별, 나이) */
+	/* 유저 정보 수정(닉네임, 성별, 나이, 카테고리, 태그) */
 	@PatchMapping("/mypage/userinfo")
 	public ResponseEntity<UserDto.UserInfoResponse> patchUser(@Valid @RequestBody UserDto.EditUserInfo edit) {
-		User user = userService.updateUser(edit);
-		return ResponseEntity.ok(userMapper.userToInfoResponse(user));
+		User user = userMapper.editToUser(edit);
+		User response = userService.updateUser(user);
+		return ResponseEntity.ok(userMapper.userToInfoResponse(response));
 	}
 
 	/* 유저 정보 수정(프로필 이미지) */
@@ -74,9 +76,9 @@ public class UserController {
 
 	/* 유저정보 조회 */
 	@GetMapping("/user")
-	public ResponseEntity<UserDto.Response> readUser() {
+	public ResponseEntity<UserDto.UserInfoResponse> readUser() {
 		User user = userService.getLoginUser();
-		return ResponseEntity.ok(userMapper.userToResponse(user));
+		return ResponseEntity.ok(userMapper.userToInfoResponse(user));
 	}
 
 	/* 비밀번호 확인 */
