@@ -1,6 +1,7 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
+import Link from 'next/link';
 import { IoChevronBack } from 'react-icons/io5';
 
 export default function Signup() {
@@ -25,10 +26,12 @@ export default function Signup() {
           <Input type="text" placeholder="닉네임" />
           <Input type="password" placeholder="비밀번호" />
           <Input type="password" placeholder="비밀번호 확인" />
-          <SubmitBtn onClick={handleClick}> 확인 </SubmitBtn>
+          <SubmitBtn onClick={handleClick}> 가입하기 </SubmitBtn>
           <div className="my-3 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">이미 계정이 있다면?</div>
-            <button className="flex text-y-brown">로그인</button>
+            <Link href={'/login'}>
+              <button className="flex text-y-brown">로그인</button>
+            </Link>
           </div>
         </div>
       </main>

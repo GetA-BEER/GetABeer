@@ -1,5 +1,5 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
-import NavBar from '@/components/NavBar';
+import Link from 'next/link';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoChevronBack } from 'react-icons/io5';
@@ -15,9 +15,11 @@ export default function Email() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
-        <button className="m-4">
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <Link href={'/login'}>
+          <button className="m-4">
+            <IoChevronBack className="w-6 h-6" />
+          </button>
+        </Link>
         <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           회원가입
         </div>
@@ -33,7 +35,9 @@ export default function Email() {
           <SubmitBtn onClick={handleClick}> 확인 </SubmitBtn>
           <div className="my-3 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">이미 계정이 있다면?</div>
-            <button className="flex text-y-brown">로그인</button>
+            <Link href={'/login'}>
+              <button className="flex text-y-brown">로그인</button>
+            </Link>
           </div>
         </div>
       </main>
