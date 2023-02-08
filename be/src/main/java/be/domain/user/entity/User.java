@@ -21,9 +21,9 @@ import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
-import be.domain.user.dto.UserDto;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
+import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.UserStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -74,9 +74,27 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<UserBeerCategory> userBeerCategories;
 
+	/* User - UserBeerCategory 연관관계 편의 메서드 */
+	public void addUserBeerCategories(UserBeerCategory userBeerCategory) {
+		userBeerCategories.add(userBeerCategory);
+
+		if (userBeerCategory.getUser() != this) {
+			userBeerCategory.addUser(this);
+		}
+	}
+
 	/* UserBeerTag Join */
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<UserBeerTag> userBeerTags;
+
+	/* User - UserBeerTag 연관관계 편의 메서드 */
+	public void addUserBeerTags(UserBeerTag userBeerTag) {
+		userBeerTags.add(userBeerTag);
+
+		if (userBeerTag.getUser() != this) {
+			userBeerTag.addUser(this);
+		}
+	}
 
 	/* BeerWishlist 1:N 양방향 매핑 */
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
@@ -163,18 +181,28 @@ public class User {
 		this.userStatus = status;
 	}
 
-	public void edit(UserDto.EditUserInfo editUserInfo) {
-		this.imageUrl = editUserInfo.getImageUrl() == null ? this.getImageUrl() : editUserInfo.getImageUrl();
-		this.nickname = editUserInfo.getNickname() == null ? this.getNickname() : editUserInfo.getNickname();
-		this.gender = editUserInfo.getGender() == null ? this.getGender() : editUserInfo.getGender();
-		this.age = editUserInfo.getAge() == null ? this.getAge() : editUserInfo.getAge();
-		// this.userBeerTags = editUserInfo.getUserBeerTags() == null ? this.userBeerTags : editUserInfo.getUserBeerTags();
+	public void edit(String imageUrl, String nickname, Gender gender, Age age) {
+		this.imageUrl = imageUrl == null ? this.imageUrl : imageUrl;
+		this.nickname = nickname == null ? this.nickname : nickname;
+		this.gender = gender == null ? this.gender : gender;
+		this.age = age == null ? this.age : age;
 	}
 
 	public void setUserInfo(Age age, Gender gender) {
 		this.age = age;
 		this.gender = gender;
-		// this.userBeerTags = ;
+	}
+
+	public void setUserBeerTags(List<UserBeerTag> userBeerTags) {
+		this.userBeerTags = this.userBeerTags == null ? userBeerTags : this.userBeerTags;
+	}
+
+	public void setUserBeerCategories(List<UserBeerCategory> userBeerCategories) {
+		this.userBeerCategories = this.userBeerCategories == null ? userBeerCategories : this.userBeerCategories;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void editPassword(String password) {
@@ -183,5 +211,10 @@ public class User {
 
 	public void withdraw() {
 		this.userStatus = UserStatus.QUIT_USER.getStatus();
+	}
+
+	public void randomProfileImage() {
+		this.imageUrl =
+			this.imageUrl == null ? RandomProfile.values()[(int)(Math.random() * 4)].getValue() : this.imageUrl;
 	}
 }
