@@ -1,9 +1,11 @@
 package be.domain.beerwishlist.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import be.domain.beer.entity.Beer;
 
-@Service
-@RequiredArgsConstructor
-public class BeerWishlistService {
+public interface BeerWishlistService {
+	void createWishlist(Long beerId);
+
+	void deleteWishlist(Long beerId);
+
+	Boolean getIsWishlist(Beer beer);
 }

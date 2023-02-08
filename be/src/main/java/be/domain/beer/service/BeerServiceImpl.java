@@ -1,5 +1,6 @@
 package be.domain.beer.service;
 
+import static be.domain.user.entity.enums.Role.*;
 import static be.global.config.CacheConstant.*;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ import be.domain.beer.repository.MonthlyBeerRepository;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.user.entity.User;
+import be.domain.user.entity.enums.Role;
+import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BeerServiceImpl implements BeerService {
 
+	private final UserService userService;
 	private final BeerRepository beerRepository;
 	private final BeerQueryRepository beerQueryRepository;
 	private final MonthlyBeerRepository monthlyBeerRepository;
@@ -44,6 +49,12 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional
 	public Beer createBeer(Beer beer) {
 
+		// User loginUser = userService.getLoginUser();
+		//
+		// if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
+		// 	throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		// }
+
 		Beer savedBeer = Beer.builder().build();
 
 		savedBeer.create(beer);
@@ -55,6 +66,12 @@ public class BeerServiceImpl implements BeerService {
 	@Override
 	@Transactional
 	public Beer updateBeer(Beer beer, Long beerId) {
+
+		User loginUser = userService.getLoginUser();
+
+		if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
 
 		Beer findBeer = findVerifiedBeer(beerId);
 
@@ -71,7 +88,13 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional
 	public void deleteBeer(Long beerId) {
 
-		beerRepository.deleteById(beerId);
+		User loginUser = userService.getLoginUser();
+
+		if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		} else {
+			beerRepository.deleteById(beerId);
+		}
 	}
 
 	//    public Beer isWishListedBeer(Beer beer, User user){
@@ -107,9 +130,10 @@ public class BeerServiceImpl implements BeerService {
 	@Override
 	@Transactional
 	public Beer getBeer(Long beerId) {
+
 		Beer findBeer = findVerifiedBeer(beerId);
-		findBeer.getBeerDetailsStatistics().addDailyViewCount();
-		return beerRepository.save(findBeer);
+
+		return findBeer;
 	}
 
 	@Override
