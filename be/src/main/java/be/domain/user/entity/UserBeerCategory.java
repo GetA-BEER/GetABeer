@@ -42,4 +42,11 @@ public class UserBeerCategory {
 			this.user.getUserBeerCategories().add(this);
 		}
 	}
+
+	public void addBeerCategory(BeerCategory beerCategory) {
+		this.beerCategory = beerCategory;
+		if (!this.user.getUserBeerCategories().contains(this)) {
+			this.beerCategory.addUserBeerCategory(this);
+		}
+	}
 }

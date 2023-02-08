@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Aspect
-// @Component
+@Component
 @RequiredArgsConstructor
 public class GetABeerAop {
 
@@ -36,18 +36,18 @@ public class GetABeerAop {
 	/*
 	 * 레이팅 새로 등록될 때마다 인기 태그 계산 후 변경 사항 저장
 	 */
-	@AfterReturning("execution(* be.domain.rating.service.RatingService.create(..)) "
-		+ "&& args(rating, beerId, ratingTag)")
+	@AfterReturning(value = "Pointcuts.createRating() && args(rating, beerId, ratingTag, userId)")
+	// @AfterReturning(value = "execution(* be.domain.rating.service.RatingService.create(..)) && args(rating, beerId, ratingTag, userId)")
 	public void calculateBeerDetailsOnCreation(JoinPoint joinPoint, Rating rating, Long beerId,
-		RatingTag ratingTag) {
+		RatingTag ratingTag, Long userId) {
 
 		Beer findBeer = beerService.findVerifiedBeer(beerId);
+
+		findBeer.addDailyRatingCount(); // 맥주 레이팅 숫자 늘려주기
 
 		// ------------------------------------BEER TAG-------------------------------------------
 
 		List<BeerTagType> postBeerTagTypes = ratingTag.createBeerTagTypeList(); // 입력받은 맥주 태그 타입
-
-		findBeer.getBeerDetailsStatistics().addDailyRatingCount(); // 맥주 레이팅 숫자 늘려주기
 
 		postBeerTagTypes.forEach(beerTagType -> { // 태그 카운트 늘려주기
 			BeerTag findBeerTag = beerTagService.findVerifiedBeerTagByBeerTagType(beerTagType);
@@ -81,14 +81,13 @@ public class GetABeerAop {
 		// TODO: 전체 별점과 회원 성별에 따른 별점 평균 계산
 		// ---------------------------------------------------------------------------------------
 
-		beerRepository.save(findBeer);
+		// beerRepository.save(findBeer);
 	}
 
 	/*
 	 * 레이팅 수정시 인기 태그 계산 후 변경 사항 저장
 	 */
-	@AfterReturning(value = "execution(* be.domain.rating.service.RatingService.update(..)) "
-		+ "&& args(rating, ratingId, ratingTag)")
+	@AfterReturning(value = "Pointcuts.updateRating() && args(rating, ratingId, ratingTag)")
 	public void calculateBeerDetailsOnUpdate(JoinPoint joinPoint, Rating rating, Long ratingId,
 		RatingTag ratingTag) {
 
@@ -126,14 +125,14 @@ public class GetABeerAop {
 		beerRepository.save(findBeer);
 	}
 
-	@Before(value = "execution(* be.domain.rating.service.RatingService.create(..)) && args(ratingId)")
+	@Before(value = "Pointcuts.deleteRating() && args(ratingId)")
 	public void calculateBeerDetailsOnDeletion(JoinPoint joinPoint, long ratingId) {
 		// ---------------------------------------------------------------------------------------
 		// TODO: 레이팅 삭제시 각종 계산
 		// ---------------------------------------------------------------------------------------
 	}
 
-	@AfterReturning(value = "execution(* be.domain.pairing.service.PairingService.create(..)) && args(pairing, image, category, beerId)")
+	@AfterReturning(value = "Pointcuts.createPairing() && args(pairing, image, category, beerId)")
 	public void calculateBeerDetailsOnPairingCreation(JoinPoint joinPoint, Pairing pairing, List<String> image,
 		String category, Long beerId) {
 		// ---------------------------------------------------------------------------------------
@@ -141,18 +140,24 @@ public class GetABeerAop {
 		// ---------------------------------------------------------------------------------------
 	}
 
-	@AfterReturning(value = "execution(* be.domain.pairing.service.PairingService.update(..)) && args(pairing, pairingId, category, image)")
+	@AfterReturning(value = "Pointcuts.updatePairing() && args(pairing, pairingId, category, image)")
 	public void calculateBeerDetailsOnPairingUpdate(JoinPoint joinPoint, Pairing pairing, long pairingId,
 		String category, List<String> image) {
 		// ---------------------------------------------------------------------------------------
-		// TODO: 페어링 생성시 각종 계산
+		// TODO: 페어링 수정시 각종 계산
 		// ---------------------------------------------------------------------------------------
 	}
 
-	@Before(value = "execution(* be.domain.pairing.service.PairingService.delete(..)) && args(pairingId)")
+	@Before(value = "Pointcuts.deletePairing() && args(pairingId)")
 	public void calculateBeerDetailsOnPairingDeletion(JoinPoint joinPoint, long pairingId) {
 		// ---------------------------------------------------------------------------------------
 		// TODO: 페어링 삭제시 각종 계산
 		// ---------------------------------------------------------------------------------------
+	}
+
+	@Before(value = "Pointcuts.getBeer() && args(beerId)")
+	public void test(JoinPoint joinPoint, Long beerId) {
+		Beer beer = beerService.findVerifiedBeer(beerId);
+		beer.addDailyViewCount();
 	}
 }

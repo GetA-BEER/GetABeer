@@ -47,10 +47,10 @@ public class BeerWishlist extends BaseTimeEntity {
 		}
 	}
 
-	//    public void addUser(User user) {
-	//        this.user = user;
-	//        if (!this.user.getBeerWishlists().contains(this)) {
-	//            this.user.getBeerWishlists().add(this);
-	//        }
-	//    }
+	public void addUser(User user) {
+		this.user = user;
+		if (!this.user.getBeerWishlists().contains(this)) {
+			this.user.getBeerWishlists().add(this);
+		}
+	}
 }

@@ -22,7 +22,7 @@ public enum ExceptionCode {
 	USER_ID_EXISTS(409, "User ID Exists"),
 	NICKNAME_EXISTS(409, "Nickname Exists"),
 	UNAUTHORIZED(401, "Unauthorized"), // 인증이 필요한 상태
-	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는
+	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는 상태
 	WRONG_CODE(400, "Code is wrong"),
 	UNAUTHORIZED_EMAIL(401, "인증되지 않은 이메일입니다."),
 	WITHDRAWN_USER(400, "탈퇴한 회원입니다."),
@@ -32,6 +32,8 @@ public enum ExceptionCode {
 	/* BEER 관련 예외 */
 	BEER_NOT_FOUND(404, "Beer Not Found"),
 	BEER_CATEGORY_NOT_FOUND(404, "Beer Category Not Found"),
+	WISH_LISTED(409, "Already Listed"),
+	UN_WISH_LISTED(409, "Already UnListed"),
 
 	/* EMBEDDED REDIS 관련 예외 */
 	EMBEDDED_REDIS_EXCEPTION(500, "redis server error"),
