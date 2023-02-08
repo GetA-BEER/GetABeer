@@ -10,6 +10,7 @@ import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
 import MiddleCard, { testBeer } from '@/components/middleCards/MiddleCard';
 import { TagMatcherToEng } from '@/utils/TagMatcher';
+import axios from 'axios';
 
 export default function PostRatingPage() {
   const router = useRouter();
@@ -40,6 +41,15 @@ export default function PostRatingPage() {
     setStar(newRating);
   };
 
+  const reset = () => {
+    setStar(0);
+    setContent('');
+    setColor('');
+    setFlavor('');
+    setTaste('');
+    setCarbonation('');
+  };
+
   const handleSubmit = () => {
     const reqBody = {
       beerId: 1,
@@ -51,6 +61,10 @@ export default function PostRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
+    axios.post('/api/ratings', reqBody).then((res) => {
+      console.log(res);
+      reset();
+    });
   };
 
   return (
