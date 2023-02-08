@@ -5,7 +5,7 @@ type ButtonProps = {
 };
 export default function SubmitBtn({ children, onClick }: ButtonProps) {
   return (
-    <div className="m-2">
+    <div className="p-2">
       <button
         onClick={onClick}
         className="flex justify-center items-center w-full h-11 rounded-xl bg-y-gold hover:bg-orange-400 text-xs"

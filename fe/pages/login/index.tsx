@@ -5,6 +5,7 @@ import { IoClose } from 'react-icons/io5';
 import NaverBtn from '@/components/login/NaverBtn';
 import GoogleBtn from '@/components/login/Googlebtn';
 import KakaoBtn from '@/components/login/KakaoBtn';
+import Link from 'next/link';
 
 export default function Login() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
@@ -17,10 +18,12 @@ export default function Login() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
-        <button className="m-4">
-          <IoClose className="w-6 h-6" />
-        </button>
-        <div className="my-8 text-center text-lg bg-white rounded-lg font-semibold">
+        <Link href={'/'}>
+          <button className="m-4">
+            <IoClose className="w-6 h-6" />
+          </button>
+        </Link>
+        <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           로그인
         </div>
         <div className="m-auto max-w-md">
@@ -29,7 +32,9 @@ export default function Login() {
           <SubmitBtn onClick={handleClick}> 로그인 </SubmitBtn>
           <div className="my-3 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">만약 계정이 없다면?</div>
-            <button className="flex text-y-brown">회원가입</button>
+            <Link href={'/signup/email'}>
+              <button className="flex text-y-brown">회원가입</button>
+            </Link>
           </div>
         </div>
         <div className="flex items-center justify-center space-x-2 my-6">
