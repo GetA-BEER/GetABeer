@@ -10,9 +10,9 @@ export default function BeerCategory() {
   ];
 
   return (
-    <div className="mx-2 mt-4">
+    <div className="px-2 pt-2">
       <div className="text-sm">선호 맥주 (최대 2개까지 선택 가능)</div>
-      <div className="grid grid-cols-4 my-2 gap-2 w-full items-center">
+      <div className="grid grid-cols-4 my-2 gap-1 w-full items-center">
         {beerCategory.map((el: string, idx: number) => (
           <div key={idx.toString()}>
             <input
