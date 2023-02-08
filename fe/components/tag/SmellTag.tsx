@@ -1,6 +1,12 @@
-export default function SmellTag() {
-  const smellList = ['과일향', '꽃향', '맥아향', '無향'];
+type tagProps = {
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
+};
 
+export default function SmellTag({ setSelected }: tagProps) {
+  const smellList = ['과일향', '꽃향', '맥아향', '無향'];
+  const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    setSelected((e.target as HTMLInputElement).value);
+  };
   return (
     <div className="my-4">
       <div className="grid grid-cols-4 mx-2 gap-2 items-center">
@@ -11,6 +17,7 @@ export default function SmellTag() {
               name="smell"
               id={el}
               value={el}
+              onClick={onClick}
               className="peer hidden"
             />
             <label
