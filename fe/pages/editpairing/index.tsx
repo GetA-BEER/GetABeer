@@ -3,8 +3,10 @@ import NavBar from '@/components/NavBar';
 import BigInput from '@/components/inputs/BigInput';
 import PairingBox from '@/components/selectBox/PairingBox';
 import ImageUpload from '../../components/postPairingPage/ImageUpload';
+import { useState } from 'react';
 
 export default function PostPairing() {
+  const [content, setContent] = useState('');
   return (
     <>
       <Head>
@@ -19,7 +21,11 @@ export default function PostPairing() {
         <PairingBox />
 
         <div className="mt-6 mb-2 text-base font-semibold">설명</div>
-        <BigInput placeholder="페어링을 추천하시는 이유를 적어주세요" />
+        <BigInput
+          placeholder="페어링을 추천하시는 이유를 적어주세요"
+          inputState={content}
+          setInputState={setContent}
+        />
         <ImageUpload />
         <NavBar />
       </main>
