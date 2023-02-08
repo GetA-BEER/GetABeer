@@ -62,7 +62,7 @@ export default function PostRatingPage() {
       carbonation: TagMatcherToEng(carbonation),
     };
     axios.post('/api/ratings', reqBody).then((res) => {
-      console.log(res);
+      console.log(res.data);
       reset();
     });
   };
