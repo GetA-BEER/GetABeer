@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ColorTag from '@/components/tag/ColorTag';
 import SmellTag from '@/components/tag/SmellTag';
-import SparkleTag from '@/components/tag/SparkleTag';
 import TasteTag from '@/components/tag/TasteTag';
+import CarbonatinTag from '@/components/tag/CarbonationTag';
 import BigInput from '@/components/inputs/BigInput';
 import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
@@ -91,7 +91,7 @@ export default function PostRatingPage() {
           <ColorTag setSelected={setColor} />
           <SmellTag setSelected={setFlavor} />
           <TasteTag setSelected={setTaste} />
-          <SparkleTag setSelected={setCarbonation} />
+          <CarbonatinTag setSelected={setCarbonation} />
         </div>
         <div className="mt-5">
           <div className="mb-3">리뷰</div>
