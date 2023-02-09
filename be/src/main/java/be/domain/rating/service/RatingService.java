@@ -106,6 +106,10 @@ public class RatingService {
 	/* 특정 맥주 평가 상세 조회 : 응답 */
 	@Transactional
 	public RatingResponseDto.Detail getRatingResponse(Long ratingId) {
+
+		/* 존재하는 평가인지 확인 */
+		Rating rating = findVerifiedRating(ratingId);
+
 		RatingResponseDto.Detail response = ratingRepository.findDetailRatingResponse(ratingId);
 
 		response.addTag(getRatingTagList(ratingId));

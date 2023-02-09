@@ -41,9 +41,6 @@ public class Pairing extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private String nickname;
-
 	@Column(columnDefinition = "TEXT")
 	private String content;
 
@@ -102,10 +99,11 @@ public class Pairing extends BaseTimeEntity {
 		this.user = user;
 	}
 
-	public void saveDefault(Beer beer, List<PairingImage> pairingImageList,
+	public void saveDefault(Beer beer, User user, List<PairingImage> pairingImageList,
 		List<PairingComment> pairingCommentList,
 		Integer likeCount, Integer commentCount) {
 		this.beer = beer;
+		this.user = user;
 		this.pairingImageList = pairingImageList;
 		this.pairingCommentList = pairingCommentList;
 		this.likeCount = likeCount;
@@ -122,5 +120,9 @@ public class Pairing extends BaseTimeEntity {
 
 	public void updateImageList(List<PairingImage> pairingImageList) {
 		this.pairingImageList = pairingImageList;
+	}
+
+	public void calculateCount(Integer commentCount) {
+		this.commentCount = commentCount;
 	}
 }

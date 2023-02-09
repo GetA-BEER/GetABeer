@@ -28,6 +28,8 @@ public class PairingImage {
 	@Column
 	private String imageUrl;
 
+	private String fileName;
+
 	/* 🧡 페어링 이미지 - 페어링 다대일 연관관계 */
 	@ManyToOne
 	@JoinColumn(name = "pairing_id")
@@ -39,9 +41,10 @@ public class PairingImage {
 	}
 
 	@Builder
-	public PairingImage(Long id, String imageUrl, Pairing pairing) {
+	public PairingImage(Long id, String imageUrl, String fileName, Pairing pairing) {
 		this.id = id;
 		this.imageUrl = imageUrl;
+		this.fileName =fileName;
 		this.pairing = pairing;
 	}
 

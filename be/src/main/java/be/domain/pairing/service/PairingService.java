@@ -1,5 +1,6 @@
 package be.domain.pairing.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
@@ -18,49 +20,44 @@ import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.entity.PairingImage;
 import be.domain.pairing.repository.PairingImageRepository;
 import be.domain.pairing.repository.PairingRepository;
+import be.domain.user.entity.User;
+import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
+import be.global.image.PairingImageHandler;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class PairingService {
 	private final PairingRepository pairingRepository;
 	private final PairingImageRepository pairingImageRepository;
 	private final BeerService beerService;
-
-	public PairingService(PairingRepository pairingRepository, PairingImageRepository paringImageRepository,
-		BeerService beerService) {
-		this.pairingRepository = pairingRepository;
-		this.pairingImageRepository = paringImageRepository;
-		this.beerService = beerService;
-	}
+	private final PairingImageHandler pairingImageHandler;
+	private final UserService userService;
 
 	/* 페어링 등록 */
 	@Transactional
-	public Pairing create(Pairing pairing, List<String> image, String category, Long beerId) {
+	public Pairing create(Pairing pairing, List<MultipartFile> files, String category,
+		Long beerId, Long userId) throws IOException {
 
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
+		/* 존재하는 회원인지 확인 */
+		User user = userService.getUser(userId);
+
 		pairing.updateCategory(findCategory(category));
 
 		/* 이미지 저장하기 */
-		if (image.size() > 3) {
+		if (files.size() > 3) {
 			throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
 		}
 
-		List<PairingImage> pairingImages = new ArrayList<>();
-
-		for (int i = 0; i < image.size(); i++) {
-			PairingImage pairingImage = PairingImage.builder()
-				.imageUrl(image.get(i))
-				.pairing(pairing)
-				.build();
-			pairingImageRepository.save(pairingImage);
-			pairingImages.add(pairingImage);
-		}
+		List<PairingImage> pairingImages = pairingImageHandler.createPairingImage(pairing, files, user.getId(), beer);
 
 		/* 페어링 등록하기 */
-		pairing.saveDefault(beer, pairingImages, new ArrayList<>(), 0, 0);
+		pairing.saveDefault(beer, user, pairingImages, new ArrayList<>(), 0, 0);
 		pairingRepository.save(pairing);
 
 		return pairing;

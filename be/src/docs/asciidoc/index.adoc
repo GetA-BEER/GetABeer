@@ -1,101 +1,101 @@
-= GET A BEER _ API DOCUMENT
-:sectnums:
-:toc: left
-:toclevels: 4
-:toc-title: Table of Contents
-:source-highlighter: prettify
-
-Team <Get a Beer>
-
-v1.0.0, 2023.1.28
-
-***
-
-== BeerController
-
-=== 맥주 생성
-
-.Curl-Request
-include::{snippets}/Post_Beer/curl-request.adoc[]
-
-.Http-Request
-include::{snippets}/Post_Beer/http-request.adoc[]
-
-.Request-Fields
-include::{snippets}/Post_Beer/request-fields.adoc[]
-
-.Http-Response
-include::{snippets}/Post_Beer/http-response.adoc[]
-
-.Response-Fields
-include::{snippets}/Post_Beer/response-fields.adoc[]
-
-=== 맥주 수정
-
-.Curl-Request
-include::{snippets}/Patch_Beer/curl-request.adoc[]
-
-.Http-Request
-include::{snippets}/Patch_Beer/http-request.adoc[]
-
-.Request-Fields
-include::{snippets}/Patch_Beer/request-fields.adoc[]
-
-.Http-Response
-include::{snippets}/Patch_Beer/http-response.adoc[]
-
-.Response-Fields
-include::{snippets}/Patch_Beer/response-fields.adoc[]
-
-=== 맥주 조회
-
-.Curl-Request
-include::{snippets}/Get_Beer/curl-request.adoc[]
-
-.Http-Request
-include::{snippets}/Get_Beer/http-request.adoc[]
-
-.Http-Response
-include::{snippets}/Get_Beer/http-response.adoc[]
-
-.Response-Fields
-include::{snippets}/Get_Beer/response-fields.adoc[]
-
-=== 이달의 맥주 조회(평균 별점 내림차순)
-
-.Curl-Request
-include::{snippets}/Get_Monthly_Beers/curl-request.adoc[]
-
-.Http-Request
-include::{snippets}/Get_Monthly_Beers/http-request.adoc[]
-
-.Http-Response
-include::{snippets}/Get_Monthly_Beers/http-response.adoc[]
-
-.Response-Fields
-include::{snippets}/Get_Monthly_Beers/response-fields.adoc[]
-
-=== 마이 페이지 맥주(최신순, 페이징)
-
-.Curl-Request
-include::{snippets}/Get_MyPage_Beers/curl-request.adoc[]
-
-.Http-Request
-include::{snippets}/Get_MyPage_Beers/http-request.adoc[]
-
-.Http-Response
-include::{snippets}/Get_MyPage_Beers/http-response.adoc[]
-
-.Response-Fields
-include::{snippets}/Get_MyPage_Beers/response-fields.adoc[]
-
-=== 맥주 삭제
-
-.Curl-Request
-include::{snippets}/Delete_Beer/curl-request.adoc[]
-
-.Http-Request
-include::{snippets}/Delete_Beer/http-request.adoc[]
-
-.Http-Response
-include::{snippets}/Delete_Beer/http-response.adoc[]
+// = GET A BEER _ API DOCUMENT
+// :sectnums:
+// :toc: left
+// :toclevels: 4
+// :toc-title: Table of Contents
+// :source-highlighter: prettify
+//
+// Team <Get a Beer>
+//
+// v1.0.0, 2023.1.28
+//
+// ***
+//
+// == BeerController
+//
+// === 맥주 생성
+//
+// .Curl-Request
+// include::{snippets}/Post_Beer/curl-request.adoc[]
+//
+// .Http-Request
+// include::{snippets}/Post_Beer/http-request.adoc[]
+//
+// .Request-Fields
+// include::{snippets}/Post_Beer/request-fields.adoc[]
+//
+// .Http-Response
+// include::{snippets}/Post_Beer/http-response.adoc[]
+//
+// .Response-Fields
+// include::{snippets}/Post_Beer/response-fields.adoc[]
+//
+// === 맥주 수정
+//
+// .Curl-Request
+// include::{snippets}/Patch_Beer/curl-request.adoc[]
+//
+// .Http-Request
+// include::{snippets}/Patch_Beer/http-request.adoc[]
+//
+// .Request-Fields
+// include::{snippets}/Patch_Beer/request-fields.adoc[]
+//
+// .Http-Response
+// include::{snippets}/Patch_Beer/http-response.adoc[]
+//
+// .Response-Fields
+// include::{snippets}/Patch_Beer/response-fields.adoc[]
+//
+// === 맥주 조회
+//
+// .Curl-Request
+// include::{snippets}/Get_Beer/curl-request.adoc[]
+//
+// .Http-Request
+// include::{snippets}/Get_Beer/http-request.adoc[]
+//
+// .Http-Response
+// include::{snippets}/Get_Beer/http-response.adoc[]
+//
+// .Response-Fields
+// include::{snippets}/Get_Beer/response-fields.adoc[]
+//
+// === 이달의 맥주 조회(평균 별점 내림차순)
+//
+// .Curl-Request
+// include::{snippets}/Get_Monthly_Beers/curl-request.adoc[]
+//
+// .Http-Request
+// include::{snippets}/Get_Monthly_Beers/http-request.adoc[]
+//
+// .Http-Response
+// include::{snippets}/Get_Monthly_Beers/http-response.adoc[]
+//
+// .Response-Fields
+// include::{snippets}/Get_Monthly_Beers/response-fields.adoc[]
+//
+// === 마이 페이지 맥주(최신순, 페이징)
+//
+// .Curl-Request
+// include::{snippets}/Get_MyPage_Beers/curl-request.adoc[]
+//
+// .Http-Request
+// include::{snippets}/Get_MyPage_Beers/http-request.adoc[]
+//
+// .Http-Response
+// include::{snippets}/Get_MyPage_Beers/http-response.adoc[]
+//
+// .Response-Fields
+// include::{snippets}/Get_MyPage_Beers/response-fields.adoc[]
+//
+// === 맥주 삭제
+//
+// .Curl-Request
+// include::{snippets}/Delete_Beer/curl-request.adoc[]
+//
+// .Http-Request
+// include::{snippets}/Delete_Beer/http-request.adoc[]
+//
+// .Http-Response
+// include::{snippets}/Delete_Beer/http-response.adoc[]

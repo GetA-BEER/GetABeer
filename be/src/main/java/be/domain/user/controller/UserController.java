@@ -19,7 +19,7 @@ import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
 import be.domain.user.service.UserService;
-import be.global.image.S3UploadServiceImpl;
+import be.global.image.ImageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	private final UserMapper userMapper;
 	private final UserService userService;
-	private final S3UploadServiceImpl s3UploadService;
+	private final ImageHandler imageHandler;
 
 	/* 회원가입 */
 	@PostMapping("/register/user")

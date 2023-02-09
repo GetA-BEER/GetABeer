@@ -31,7 +31,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 		List<PairingImageDto.Response> result = queryFactory
 			.select(new QPairingImageDto_Response(
 				pairingImage.id,
-				pairingImage.imageUrl
+				pairingImage.imageUrl,
+				pairingImage.fileName
 			))
 			.from(pairingImage)
 			.where(pairingImage.pairing.id.eq(pairingId))
@@ -57,7 +58,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.select(Projections.fields(PairingResponseDto.Total.class,
 				pairing.beer.id.as("beerId"),
 				pairing.id.as("pairingId"),
-				pairing.nickname,
+				pairing.user.id.as("userId"),
+				pairing.user.nickname.as("nickname"),
 				pairing.content,
 				pairing.likeCount,
 				pairing.commentCount,
@@ -79,7 +81,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.select(Projections.fields(PairingResponseDto.Total.class,
 				pairing.beer.id.as("beerId"),
 				pairing.id.as("pairingId"),
-				pairing.nickname,
+				pairing.user.id.as("userId"),
+				pairing.user.nickname.as("nickname"),
 				pairing.content,
 				pairing.likeCount,
 				pairing.commentCount,
@@ -101,7 +104,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.select(Projections.fields(PairingResponseDto.Total.class,
 				pairing.beer.id.as("beerId"),
 				pairing.id.as("pairingId"),
-				pairing.nickname,
+				pairing.user.id.as("userId"),
+				pairing.user.nickname.as("nickname"),
 				pairing.content,
 				pairing.likeCount,
 				pairing.commentCount,

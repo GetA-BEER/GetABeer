@@ -10,12 +10,14 @@ public class PairingImageDto {
 	public static class Response {
 		private Long pairingImageId;
 		private String imageUrl;
+		private String fileName;
 
 		@Builder
 		@QueryProjection
-		public Response(Long pairingImageId, String imageUrl) {
+		public Response(Long pairingImageId, String imageUrl, String fileName) {
 			this.pairingImageId = pairingImageId;
 			this.imageUrl = imageUrl;
+			this.fileName = fileName;
 		}
 	}
 }

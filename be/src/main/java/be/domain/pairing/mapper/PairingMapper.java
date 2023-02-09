@@ -27,7 +27,8 @@ public interface PairingMapper {
 		PairingResponseDto.Detail response = PairingResponseDto.Detail.builder()
 			.beerId(beerId)
 			.pairingId(pairing.getId())
-			.nickname(pairing.getNickname())
+			.userId(pairing.getUser().getId())
+			.nickname(pairing.getUser().getNickname())
 			.content(pairing.getContent())
 			.imageList(getPairingImageList(pairing.getPairingImageList()))
 			.commentList(getCommentList(pairing.getPairingCommentList()))
@@ -52,6 +53,7 @@ public interface PairingMapper {
 			PairingImageDto.Response response = PairingImageDto.Response.builder()
 				.pairingImageId(pairingImages.get(i).getId())
 				.imageUrl(pairingImages.get(i).getImageUrl())
+				.fileName(pairingImages.get(i).getFileName())
 				.build();
 
 			result.add(response);
