@@ -40,6 +40,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+	private final PasswordEncoder passwordEncoder;
+	private final CustomAuthorityUtils authorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
 	private final UserRepository userRepository;
 	private final BeerTagService beerTagService;
 	private final BeerCategoryService beerCategoryService;
@@ -47,9 +50,6 @@ public class UserService {
 	private final UserBeerTagQRepository userBeerTagQRepository;
 	private final UserBeerCategoryRepository userBeerCategoryRepository;
 	private final UserBeerCategoryQRepository userBeerCategoryQRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final CustomAuthorityUtils authorityUtils;
-	private final RedisTemplate<String, String> redisTemplate;
 	private final EntityManager em;
 
 	/* 유저 회원가입 */
@@ -275,5 +275,24 @@ public class UserService {
 				.build();
 			userBeerCategoryRepository.save(saved);
 		});
+	}
+
+	/**
+	 * 마이페이지
+	 */
+
+	/* 나의 평가 */
+	public void getMyRating() {
+
+	}
+
+	/* 나의 코멘트 */
+	public void getMyComment() {
+
+	}
+
+	/* 나의 페어링 */
+	public void getMyPairing() {
+
 	}
 }

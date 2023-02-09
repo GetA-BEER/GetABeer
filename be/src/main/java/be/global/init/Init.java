@@ -2,6 +2,7 @@ package be.global.init;
 
 import static be.global.init.InitConstant.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -24,11 +25,14 @@ import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.entity.BeerCategoryType;
 import be.domain.beercategory.repository.BeerCategoryRepository;
+import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.repository.BeerTagRepository;
 import be.domain.beertag.service.BeerTagService;
 import be.domain.user.entity.User;
+import be.domain.user.entity.UserBeerCategory;
+import be.domain.user.entity.UserBeerTag;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
 import be.domain.user.entity.enums.RandomProfile;
@@ -51,9 +55,10 @@ public class Init {
 	@Bean
 	@Transactional
 	CommandLineRunner stubInit(BeerController beerController, BeerMapper beerMapper, BeerService beerService,
-		BeerRepository beerRepository, BeerTagService beerTagService, UserBeerTagRepository userBeerTagRepository,
-		BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
-		BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository) {
+							   BeerRepository beerRepository, BeerTagService beerTagService, UserBeerTagRepository userBeerTagRepository,
+							   BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
+							   BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository,
+							   BeerCategoryService beerCategoryService) {
 
 		for (int i = 0; i < 7; i++) {
 			BeerCategory beerCategory = BeerCategory.builder()
@@ -141,21 +146,33 @@ public class Init {
 				.nickname("닉네임" + i)
 				.roles(List.of(Role.ROLE_USER.toString()))
 				.password(passwordEncoder.encode("password" + i + "!"))
-				// .status(UserStatus.values()[(int)(Math.random() * 3)].getStatus())
 				.status(UserStatus.ACTIVE_USER.getStatus())
 				.imageUrl(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
 				.build();
 
 			user.setUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.values()[(int)(Math.random() * 3)]);
+			user.setUserBeerTags(new ArrayList<>());
 
-			// UserBeerTag userBeerTag =
-			// 	UserBeerTag.builder()
-			// 		.beerTag(beerTagService.findVerifiedBeerTag((long)(Math.random() * 16) + 1))
-			// 		.user(user)
-			// 		.build();
-			//
-			// userBeerTagRepository.save(userBeerTag);
+			for (int j = 0; j < 4; j++) {
+				UserBeerTag userBeerTag =
+					UserBeerTag.builder()
+						.beerTag(beerTagService.findVerifiedBeerTag((long)(Math.random() * 16) + 1))
+						.user(user)
+						.build();
+				user.addUserBeerTags(userBeerTag);
+			}
 
+			user.setUserBeerCategories(new ArrayList<>());
+
+			for (int j = 0; j < 2; j++) {
+				UserBeerCategory userBeerCategory =
+					UserBeerCategory.builder()
+						.beerCategory(beerCategoryService.findVerifiedBeerCategoryById((long)(Math.random() * 7) + 1))
+						.user(user)
+						.build();
+
+				user.addUserBeerCategories(userBeerCategory);
+			}
 			userRepository.save(user);
 
 		}
