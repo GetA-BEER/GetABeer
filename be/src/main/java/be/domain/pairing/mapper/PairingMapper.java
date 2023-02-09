@@ -53,6 +53,7 @@ public interface PairingMapper {
 			PairingImageDto.Response response = PairingImageDto.Response.builder()
 				.pairingImageId(pairingImages.get(i).getId())
 				.imageUrl(pairingImages.get(i).getImageUrl())
+				.fileName(pairingImages.get(i).getFileName())
 				.build();
 
 			result.add(response);

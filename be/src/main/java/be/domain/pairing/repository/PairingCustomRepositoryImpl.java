@@ -31,7 +31,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 		List<PairingImageDto.Response> result = queryFactory
 			.select(new QPairingImageDto_Response(
 				pairingImage.id,
-				pairingImage.imageUrl
+				pairingImage.imageUrl,
+				pairingImage.fileName
 			))
 			.from(pairingImage)
 			.where(pairingImage.pairing.id.eq(pairingId))
