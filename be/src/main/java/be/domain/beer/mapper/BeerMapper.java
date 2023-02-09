@@ -17,7 +17,6 @@ import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beertag.entity.BeerTag;
-import be.domain.rating.entity.Rating;
 
 @Mapper(componentModel = "spring")
 public interface BeerMapper {
@@ -52,7 +51,6 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
-		detailsResponse.isWishListed(beer.getIsWishListed());
 		detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
@@ -63,7 +61,7 @@ public interface BeerMapper {
 		return detailsResponse.build();
 	}
 
-	default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer, List<BeerTag> beerTags) {
+	default BeerDto.DetailsResponse beerToPatchDetailsResponse(Beer beer) {
 
 		BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
 
@@ -72,7 +70,26 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
 		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
-		detailsResponse.isWishListed(beer.getIsWishListed());
+		detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
+			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
+				.getBeerCategoryType())
+			.collect(Collectors.toList()));
+		//        detailsResponse.beerTags(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+
+		return detailsResponse.build();
+	}
+
+	default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer, List<BeerTag> beerTags, Boolean isWishlist) {
+
+		BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
+
+		detailsResponse.beerId(beer.getId());
+		detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
+		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
+		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
+		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+		detailsResponse.isWishlist(isWishlist);
 		detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()

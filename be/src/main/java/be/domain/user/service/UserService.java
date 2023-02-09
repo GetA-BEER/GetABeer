@@ -15,14 +15,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.domain.beercategory.entity.BeerCategory;
+import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.service.BeerTagService;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
+import be.domain.user.entity.UserBeerCategory;
 import be.domain.user.entity.UserBeerTag;
 import be.domain.user.entity.enums.ProviderType;
-import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.UserStatus;
+import be.domain.user.repository.UserBeerCategoryQRepository;
+import be.domain.user.repository.UserBeerCategoryRepository;
+import be.domain.user.repository.UserBeerTagQRepository;
 import be.domain.user.repository.UserBeerTagRepository;
 import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
@@ -36,8 +41,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository userRepository;
-	private final UserBeerTagRepository userBeerTagRepository;
 	private final BeerTagService beerTagService;
+	private final BeerCategoryService beerCategoryService;
+	private final UserBeerTagRepository userBeerTagRepository;
+	private final UserBeerTagQRepository userBeerTagQRepository;
+	private final UserBeerCategoryRepository userBeerCategoryRepository;
+	private final UserBeerCategoryQRepository userBeerCategoryQRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final CustomAuthorityUtils authorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
@@ -58,44 +67,56 @@ public class UserService {
 			.provider(String.valueOf(ProviderType.LOCAL))
 			.roles(authorityUtils.createRoles(user.getEmail()))
 			.password(passwordEncoder.encode(user.getPassword()))
-			.imageUrl(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
 			.build();
+
+		saved.randomProfileImage();
 
 		redisTemplate.delete(user.getEmail());
 
 		return userRepository.save(saved);
 	}
 
-	/* 회원가입 유저 정보 입력 - 연령, 성별, 태그 */
+	/* 회원가입 유저 정보 입력 - 연령, 성별, 태그, 카테고리 */
 	@Transactional
-	public User postUserInfo(UserDto.UserInfoPost post) {
-		User user = userRepository.findByEmail(post.getEmail())
+	public User postUserInfo(User post) {
+		User user = userRepository.findById(post.getId())
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-		// setUserBeerTags(user, post);
-
+		setUserBeerTags(post, user);
+		setUserBeerCategories(post, user);
 		user.setUserInfo(post.getAge(), post.getGender());
 		em.flush();
 
 		return user;
 	}
 
-	/* 유저 정보 수정 */
+	/* 유저 정보 수정 - 연령, 성별, 태그, 카테고리 */
 	@Transactional
-	public User updateUser(UserDto.EditUserInfo edit) {
+	public User updateUser(User edit) {
 		User user = getLoginUser();
 
-		// if (edit.getNickname() != null) {
-		// 	verifyNickname(edit.getNickname());
-		// }
+		if (edit.getNickname() != null) {
+			verifyNickname(edit.getNickname());
+		}
 
-		user.edit(edit);
+		if (edit.getUserBeerCategories() != null) {
+			setUserBeerCategories(edit, user);
+		}
+
+		if (edit.getUserBeerTags() != null) {
+			setUserBeerTags(edit, user);
+		}
+
+		user.edit(edit.getImageUrl(),
+				  edit.getNickname(),
+				  edit.getGender(),
+				  edit.getAge());
 		em.flush();
 
 		return userRepository.findById(user.getId()).orElseThrow();
 	}
 
-	/* 비밀번호 확인 */
+	/* 비밀번호 수정 - 확인 */
 	@Transactional
 	public User verifyPassword(UserDto.EditPassword editPassword) {
 		User user = getLoginUser();
@@ -140,8 +161,8 @@ public class UserService {
 		return userRepository.findByEmail(authentication.getName())
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 	}
-  
-    /* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
+
+	/* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
 	public void checkUser(Long userId, Long loginUserId) {
 		if (!userId.equals(loginUserId)) {
 			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
@@ -220,16 +241,39 @@ public class UserService {
 		}
 	}
 
-	/* setBeerTags */
-	// private void setUserBeerTags(User user, UserDto.UserInfoPost post) {
-	// 	post.getUserBeerTags()
-	// 		.forEach(userBeerTag -> {
-	// 			BeerTag beerTag = beerTagService.findVerifiedBeerTag(userBeerTag.getBeerTag().getId());
-	// 			UserBeerTag saved = UserBeerTag.builder()
-	// 				.user(user)
-	// 				.beerTag(beerTag)
-	// 				.build();
-	// 			userBeerTagRepository.save(saved);
-	// 		});
-	// }
+	/* set UserBeerTags */
+	private void setUserBeerTags(User post, User user) {
+
+		if (user.getUserBeerTags() != null) {
+			userBeerTagQRepository.delete(user.getId());
+		}
+
+		post.getUserBeerTags().forEach(userBeerTag -> {
+			BeerTag beerTag =
+				beerTagService.findVerifiedBeerTagByBeerTagType(userBeerTag.getBeerTag().getBeerTagType());
+			UserBeerTag saved = UserBeerTag.builder()
+				.user(user)
+				.beerTag(beerTag)
+				.build();
+			userBeerTagRepository.save(saved);
+		});
+	}
+
+	/* set BeerCategories */
+	private void setUserBeerCategories(User post, User user) {
+
+		if (user.getUserBeerCategories() != null) {
+			userBeerCategoryQRepository.delete(user.getId());
+		}
+
+		post.getUserBeerCategories().forEach(userBeerCategory -> {
+			BeerCategory beerCategory =
+				beerCategoryService.findVerifiedBeerCategory(userBeerCategory.getBeerCategory().getBeerCategoryType());
+			UserBeerCategory saved = UserBeerCategory.builder()
+				.user(user)
+				.beerCategory(beerCategory)
+				.build();
+			userBeerCategoryRepository.save(saved);
+		});
+	}
 }

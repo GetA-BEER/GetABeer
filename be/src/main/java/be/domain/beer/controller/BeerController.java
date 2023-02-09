@@ -28,6 +28,7 @@ import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.beerwishlist.service.BeerWishlistServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @Validated
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class BeerController {
 	private final BeerMapper beerMapper;
 	private final BeerService beerService;
+	private final BeerWishlistServiceImpl beerWishlistServiceImpl;
 
 	@PostMapping("/add")
 	public ResponseEntity<BeerDto.DetailsResponse> postBeer(@Valid @RequestBody BeerDto.Post postBeer) {
@@ -55,9 +57,8 @@ public class BeerController {
 
 		Beer beer = beerMapper.beerPatchToBeer(patchBeer);
 		Beer updatedBeer = beerService.updateBeer(beer, beerId);
-		List<BeerTag> beerTags = beerService.findTop4BeerTags(updatedBeer);
 		updatedBeer.addBeerBeerCategories(beer.getBeerBeerCategories()); // Response DTO
-		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(updatedBeer, beerTags);
+		BeerDto.DetailsResponse response = beerMapper.beerToPatchDetailsResponse(updatedBeer);
 
 		return ResponseEntity.ok(response);
 	}
@@ -65,9 +66,10 @@ public class BeerController {
 	@GetMapping("/{beer_id}")
 	public ResponseEntity<BeerDto.DetailsResponse> getBeer(@PathVariable("beer_id") Long beerId) {
 
-		Beer beer = beerService.findVerifiedBeer(beerId);
+		Beer beer = beerService.getBeer(beerId);
 		List<BeerTag> beerTags = beerService.findTop4BeerTags(beer);
-		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer, beerTags);
+		Boolean isWishlist = beerWishlistServiceImpl.getIsWishlist(beer);
+		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer, beerTags, isWishlist);
 
 		return ResponseEntity.ok(response);
 	}
@@ -115,5 +117,4 @@ public class BeerController {
 
 		return ResponseEntity.ok(responses);
 	}
-
 }

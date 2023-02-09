@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.querydsl.core.annotations.QueryProjection;
 
 import be.domain.beer.entity.BeerBeerCategory;
+import be.domain.user.entity.UserBeerCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,10 +44,21 @@ public class BeerCategory implements Serializable {
 	@OneToMany(mappedBy = "beerCategory")
 	private List<BeerBeerCategory> beerBeerCategories = new ArrayList<>();
 
+	@JsonManagedReference
+	@OneToMany(mappedBy = "beerCategory")
+	private List<UserBeerCategory> userBeerCategories = new ArrayList<>();
+
 	public void addBeerBeerCategory(BeerBeerCategory beerBeerCategory) {
 		this.beerBeerCategories.add(beerBeerCategory);
 		if (beerBeerCategory.getBeerCategory() != this) {
 			beerBeerCategory.addBeerCategory(this);
+		}
+	}
+
+	public void addUserBeerCategory(UserBeerCategory userBeerCategory) {
+		this.userBeerCategories.add(userBeerCategory);
+		if (userBeerCategory.getBeerCategory() != this) {
+			userBeerCategory.addBeerCategory(this);
 		}
 	}
 

@@ -29,7 +29,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @Getter
 @Builder
@@ -59,7 +61,6 @@ public class Beer extends BaseTimeEntity implements Serializable {
 	@Embedded
 	@Nullable
 	private BeerDetailsStatistics beerDetailsStatistics;
-	private Boolean isWishListed;
 
 	@ManyToOne
 	@JoinColumn(name = "similar_beer_id")
@@ -170,8 +171,12 @@ public class Beer extends BaseTimeEntity implements Serializable {
 		this.beerDetailsBasic = beer.getBeerDetailsBasic();
 	}
 
+	public void addDailyViewCount() {
+		this.beerDetailsStatistics.addDailyViewCount();
+	}
+
 	public void addDailyRatingCount() {
-		this.getBeerDetailsStatistics().addDailyRatingCount();
+		this.beerDetailsStatistics.addDailyRatingCount();
 	}
 
 }

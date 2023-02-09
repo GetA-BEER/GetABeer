@@ -145,12 +145,12 @@ public class BeerDto {
 	public static class DetailsResponse {
 
 		private Long beerId;
+		private Boolean isWishlist;
 		private BeerDetailsBasic beerDetailsBasic;
 		List<BeerCategoryType> beerCategoryTypes;
 		private BeerDetailsTopTags beerDetailsTopTags;
 		private BeerDetailsStars beerDetailsStars;
 		private BeerDetailsCounts beerDetailsCounts;
-		private Boolean isWishListed;
 		List<SimilarResponse> similarBeers;
 
 	}
