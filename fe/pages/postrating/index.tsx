@@ -61,12 +61,10 @@ export default function PostRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios
-      .post('https://server.getabeer.co.kr/api/ratings', reqBody)
-      .then((res) => {
-        console.log(res);
-        reset();
-      });
+    axios.post('/api/ratings', reqBody).then((res) => {
+      console.log(res);
+      reset();
+    });
   };
 
   return (
@@ -90,10 +88,10 @@ export default function PostRatingPage() {
         </div>
         <div className="mt-3">
           <div>평가</div>
-          <ColorTag setSelected={setColor} />
-          <SmellTag setSelected={setFlavor} />
-          <TasteTag setSelected={setTaste} />
-          <CarbonatinTag setSelected={setCarbonation} />
+          <ColorTag setSelected={setColor} checked={undefined} />
+          <SmellTag setSelected={setFlavor} checked={undefined} />
+          <TasteTag setSelected={setTaste} checked={undefined} />
+          <CarbonatinTag setSelected={setCarbonation} checked={undefined} />
         </div>
         <div className="mt-5">
           <div className="mb-3">리뷰</div>
