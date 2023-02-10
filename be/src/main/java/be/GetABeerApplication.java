@@ -9,6 +9,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @EnableScheduling
 @EnableJpaAuditing
+// @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
+// 	type = FilterType.ASSIGNABLE_TYPE,
+// 	classes = BeerSearchRepository.class
+// ))
 @SpringBootApplication
 public class GetABeerApplication {
 

@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.pairing.entity.Pairing;
@@ -37,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @ToString
 @DynamicInsert
+// @Document(indexName = "beers")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Beer extends BaseTimeEntity implements Serializable {
@@ -67,15 +69,15 @@ public class Beer extends BaseTimeEntity implements Serializable {
 	private Beer similarBeer;
 	@OneToMany(mappedBy = "similarBeer")
 	private List<Beer> similarBeers = new ArrayList<>();
-	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<BeerBeerCategory> beerBeerCategories = new ArrayList<>();
-	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
-	@OneToMany(mappedBy = "beer", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<BeerWishlist> beerWishlists = new ArrayList<>();
-	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<Rating> ratingList = new ArrayList<>();
-	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<Pairing> pairingList = new ArrayList<>();
 
 	public void addBeerBeerCategories(List<BeerBeerCategory> beerBeerCategories) {
@@ -171,12 +173,74 @@ public class Beer extends BaseTimeEntity implements Serializable {
 		this.beerDetailsBasic = beer.getBeerDetailsBasic();
 	}
 
-	public void addDailyViewCount() {
-		this.beerDetailsStatistics.addDailyViewCount();
+	public void addStatViewCount() {
+		this.beerDetailsStatistics.addStatViewCount();
 	}
 
-	public void addDailyRatingCount() {
-		this.beerDetailsStatistics.addDailyRatingCount();
+	public void addStatRatingCount() {
+		this.beerDetailsStatistics.addStatRatingCount();
+	}
+
+	public void addRatingCount() {
+		this.beerDetailsCounts.addRatingCount();
+	}
+
+	public void addFemaleStarCount() {
+		this.beerDetailsCounts.addFemaleStarCount();
+	}
+
+	public void addMaleStarCount() {
+		this.beerDetailsCounts.addMaleStarCount();
+	}
+
+	public void minusRatingCount() {
+		this.beerDetailsCounts.minusRatingCount();
+	}
+
+	public void minusFemaleStarCount() {
+		this.beerDetailsCounts.minusFemaleStarCount();
+	}
+
+	public void minusMaleStarCount() {
+		this.beerDetailsCounts.minusMaleStarCount();
+	}
+
+	public void calculateTotalAverageStars(Double star) {
+		this.beerDetailsStars.calculateTotalAverageStars(star, this.beerDetailsCounts.getRatingCount());
+	}
+
+	public void calculateFemaleAverageStars(Double star) {
+		this.beerDetailsStars.calculateFemaleAverageStars(star, this.beerDetailsCounts.getFemaleStarCount());
+	}
+
+	public void calculateMaleAverageStars(Double star) {
+		this.beerDetailsStars.calculateMaleAverageStars(star, this.beerDetailsCounts.getMaleStarCount());
+	}
+
+	public void updateTotalAverageStars(Double previousStar, Double afterStar) {
+		this.beerDetailsStars.updateTotalAverageStars(previousStar, afterStar, this.beerDetailsCounts.getRatingCount());
+	}
+
+	public void updateFemaleAverageStars(Double previousStar, Double afterStar) {
+		this.beerDetailsStars.updateFemaleAverageStars(previousStar, afterStar,
+			this.beerDetailsCounts.getFemaleStarCount());
+	}
+
+	public void updateMaleAverageStars(Double previousStar, Double afterStar) {
+		this.beerDetailsStars.updateMaleAverageStars(previousStar, afterStar,
+			this.beerDetailsCounts.getMaleStarCount());
+	}
+
+	public void deleteTotalAverageStars(Double deleteStar) {
+		this.beerDetailsStars.deleteTotalAverageStars(deleteStar, this.beerDetailsCounts.getRatingCount());
+	}
+
+	public void deleteFemaleAverageStars(Double deleteStar) {
+		this.beerDetailsStars.deleteFemaleAverageStars(deleteStar, this.beerDetailsCounts.getRatingCount());
+	}
+
+	public void deleteMaleAverageStars(Double deleteStar) {
+		this.beerDetailsStars.deleteMaleAverageStars(deleteStar, this.beerDetailsCounts.getRatingCount());
 	}
 
 }

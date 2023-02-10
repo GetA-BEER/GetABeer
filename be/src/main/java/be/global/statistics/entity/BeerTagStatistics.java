@@ -24,28 +24,31 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerTagTypeStatistics {
+public class BeerTagStatistics {
 	@Id
 	@Column(name = "rating_statistics_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@CreatedDate
 	private LocalDateTime createdAt;
-	private LocalDate date;
-	private Long straw;
-	private Long gold;
-	private Long brown;
-	private Long black;
-	private Long sweet;
-	private Long sour;
-	private Long bitter;
-	private Long rough;
-	private Long fruity;
-	private Long flower;
-	private Long malty;
-	private Long hoppy;
-	private Long weak;
-	private Long middle;
-	private Long strong;
-	private Long noCarbonation;
+	private Integer week;
+	private Integer straw;
+	private Integer gold;
+	private Integer brown;
+	private Integer black;
+	private Integer sweet;
+	private Integer sour;
+	private Integer bitter;
+	private Integer rough;
+	private Integer fruity;
+	private Integer flower;
+	private Integer malty;
+	private Integer noScent;
+	private Integer weak;
+	private Integer middle;
+	private Integer strong;
+	private Integer noCarbonation;
+	private Integer male;
+	private Integer female;
+	private Integer refuse;
 }

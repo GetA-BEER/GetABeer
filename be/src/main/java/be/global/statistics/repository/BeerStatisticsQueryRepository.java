@@ -20,13 +20,13 @@ public class BeerStatisticsQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 	private final BeerStatisticsJdbcRepository beerStatisticsJdbcRepository;
 
-	public void createAndSaveDailyBeerStatistics() {
+	public void createAndSaveBeerStatistics() {
 
 		List<BeerStatistics> list = new ArrayList<>();
 
 		jpaQueryFactory.selectFrom(beer)
-			.where(beer.beerDetailsStatistics.dailyViewCount.goe(1))
-			.orderBy(beer.beerDetailsStatistics.dailyViewCount.desc())
+			.where(beer.beerDetailsStatistics.statViewCount.goe(1))
+			.orderBy(beer.beerDetailsStatistics.statViewCount.desc())
 			.fetch()
 			.forEach(findBeer -> {
 				BeerStatistics beerStatistics = BeerStatistics.builder().build();
@@ -39,5 +39,4 @@ public class BeerStatisticsQueryRepository {
 
 		beerStatisticsJdbcRepository.saveAll(list);
 	}
-
 }

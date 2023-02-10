@@ -21,6 +21,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.rating.entity.Rating;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,5 +99,12 @@ public class BeerQueryRepository {
 		int end = Math.min((start + pageable.getPageSize()), total);
 
 		return new PageImpl<>(resultList.subList(start, end), pageable, total);
+	}
+
+	public Rating findBestRating(Beer findBeer) {
+
+		return jpaQueryFactory.selectFrom(rating)
+			.where(rating.beer.eq(findBeer))
+			.fetchFirst();
 	}
 }

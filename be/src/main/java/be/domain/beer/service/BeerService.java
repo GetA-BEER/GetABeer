@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.rating.entity.Rating;
 
 public interface BeerService {
 	Beer createBeer(Beer beer);
@@ -20,6 +21,8 @@ public interface BeerService {
 	Beer getBeer(Long beerId);
 
 	List<MonthlyBeer> findMonthlyBeers();
+
+	Rating findBestRating(Beer beer);
 
 	List<BeerTag> findTop4BeerTags(Beer beer);
 

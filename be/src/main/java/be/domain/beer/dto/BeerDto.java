@@ -74,7 +74,7 @@ public class BeerDto {
 		private String engName;
 		private BeerDetailsTopTags beerDetailsTopTags;
 		private Double averageStar;
-		private Integer totalStarCount;
+		private Integer ratingCount;
 		private String thumbnail;
 		private Rating bestRating;
 	}
