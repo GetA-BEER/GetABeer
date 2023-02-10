@@ -2,7 +2,7 @@ export default function BeerCategory() {
   const beerCategory = [
     'Ale',
     'IPA',
-    'Larger',
+    'Lager',
     'Weizen',
     'Dunkel',
     'Pilsener',

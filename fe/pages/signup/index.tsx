@@ -3,9 +3,11 @@ import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import Link from 'next/link';
 import { IoChevronBack } from 'react-icons/io5';
+import { useState } from 'react';
 
 export default function Signup() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
+  const [content, setContent] = useState('');
   return (
     <>
       <Head>
@@ -22,10 +24,30 @@ export default function Signup() {
           회원가입
         </div>
         <div className="m-auto max-w-md">
-          <Input type="email" placeholder="email@gmail.com" />
-          <Input type="text" placeholder="닉네임" />
-          <Input type="password" placeholder="비밀번호" />
-          <Input type="password" placeholder="비밀번호 확인" />
+          <Input
+            type="email"
+            placeholder="email@gmail.com"
+            inputState={content}
+            setInputState={setContent}
+          />
+          <Input
+            type="text"
+            placeholder="닉네임"
+            inputState={content}
+            setInputState={setContent}
+          />
+          <Input
+            type="password"
+            placeholder="비밀번호"
+            inputState={content}
+            setInputState={setContent}
+          />
+          <Input
+            type="password"
+            placeholder="비밀번호 확인"
+            inputState={content}
+            setInputState={setContent}
+          />
           <SubmitBtn onClick={handleClick}> 가입하기 </SubmitBtn>
           <div className="my-3 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">이미 계정이 있다면?</div>

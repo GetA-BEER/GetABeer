@@ -6,9 +6,11 @@ import NaverBtn from '@/components/login/NaverBtn';
 import GoogleBtn from '@/components/login/Googlebtn';
 import KakaoBtn from '@/components/login/KakaoBtn';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function Login() {
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
+  const handleClick = () => {};
+  const [content, setContent] = useState('');
   return (
     <>
       <Head>
@@ -27,8 +29,18 @@ export default function Login() {
           로그인
         </div>
         <div className="m-auto max-w-md">
-          <Input type="email" placeholder="email@gmail.com" />
-          <Input type="password" placeholder="비밀번호를 입력하세요." />
+          <Input
+            type="email"
+            placeholder="email@gmail.com"
+            inputState={content}
+            setInputState={setContent}
+          />
+          <Input
+            type="password"
+            placeholder="비밀번호를 입력하세요."
+            inputState={content}
+            setInputState={setContent}
+          />
           <SubmitBtn onClick={handleClick}> 로그인 </SubmitBtn>
           <div className="my-3 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">만약 계정이 없다면?</div>
