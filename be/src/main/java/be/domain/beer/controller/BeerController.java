@@ -28,7 +28,7 @@ import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
-import be.domain.beerwishlist.service.BeerWishlistServiceImpl;
+import be.domain.beerwishlist.service.BeerWishlistService;
 import lombok.RequiredArgsConstructor;
 
 @Validated
@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class BeerController {
 	private final BeerMapper beerMapper;
 	private final BeerService beerService;
-	private final BeerWishlistServiceImpl beerWishlistServiceImpl;
+	private final BeerWishlistService beerWishlistService;
 
 	@PostMapping("/add")
 	public ResponseEntity<BeerDto.DetailsResponse> postBeer(@Valid @RequestBody BeerDto.Post postBeer) {
@@ -68,7 +68,7 @@ public class BeerController {
 
 		Beer beer = beerService.getBeer(beerId);
 		List<BeerTag> beerTags = beerService.findTop4BeerTags(beer);
-		Boolean isWishlist = beerWishlistServiceImpl.getIsWishlist(beer);
+		Boolean isWishlist = beerWishlistService.getIsWishlist(beer);
 		BeerDto.DetailsResponse response = beerMapper.beerToDetailsResponse(beer, beerTags, isWishlist);
 
 		return ResponseEntity.ok(response);

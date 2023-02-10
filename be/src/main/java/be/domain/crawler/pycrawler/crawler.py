@@ -69,20 +69,28 @@ def create_info(beer_info):
 ##                                                                                    ##
 ########################################################################################
 
-driver.get(START_URL)
-
-time.sleep(5)
+# driver.get(START_URL)
+#
+# time.sleep(5)
 
 for i in range(len(TEST_LIST)):
+
+    driver.get(START_URL)
+    time.sleep(5)
+
     try:
         search_box = driver.find_element(By.XPATH, SEARCH_BOX)
     except NoSuchElementException:
         break
+        # driver.get(START_URL)
+        # time.sleep(5)
+        # search_box = driver.find_element(By.XPATH, SEARCH_BOX)
     else:
-        search_box.send_keys(Keys.COMMAND, 'a')
+        time.sleep(5)
+        search_box.send_keys(Keys.COMMAND + 'a')
         time.sleep(1)
         search_box.send_keys(TEST_LIST[i])
-        time.sleep(2)
+        time.sleep(5)
         search_box.send_keys(Keys.TAB, Keys.TAB, Keys.ENTER)
         time.sleep(5)
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, TARGET_XPATH)))
@@ -91,6 +99,7 @@ for i in range(len(TEST_LIST)):
 
         element_length = len(list(beer_info.text.split('\n')))
         if element_length < 13:
+            driver.get(START_URL)
             continue
         else:
             create_info(beer_info)

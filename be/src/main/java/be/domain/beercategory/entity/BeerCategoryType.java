@@ -2,7 +2,7 @@ package be.domain.beercategory.entity;
 
 public enum BeerCategoryType {
 	ALE(),
-	LARGER(),
+	LAGER(),
 	WEIZEN(),
 	DUNKEL(),
 	PILSENER(),

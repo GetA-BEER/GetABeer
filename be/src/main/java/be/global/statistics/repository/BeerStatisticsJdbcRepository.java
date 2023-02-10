@@ -52,7 +52,7 @@ public class BeerStatisticsJdbcRepository {
 				public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
 					BeerStatistics beerStatistics = subList.get(i);
 					preparedStatement.setTimestamp(1, Timestamp.valueOf(beerStatistics.getCreatedAt()));
-					preparedStatement.setDate(2, Date.valueOf(beerStatistics.getDate()));
+					preparedStatement.setInt(2, beerStatistics.getWeek());
 					preparedStatement.setLong(3, beerStatistics.getBeerId());
 					preparedStatement.setString(3, beerStatistics.getKorName());
 					preparedStatement.setString(3, beerStatistics.getCategory1());

@@ -77,11 +77,11 @@ spring:
           auth: true
           starttls:
             enable: true
-#            required: true
-#          socketFactory:
-#            class: javax.net.ssl.SSLSocketFactory
-#            fallback: false
-#            port: 587
+  #            required: true
+  #          socketFactory:
+  #            class: javax.net.ssl.SSLSocketFactory
+  #            fallback: false
+  #            port: 587
   servlet:
     multipart:
       max-file-size: 5MB
@@ -108,7 +108,7 @@ mail:
   address:
     admin: admin@gmail.com
 jwt:
-  secret-key:   ${JWT_SECRET_KEY}
+  secret-key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 120
   refresh-token-expiration-minutes: 1440
 app:

@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BeerDetailsCounts {
 
-	@ColumnDefault("0")
-	private Integer totalStarCount;
+	// @ColumnDefault("0")
+	// private Integer totalStarCount;
 	@ColumnDefault("0")
 	private Integer femaleStarCount;
 	@ColumnDefault("0")
@@ -25,12 +25,35 @@ public class BeerDetailsCounts {
 	private Integer pairingCount;
 
 	@Builder
-	public BeerDetailsCounts(Integer totalStarCount, Integer femaleStarCount, Integer maleStarCount,
-		Integer ratingCount, Integer pairingCount) {
-		this.totalStarCount = totalStarCount;
+	public BeerDetailsCounts(Integer femaleStarCount, Integer maleStarCount, Integer ratingCount,
+		Integer pairingCount) {
 		this.femaleStarCount = femaleStarCount;
 		this.maleStarCount = maleStarCount;
 		this.ratingCount = ratingCount;
 		this.pairingCount = pairingCount;
+	}
+
+	public void addRatingCount() {
+		this.ratingCount++;
+	}
+
+	public void addFemaleStarCount() {
+		this.femaleStarCount++;
+	}
+
+	public void addMaleStarCount() {
+		this.maleStarCount++;
+	}
+
+	public void minusRatingCount() {
+		this.ratingCount--;
+	}
+
+	public void minusFemaleStarCount() {
+		this.femaleStarCount--;
+	}
+
+	public void minusMaleStarCount() {
+		this.maleStarCount--;
 	}
 }

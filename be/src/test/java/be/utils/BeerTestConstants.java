@@ -75,7 +75,7 @@ public class BeerTestConstants {
 
 	public static final BeerDetailsCounts BEER_DETAILS_COUNTS_EMPTY =
 		BeerDetailsCounts.builder()
-			.totalStarCount(0)
+			// .totalStarCount(0)
 			.femaleStarCount(0)
 			.maleStarCount(0)
 			.ratingCount(0)
@@ -84,7 +84,7 @@ public class BeerTestConstants {
 
 	public static final BeerDetailsCounts BEER_DETAILS_COUNTS_WITH_VALUES =
 		BeerDetailsCounts.builder()
-			.totalStarCount(25)
+			// .totalStarCount(25)
 			.femaleStarCount(12)
 			.maleStarCount(13)
 			.ratingCount(25)

@@ -116,7 +116,7 @@ public interface BeerMapper {
 				searchResponseBuilder.engName(beer.getBeerDetailsBasic().getEngName());
 				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
 				searchResponseBuilder.averageStar(beer.getBeerDetailsStars().getTotalAverageStars());
-				searchResponseBuilder.totalStarCount(beer.getBeerDetailsCounts().getTotalStarCount());
+				searchResponseBuilder.ratingCount(beer.getBeerDetailsCounts().getRatingCount());
 				searchResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
 				if (beer.getBeerDetailsBestRating() != null) {
 					searchResponseBuilder.bestRating(beer.getBeerDetailsBestRating().createRating());
@@ -187,7 +187,7 @@ public interface BeerMapper {
 
 		BeerDetailsCounts.BeerDetailsCountsBuilder beerDetailsCounts = BeerDetailsCounts.builder();
 
-		beerDetailsCounts.totalStarCount(beer.getBeerDetailsCounts().getTotalStarCount());
+		// beerDetailsCounts.totalStarCount(beer.getBeerDetailsCounts().getTotalStarCount());
 		beerDetailsCounts.femaleStarCount(beer.getBeerDetailsCounts().getFemaleStarCount());
 		beerDetailsCounts.maleStarCount(beer.getBeerDetailsCounts().getMaleStarCount());
 		beerDetailsCounts.ratingCount(beer.getBeerDetailsCounts().getRatingCount());

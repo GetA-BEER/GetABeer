@@ -43,7 +43,7 @@ public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 	private Double abv;
 	private Integer ibu;
 	private Double averageStar;
-	private Integer starCount;
+	private Integer ratingCount;
 
 	public void create(Beer beer) {
 		this.id = beer.getId();
@@ -57,6 +57,6 @@ public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 		this.abv = beer.getBeerDetailsBasic().getAbv();
 		this.ibu = beer.getBeerDetailsBasic().getIbu();
 		this.averageStar = beer.getBeerDetailsStars().getTotalAverageStars();
-		this.starCount = beer.getBeerDetailsCounts().getTotalStarCount();
+		this.ratingCount = beer.getBeerDetailsCounts().getRatingCount();
 	}
 }
