@@ -1,20 +1,44 @@
 export const TagMatcherToKor = (str: string) => {
   switch (str) {
+    case 'STRAW':
+      return '짚색';
     case 'GOLD':
       return '금색';
+    case 'BROWN':
+      return '갈색';
+    case 'BLACK':
+      return '흑색';
     case 'SWEET':
       return '단맛';
+    case 'SOUR':
+      return '신맛';
+    case 'BITTER':
+      return '쓴맛';
+    case 'ROUGH':
+      return '떫은맛';
+    case 'FRUITY':
+      return '과일향';
     case 'FLOWER':
       return '꽃향';
+    case 'MALTY':
+      return '맥아향';
+    case 'NO_SCENT':
+      return '無향';
+    case 'WEAK':
+      return '탄산 약';
+    case 'MIDDLE':
+      return '탄산 중';
     case 'STRONG':
       return '탄산 강';
+    case 'NO_CARBONATION':
+      return '탄산 無';
   }
 };
 
 export const TagMatcherToEng = (str: string) => {
   switch (str) {
     case '짚색':
-      return 'GOLD';
+      return 'STRAW';
     case '금색':
       return 'GOLD';
     case '갈색':
@@ -22,28 +46,28 @@ export const TagMatcherToEng = (str: string) => {
     case '흑색':
       return 'BLACK';
     case '과일향':
-      return 'FLOWER';
+      return 'FRUITY';
     case '꽃향':
       return 'FLOWER';
     case '맥아향':
-      return 'FLOWER';
+      return 'MALTY';
     case '無향':
-      return 'FLOWER';
+      return 'NO_SCENT';
     case '단맛':
       return 'SWEET';
     case '신맛':
-      return 'SWEET';
+      return 'SOUR';
     case '쓴맛':
-      return 'SWEET';
+      return 'BITTER';
     case '떫은맛':
-      return 'SWEET';
+      return 'ROUGH';
     case '탄산 약':
-      return 'STRONG';
+      return 'WEAK';
     case '탄산 중':
-      return 'STRONG';
+      return 'MIDDLE';
     case '탄산 강':
       return 'STRONG';
     case '탄산 無':
-      return 'STRONG';
+      return 'NO_CARBONATION';
   }
 };
