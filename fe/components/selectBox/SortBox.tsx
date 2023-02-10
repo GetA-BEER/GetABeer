@@ -1,24 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 
-export default function SortBox() {
+export type Sort = 'recency' | 'mostlikes' | 'mostcomments';
+
+type Props = {
+  setSort: React.Dispatch<React.SetStateAction<Sort>>;
+};
+
+export default function SortBox({ setSort }: Props) {
   const sortList = ['추천순', '최신순', '댓글 많은 순'];
   const [showModal, setShowModal] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const [category, setCategory] = useState('Sort');
+  const [category, setCategory] = useState('추천순');
+
+  useEffect(() => {
+    if (category === '추천순') {
+      setSort('mostlikes');
+    } else if (category === '최신순') {
+      setSort('recency');
+    } else if (category === '댓글 많은 순') {
+      setSort('mostcomments');
+    }
+  }, [category, setSort]);
+
   const onCategoryChange = (select: string) => {
-    setChecked(true);
     setCategory(select);
     setShowModal(false);
-    console.log(checked);
   };
   return (
     <div className="m-2">
       <button
         onClick={() => setShowModal(!showModal)}
-        className={`${
-          checked ? 'text-black' : 'text-y-gray'
-        } flex items-center w-32 border border-y-gray pl-2 pr-3 py-1 text-xs rounded-md`}
+        className="flex items-center w-32 border border-y-gray pl-2 pr-3 py-1 text-xs rounded-md"
       >
         <GoTriangleDown className="w-3 h-3 mt-[1px] mr-1 text-y-gray" />
         <span>{category}</span>
