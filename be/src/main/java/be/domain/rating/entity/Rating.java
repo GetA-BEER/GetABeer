@@ -21,6 +21,7 @@ import org.hibernate.validator.constraints.Range;
 
 import be.domain.beer.entity.Beer;
 import be.domain.comment.entity.RatingComment;
+import be.domain.like.entity.RatingLike;
 import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -100,6 +101,18 @@ public class Rating extends BaseTimeEntity {
 		}
 	}
 
+	@OneToMany(mappedBy = "rating", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<RatingLike> ratingLikeList;
+
+	public void addRatingLikeList(RatingLike ratingLike) {
+		ratingLikeList.add(ratingLike);
+
+		if (ratingLike.getRating() != this) {
+			ratingLike.belongToRating(this);
+		}
+	}
+
+	// ---------------------------------------------------------------------------------------------------------
 	public void updateContent(String content) {
 		this.content = content;
 	}
