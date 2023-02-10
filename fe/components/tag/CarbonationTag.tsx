@@ -1,8 +1,9 @@
 type tagProps = {
   setSelected: React.Dispatch<React.SetStateAction<string>>;
+  checked: string | undefined;
 };
 
-export default function CarbonatinTag({ setSelected }: tagProps) {
+export default function CarbonatinTag({ setSelected, checked }: tagProps) {
   const sparkleList = ['탄산 약', '탄산 중', '탄산 강', '탄산 無'];
   const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
     setSelected((e.target as HTMLInputElement).value);
@@ -17,6 +18,7 @@ export default function CarbonatinTag({ setSelected }: tagProps) {
               name="sparkl"
               id={el}
               value={el}
+              defaultChecked={checked === el ? true : false}
               onClick={onClick}
               className="peer hidden"
             />

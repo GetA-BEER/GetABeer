@@ -1,8 +1,9 @@
 type tagProps = {
   setSelected: React.Dispatch<React.SetStateAction<string>>;
+  checked: string | undefined;
 };
 
-export default function SmellTag({ setSelected }: tagProps) {
+export default function SmellTag({ setSelected, checked }: tagProps) {
   const smellList = ['과일향', '꽃향', '맥아향', '無향'];
   const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
     setSelected((e.target as HTMLInputElement).value);
@@ -17,6 +18,7 @@ export default function SmellTag({ setSelected }: tagProps) {
               name="smell"
               id={el}
               value={el}
+              defaultChecked={checked === el ? true : false}
               onClick={onClick}
               className="peer hidden"
             />

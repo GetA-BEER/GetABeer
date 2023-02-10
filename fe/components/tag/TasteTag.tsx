@@ -1,8 +1,9 @@
 type tagProps = {
   setSelected: React.Dispatch<React.SetStateAction<string>>;
+  checked: string | undefined;
 };
 
-export default function TasteTag({ setSelected }: tagProps) {
+export default function TasteTag({ setSelected, checked }: tagProps) {
   const tasteList = ['단맛', '신맛', '쓴맛', '떫은맛'];
   const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
     setSelected((e.target as HTMLInputElement).value);
@@ -17,6 +18,7 @@ export default function TasteTag({ setSelected }: tagProps) {
               name="taste"
               id={el}
               value={el}
+              defaultChecked={checked === el ? true : false}
               onClick={onClick}
               className="peer hidden"
             />
