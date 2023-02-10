@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiCamera } from 'react-icons/fi';
 import { BsImages } from 'react-icons/bs';
-import { AiFillCamera, AiOutlineClose } from 'react-icons/ai';
+import { AiFillCamera } from 'react-icons/ai';
+import imageCompression from 'browser-image-compression';
 
 export default function CameraModal() {
   interface FileData {
@@ -13,25 +14,80 @@ export default function CameraModal() {
 
   const [showModal, setShowModal] = useState(false);
   const [uploadImg, setUploadImg] = useState<FileData | null>(null);
+  const [style, setStyle] = useState('pc');
 
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files !== null) {
+      const imageFile = e.target.files[0];
+      console.log(imageFile);
+      // console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+      const options = {
+        //옵션 설정 필요
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      };
+      try {
+        const compressedFile = await imageCompression(imageFile, options);
+        setUploadImg(compressedFile);
+        console.log(
+          `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+        );
+        // await uploadToServer(compressedFile);
+        await console.log(uploadImg);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setStyle('pc');
+    } else {
+      setStyle('mobile');
+    }
+    window.addEventListener('resize', windowResize);
+    return () => {
+      window.removeEventListener('resize', windowResize);
+    };
+  }, []);
   const onCameraClick = () => {
     setShowModal(true);
   };
 
-  const imageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files !== null) {
-      const imageFile = e.target.files[0];
-      setUploadImg(imageFile);
-      console.log(imageFile);
+  const windowResize = () => {
+    if (window.innerWidth >= 1024) {
+      setStyle('pc');
+    } else {
+      setStyle('mobile');
     }
   };
 
   return (
     <>
-      <div onClick={() => onCameraClick()} className="hover:text-y-brown">
-        <FiCamera className="m-auto text-3xl py-[1px]" />
-        <div className="text-[8px]">이미지 검색</div>
-      </div>
+      {style === 'pc' ? (
+        <form className="hover:text-y-brown">
+          <label htmlFor="camera">
+            <FiCamera className="m-auto text-3xl py-[1px]" />
+            <div className="text-[8px]">이미지 검색</div>
+          </label>
+          <input
+            type="file"
+            id="camera"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+        </form>
+      ) : (
+        <div onClick={() => onCameraClick()} className="hover:text-y-brown">
+          <FiCamera className="m-auto text-3xl py-[1px]" />
+          <div className="text-[8px]">이미지 검색</div>
+        </div>
+      )}
       {showModal ? (
         <form className="fixed bottom-16 left-1/2 -ml-16 animate-upper">
           <div className="grid grid-cols-2 gap-2  text-y-brown ">
@@ -46,7 +102,7 @@ export default function CameraModal() {
                 accept="image/*"
                 capture="environment"
                 className="hidden"
-                onChange={imageUpload}
+                onChange={handleImageUpload}
               />
             </div>
 
@@ -60,7 +116,7 @@ export default function CameraModal() {
                 id="file"
                 accept="image/*"
                 className="hidden"
-                onChange={imageUpload}
+                onChange={handleImageUpload}
               />
             </div>
             <button

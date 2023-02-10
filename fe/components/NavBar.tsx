@@ -5,12 +5,6 @@ import { BiUser } from 'react-icons/bi';
 import { useState } from 'react';
 import CameraModal from './modals/CameraModal';
 export default function NavBar() {
-  const [navState, setNavState] = useState(0);
-
-  const onNavChange = (state: number): void => {
-    setNavState(state);
-  };
-
   return (
     <>
       <nav className="w-full m-auto fixed bottom-0 z-20  border-gray-200 select-none">
