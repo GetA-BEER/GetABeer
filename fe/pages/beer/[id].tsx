@@ -13,10 +13,11 @@ export default function Beer() {
       id: 1,
       star: 4.0,
       nickName: '유진님사진',
+      description: '대충 한줄 요약 멘트',
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
-      tags: ['맛 태그', '향 태그', '탄산', '색 태그'],
+      tags: ['맛 태그', '향 태그', '강 탄산', '색 태그'],
     },
     {
       id: 2,

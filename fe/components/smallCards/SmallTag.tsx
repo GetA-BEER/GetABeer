@@ -1,13 +1,13 @@
 export default function SmallTag(props: { tags: string[] }) {
   return (
-    <div>
+    <div className="flex flex-wrap h-fit mb-1">
       {props.tags.map((el, idx) => (
-        <span
+        <div
           key={idx}
-          className="px-1 py-[5px] rounded-md my-3 bg-y-gold text-white text-[8px] sm:text-xs lg:text-sm mr-0.5 font-light"
+          className="px-[2px] py-[1px] my-[1px] rounded-[4px]  bg-y-gold text-white text-[10px] mr-0.5 "
         >
           #{el}
-        </span>
+        </div>
       ))}
     </div>
   );

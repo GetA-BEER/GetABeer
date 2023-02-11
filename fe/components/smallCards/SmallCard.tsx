@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { noReview } from '@/atoms/noReview';
 import { NoReviewTypes } from '@/atoms/noReview';
-import SmallTag from '@/components/smallCards/smallTag';
+import SmallTag from '@/components/smallCards/SmallTag';
 
 export default function SmallCard(props: { cardProps: SmallCardInfo }) {
+  const MAX_LEN = 42;
   const [starScore, setStarScore] = useState<number | undefined>(
     props?.cardProps?.star
   );
@@ -47,14 +48,25 @@ export default function SmallCard(props: { cardProps: SmallCardInfo }) {
         </span>
       </div>
       {/* 태그, 설명 */}
-      <div className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
+      <div className="py-2 px-1 h-28 w-full line-clamp-3 border-y-2 border-gray-200 text-xs overflow-hidden relative">
         <SmallTag tags={props.cardProps.tags} />
         {props.cardProps.description === undefined ? (
-          <div className="text-y-gray text-[8px]">
+          <div className="text-y-gray ">
             {noReviewState[randomNum]?.contents}
           </div>
+        ) : props.cardProps?.description.length >= MAX_LEN ? (
+          <>
+            {/* 만약  MAX_LEN 보다 글자수가 많은 경우 더보기 보이기*/}
+            <div className="text-xs leading-5">
+              {props.cardProps.description}
+            </div>
+            <div className="absolute h-fit bottom-0 right-2 bg-white pl-1">
+              ...
+              <span className="text-y-gold ">더보기</span>
+            </div>
+          </>
         ) : (
-          <div className="text-[8px]">{props.cardProps.description}</div>
+          <div className="text-xs leading-5">{props.cardProps.description}</div>
         )}
       </div>
       {/* 날짜,코멘트수,엄지수 */}
