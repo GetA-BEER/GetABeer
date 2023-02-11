@@ -10,13 +10,30 @@ import Image from 'next/image';
 
 export default function SmallPairingCard(props: {
   pairingProps: PairingCardInfo;
+  idx: number;
 }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [randomNum, setRandomNum] = useState(0);
+  const [collisions, setCollisions] = useState<boolean>(false);
+
   useEffect(() => {
     let randomTmp: number = Math.floor(Math.random() * 3);
     setRandomNum(randomTmp);
   }, []);
+
+  useEffect(() => {
+    let parent = document.getElementById('pairingParents');
+    let imageChild = document.getElementById(`pairingImage${props.idx}`);
+    let deschild = document.getElementById(`pairingDescribe${props.idx}`);
+
+    if (parent !== null && deschild !== null && imageChild !== null) {
+      let parentHeight = parent.offsetHeight;
+      let tagChildHeight = imageChild.clientHeight;
+      let deschildHeight = deschild.clientHeight;
+      if (parentHeight <= tagChildHeight + deschildHeight) setCollisions(true);
+      console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
+    }
+  }, [collisions, props.idx]);
 
   return (
     <div className="w-full rounded-lg bg-white text-y-black drop-shadow-lg text-xs border">
@@ -31,31 +48,43 @@ export default function SmallPairingCard(props: {
         </span>
       </div>
       {/* 사진,설명 */}
-      <div className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
+      <div
+        className={`p-2 h-28 w-full border-y-2 border-gray-200 leading-5 relative ${
+          collisions ? 'overflow-hidden' : ''
+        }`}
+        id="pairingParents"
+      >
         {props.pairingProps.image === undefined ? (
-          <div className="text-y-gray">
-            {noReviewState[randomNum]?.contents}
-          </div>
+          <div id={`pairingImage${props.idx}`}></div>
         ) : (
           <>
             <Image
               src={props.pairingProps.image}
               alt="img"
-              width={50}
-              height={50}
+              width={77}
+              height={77}
               className="m-auto"
+              id={`pairingImage${props.idx}`}
             />
           </>
         )}
         {props.pairingProps.description === undefined ? (
-          <div className="text-y-gray">
+          <div className="text-y-gray" id={`pairingDescribe${props.idx}`}>
             {noReviewState[randomNum]?.contents}
           </div>
-        ) : (
+        ) : collisions ? (
           <>
-            {props.pairingProps.description}...
-            <span className="text-y-gold">더보기</span>
+            <div id={`pairingDescribe${props.idx}`}>
+              {props.pairingProps.description}
+            </div>
+            <div className="absolute -bottom-[0.5px] right-1 px-1 bg-white">
+              ...<span className="text-y-gold">더보기</span>
+            </div>
           </>
+        ) : (
+          <div id={`pairingDescribe${props.idx}`}>
+            {props.pairingProps.description}
+          </div>
         )}
       </div>
       {/* 날짜,코멘트수,엄지수 */}

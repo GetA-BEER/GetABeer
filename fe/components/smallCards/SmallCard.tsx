@@ -38,11 +38,11 @@ export default function SmallCard(props: {
     let deschild = document.getElementById(`overDescribe${props.idx}`);
 
     if (parent !== null && deschild !== null && tagChild !== null) {
-      let parentHeight = parent.clientHeight;
+      let parentHeight = parent.offsetHeight;
       let tagChildHeight = tagChild.clientHeight;
       let deschildHeight = deschild.clientHeight;
       if (parentHeight <= tagChildHeight + deschildHeight) setCollisions(true);
-      console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
+      // console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
     }
   }, [collisions, props.idx]);
 

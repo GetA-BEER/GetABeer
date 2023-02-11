@@ -21,9 +21,10 @@ export default function SmallCardController(props: {
 
   return (
     <div className="grid grid-cols-2 gap-3 px-3">
-      {smallPairingList?.map((pairingProps: PairingCardInfo) => (
+      {smallPairingList?.map((pairingProps: PairingCardInfo, idx: number) => (
         <SmallPairingCard
           pairingProps={pairingProps}
+          idx={idx}
           key={pairingProps.id.toString()}
         />
       ))}
