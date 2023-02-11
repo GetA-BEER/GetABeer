@@ -20,8 +20,12 @@ export default function SmallCardController(props: {
   );
   return (
     <div className="grid grid-cols-2 gap-3 px-3">
-      {cardPropsList?.map((cardProps: SmallCardInfo) => (
-        <SmallCard cardProps={cardProps} key={cardProps.id.toString()} />
+      {cardPropsList?.map((cardProps: SmallCardInfo, idx: number) => (
+        <SmallCard
+          cardProps={cardProps}
+          idx={idx}
+          key={cardProps.id.toString()}
+        />
       ))}
     </div>
   );

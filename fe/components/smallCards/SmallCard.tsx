@@ -9,13 +9,17 @@ import { noReview } from '@/atoms/noReview';
 import { NoReviewTypes } from '@/atoms/noReview';
 import SmallTag from '@/components/smallCards/SmallTag';
 
-export default function SmallCard(props: { cardProps: SmallCardInfo }) {
-  const MAX_LEN = 42;
+export default function SmallCard(props: {
+  cardProps: SmallCardInfo;
+  idx: number;
+}) {
+  const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [starScore, setStarScore] = useState<number | undefined>(
     props?.cardProps?.star
   );
-  const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
+  const [collisions, setCollisions] = useState<boolean>(false);
   const [randomNum, setRandomNum] = useState(0);
+
   useEffect(() => {
     let randomTmp: number = Math.floor(Math.random() * 3);
     setRandomNum(randomTmp);
@@ -27,6 +31,20 @@ export default function SmallCard(props: { cardProps: SmallCardInfo }) {
       setStarScore(0);
     }
   }, [starScore]);
+
+  useEffect(() => {
+    let parent = document.getElementById('overParents');
+    let tagChild = document.getElementById(`overTags${props.idx}`);
+    let deschild = document.getElementById(`overDescribe${props.idx}`);
+
+    if (parent !== null && deschild !== null && tagChild !== null) {
+      let parentHeight = parent.clientHeight;
+      let tagChildHeight = tagChild.clientHeight;
+      let deschildHeight = deschild.clientHeight;
+      if (parentHeight <= tagChildHeight + deschildHeight) setCollisions(true);
+      console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
+    }
+  }, [collisions, props.idx]);
 
   return (
     <div className="w-full rounded-lg bg-white text-y-black drop-shadow-lg text-xs border">
@@ -48,25 +66,38 @@ export default function SmallCard(props: { cardProps: SmallCardInfo }) {
         </span>
       </div>
       {/* 태그, 설명 */}
-      <div className="py-2 px-1 h-28 w-full line-clamp-3 border-y-2 border-gray-200 text-xs overflow-hidden relative">
-        <SmallTag tags={props.cardProps.tags} />
+      <div
+        className={`py-2 px-1 h-28 w-full border-y-2 text-xs relative ${
+          collisions ? 'overflow-hidden' : ''
+        }`}
+        id="overParents"
+      >
+        <div id={`overTags${props.idx}`}>
+          <SmallTag tags={props.cardProps.tags} />
+        </div>
         {props.cardProps.description === undefined ? (
           <div className="text-y-gray ">
             {noReviewState[randomNum]?.contents}
           </div>
-        ) : props.cardProps?.description.length >= MAX_LEN ? (
+        ) : collisions ? (
           <>
-            {/* 만약  MAX_LEN 보다 글자수가 많은 경우 더보기 보이기*/}
-            <div className="text-xs leading-5">
+            <div
+              className="text-xs leading-5 h-fit relative"
+              id={`overDescribe${props.idx}`}
+            >
               {props.cardProps.description}
             </div>
-            <div className="absolute h-fit bottom-0 right-2 bg-white pl-1">
-              ...
-              <span className="text-y-gold ">더보기</span>
+            <div className="absolute -bottom-[0.5px] right-1 px-1 bg-white">
+              ...<span className="text-y-gold">더보기</span>
             </div>
           </>
         ) : (
-          <div className="text-xs leading-5">{props.cardProps.description}</div>
+          <div
+            className="text-xs leading-5 h-fit"
+            id={`overDescribe${props.idx}`}
+          >
+            {props.cardProps.description}
+          </div>
         )}
       </div>
       {/* 날짜,코멘트수,엄지수 */}
