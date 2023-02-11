@@ -6,7 +6,7 @@ export interface NoReviewTypes {
 }
 
 export const noReview = atom<NoReviewTypes[]>({
-  key: 'noreview',
+  key: `noreview`,
   default: [
     {
       id: 0,

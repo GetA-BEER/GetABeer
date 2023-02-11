@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { noReview } from '@/atoms/noReview';
 import { NoReviewTypes } from '@/atoms/noReview';
+import SmallTag from '@/components/smallCards/smallTag';
 
 export default function SmallCard(props: { cardProps: SmallCardInfo }) {
   const [starScore, setStarScore] = useState<number | undefined>(
@@ -45,14 +46,15 @@ export default function SmallCard(props: { cardProps: SmallCardInfo }) {
           <BiUser className="ml-1 bg-y-brown text-white rounded-full w-4 h-4" />
         </span>
       </div>
-      {/* 설명 */}
+      {/* 태그, 설명 */}
       <div className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
+        <SmallTag tags={props.cardProps.tags} />
         {props.cardProps.description === undefined ? (
-          <div className="text-y-gray">
+          <div className="text-y-gray text-[8px]">
             {noReviewState[randomNum]?.contents}
           </div>
         ) : (
-          <>{props.cardProps.description}</>
+          <div className="text-[8px]">{props.cardProps.description}</div>
         )}
       </div>
       {/* 날짜,코멘트수,엄지수 */}

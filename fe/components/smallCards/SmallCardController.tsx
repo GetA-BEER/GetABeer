@@ -9,6 +9,7 @@ export interface SmallCardInfo {
   date: string;
   comments: number;
   thumbs: number;
+  tags: string[];
 }
 
 export default function SmallCardController(props: {

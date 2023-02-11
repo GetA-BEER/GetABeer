@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil';
 import { noReview } from '@/atoms/noReview';
 import { NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function SmallPairingCard(props: {
   pairingProps: PairingCardInfo;
@@ -29,8 +30,23 @@ export default function SmallPairingCard(props: {
           <BiUser className="ml-1 bg-y-brown text-white rounded-full w-4 h-4" />
         </span>
       </div>
-      {/* 설명 */}
+      {/* 사진,설명 */}
       <div className="p-2 h-28 overflow-hidden w-full border-y-2 border-gray-200 leading-6">
+        {props.pairingProps.image === undefined ? (
+          <div className="text-y-gray">
+            {noReviewState[randomNum]?.contents}
+          </div>
+        ) : (
+          <>
+            <Image
+              src={props.pairingProps.image}
+              alt="img"
+              width={50}
+              height={50}
+              className="m-auto"
+            />
+          </>
+        )}
         {props.pairingProps.description === undefined ? (
           <div className="text-y-gray">
             {noReviewState[randomNum]?.contents}

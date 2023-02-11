@@ -12,10 +12,11 @@ export default function Beer() {
     {
       id: 1,
       star: 4.0,
-      nickName: '유진님',
+      nickName: '유진님사진',
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
+      tags: ['맛 태그', '향 태그', '탄산', '색 태그'],
     },
     {
       id: 2,
@@ -26,6 +27,7 @@ export default function Beer() {
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
+      tags: ['맛 태그', '향 태그', '탄산', '색 태그'],
     },
   ];
   const pairProps = [
@@ -46,6 +48,7 @@ export default function Beer() {
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
     },
   ];
   const beerProps = [

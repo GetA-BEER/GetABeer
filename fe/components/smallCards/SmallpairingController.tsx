@@ -9,6 +9,7 @@ export interface PairingCardInfo {
   date: string;
   comments: number;
   thumbs: number;
+  image?: string;
 }
 
 export default function SmallCardController(props: {
