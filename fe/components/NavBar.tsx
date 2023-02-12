@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { AiOutlineTrophy, AiOutlineHome } from 'react-icons/ai';
-import { FiCamera, FiMapPin } from 'react-icons/fi';
+import { FiMapPin } from 'react-icons/fi';
 import { BiUser } from 'react-icons/bi';
-import { useState } from 'react';
-import CameraModal from './modals/CameraModal';
+import CameraModal from './modal/CameraModal';
 export default function NavBar() {
   return (
     <>

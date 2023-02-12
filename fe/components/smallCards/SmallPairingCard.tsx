@@ -57,16 +57,16 @@ export default function SmallPairingCard(props: {
         {props.pairingProps.image === undefined ? (
           <div id={`pairingImage${props.idx}`}></div>
         ) : (
-          <>
+          <div className="h-[77px] overflow-hidden m-auto">
             <Image
               src={props.pairingProps.image}
               alt="img"
-              width={77}
+              width={100}
               height={77}
               className="m-auto"
               id={`pairingImage${props.idx}`}
             />
-          </>
+          </div>
         )}
         {props.pairingProps.description === undefined ? (
           <div className="text-y-gray" id={`pairingDescribe${props.idx}`}>

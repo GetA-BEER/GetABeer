@@ -6,7 +6,7 @@ export default function PopularBeer(props: {
   idx: number;
 }) {
   return (
-    <div className="rounded-2xl w-full m-2 bg-white text-y-black drop-shadow-xl text-[5px] border hover:scale-105">
+    <div className="rounded-2xl w-full m-2 bg-white text-y-black drop-shadow-xl text-[5px] border hover:scale-105 overflow-hidden">
       <div
         className={`${
           props.idx % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'
