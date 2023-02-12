@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
 import imageCompression from 'browser-image-compression';
 import { useState } from 'react';
 
@@ -40,15 +40,89 @@ export default function ImageUpload() {
       }
     }
   }
+
+  // 파일 삭제
+  const handleDelete = (e: React.MouseEvent<HTMLElement>, idx: number) => {
+    e.preventDefault();
+    // const copyImg = uploadImg.slice();
+    const copyUrl = preImg.slice();
+    // copyImg.splice(idx, 1);
+    copyUrl.splice(idx, 1);
+    // setUploadImg(copyImg);
+    setPreImg(copyUrl);
+  };
+
+  // 썸네일 사진 선택
+  const selectThumnail = (idx: number) => {
+    // let copyImg = image.slice();
+    let copyUrl = preImg.slice();
+    // let selectImg = copyImg.splice(idx, 1);
+    let selectUrl = copyUrl.splice(idx, 1);
+    // setUploadImg([...selectImg, ...copyImg]);
+    setPreImg([...selectUrl, ...copyUrl]);
+  };
+
   return (
-    <div className="m-5">
+    <div className="m-2">
       <div className="mt-4 mb-2 text-base font-semibold">사진</div>
 
-      <div className="grid grid-cols-3 gap-2 h-[105px] md:h-64 sm:h-48">
+      <form className="grid grid-cols-3 gap-2 h-[105px] md:h-64 sm:h-48">
         {/* first Image */}
-        <div className="bg-y-cream flex justify-center items-center rounded-xl overflow-hidden ">
-          <form>
-            {preImg[0] === undefined ? (
+        <div className="bg-y-cream flex justify-center items-center rounded-xl overflow-hidden relative">
+          {preImg[0] === undefined ? (
+            <>
+              <label htmlFor="file">
+                <AiOutlinePlus className="w-10 h-10" />
+              </label>
+              <input
+                type="file"
+                id="file"
+                accept="image/*;camera"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+            </>
+          ) : (
+            <>
+              <Image src={preImg[0]} alt="bg" width={500} height={500} />
+              <span className="absolute bg-y-gold py-1 px-2 rounded-md text-xs left-1 top-1 text-white">
+                대표
+              </span>
+              <span
+                onClick={(e) => {
+                  handleDelete(e, 0);
+                }}
+                className="absolute right-1 top-1 text-y-gold bg-y-cream rounded-full"
+              >
+                <AiOutlineCloseCircle className="w-6 h-6" />
+              </span>
+            </>
+          )}
+        </div>
+        {/* second Image */}
+        {preImg[0] === undefined ? (
+          <div className="border-2 border-y-lightGray border-dashed flex justify-center items-center rounded-xl"></div>
+        ) : (
+          <div className="bg-y-cream flex justify-center items-center rounded-xl overflow-hidden relative">
+            {preImg[1] !== undefined ? (
+              <>
+                <Image
+                  src={preImg[1]}
+                  alt="bg"
+                  width={500}
+                  height={500}
+                  onClick={() => selectThumnail(1)}
+                />
+                <span
+                  onClick={(e) => {
+                    handleDelete(e, 1);
+                  }}
+                  className="absolute right-1 top-1 text-y-gold bg-y-cream rounded-full"
+                >
+                  <AiOutlineCloseCircle className="w-6 h-6" />
+                </span>
+              </>
+            ) : (
               <>
                 <label htmlFor="file">
                   <AiOutlinePlus className="w-10 h-10" />
@@ -61,34 +135,7 @@ export default function ImageUpload() {
                   onChange={handleImageUpload}
                 />
               </>
-            ) : (
-              <Image src={preImg[0]} alt="bg" width={500} height={500} />
             )}
-          </form>
-        </div>
-        {/* second Image */}
-        {preImg[0] === undefined ? (
-          <div className="border-2 border-y-lightGray border-dashed flex justify-center items-center rounded-xl"></div>
-        ) : (
-          <div className="bg-y-cream flex justify-center items-center rounded-xl overflow-hidden ">
-            <form>
-              {preImg[1] !== undefined ? (
-                <Image src={preImg[1]} alt="bg" width={500} height={500} />
-              ) : (
-                <>
-                  <label htmlFor="file">
-                    <AiOutlinePlus className="w-10 h-10" />
-                  </label>
-                  <input
-                    type="file"
-                    id="file"
-                    accept="image/*;camera"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </>
-              )}
-            </form>
           </div>
         )}
 
@@ -96,28 +143,42 @@ export default function ImageUpload() {
         {preImg[1] === undefined ? (
           <div className="border-2 border-y-lightGray border-dashed flex justify-center items-center rounded-xl"></div>
         ) : (
-          <div className="bg-y-cream flex justify-center items-center rounded-xl overflow-hidden ">
-            <form>
-              {preImg[2] !== undefined ? (
-                <Image src={preImg[2]} alt="bg" width={500} height={500} />
-              ) : (
-                <>
-                  <label htmlFor="file">
-                    <AiOutlinePlus className="w-10 h-10" />
-                  </label>
-                  <input
-                    type="file"
-                    id="file"
-                    accept="image/*;camera"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </>
-              )}
-            </form>
+          <div className="bg-y-cream flex justify-center items-center rounded-xl overflow-hidden relative">
+            {preImg[2] !== undefined ? (
+              <>
+                <Image
+                  src={preImg[2]}
+                  alt="bg"
+                  width={500}
+                  height={500}
+                  onClick={() => selectThumnail(2)}
+                />
+                <span
+                  onClick={(e) => {
+                    handleDelete(e, 2);
+                  }}
+                  className="absolute right-1 top-1 text-y-gold bg-y-cream rounded-full"
+                >
+                  <AiOutlineCloseCircle className="w-6 h-6" />
+                </span>
+              </>
+            ) : (
+              <>
+                <label htmlFor="file">
+                  <AiOutlinePlus className="w-10 h-10" />
+                </label>
+                <input
+                  type="file"
+                  id="file"
+                  accept="image/*;camera"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+              </>
+            )}
           </div>
         )}
-      </div>
+      </form>
     </div>
   );
 }
