@@ -112,8 +112,6 @@ export default function Beer() {
       </Head>
 
       <main className="m-auto h-screen max-w-4xl relative">
-        {/* <div className="bg-scroll h-full bg-opacity-50 bg-gradient-to-b from-[rgba(205,95,3)] via-[rgba(241,179,28,20)] to-transparent "></div> */}
-
         <Image
           className="w-full h-screen left-0 top-0 fixed -z-10"
           src="/images/background.png"
