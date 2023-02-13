@@ -5,8 +5,7 @@ import { HiTrash } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';
 import ImageCarouel from './ImageCarousel';
 import { useRecoilValue } from 'recoil';
-import { noReview } from '@/atoms/noReview';
-import { NoReviewTypes } from '@/atoms/noReview';
+import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
 
 export default function DetailCard(props: { pairingProps: PairingInfo }) {

@@ -4,9 +4,36 @@ import BigInput from '@/components/inputs/BigInput';
 import PairingBox from '@/components/selectBox/PairingBox';
 import ImageUpload from '../../components/postPairingPage/ImageUpload';
 import { useState } from 'react';
+import MiddleCard from '@/components/middleCards/MiddleCard';
+export interface MiddleCardInfo {
+  beerId: number;
+  thumbnail: string;
+  korName: string;
+  category: string[];
+  country: string;
+  abv: number;
+  ibu: number;
+  totalStarCount: number;
+  totalAverageStars: number;
+  beerTags: string[];
+}
+
+export const testBeer: MiddleCardInfo = {
+  beerId: 1,
+  thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
+  korName: '제주 슬라이스',
+  category: ['ALE', 'IPA'],
+  country: '한국',
+  abv: 4.5,
+  ibu: 28,
+  totalStarCount: 25,
+  totalAverageStars: 4.3,
+  beerTags: ['금색', '단맛', '과일향', '탄산 강'],
+};
 
 export default function PostPairing() {
   const [content, setContent] = useState('');
+
   return (
     <>
       <Head>
@@ -18,19 +45,20 @@ export default function PostPairing() {
 
       <main className="m-auto h-screen max-w-4xl ">
         <div className="p-5">
+          <MiddleCard cardProps={testBeer} />
           <div className="mt-6 mb-2 text-base font-semibold">
             페어링 카테고리
           </div>
           <PairingBox />
 
-        <div className="mt-6 mb-2 text-base font-semibold">설명</div>
-        <BigInput
-          placeholder="페어링을 추천하시는 이유를 적어주세요"
-          inputState={content}
-          setInputState={setContent}
-        />
-        <ImageUpload />
-
+          <div className="mt-6 mb-2 text-base font-semibold">설명</div>
+          <BigInput
+            placeholder="페어링을 추천하시는 이유를 적어주세요"
+            inputState={content}
+            setInputState={setContent}
+          />
+          <ImageUpload />
+        </div>
         <NavBar />
       </main>
     </>

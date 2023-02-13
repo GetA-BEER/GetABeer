@@ -4,8 +4,7 @@ import { PairingCardInfo } from './PairingCardController';
 import ProfileCard from './ProfileCard';
 import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
-import { noReview } from '@/atoms/noReview';
-import { NoReviewTypes } from '@/atoms/noReview';
+import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
 
 export default function PairingCard(props: {

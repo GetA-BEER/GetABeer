@@ -5,6 +5,7 @@ import SmallPairingController from '@/components/smallCards/SmallpairingControll
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
 import RatingTitle from '@/components/beerPage/RatingTitle';
 import PairingTitle from '@/components/beerPage/PairingTitle';
+import BeerDetailCard, { testBeer } from '@/components/beerPage/BeerDetailCard';
 import NavBar from '@/components/NavBar';
 
 export default function Beer() {
@@ -121,8 +122,8 @@ export default function Beer() {
           priority
         />
 
-        <div className="h-40 bg-white m-2 rounded-lg max-w-4xl">
-          제주슬라이스
+        <div className="m-3">
+          <BeerDetailCard cardProps={testBeer} />
         </div>
 
         <RatingTitle ratingCount={ratingCount} />

@@ -3,8 +3,7 @@ import { FaRegCommentDots } from 'react-icons/fa';
 import { FiThumbsUp } from 'react-icons/fi';
 import { PairingCardInfo } from './SmallpairingController';
 import { useRecoilValue } from 'recoil';
-import { noReview } from '@/atoms/noReview';
-import { NoReviewTypes } from '@/atoms/noReview';
+import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
