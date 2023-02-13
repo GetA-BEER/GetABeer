@@ -56,6 +56,26 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 	}
 
 	@Override
+	public PairingResponseDto.Detail findPairingDetailResponseDto(Long pairingId) {
+		var result = queryFactory
+			.select(Projections.fields(PairingResponseDto.Detail.class,
+				pairing.beer.id.as("beerId"),
+				pairing.id.as("pairingId"),
+				pairing.user.id.as("userId"),
+				pairing.user.nickname.as("nickname"),
+				pairing.content,
+				pairing.likeCount,
+				pairing.commentCount,
+				pairing.createdAt,
+				pairing.modifiedAt
+				)).from(pairing)
+			.where(pairing.id.eq(pairingId))
+			.fetchFirst();
+
+		return result;
+	}
+
+	@Override
 	public Page<PairingResponseDto.Total> findPairingTotalResponseOrderByRecent(Long beerId, Pageable pageable) {
 		var list = queryFactory
 			.select(Projections.fields(PairingResponseDto.Total.class,

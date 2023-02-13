@@ -109,7 +109,10 @@ public class PairingImageHandler implements ImageHandler {
 			String ext;
 			String contentType = image.getContentType();
 			if (ObjectUtils.isEmpty(contentType)) {
-				throw new BusinessLogicException(ExceptionCode.NOT_IMAGE_EXTENSION);
+				// throw new BusinessLogicException(ExceptionCode.NOT_IMAGE_EXTENSION);
+
+				/* 빈 파일이어도 1인 사이즈의 리스트가 들어오고 있기 때문에 예외 대신 result를 리턴, 만약에 이유를 찾으면 수정 예정 */
+				return result;
 			} else {
 				if (contentType.contains("image/jpeg")) {
 					ext = ".jpg";

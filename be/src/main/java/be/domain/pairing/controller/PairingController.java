@@ -41,7 +41,7 @@ public class PairingController {
 	/* 페어링 등록 */
 	@PostMapping
 	public ResponseEntity<PairingResponseDto.Detail> post(@RequestPart(name = "post") PairingRequestDto.Post post,
-		@RequestPart(name = "files") List<MultipartFile> files) throws IOException {
+		@RequestPart(name = "files", required = false) List<MultipartFile> files) throws IOException {
 		Pairing pairing = pairingService.create(mapper.pairingPostDtoToPairing(post),
 			files, post.getCategory(), post.getBeerId(), post.getUserId());
 
@@ -62,9 +62,9 @@ public class PairingController {
 	/* 특정 페어링 상세 조회 */
 	@GetMapping("/{pairingId}")
 	public ResponseEntity<PairingResponseDto.Detail> getPairing(@PathVariable @Positive Long pairingId) {
-		Pairing pairing = pairingService.getPairing(pairingId);
+		PairingResponseDto.Detail response = pairingService.getPairing(pairingId);
 
-		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
+		return ResponseEntity.ok(response);
 	}
 
 	/* 페어링 삭제 */

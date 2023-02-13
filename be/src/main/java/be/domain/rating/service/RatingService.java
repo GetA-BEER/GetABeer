@@ -17,6 +17,8 @@ import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.service.BeerTagService;
+import be.domain.like.repository.RatingLikeRepository;
+import be.domain.like.service.RatingLikeService;
 import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
@@ -40,6 +42,7 @@ public class RatingService {
 	private final BeerBeerTagQueryRepository beerBeerTagQueryRepository;
 	private final RatingTagRepository tagRepository;
 	private final UserService userService;
+	private final RatingLikeRepository ratingLikeRepository;
 
 	/* 맥주 평가 등록 */
 	@Transactional
@@ -115,6 +118,9 @@ public class RatingService {
 		response.addTag(getRatingTagList(ratingId));
 		response.addComment(ratingRepository.findRatingCommentResponse(ratingId));
 
+		User user = userService.getLoginUser();
+		response.addUserLike(getIsUserLikes(rating.getId(), user.getId()));
+
 		return response;
 	}
 
@@ -152,6 +158,8 @@ public class RatingService {
 
 		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
 
+		User user = userService.getLoginUser();
+		responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
 		return responses;
 	}
 
@@ -161,6 +169,9 @@ public class RatingService {
 			PageRequest.of(page - 1, size));
 
 		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
+
+		User user = userService.getLoginUser();
+		responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
 
 		return responses;
 	}
@@ -172,6 +183,8 @@ public class RatingService {
 
 		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
 
+		User user = userService.getLoginUser();
+		responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
 		return responses;
 	}
 
@@ -188,6 +201,17 @@ public class RatingService {
 		tag.add(ratingTag.getCarbonation());
 
 		return tag;
+	}
+
+	/* 추천 여부 가져오기 */
+	private Boolean getIsUserLikes(Long ratingId, Long userId) {
+		int userLikes = ratingLikeRepository.findRatingLikeUser(ratingId, userId);
+
+		if (userLikes != 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/* 존재하는 맥주 코멘트인지 확인 -> 존재하면 해당 맥주 코멘트 반환 */

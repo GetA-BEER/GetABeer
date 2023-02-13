@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
+import be.domain.like.entity.PairingLike;
+import be.domain.like.entity.RatingLike;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.enums.Age;
@@ -105,7 +107,6 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<Rating> ratingList;
 
-	/* 🤎회원 - 맥주 평가 일대다 연관관계 편의 메서드 */
 	public void addRatingList(Rating rating) {
 		ratingList.add(rating);
 
@@ -118,7 +119,6 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<RatingComment> ratingCommentList;
 
-	/* 💝 회원 - 맥주 평가 댓글 일대다 연관관계 */
 	public void addRatingCommentList(RatingComment ratingComment) {
 		ratingCommentList.add(ratingComment);
 
@@ -131,7 +131,6 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<Pairing> pairingList;
 
-	/* 🖤 회원 - 페어링 일대다 연관관계 편의 메서드 */
 	public void addPairingList(Pairing pairing) {
 		pairingList.add(pairing);
 
@@ -144,12 +143,35 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<PairingComment> pairingCommentList;
 
-	/* 💙회원 - 페어링 댓글 일대다 연관관계 편의 메서드 */
 	public void addPairingCommentList(PairingComment pairingComment) {
 		pairingCommentList.add(pairingComment);
 
 		if (pairingComment.getUser() != this) {
 			pairingComment.bndUser(this);
+		}
+	}
+
+	/* 📍 회원 - 평가 추천 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<RatingLike> ratingLikeList;
+
+	public void addRatingLikeList(RatingLike ratingLike) {
+		ratingLikeList.add(ratingLike);
+
+		if (ratingLike.getUser() != this) {
+			ratingLike.belongToUser(this);
+		}
+	}
+
+	/* 📍 회원 - 페어링 추천 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<PairingLike> pairingLikeList;
+
+	public void addPairingLikeList(PairingLike pairingLike) {
+		pairingLikeList.add(pairingLike);
+
+		if (pairingLike.getUser() != this) {
+			pairingLike.belongToUser(this);
 		}
 	}
 

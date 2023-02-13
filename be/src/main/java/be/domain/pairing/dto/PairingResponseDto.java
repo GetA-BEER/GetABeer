@@ -29,8 +29,17 @@ public class PairingResponseDto {
 		private PairingCategory category;
 		private Integer likeCount;
 		private Integer commentCount;
+		private Boolean isUserLikes;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
+
+		public void addCategory(PairingCategory category) {
+			this.category = category;
+		}
+
+		public void addUserLike(Boolean isUserLikes) {
+			this.isUserLikes = isUserLikes;
+		}
 	}
 
 	@Getter
@@ -49,6 +58,7 @@ public class PairingResponseDto {
 		private PairingCategory category;
 		private Integer likeCount;
 		private Integer commentCount;
+		private Boolean isUserLikes;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
@@ -58,6 +68,10 @@ public class PairingResponseDto {
 
 		public void addThumbnail(String thumbnail) {
 			this.thumbnail = thumbnail;
+		}
+
+		public void addUserLike(Boolean isUserLikes) {
+			this.isUserLikes = isUserLikes;
 		}
 	}
 }

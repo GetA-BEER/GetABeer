@@ -28,6 +28,7 @@ public class RatingResponseDto {
 		private Integer likeCount;
 		private Integer commentCount;
 		private List<RatingCommentDto.Response> ratingCommentList;
+		private Boolean isUserLikes;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
@@ -37,6 +38,10 @@ public class RatingResponseDto {
 
 		public void addComment(List<RatingCommentDto.Response> ratingCommentList) {
 			this.ratingCommentList = ratingCommentList;
+		}
+
+		public void addUserLike(Boolean isUserLikes) {
+			this.isUserLikes = isUserLikes;
 		}
 	}
 
@@ -56,11 +61,16 @@ public class RatingResponseDto {
 		private Double star;
 		private Integer likeCount;
 		private Integer commentCount;
+		private Boolean isUserLikes;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
 		public void addTag(List<BeerTagType> ratingTag) {
 			this.ratingTag = ratingTag;
+		}
+
+		public void addUserLike(Boolean isUserLikes) {
+			this.isUserLikes = isUserLikes;
 		}
 	}
 }
