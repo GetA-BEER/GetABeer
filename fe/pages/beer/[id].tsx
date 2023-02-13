@@ -12,20 +12,23 @@ export default function Beer() {
     {
       id: 1,
       star: 4.0,
-      nickName: '유진님',
+      nickName: '유진님사진',
+      description: '라마바사아자차가나사아자차가나나사아자차가나나',
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
+      tags: ['맛 태그', '향 태그', '강 탄산', '색 태그'],
     },
     {
       id: 2,
       star: 4.222,
       nickName: '테스트',
       description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+        '가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나나',
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
+      tags: ['맛 태그', '향 태그', '탄산', '색 태그'],
     },
   ];
   const pairProps = [
@@ -34,7 +37,7 @@ export default function Beer() {
       pairing: '튀김',
       nickName: '유진님',
       description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+        '펠롱은 반짝이라 의미제주 사투리 입니 의미의 제주 사투리 입니다,sss제주 사투리 입니다제주 사투리 입니다제주 사투리 입니다',
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
@@ -46,6 +49,7 @@ export default function Beer() {
       date: '2023.41.30',
       comments: 5,
       thumbs: 10,
+      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
     },
   ];
   const beerProps = [
@@ -108,8 +112,6 @@ export default function Beer() {
       </Head>
 
       <main className="m-auto h-screen max-w-4xl relative">
-        {/* <div className="bg-scroll h-full bg-opacity-50 bg-gradient-to-b from-[rgba(205,95,3)] via-[rgba(241,179,28,20)] to-transparent "></div> */}
-
         <Image
           className="w-full h-screen left-0 top-0 fixed -z-10"
           src="/images/background.png"

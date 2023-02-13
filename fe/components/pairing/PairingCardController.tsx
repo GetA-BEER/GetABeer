@@ -20,9 +20,10 @@ export default function PairingCardController(props: {
   );
   return (
     <>
-      {cardPropsList?.map((pairingCardProps: PairingCardInfo) => (
+      {cardPropsList?.map((pairingCardProps: PairingCardInfo, idx: number) => (
         <PairingCard
           pairingCardProps={pairingCardProps}
+          idx={idx}
           key={pairingCardProps.id.toString()}
         />
       ))}

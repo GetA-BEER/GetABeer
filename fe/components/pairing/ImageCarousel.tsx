@@ -44,8 +44,8 @@ export default function ImageCarouel(props: { imageProps: any }) {
                 className="w-4/5 m-auto"
                 src={imageList[0]?.image2}
                 alt="adv2"
-                width={300}
-                height={300}
+                width={250}
+                height={250}
               />
               <div className="absolute text-white left-20 bottom-10 text-2xl">
                 여기에 Get A Beer 두번째 광고가 들어갑니다
