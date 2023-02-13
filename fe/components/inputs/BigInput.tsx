@@ -1,12 +1,17 @@
-// import React from 'react';
 import { useState } from 'react';
 
 type InputProps = {
   placeholder: string;
+  inputState: string;
+  setInputState: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export default function BigInput({ placeholder }: InputProps) {
-  const [inputState, setInputState] = useState<string | undefined>();
+export default function BigInput({
+  placeholder,
+  inputState,
+  setInputState,
+}: InputProps) {
+  // const [inputState, setInputState] = useState<string | undefined>();
   const [inputLen, setInputLen] = useState<number | undefined>(0);
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputState(e.target.value);

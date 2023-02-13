@@ -1,6 +1,13 @@
-export default function ColorTag() {
-  const colorList = ['짚색', '금색', '갈색', '흑색'];
+type tagProps = {
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
+  checked: string | undefined;
+};
 
+export default function ColorTag({ setSelected, checked }: tagProps) {
+  const colorList = ['짚색', '금색', '갈색', '흑색'];
+  const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    setSelected((e.target as HTMLInputElement).value);
+  };
   return (
     <div className="my-4">
       <div className="grid grid-cols-4 mx-2 gap-2 items-center">
@@ -11,6 +18,8 @@ export default function ColorTag() {
               name="color"
               id={el}
               value={el}
+              defaultChecked={checked === el ? true : false}
+              onClick={onClick}
               className="peer hidden"
             />
             <label
