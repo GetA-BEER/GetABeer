@@ -28,7 +28,7 @@ export default function RatingCard(props: {
 }) {
   const router = useRouter();
   const editRating = () => {
-    router.push(`/editrating/${props.cardProps.ratingId}`);
+    router.replace(`/editrating/${props.cardProps.ratingId}`);
   };
 
   const deleteRating = () => {

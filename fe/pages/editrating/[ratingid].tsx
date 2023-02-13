@@ -9,7 +9,7 @@ import BigInput from '@/components/inputs/BigInput';
 import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
 import MiddleCard, { testBeer } from '@/components/middleCards/MiddleCard';
-import { TagMatcherToKor } from '@/utils/TagMatcher';
+import { TagMatcherToEng, TagMatcherToKor } from '@/utils/TagMatcher';
 import axios from 'axios';
 
 export default function EditRatingPage() {
@@ -45,15 +45,14 @@ export default function EditRatingPage() {
       userId: 1,
       star,
       content,
-      color,
-      flavor,
-      taste,
-      carbonation,
+      color: TagMatcherToEng(color),
+      flavor: TagMatcherToEng(flavor),
+      taste: TagMatcherToEng(taste),
+      carbonation: TagMatcherToEng(carbonation),
     };
-    console.log(reqBody);
-    // axios.patch(`/api/ratings/${ratingId}`, reqBody).then((res) => {
-    //   console.log(res);
-    // });
+    axios.patch(`/api/ratings/${ratingId}`, reqBody).then((res) => {
+      router.replace(`/rating/${ratingId}`);
+    });
   };
 
   return (
