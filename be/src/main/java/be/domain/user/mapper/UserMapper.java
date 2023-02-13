@@ -80,9 +80,9 @@ public interface UserMapper {
 		return responses.stream().map(
 			response -> UserBeerTag.builder()
 				.beerTag(BeerTag.builder()
-							 .id(response.getBeerTagId())
-							 .beerTagType(response.getBeerTagType())
-							 .build())
+					.id(response.getBeerTagId())
+					.beerTagType(response.getBeerTagType())
+					.build())
 				.build()).collect(Collectors.toList());
 	}
 
@@ -90,9 +90,9 @@ public interface UserMapper {
 		return responses.stream().map(
 			response -> UserBeerCategory.builder()
 				.beerCategory(BeerCategory.builder()
-								  .id(response.getBeerCategoryId())
-								  .beerCategoryType(response.getBeerCategoryType())
-								  .build())
+					.id(response.getBeerCategoryId())
+					.beerCategoryType(response.getBeerCategoryType())
+					.build())
 				.build()).collect(Collectors.toList());
 	}
 }

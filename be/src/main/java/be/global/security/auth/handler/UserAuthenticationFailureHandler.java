@@ -17,8 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 public class UserAuthenticationFailureHandler implements AuthenticationFailureHandler {
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request,
-										HttpServletResponse response,
-										AuthenticationException exception) throws IOException, ServletException {
+		HttpServletResponse response,
+		AuthenticationException exception) throws IOException, ServletException {
 		log.error("Authentication failed: {}", exception.getMessage());
 		ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
 	}

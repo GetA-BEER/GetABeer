@@ -34,10 +34,18 @@ spring:
     oauth2:
       client:
         registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+              - profile
           kakao:
-            client-id:
-            client-secret:
-            redirect-uri: "{baseUrl}/{action}/oauth2/{registrationId}"
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope:
@@ -46,13 +54,14 @@ spring:
               - profile_image
             client_name: Kakao
           naver:
-            client-id:
-            client-secret:
-            redirect-uri: "{baseUrl}/{action}/oauth2/{registrationId}"
+            client-id: ${NAVER_CLIENT_ID}
+            client-secret: ${NAVER_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
+            client-authentication-method: POST
             scope:
+              - email
               - name
-              - nickname
               - profile_image
             client-name: Naver
         provider:
@@ -69,19 +78,19 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: # ${SMTP_GOOGLE_ACCOUNT}
-    password: # ${SMTP_GOOGLE_PASSWORD}
+    username: ${SMTP_GOOGLE_ACCOUNT}
+    password: ${SMTP_GOOGLE_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-#            required: true
-#          socketFactory:
-#            class: javax.net.ssl.SSLSocketFactory
-#            fallback: false
-#            port: 587
+  #            required: true
+  #          socketFactory:
+  #            class: javax.net.ssl.SSLSocketFactory
+  #            fallback: false
+  #            port: 587
   servlet:
     multipart:
       max-file-size: 5MB
@@ -108,7 +117,7 @@ mail:
   address:
     admin: admin@gmail.com
 jwt:
-  secret-key:   ${JWT_SECRET_KEY}
+  secret-key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 120
   refresh-token-expiration-minutes: 1440
 app:
