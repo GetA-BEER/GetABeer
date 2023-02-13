@@ -14,6 +14,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import be.domain.user.repository.UserRepository;
+import be.domain.user.service.UserService;
 import be.global.security.auth.filter.JwtAuthenticationFilter;
 import be.global.security.auth.filter.JwtVerificationFilter;
 import be.global.security.auth.handler.UserAccessDeniedHandler;
@@ -21,6 +23,8 @@ import be.global.security.auth.handler.UserAuthenticationEntryPoint;
 import be.global.security.auth.handler.UserAuthenticationFailureHandler;
 import be.global.security.auth.handler.UserAuthenticationSuccessHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.oauth.handler.OAuth2SuccessHandler;
+import be.global.security.auth.oauth.service.CustomOAuth2UserService;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -28,8 +32,8 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
 	private final JwtTokenizer jwtTokenizer;
+	private final UserRepository userRepository;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
 
@@ -53,7 +57,13 @@ public class SecurityConfig {
 			.apply(new CustomFilterConfigurer())
 			.and()
 			.authorizeHttpRequests(authorize -> authorize
-				.anyRequest().permitAll());
+				.anyRequest().permitAll())
+			.oauth2Login(oauth2 -> {
+				oauth2.authorizationEndpoint().baseUri("/oauth2/authorization");
+				oauth2.successHandler(
+					new OAuth2SuccessHandler(redisTemplate, userRepository, jwtTokenizer, customAuthorityUtils, passwordEncoder()));
+				oauth2.userInfoEndpoint().userService(new CustomOAuth2UserService());
+			});
 
 		return http.build();
 	}
@@ -63,16 +73,15 @@ public class SecurityConfig {
 		public void configure(HttpSecurity builder) throws Exception {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,
-																						  jwtTokenizer,
-																						  redisTemplate);
+			JwtAuthenticationFilter jwtAuthenticationFilter =
+				new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, redisTemplate);
+
 			jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
-			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer,
-																					customAuthorityUtils,
-																					redisTemplate);
+			JwtVerificationFilter jwtVerificationFilter =
+				new JwtVerificationFilter(jwtTokenizer, customAuthorityUtils, redisTemplate);
 
 			builder
 				.addFilter(jwtAuthenticationFilter)

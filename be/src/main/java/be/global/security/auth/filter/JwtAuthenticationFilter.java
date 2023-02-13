@@ -1,9 +1,6 @@
 package be.global.security.auth.filter;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.FilterChain;
@@ -38,7 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	@SneakyThrows
 	public Authentication attemptAuthentication(HttpServletRequest request,
-												HttpServletResponse response) {
+		HttpServletResponse response) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		UserDto.Login login = objectMapper.readValue(request.getInputStream(), UserDto.Login.class);
@@ -51,14 +48,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request,
-											HttpServletResponse response,
-											FilterChain chain,
-											Authentication authResult) throws ServletException, IOException {
+		HttpServletResponse response,
+		FilterChain chain,
+		Authentication authResult) throws ServletException, IOException {
 
 		User user = (User)authResult.getPrincipal();
 
-		String accessToken = delegateAccessToken(user);
-		String refreshToken = delegateRefreshToken(user);
+		String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(), user.getProvider());
+		String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
 
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
 			redisTemplate.delete(user.getEmail());
@@ -81,25 +78,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 	}
 
-	private String delegateAccessToken(User user) {
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("email", user.getEmail());
-		claims.put("roles", user.getRoles());
-		claims.put("provider", user.getProvider());
-
-		String subject = user.getEmail();
-		Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-
-		String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-		return jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-	}
-
-	private String delegateRefreshToken(User user) {
-		String subject = user.getEmail();
-		Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-		String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-		return jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-	}
 }

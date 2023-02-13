@@ -2,8 +2,11 @@ package be.domain.pairing.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.entity.PairingComment;
@@ -84,5 +87,23 @@ public interface PairingMapper {
 		}
 
 		return result;
+	}
+
+	default Page<PairingResponseDto.Total> pairingToPairingResponse(List<Pairing> pairings) {
+		return new PageImpl<>(pairings.stream()
+			.map(pairing ->
+				new PairingResponseDto.Total(
+					pairing.getBeer().getId(),
+					pairing.getId(),
+					pairing.getUser().getId(),
+					pairing.getUser().getNickname(),
+					pairing.getContent(),
+					pairing.getPairingImageList().get(0).getImageUrl(),
+					pairing.getPairingCategory(),
+					pairing.getLikeCount(),
+					pairing.getCommentCount(),
+					pairing.getCreatedAt(),
+					pairing.getModifiedAt())
+			).collect(Collectors.toList()));
 	}
 }

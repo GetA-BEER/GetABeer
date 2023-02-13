@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import be.domain.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -39,9 +42,9 @@ public class JwtTokenizer {
 	}
 
 	public String generateAccessToken(Map<String, Object> claims,
-									  String subject,
-									  Date expiration,
-									  String base64EncodedSecretKey) {
+		String subject,
+		Date expiration,
+		String base64EncodedSecretKey) {
 
 		Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
@@ -55,8 +58,8 @@ public class JwtTokenizer {
 	}
 
 	public String generateRefreshToken(String subject,
-									   Date expiration,
-									   String base64EncodedSecretKey) {
+		Date expiration,
+		String base64EncodedSecretKey) {
 
 		Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
@@ -105,5 +108,25 @@ public class JwtTokenizer {
 		String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
 
 		return getClaims(jws, base64EncodedSecretKey).getBody();
+	}
+
+	public String delegateAccessToken(String email, List<String> authorities, String provider) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("email", email);
+		claims.put("roles", authorities);
+		claims.put("provider", provider);
+
+		Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
+
+		String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+		return generateAccessToken(claims, email, expiration, base64EncodedSecretKey);
+	}
+
+	public String delegateRefreshToken(String email) {
+		Date expiration = getTokenExpiration(getRefreshTokenExpirationMinutes());
+		String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+		return generateRefreshToken(email, expiration, base64EncodedSecretKey);
 	}
 }

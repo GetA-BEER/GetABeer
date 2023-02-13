@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,10 @@ import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.service.BeerTagService;
+import be.domain.pairing.entity.Pairing;
+import be.domain.pairing.repository.PairingRepository;
+import be.domain.rating.entity.Rating;
+import be.domain.rating.repository.RatingRepository;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.UserBeerCategory;
@@ -40,6 +46,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+	private final PasswordEncoder passwordEncoder;
+	private final CustomAuthorityUtils authorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
 	private final UserRepository userRepository;
 	private final BeerTagService beerTagService;
 	private final BeerCategoryService beerCategoryService;
@@ -47,9 +56,8 @@ public class UserService {
 	private final UserBeerTagQRepository userBeerTagQRepository;
 	private final UserBeerCategoryRepository userBeerCategoryRepository;
 	private final UserBeerCategoryQRepository userBeerCategoryQRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final CustomAuthorityUtils authorityUtils;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RatingRepository ratingRepository;
+	private final PairingRepository pairingRepository;
 	private final EntityManager em;
 
 	/* 유저 회원가입 */
@@ -69,7 +77,7 @@ public class UserService {
 			.password(passwordEncoder.encode(user.getPassword()))
 			.build();
 
-		saved.randomProfileImage();
+		saved.randomProfileImage(user.getImageUrl());
 
 		redisTemplate.delete(user.getEmail());
 
@@ -108,9 +116,9 @@ public class UserService {
 		}
 
 		user.edit(edit.getImageUrl(),
-				  edit.getNickname(),
-				  edit.getGender(),
-				  edit.getAge());
+			edit.getNickname(),
+			edit.getGender(),
+			edit.getAge());
 		em.flush();
 
 		return userRepository.findById(user.getId()).orElseThrow();
@@ -204,18 +212,20 @@ public class UserService {
 	public void logout(HttpServletRequest request, String email) {
 		redisTemplate.opsForValue()
 			.set(request.getHeader("Authorization"),
-				 "logout",
-				 30 * 60 * 1000L,
-				 TimeUnit.MILLISECONDS);
+				"logout",
+				30 * 60 * 1000L,
+				TimeUnit.MILLISECONDS);
 		redisTemplate.delete(email);
 	}
 
 	/* 이미 가입한 이메일인지 확인 */
-	private void verifyExistEmail(String email) {
+	public boolean verifyExistEmail(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
 		}
+
+		return true;
 	}
 
 	/* 존재하는 유저인지 확인 및 ID 반환*/
@@ -243,7 +253,6 @@ public class UserService {
 
 	/* set UserBeerTags */
 	private void setUserBeerTags(User post, User user) {
-
 		if (user.getUserBeerTags() != null) {
 			userBeerTagQRepository.delete(user.getId());
 		}
@@ -261,7 +270,6 @@ public class UserService {
 
 	/* set BeerCategories */
 	private void setUserBeerCategories(User post, User user) {
-
 		if (user.getUserBeerCategories() != null) {
 			userBeerCategoryQRepository.delete(user.getId());
 		}
@@ -275,5 +283,30 @@ public class UserService {
 				.build();
 			userBeerCategoryRepository.save(saved);
 		});
+	}
+
+	/**
+	 * 마이페이지
+	 */
+
+	/* 나의 평가 */
+	public Page<Rating> getUserRating(int page) {
+		User user = getLoginUser();
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return ratingRepository.findRatingByUser(user, pageRequest);
+	}
+
+	/* 나의 코멘트 */
+	public void getUserComment() {
+
+	}
+
+	/* 나의 페어링 */
+	public Page<Pairing> getUserPairing(int page) {
+		User user = getLoginUser();
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return pairingRepository.findPairingByUser(user, pageRequest);
 	}
 }

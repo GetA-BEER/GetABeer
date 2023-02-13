@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 import be.domain.comment.dto.RatingCommentDto;
 import be.domain.rating.dto.RatingResponseDto;
+import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
+import be.domain.user.entity.User;
 
 public interface RatingCustomRepository {
 	RatingResponseDto.Detail findDetailRatingResponse(Long ratingId);
@@ -21,4 +23,6 @@ public interface RatingCustomRepository {
 	Page<RatingResponseDto.Total> findRatingTotalResponseOrderByLikes(Long beerId, Pageable pageable);
 
 	Page<RatingResponseDto.Total> findRatingTotalResponseOrderByComments(Long beerId, Pageable pageable);
+
+	Page<Rating> findRatingByUser(User user, Pageable pageable);
 }

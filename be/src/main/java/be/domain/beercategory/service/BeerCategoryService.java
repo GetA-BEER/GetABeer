@@ -19,4 +19,9 @@ public class BeerCategoryService {
 		return beerCategoryRepository.findBeerCategoryByBeerCategoryType(beerCategoryType)
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BEER_CATEGORY_NOT_FOUND));
 	}
+
+	public BeerCategory findVerifiedBeerCategoryById(Long beerCategoryId) {
+		return beerCategoryRepository.findById(beerCategoryId)
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BEER_CATEGORY_NOT_FOUND));
+	}
 }
