@@ -43,7 +43,7 @@ export default function PostPairing() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
 
-      <main className="m-auto h-screen max-w-4xl ">
+      <main className="m-auto h-screen max-w-4xl">
         <div className="p-5">
           <MiddleCard cardProps={testBeer} />
           <div className="mt-6 mb-2 text-base font-semibold">

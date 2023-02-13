@@ -6,8 +6,10 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
 import { useState } from 'react';
 
-export default function ImageCarousel(props: { imageProps: any }) {
-  const [imageList, setImageList] = useState(props?.imageProps);
+export default function PairingImageCarousel() {
+  // const [imageList, setImageList] = useState(imageProps?.imageProps);
+  console.log(11111111111111111);
+  // console.log('imageList', imageList);
   return (
     <Swiper
       pagination={true}
@@ -16,7 +18,8 @@ export default function ImageCarousel(props: { imageProps: any }) {
       modules={[Pagination, Navigation]}
       className="mySwiper"
     >
-      {imageList === undefined ? (
+      rrrrrrrrrrrrrr
+      {/* {imageList === undefined ? (
         <></>
       ) : (
         <>
@@ -69,7 +72,7 @@ export default function ImageCarousel(props: { imageProps: any }) {
             </SwiperSlide>
           )}
         </>
-      )}
+      )} */}
     </Swiper>
   );
 }

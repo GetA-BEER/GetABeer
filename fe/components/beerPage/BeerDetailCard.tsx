@@ -66,9 +66,13 @@ export default function BeerDetailCard({ cardProps }: any) {
                 );
               })}
             </span>
-            <span> / {cardProps?.beerDetailsBasic.country} </span>
-            <span>{cardProps?.beerDetailsBasic.abv}%</span>
-            <span> / {cardProps?.beerDetailsBasic.ibu} IBU</span>
+            <span className="mx-[1px]">
+              / {cardProps?.beerDetailsBasic.country}
+            </span>
+            <span className="mx-[1px]">
+              {cardProps?.beerDetailsBasic.abv}% /
+            </span>
+            <span>{cardProps?.beerDetailsBasic.ibu} IBU</span>
           </div>
           <div className="my-1 flex items-end">
             <StarScore score={cardProps?.beerDetailsStars.totalAverageStars} />

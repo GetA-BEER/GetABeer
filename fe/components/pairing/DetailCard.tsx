@@ -1,14 +1,61 @@
 import { FiThumbsUp } from 'react-icons/fi';
-import { PairingInfo } from '@/pages/pairing/[id]';
+// import { PairingInfo } from '@/pages/pairing/[id]';
 import { MdModeEdit } from 'react-icons/md';
 import { HiTrash } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';
-import ImageCarouel from './ImageCarousel';
 import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
+import PairingImageCarousel from '@/components/pairing/PairingImageCarousel';
 
-export default function DetailCard(props: { pairingProps: PairingInfo }) {
+export default function DetailCard(props: { pairingProps: any }) {
+  // const pairingProps: any = {
+  //   beerId: 1,
+  //   pairingId: 1,
+  //   userId: 1,
+  //   nickname: '닉네임1',
+  //   content: '페어링 안내',
+  //   imageList: [
+  //     {
+  //       pairingImageId: 1,
+  //       imageUrl:
+  //         'https://getabeer.s3.ap-northeast-2.amazonaws.com/image/2023-02-09-13-57-53-233/pairing_images_1_1.png',
+  //       fileName: 'image/2023-02-09-13-57-53-233/pairing_images_1_1.png',
+  //     },
+  //     {
+  //       pairingImageId: 2,
+  //       imageUrl:
+  //         'https://getabeer.s3.ap-northeast-2.amazonaws.com/image/2023-02-09-13-57-53-713/pairing_images_1_1.png',
+  //       fileName: 'image/2023-02-09-13-57-53-713/pairing_images_1_1.png',
+  //     },
+  //   ],
+  //   commentList: [
+  //     {
+  //       pairingId: 1,
+  //       pairingCommentId: 1,
+  //       userId: 1,
+  //       nickname: '닉네임1',
+  //       content: '페어링 댓글',
+  //       createdAt: '2023-02-09T13:58:20.330872',
+  //       modifiedAt: '2023-02-09T13:58:20.330872',
+  //     },
+  //     {
+  //       pairingId: 1,
+  //       pairingCommentId: 2,
+  //       userId: 1,
+  //       nickname: '닉네임1',
+  //       content: '페어링 댓글',
+  //       createdAt: '2023-02-09T13:58:23.619436',
+  //       modifiedAt: '2023-02-09T13:58:23.619436',
+  //     },
+  //   ],
+  //   category: 'GRILL',
+  //   likeCount: 0,
+  //   commentCount: 2,
+  //   createdAt: '2023-02-09T13:57:53.875197',
+  //   modifiedAt: '2023-02-09T13:58:23.621731',
+  // };
+
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [randomNum, setRandomNum] = useState(0);
   useEffect(() => {
@@ -35,18 +82,18 @@ export default function DetailCard(props: { pairingProps: PairingInfo }) {
           {props?.pairingProps?.image === undefined ? (
             <></>
           ) : (
-            <ImageCarouel imageProps={props?.pairingProps?.image} />
+            <PairingImageCarousel />
           )}
           <div className="p-2 h-fit overflow-hidden w-full leading-6">
             <div className="w-fit px-2 py-[2px] text-xs rounded-md text-white bg-y-gold">
               {props.pairingProps.category}
             </div>
-            {props.pairingProps.description === undefined ? (
+            {props.pairingProps.content === undefined ? (
               <div className="text-y-gray">
                 {noReviewState[randomNum]?.contents}
               </div>
             ) : (
-              <>{props.pairingProps.description}</>
+              <>{props.pairingProps.content}</>
             )}
           </div>
         </div>
