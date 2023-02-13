@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
+import be.domain.like.repository.PairingLikeRepository;
 import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
@@ -35,6 +36,7 @@ public class PairingService {
 	private final BeerService beerService;
 	private final PairingImageHandler pairingImageHandler;
 	private final UserService userService;
+	private final PairingLikeRepository pairingLikeRepository;
 
 	/* 페어링 등록 */
 	@Transactional
@@ -93,10 +95,25 @@ public class PairingService {
 		return findPairing;
 	}
 
-	/* 특정 페어링 상세 조회 */
-	public Pairing getPairing(Long pairingId) {
+	/* 특정 페어링 상세 조회 : 평가 조회 */
+	public Pairing findPairing(Long pairingId) {
 
 		return findVerifiedPairing(pairingId);
+	}
+
+	/* 특정 페어링 상세 조회 : 응답 값 */
+	public PairingResponseDto.Detail getPairing(Long pairingId) {
+
+		/* 존재하는 페어링인지 확인 */
+		Pairing pairing = findVerifiedPairing(pairingId);
+
+		PairingResponseDto.Detail response = pairingRepository.findPairingDetailResponseDto(pairing.getId());
+		User user = userService.getLoginUser();
+
+		response.addCategory(findCategory(pairing.getId()));
+		response.addUserLike(getIsUserLikes(pairingId, user.getId()));
+
+		return response;
 	}
 
 	/* 페어링 삭제 */
@@ -113,7 +130,10 @@ public class PairingService {
 			pairingRepository.findPairingTotalResponseOrderByRecent(beerId, PageRequest.of(page - 1, size));
 
 		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
-		responses.forEach(pairing -> pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
+		// responses.forEach(pairing -> pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
+
+		User user = userService.getLoginUser();
+		responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
 
 		return responses;
 	}
@@ -124,7 +144,10 @@ public class PairingService {
 			pairingRepository.findPairingTotalResponseOrderByLikes(beerId, PageRequest.of(page - 1, size));
 
 		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
-		responses.forEach(pairing -> pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
+		// responses.forEach(pairing -> pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
+
+		User user = userService.getLoginUser();
+		responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
 
 		return responses;
 	}
@@ -135,7 +158,10 @@ public class PairingService {
 			pairingRepository.findPairingTotalResponseOrderByComments(beerId, PageRequest.of(page - 1, size));
 
 		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
-		responses.forEach(pairing -> pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
+		// responses.forEach(pairing -> pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
+
+		User user = userService.getLoginUser();
+		responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
 
 		return responses;
 	}
@@ -152,6 +178,16 @@ public class PairingService {
 		Pairing pairing = findVerifiedPairing(pairingId);
 
 		return pairing.getPairingCategory();
+	}
+
+	private Boolean getIsUserLikes(Long pairingId, Long userId) {
+		int userLikes = pairingLikeRepository.findPairingLikeUser(pairingId, userId);
+
+		if (userLikes != 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/* 존재하는 페어링인지 확인 -> 존재하면 해당 페어링 반환 */
