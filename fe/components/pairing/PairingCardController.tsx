@@ -21,7 +21,7 @@ export default function PairingCardController(props: {
   );
   return (
     <>
-      {cardPropsList.map((pairingCardProps: any) => (
+      {cardPropsList?.map((pairingCardProps: any) => (
         <Link
           href={`/pairing/${pairingCardProps.pairingId}`}
           key={pairingCardProps.pairingId}

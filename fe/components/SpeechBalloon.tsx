@@ -8,12 +8,12 @@ export default function SpeechBalloon({ props }: any) {
         <div className="flex">
           <BiUser className=" bg-y-brown text-white rounded-full w-10 h-10 ml-1" />
           <div className="flex flex-col ml-2">
-            <span>{props.nickName}</span>
-            <span className="text-xs text-y-gray">{props.date}</span>
+            <span>{props.nickname}</span>
+            <span className="text-xs text-y-gray">{props.createdAt}</span>
           </div>
         </div>
         <div className="m-3 mt-5 text-sm font-light leading-6">
-          {props.ment}
+          {props.content}
         </div>
       </div>
     </div>
