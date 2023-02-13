@@ -14,26 +14,26 @@ import lombok.RequiredArgsConstructor;
 public class BeerDetailsStatistics {
 
 	@ColumnDefault("0")
-	private Long dailyViewCount;
+	private Integer statViewCount;
 	@ColumnDefault("0")
-	private Long dailyRatingCount;
+	private Integer statRatingCount;
 
 	@Builder
-	public BeerDetailsStatistics(Long dailyViewCount, Long dailyRatingCount) {
-		this.dailyViewCount = dailyViewCount;
-		this.dailyRatingCount = dailyRatingCount;
+	public BeerDetailsStatistics(Integer statViewCount, Integer statRatingCount) {
+		this.statViewCount = statViewCount;
+		this.statRatingCount = statRatingCount;
 	}
 
-	public void addDailyViewCount() {
-		this.dailyViewCount++;
+	public void addStatViewCount() {
+		this.statViewCount++;
 	}
 
-	public void addDailyRatingCount() {
-		this.dailyRatingCount++;
+	public void addStatRatingCount() {
+		this.statRatingCount++;
 	}
 
 	public void resetStatistic() {
-		this.dailyViewCount = 0L;
-		this.dailyRatingCount = 0L;
+		this.statViewCount = 0;
+		this.statRatingCount = 0;
 	}
 }

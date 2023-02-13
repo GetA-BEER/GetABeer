@@ -25,6 +25,7 @@ import be.domain.beer.repository.MonthlyBeerRepository;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.rating.entity.Rating;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Role;
 import be.domain.user.service.UserService;
@@ -88,13 +89,13 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional
 	public void deleteBeer(Long beerId) {
 
-		User loginUser = userService.getLoginUser();
-
-		if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		} else {
-			beerRepository.deleteById(beerId);
-		}
+		// User loginUser = userService.getLoginUser();
+		//
+		// if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
+		// 	throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		// } else {
+		beerRepository.deleteById(beerId);
+		// }
 	}
 
 	//    public Beer isWishListedBeer(Beer beer, User user){
@@ -131,9 +132,7 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional
 	public Beer getBeer(Long beerId) {
 
-		Beer findBeer = findVerifiedBeer(beerId);
-
-		return findBeer;
+		return findVerifiedBeer(beerId);
 	}
 
 	@Override
@@ -141,6 +140,12 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional(readOnly = true)
 	public List<MonthlyBeer> findMonthlyBeers() {
 		return monthlyBeerQueryRepository.findMonthlyBeer();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Rating findBestRating(Beer beer) {
+		return beerQueryRepository.findBestRating(beer);
 	}
 
 	@Override

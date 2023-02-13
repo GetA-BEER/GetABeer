@@ -2,6 +2,7 @@ package be.global.statistics.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,13 +11,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 import org.springframework.data.annotation.CreatedDate;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.BeerDetailsTopTags;
+import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,26 +31,26 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerStatistics {
+public class BeerStatistics extends BaseTimeEntity {
 	@Id
 	@Column(name = "beer_statistics_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@CreatedDate
 	private LocalDateTime createdAt;
-	private LocalDate date;
+	private Integer week;
 	private Long beerId;
 	private String korName;
 	private String category1;
 	private String category2;
 	private BeerDetailsStars beerDetailsStars;
 	private BeerDetailsTopTags beerDetailsTopTags;
-	private Long viewCount;
-	private Long ratingCount;
+	private Integer viewCount;
+	private Integer ratingCount;
 
 	public void create(Beer beer) {
 		this.createdAt = LocalDateTime.now();
-		this.date = LocalDate.now().minusDays(1);
+		this.week = LocalDate.now().minusWeeks(1).get(WeekFields.ISO.weekOfYear());
 		this.beerId = beer.getId();
 		this.korName = beer.getBeerDetailsBasic().getKorName();
 
@@ -65,7 +66,7 @@ public class BeerStatistics {
 		}
 		this.beerDetailsStars = beer.getBeerDetailsStars();
 		this.beerDetailsTopTags = beer.getBeerDetailsTopTags();
-		this.viewCount = beer.getBeerDetailsStatistics().getDailyViewCount();
-		this.ratingCount = beer.getBeerDetailsStatistics().getDailyRatingCount();
+		this.viewCount = beer.getBeerDetailsStatistics().getStatViewCount();
+		this.ratingCount = beer.getBeerDetailsStatistics().getStatRatingCount();
 	}
 }

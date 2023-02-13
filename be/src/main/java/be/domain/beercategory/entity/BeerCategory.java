@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -27,6 +30,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
+@DynamicInsert
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BeerCategory implements Serializable {
@@ -39,6 +43,8 @@ public class BeerCategory implements Serializable {
 	private Long id;
 	@Enumerated(EnumType.STRING)
 	private BeerCategoryType beerCategoryType;
+	@ColumnDefault("0")
+	private Integer statCount;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "beerCategory")

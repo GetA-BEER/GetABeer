@@ -31,14 +31,14 @@ public class PairingCategoryStatistics {
 	private Long id;
 	@CreatedDate
 	private LocalDateTime createdAt;
-	private LocalDate date;
-	private String fried;
-	private String grill;
-	private String stir;
-	private String fresh;
-	private String dry;
-	private String snack;
-	private String soup;
-	private String etc;
+	private Integer week;
+	private Integer fried;
+	private Integer grill;
+	private Integer stir;
+	private Integer fresh;
+	private Integer dry;
+	private Integer snack;
+	private Integer soup;
+	private Integer etc;
 
 }

@@ -101,9 +101,9 @@ public class Init {
 
 			BeerDetailsStars beerDetailsStars =
 				BeerDetailsStars.builder()
-					.totalAverageStars((double)(int)((Math.random() * 5) * 10) / 10)
-					.femaleAverageStars((double)(int)((Math.random() * 5) * 10) / 10)
-					.maleAverageStars((double)(int)((Math.random() * 5) * 10) / 10)
+					.totalAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
+					.femaleAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
+					.maleAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
 					.build();
 
 			beerController.postBeer(postBeer);

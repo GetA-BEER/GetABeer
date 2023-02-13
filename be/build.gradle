@@ -39,7 +39,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // OAuth 2.0
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // OAuth 2.0
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-aop' // Spring AOP
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // View Template, Image Download
@@ -51,6 +51,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail' // Email 전송
     implementation 'com.google.code.gson:gson' // Serialization, Deserialization
     //    ------------------------------ DATA COLLECTING AND ANALYSIS---------------------------------
+//    implementation 'org.springframework.data:spring-data-elasticsearch:4.2.2' // Elasticsearch
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.6.2' // Elasticsearch
 //    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // Prometheus
@@ -73,8 +74,8 @@ dependencies {
     //    --------------------------------------------------------------------------------------------
     implementation "com.h2database:h2" // h2
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
-	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2' // 내장 Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
+    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2' // 내장 Redis
 //    runtimeOnly 'mysql:mysql-connector-java' // MySQL
     //    --------------------------------------------------------------------------------------------
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2' // AWS S3 이미지 업로드

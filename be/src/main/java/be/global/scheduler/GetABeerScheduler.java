@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BeerScheduler {
+public class GetABeerScheduler {
 
 	private final BeerService beerService;
 	private final StatisticsService statisticsService;
@@ -25,10 +25,13 @@ public class BeerScheduler {
 	}
 
 	/*
-	 * 매일 00시 10분에 전날 맥주 통계자료 생성
+	 * 매주 월요일 00시 10분에 직전 주간 통계자료 생성
 	 */
-	@Scheduled(cron = "0 10 0 * * *")
-	public void createDailyBeerStatistics() {
+	@Scheduled(cron = "0 10 0 * * MON")
+	public void createBeerStatistics() {
 		statisticsService.createBeerStatistics();
+		statisticsService.createBeerCategoryStatistics();
+		statisticsService.createBeerTagStatistics();
+		statisticsService.createPairingCategoryStatistics();
 	}
 }

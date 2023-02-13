@@ -39,7 +39,7 @@ public class BeerTag implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private BeerTagType beerTagType;
 	@ColumnDefault("0")
-	private long dailyCount;
+	private Integer statCount;
 
 	@OneToMany(mappedBy = "beerTag")
 	private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
@@ -55,14 +55,14 @@ public class BeerTag implements Serializable {
 	}
 
 	public void addDailyCount() {
-		this.dailyCount++;
+		this.statCount++;
 	}
 
 	public void subtractDailyCount() {
-		if (this.dailyCount != 0L) {
-			this.dailyCount--;
+		if (this.statCount != 0) {
+			this.statCount--;
 		} else {
-			this.dailyCount = 0L;
+			this.statCount = 0;
 		}
 	}
 

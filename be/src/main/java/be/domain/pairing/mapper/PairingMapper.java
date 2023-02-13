@@ -30,6 +30,7 @@ public interface PairingMapper {
 		PairingResponseDto.Detail response = PairingResponseDto.Detail.builder()
 			.beerId(beerId)
 			.pairingId(pairing.getId())
+			.userId(pairing.getUser().getId())
 			.nickname(pairing.getUser().getNickname())
 			.content(pairing.getContent())
 			.imageList(getPairingImageList(pairing.getPairingImageList()))
@@ -55,7 +56,7 @@ public interface PairingMapper {
 			PairingImageDto.Response response = PairingImageDto.Response.builder()
 				.pairingImageId(pairingImages.get(i).getId())
 				.imageUrl(pairingImages.get(i).getImageUrl())
-				// .fileName(pairingImages.get(i).getFileName())
+				.fileName(pairingImages.get(i).getFileName())
 				.build();
 
 			result.add(response);
@@ -94,6 +95,7 @@ public interface PairingMapper {
 				new PairingResponseDto.Total(
 					pairing.getBeer().getId(),
 					pairing.getId(),
+					pairing.getUser().getId(),
 					pairing.getUser().getNickname(),
 					pairing.getContent(),
 					pairing.getPairingImageList().get(0).getImageUrl(),
