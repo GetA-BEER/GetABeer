@@ -1,5 +1,6 @@
 package be.domain.like.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,6 +26,7 @@ import lombok.NoArgsConstructor;
 public class RatingLike {
 
 	@Id
+	@Column(name = "rating_like_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

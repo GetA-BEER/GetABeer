@@ -151,6 +151,7 @@ public class User {
 	}
 
 	/* 📍 회원 - 평가 추천 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<RatingLike> ratingLikeList;
 
 	public void addRatingLikeList(RatingLike ratingLike) {
@@ -162,6 +163,7 @@ public class User {
 	}
 
 	/* 📍 회원 - 페어링 추천 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<PairingLike> pairingLikeList;
 
 	public void addPairingLikeList(PairingLike pairingLike) {

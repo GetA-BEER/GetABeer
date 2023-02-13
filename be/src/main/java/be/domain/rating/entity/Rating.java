@@ -138,4 +138,7 @@ public class Rating extends BaseTimeEntity {
 	public void calculateComments(Integer commentCount) {
 		this.commentCount = commentCount;
 	}
+	public void calculateLikes(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
 }

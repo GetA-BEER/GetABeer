@@ -20,6 +20,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import be.domain.beer.entity.Beer;
 import be.domain.comment.entity.PairingComment;
+import be.domain.like.entity.PairingLike;
 import be.domain.pairing.dto.PairingImageDto;
 import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
@@ -99,6 +100,18 @@ public class Pairing extends BaseTimeEntity {
 		this.user = user;
 	}
 
+	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<PairingLike> pairingLikeList;
+
+	public void addPairingLikeList(PairingLike pairingLike) {
+		pairingLikeList.add(pairingLike);
+
+		if (pairingLike.getPairing() != this) {
+			pairingLike.belongToPairing(this);
+		}
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------
 	public void saveDefault(Beer beer, User user, List<PairingImage> pairingImageList,
 		List<PairingComment> pairingCommentList,
 		Integer likeCount, Integer commentCount) {
@@ -124,5 +137,9 @@ public class Pairing extends BaseTimeEntity {
 
 	public void calculateCount(Integer commentCount) {
 		this.commentCount = commentCount;
+	}
+
+	public void calculateLikes(Integer likeCount) {
+		this.likeCount = likeCount;
 	}
 }
