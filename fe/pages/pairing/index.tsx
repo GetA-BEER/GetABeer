@@ -1,10 +1,13 @@
 import Head from 'next/head';
 import NavBar from '@/components/NavBar';
-import SortBox from '@/components/selectBox/SortBox';
+import SortBox, { Sort } from '@/components/selectBox/SortBox';
+import { useState } from 'react';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 
 export default function Pairing() {
+  const [sort, setSort] = useState<Sort>('mostlikes');
+
   const pairingCardProps = [
     {
       id: 1,
@@ -50,7 +53,8 @@ export default function Pairing() {
           제주슬라이스
         </div>
         <div className="m-auto flex">
-          <SortBox /> <PairingBox />
+          <SortBox setSort={setSort} />
+          <PairingBox />
         </div>
         <PairingCardController pairingCardProps={pairingCardProps} />
         <div className="pb-32"></div>

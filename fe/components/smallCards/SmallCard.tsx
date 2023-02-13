@@ -5,8 +5,7 @@ import { SmallCardInfo } from './SmallCardController';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { noReview } from '@/atoms/noReview';
-import { NoReviewTypes } from '@/atoms/noReview';
+import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import SmallTag from '@/components/smallCards/SmallTag';
 
 export default function SmallCard(props: {
