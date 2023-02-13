@@ -2,8 +2,11 @@ package be.domain.pairing.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.entity.PairingComment;
@@ -27,7 +30,7 @@ public interface PairingMapper {
 		PairingResponseDto.Detail response = PairingResponseDto.Detail.builder()
 			.beerId(beerId)
 			.pairingId(pairing.getId())
-			.nickname(pairing.getNickname())
+			.nickname(pairing.getUser().getNickname())
 			.content(pairing.getContent())
 			.imageList(getPairingImageList(pairing.getPairingImageList()))
 			.commentList(getCommentList(pairing.getPairingCommentList()))
@@ -52,6 +55,7 @@ public interface PairingMapper {
 			PairingImageDto.Response response = PairingImageDto.Response.builder()
 				.pairingImageId(pairingImages.get(i).getId())
 				.imageUrl(pairingImages.get(i).getImageUrl())
+				// .fileName(pairingImages.get(i).getFileName())
 				.build();
 
 			result.add(response);
@@ -82,5 +86,22 @@ public interface PairingMapper {
 		}
 
 		return result;
+	}
+
+	default Page<PairingResponseDto.Total> pairingToPairingResponse(List<Pairing> pairings) {
+		return new PageImpl<>(pairings.stream()
+			.map(pairing ->
+				new PairingResponseDto.Total(
+					pairing.getBeer().getId(),
+					pairing.getId(),
+					pairing.getUser().getNickname(),
+					pairing.getContent(),
+					pairing.getPairingImageList().get(0).getImageUrl(),
+					pairing.getPairingCategory(),
+					pairing.getLikeCount(),
+					pairing.getCommentCount(),
+					pairing.getCreatedAt(),
+					pairing.getModifiedAt())
+			).collect(Collectors.toList()));
 	}
 }

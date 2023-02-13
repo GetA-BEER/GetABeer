@@ -7,6 +7,7 @@ import static be.domain.rating.entity.QRatingTag.*;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
@@ -16,7 +17,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import be.domain.comment.dto.QRatingCommentDto_Response;
 import be.domain.comment.dto.RatingCommentDto;
 import be.domain.rating.dto.RatingResponseDto;
+import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
+import be.domain.user.entity.User;
 
 public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 	private final JPAQueryFactory queryFactory;
@@ -142,6 +145,25 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 			.fetch();
 
 		return PageableExecutionUtils.getPage(list, pageable, list::size);
+	}
+
+	@Override
+	public Page<Rating> findRatingByUser(User user, Pageable pageable) {
+		List<Rating> ratings = queryFactory
+			.select(rating)
+			.from(rating)
+			.where(rating.user.eq(user))
+			.orderBy(rating.createdAt.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		Long total = queryFactory
+			.select(rating.count())
+			.from(rating)
+			.fetchOne();
+
+		return new PageImpl<>(ratings, pageable, total);
 	}
 
 }

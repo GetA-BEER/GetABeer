@@ -55,10 +55,10 @@ public class Init {
 	@Bean
 	@Transactional
 	CommandLineRunner stubInit(BeerController beerController, BeerMapper beerMapper, BeerService beerService,
-							   BeerRepository beerRepository, BeerTagService beerTagService, UserBeerTagRepository userBeerTagRepository,
-							   BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
-							   BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository,
-							   BeerCategoryService beerCategoryService) {
+		BeerRepository beerRepository, BeerTagService beerTagService, UserBeerTagRepository userBeerTagRepository,
+		BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
+		BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository,
+		BeerCategoryService beerCategoryService) {
 
 		for (int i = 0; i < 7; i++) {
 			BeerCategory beerCategory = BeerCategory.builder()

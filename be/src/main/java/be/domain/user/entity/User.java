@@ -23,6 +23,7 @@ import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
+import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.UserStatus;
 import lombok.AccessLevel;
@@ -168,9 +169,9 @@ public class User {
 
 	@Builder
 	public User(Long id, String email, String nickname,
-				String password, List<String> roles,
-				String provider, String imageUrl,
-				String status) {
+		String password, List<String> roles,
+		String provider, String imageUrl,
+		String status) {
 		this.id = id;
 		this.email = email;
 		this.nickname = nickname;
@@ -213,8 +214,12 @@ public class User {
 		this.userStatus = UserStatus.QUIT_USER.getStatus();
 	}
 
-	public void randomProfileImage() {
+	public void randomProfileImage(String imageUrl) {
 		this.imageUrl =
-			this.imageUrl == null ? RandomProfile.values()[(int)(Math.random() * 4)].getValue() : this.imageUrl;
+			imageUrl == null ? RandomProfile.values()[(int)(Math.random() * 4)].getValue() : this.imageUrl;
+	}
+
+	public void setProvider() {
+		this.provider = this.provider == null ? String.valueOf(ProviderType.LOCAL) : this.provider;
 	}
 }

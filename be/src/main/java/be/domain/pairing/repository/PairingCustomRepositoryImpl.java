@@ -6,6 +6,7 @@ import static be.domain.pairing.entity.QPairingImage.*;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
@@ -15,7 +16,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.dto.QPairingImageDto_Response;
+import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingImage;
+import be.domain.user.entity.User;
 
 public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 
@@ -32,6 +35,7 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.select(new QPairingImageDto_Response(
 				pairingImage.id,
 				pairingImage.imageUrl
+				// pairingImage.fileName
 			))
 			.from(pairingImage)
 			.where(pairingImage.pairing.id.eq(pairingId))
@@ -57,7 +61,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.select(Projections.fields(PairingResponseDto.Total.class,
 				pairing.beer.id.as("beerId"),
 				pairing.id.as("pairingId"),
-				pairing.nickname,
+				pairing.user.id.as("userId"),
+				pairing.user.nickname.as("nickname"),
 				pairing.content,
 				pairing.likeCount,
 				pairing.commentCount,
@@ -79,7 +84,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.select(Projections.fields(PairingResponseDto.Total.class,
 				pairing.beer.id.as("beerId"),
 				pairing.id.as("pairingId"),
-				pairing.nickname,
+				pairing.user.id.as("userId"),
+				pairing.user.nickname.as("nickname"),
 				pairing.content,
 				pairing.likeCount,
 				pairing.commentCount,
@@ -101,7 +107,8 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.select(Projections.fields(PairingResponseDto.Total.class,
 				pairing.beer.id.as("beerId"),
 				pairing.id.as("pairingId"),
-				pairing.nickname,
+				pairing.user.id.as("userId"),
+				pairing.user.nickname.as("nickname"),
 				pairing.content,
 				pairing.likeCount,
 				pairing.commentCount,
@@ -115,5 +122,24 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.fetch();
 
 		return PageableExecutionUtils.getPage(list, pageable, list::size);
+	}
+
+	@Override
+	public Page<Pairing> findPairingByUser(User user, Pageable pageable) {
+		List<Pairing> pairings = queryFactory
+			.select(pairing)
+			.from(pairing)
+			.where(pairing.user.eq(user))
+			.orderBy(pairing.createdAt.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		Long total = queryFactory
+			.select(pairing.count())
+			.from(pairing)
+			.fetchOne();
+
+		return new PageImpl<>(pairings, pageable, total);
 	}
 }
