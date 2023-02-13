@@ -7,9 +7,6 @@ import { Pagination, Navigation } from 'swiper';
 import { useState } from 'react';
 
 export default function PairingImageCarousel() {
-  // const [imageList, setImageList] = useState(imageProps?.imageProps);
-  console.log(11111111111111111);
-  // console.log('imageList', imageList);
   return (
     <Swiper
       pagination={true}
@@ -18,7 +15,6 @@ export default function PairingImageCarousel() {
       modules={[Pagination, Navigation]}
       className="mySwiper"
     >
-      rrrrrrrrrrrrrr
       {/* {imageList === undefined ? (
         <></>
       ) : (
