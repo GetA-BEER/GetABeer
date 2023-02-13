@@ -25,7 +25,7 @@ public class PairingLikeService {
 
 	public String clickLike(Long pairingId) {
 		User user = userService.getLoginUser();
-		Pairing pairing = pairingService.getPairing(pairingId);
+		Pairing pairing = pairingService.findPairing(pairingId);
 
 		isWritingUser(pairing.getUser().getId(), user.getId());
 

@@ -55,7 +55,7 @@ public class RatingLikeService {
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
-	private int isUserLikedRating(Long ratingId, Long userId) {
+	public int isUserLikedRating(Long ratingId, Long userId) {
 
 		return ratingLikeRepository.findRatingLikeUser(ratingId, userId);
 	}
