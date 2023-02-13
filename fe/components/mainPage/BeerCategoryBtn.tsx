@@ -2,7 +2,7 @@ export default function BeerCategoryBtn() {
   const beerCategoryList = [
     'Ale',
     'IPA',
-    'Larger',
+    'Lager',
     'Weizen',
     'Dunkel',
     'Pilsener',
@@ -12,7 +12,7 @@ export default function BeerCategoryBtn() {
       <div className="mx-3 mt-6 mb-2 font-bold">
         맥주<span className="text-y-brown ml-1">카테고리</span>
       </div>
-      <div className="grid grid-cols-6 mx-2 gap-2 items-center font-bold">
+      <div className="grid grid-cols-6 mx-2 gap-2 items-center font-bold select-none">
         {beerCategoryList.map((el: string, idx: number) => (
           <div
             key={idx.toString()}

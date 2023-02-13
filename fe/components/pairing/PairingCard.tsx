@@ -10,13 +10,26 @@ import { useEffect, useState } from 'react';
 
 export default function PairingCard(props: {
   pairingCardProps: PairingCardInfo;
+  idx: number;
 }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [randomNum, setRandomNum] = useState(0);
+  const [collisions, setCollisions] = useState<boolean>(false);
+  const MAX_PARENT_HEIGHT = 96;
   useEffect(() => {
     let randomTmp: number = Math.floor(Math.random() * 3);
     setRandomNum(randomTmp);
   }, []);
+
+  useEffect(() => {
+    let myDesc = document.getElementById(`myDescribe${props.idx}`);
+    if (myDesc !== null) {
+      let myDescHeight = myDesc.offsetHeight;
+      if (MAX_PARENT_HEIGHT < myDescHeight) setCollisions(true);
+      // console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
+    }
+  }, [collisions, props.idx]);
+
   return (
     <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2 mt-3">
       {/*닉네임, 날짜*/}
@@ -25,34 +38,74 @@ export default function PairingCard(props: {
         date={props.pairingCardProps.date}
       />
       {/* 사진,설명 */}
-      <div>
-        <div className="grid grid-cols-3 gap-2 px-3 h-24">
-          {props?.pairingCardProps?.image === undefined ? (
-            <></>
-          ) : (
-            <div className="h-24 border bg-auto">
-              <Image
-                src={props?.pairingCardProps?.image}
-                className="h-full m-auto"
-                alt="star"
-                width={200}
-                height={100}
-              />
-            </div>
-          )}
-          <div className="col-span-2 h-24 text-[8px] overflow-hidden w-full leading-5">
+
+      <div className="grid grid-cols-3 gap-3 px-3 h-24">
+        {props?.pairingCardProps?.image === undefined ? (
+          <div className="col-span-3 h-24 overflow-hidden w-full leading-6 relative">
             {props?.pairingCardProps?.description === undefined ? (
               <div className="text-y-gray">
                 {noReviewState[randomNum]?.contents}
               </div>
-            ) : (
+            ) : collisions ? (
               <>
-                {props.pairingCardProps?.description}...
-                <span className="text-y-gold">더보기</span>
+                <div
+                  className="leading-6 h-fit relative"
+                  id={`myDescribe${props.idx}`}
+                >
+                  {props.pairingCardProps.description}
+                </div>
+                <div className="absolute bottom-[1.1px] right-0 px-2 bg-white">
+                  ...<span className="text-y-gold">더보기</span>
+                </div>
               </>
+            ) : (
+              <div
+                className="text-xs leading-6 h-fit"
+                id={`myDescribe${props.idx}`}
+              >
+                {props.pairingCardProps.description}
+              </div>
             )}
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="h-24 flex bg-auto overflow-hidden border rounded-lg">
+              <Image
+                src={props?.pairingCardProps?.image}
+                className="m-auto w-full"
+                alt="star"
+                width={180}
+                height={200}
+              />
+            </div>
+            <div className="col-span-2 h-24 overflow-hidden w-full leading-6 relative">
+              {props?.pairingCardProps?.description === undefined ? (
+                <div className="text-y-gray">
+                  {noReviewState[randomNum]?.contents}
+                </div>
+              ) : collisions ? (
+                <>
+                  <div
+                    className="leading-6 h-fit relative"
+                    id={`myDescribe${props.idx}`}
+                  >
+                    {props.pairingCardProps.description}
+                  </div>
+                  <div className="absolute bottom-[1.1px] right-0 px-2 bg-white">
+                    ...<span className="text-y-gold">더보기</span>
+                  </div>
+                </>
+              ) : (
+                <div
+                  className="text-xs leading-6 h-fit"
+                  id={`myDescribe${props.idx}`}
+                >
+                  {props.pairingCardProps.description}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
       {/* 코멘트수,엄지수 */}
       <div className="py-2 px-2 flex justify-end items-center text-[8px]">
