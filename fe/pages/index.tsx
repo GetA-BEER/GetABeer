@@ -3,6 +3,7 @@ import Advertise from '@/components/mainPage/Advertise';
 import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
+import Footer from '@/components/Footer';
 
 export default function Main() {
   const beerProps = [
@@ -66,9 +67,11 @@ export default function Main() {
         <div className="m-auto">
           <BeerCategoryBtn />
           <PopularBeerController beerProps={beerProps} />
+          <PopularBeerController beerProps={beerProps} />
         </div>
         <div className="pb-14"></div>
         <NavBar />
+        <Footer />
       </main>
     </>
   );

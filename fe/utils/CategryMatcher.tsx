@@ -1,5 +1,7 @@
 export const CategoryMatcherToKor = (str: string) => {
   switch (str) {
+    case 'ALL':
+      return '전체';
     case 'FRIED':
       return '튀김/부침';
     case 'GRILL':
@@ -21,6 +23,8 @@ export const CategoryMatcherToKor = (str: string) => {
 
 export const CategoryMatcherToEng = (str: string) => {
   switch (str) {
+    case '전체':
+      return 'ALL';
     case '튀김/부침':
       return 'FRIED';
     case '구이/오븐':

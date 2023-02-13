@@ -69,7 +69,8 @@ export default function Beer() {
         pairingId: 1,
         nickname: '김맥주',
         content: '수정된 페어링',
-        thumbnail: '주소3',
+        thumbnail:
+          'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
         category: 'SNACK',
         likeCount: 3,
         commentCount: 0,
@@ -82,7 +83,8 @@ export default function Beer() {
         pairingId: 2,
         nickname: '김맥주',
         content: '페어링 안내',
-        thumbnail: '주소1',
+        thumbnail:
+          'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
         category: 'GRILL',
         likeCount: 2,
         commentCount: 0,

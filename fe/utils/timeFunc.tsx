@@ -44,9 +44,7 @@ export const DetailTime = (time: string) => {
   } else if (elsTime.elapsedDay >= 2 && elsTime.elapsedDay < 3) {
     result = Math.floor(elsTime.elapsedDay) + ' 일 전';
   } else if (elsTime.elapsedDay >= 3) {
-    let tmpResult = createdTime.toLocaleString('en-GB');
-    result = tmpResult.slice(0, 10);
+    result = time?.slice(0, 10).split('-').join('.');
   }
-
   return result;
 };

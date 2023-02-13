@@ -44,7 +44,6 @@ export default function PairingDetail() {
         content: '페어링 댓글',
         createdAt: '2023-02-09T13:58:20.330872',
         modifiedAt: '2023-02-09T13:58:20.330872',
-        ment: '여기다 입력하면 글자가 써지는건가',
       },
       {
         pairingId: 1,
@@ -57,9 +56,9 @@ export default function PairingDetail() {
       },
     ],
     category: 'GRILL',
-    likeCount: 0,
+    likeCount: 3,
     commentCount: 2,
-
+    isUserLikes: true,
     createdAt: '2023-02-09T13:57:53.875197',
     modifiedAt: '2023-02-09T13:58:23.621731',
   };

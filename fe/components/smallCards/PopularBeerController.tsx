@@ -28,9 +28,9 @@ export default function PopularBeerController(props: {
         <span className="text-y-brown">인기많은</span>
         <span className="text-black">맥주</span>
       </div>
-      <div className="w-full">
+      <div className="w-full ">
         <Swiper
-          className="w-full h-fit"
+          className="w-full h-fit "
           slidesPerView={2.4}
           spaceBetween={20}
           modules={[Pagination]}

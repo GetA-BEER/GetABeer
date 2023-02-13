@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import Link from 'next/link';
 
 // export interface SmallCardInfo {
 //   id: number;
@@ -27,7 +28,9 @@ export default function SmallCardController(props: { cardProps: any }) {
     >
       {cardPropsList?.map((cardProps: any) => (
         <SwiperSlide key={cardProps.ratingId}>
-          <SmallCard cardProps={cardProps} />
+          <Link href={`/rating/${cardProps.ratingId}`}>
+            <SmallCard cardProps={cardProps} />
+          </Link>
         </SwiperSlide>
       ))}
     </Swiper>

@@ -65,10 +65,7 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
         }`}
         id="pairingParents"
       >
-        {/* 수정해야한다!!!!!!!!!!!!!!!! */}
-        {props.pairingProps.thumbnail === undefined ||
-        props.pairingProps.thumbnail === '주소3' ||
-        props.pairingProps.thumbnail === '주소1' ? (
+        {props.pairingProps.thumbnail === undefined ? (
           <div id={`pairingImage${props.pairingProps.pairingId}`}></div>
         ) : (
           <div className="h-[77px] overflow-hidden m-auto">
