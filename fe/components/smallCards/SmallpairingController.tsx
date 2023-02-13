@@ -1,33 +1,38 @@
 import SmallPairingCard from './SmallPairingCard';
 import React, { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
-export interface PairingCardInfo {
-  id: number;
-  pairing: string;
-  nickName: string;
-  description?: string;
-  date: string;
-  comments: number;
-  thumbs: number;
-  image?: string;
-}
+// export interface PairingCardInfo {
+//   id: number;
+//   pairing: string;
+//   nickName: string;
+//   description?: string;
+//   date: string;
+//   comments: number;
+//   thumbs: number;
+//   image?: string;
+// }
 
-export default function SmallCardController(props: {
-  pairProps: PairingCardInfo[];
-}) {
-  const [smallPairingList, setSmallPairingList] = useState<PairingCardInfo[]>(
+export default function SmallCardController(props: { pairProps: any }) {
+  const [smallPairingList, setSmallPairingList] = useState<any>(
     props.pairProps
   );
 
   return (
-    <div className="grid grid-cols-2 gap-3 px-3">
-      {smallPairingList?.map((pairingProps: PairingCardInfo, idx: number) => (
-        <SmallPairingCard
-          pairingProps={pairingProps}
-          idx={idx}
-          key={pairingProps.id.toString()}
-        />
+    <Swiper
+      className="w-full h-fit"
+      slidesPerView={2.2}
+      spaceBetween={10}
+      modules={[Pagination]}
+    >
+      {smallPairingList?.map((pairingProps: any, idx: number) => (
+        <SwiperSlide key={pairingProps.pairingId}>
+          <SmallPairingCard pairingProps={pairingProps} />
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 }

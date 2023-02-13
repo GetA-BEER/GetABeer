@@ -25,7 +25,8 @@ export default function PopularBeerController(props: {
   return (
     <>
       <div className="mx-3 mt-6 mb-2 text-base font-semibold">
-        인기 많은 <span className="text-y-brown">맥주</span>
+        <span className="text-y-brown">인기많은</span>
+        <span className="text-black">맥주</span>
       </div>
       <div className="w-full">
         <Swiper

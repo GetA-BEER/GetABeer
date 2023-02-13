@@ -1,10 +1,12 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
 
 export interface ITodoTypes {
   id: number;
   contents: string;
   isBoolean: boolean;
 }
+const { persistAtom } = recoilPersist();
 
 // string 값을 atom으로 관리하는 방식
 export const stringState = atom<string>({
