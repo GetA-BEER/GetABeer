@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
@@ -82,7 +83,7 @@ public class UserController {
 	// public ResponseEntity editProfileImage(@RequestParam(value = "image") MultipartFile image) {
 	// 	User user = userService.getLoginUser();
 	// 	String oldImageUrl = user.getImageUrl();
-	//
+	// 	String oldFileKey = user.
 	// }
 
 	/* 유저정보 조회 */
