@@ -7,10 +7,22 @@ import GoogleBtn from '@/components/login/Googlebtn';
 import KakaoBtn from '@/components/login/KakaoBtn';
 import Link from 'next/link';
 import { useState } from 'react';
+import axios from 'axios';
 
 export default function Login() {
+  const handleClickLogin = () => {
+    const reqBody = {
+      email: inputEmail,
+      password: inputPw,
+    };
+    axios.post('/api/login', reqBody).then((res) => {
+      console.log(res.data);
+    });
+  };
+
   const handleClick = () => {};
-  const [content, setContent] = useState('');
+  const [inputEmail, setinputEmail] = useState('');
+  const [inputPw, setInputPw] = useState('');
   return (
     <>
       <Head>
@@ -32,16 +44,16 @@ export default function Login() {
           <Input
             type="email"
             placeholder="email@gmail.com"
-            inputState={content}
-            setInputState={setContent}
+            inputState={inputEmail}
+            setInputState={setinputEmail}
           />
           <Input
             type="password"
             placeholder="비밀번호를 입력하세요."
-            inputState={content}
-            setInputState={setContent}
+            inputState={inputPw}
+            setInputState={setInputPw}
           />
-          <SubmitBtn onClick={handleClick}> 로그인 </SubmitBtn>
+          <SubmitBtn onClick={handleClickLogin}> 로그인 </SubmitBtn>
           <div className="my-3 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">만약 계정이 없다면?</div>
             <Link href={'/signup/email'}>
