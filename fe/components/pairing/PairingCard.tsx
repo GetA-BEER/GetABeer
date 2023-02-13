@@ -25,7 +25,7 @@ export default function PairingCard(props: {
     let myDesc = document.getElementById(`myDescribe${props.idx}`);
     if (myDesc !== null) {
       let myDescHeight = myDesc.offsetHeight;
-      if (MAX_PARENT_HEIGHT <= myDescHeight) setCollisions(true);
+      if (MAX_PARENT_HEIGHT < myDescHeight) setCollisions(true);
       // console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
     }
   }, [collisions, props.idx]);
