@@ -30,7 +30,7 @@ export const testBeer: MiddleCardInfo = {
 
 export default function MiddleCard({ cardProps }: any) {
   return (
-    <div className="flex rounded-lg bg-white text-y-black border border-y-lightGray px-3 py-5 m-2">
+    <div className="flex rounded-lg bg-white text-y-black border border-y-lightGray px-3 py-5 my-2">
       <Image
         className="pt-3"
         alt={cardProps?.korName}

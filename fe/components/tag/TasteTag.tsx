@@ -1,6 +1,13 @@
-export default function TasteTag() {
-  const tasteList = ['단맛', '신맛', '쓴맛', '떫은맛'];
+type tagProps = {
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
+  checked: string | undefined;
+};
 
+export default function TasteTag({ setSelected, checked }: tagProps) {
+  const tasteList = ['단맛', '신맛', '쓴맛', '떫은맛'];
+  const onClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    setSelected((e.target as HTMLInputElement).value);
+  };
   return (
     <div className="my-4">
       <div className="grid grid-cols-4 mx-2 gap-2 items-center">
@@ -11,6 +18,8 @@ export default function TasteTag() {
               name="taste"
               id={el}
               value={el}
+              defaultChecked={checked === el ? true : false}
+              onClick={onClick}
               className="peer hidden"
             />
             <label
