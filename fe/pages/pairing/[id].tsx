@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import DetailCard from '@/components/pairing/DetailCard';
+import NavBar from '@/components/NavBar';
 
 export interface PairingInfo {
   id: number;
@@ -27,7 +28,7 @@ export default function PairingDetail() {
       },
     ],
     description:
-      '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+      '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입',
   };
   return (
     <>
@@ -42,6 +43,7 @@ export default function PairingDetail() {
           페어링
         </div>
         <DetailCard pairingProps={pairingProps} />
+        <NavBar />
       </main>
     </>
   );
