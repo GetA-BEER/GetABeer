@@ -20,6 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import be.domain.comment.dto.PairingCommentDto;
+import be.domain.comment.dto.RatingCommentDto;
+import be.domain.comment.entity.PairingComment;
+import be.domain.comment.entity.RatingComment;
+import be.domain.comment.mapper.PairingCommentMapper;
+import be.domain.comment.mapper.RatingCommentMapper;
 import be.domain.like.repository.PairingLikeRepository;
 import be.domain.like.repository.RatingLikeRepository;
 import be.domain.pairing.dto.PairingResponseDto;
@@ -47,6 +53,8 @@ public class UserController {
 	private final UserService userService;
 	private final RatingMapper ratingMapper;
 	private final PairingMapper pairingMapper;
+	private final RatingCommentMapper ratingCommentMapper;
+	private final PairingCommentMapper pairingCommentMapper;
 	private final RatingLikeRepository ratingLikeRepository;
 	private final PairingLikeRepository pairingLikeRepository;
 
@@ -84,8 +92,9 @@ public class UserController {
 	}
 
 	/* 유저 정보 수정(프로필 이미지) */
-	@PatchMapping("/mypage/userinfo/profile")
-	public ResponseEntity<UserDto.UserInfoResponse> editProfileImage(@RequestParam(value = "image") MultipartFile image) throws IOException {
+	@PatchMapping("/mypage/userinfo/image")
+	public ResponseEntity<UserDto.UserInfoResponse> editProfileImage(
+		@RequestParam(value = "image") MultipartFile image) throws IOException {
 		User user = userService.updateProfileImage(image);
 		return ResponseEntity.ok(userMapper.userToInfoResponse(user));
 	}
@@ -149,11 +158,25 @@ public class UserController {
 		return ResponseEntity.ok(new MultiResponseDto<>(userRatingList.getContent(), userRatingList));
 	}
 
-	/* 나의 코멘트 */
-	@GetMapping("/mypage/comment")
-	public ResponseEntity getMyComments() {
+	/* 나의 페어링 코멘트 */
+	@GetMapping("/mypage/comment/pairing")
+	public ResponseEntity<MultiResponseDto<PairingCommentDto.Response>> getMyPairingComments(
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
+		Page<PairingComment> pairingComments = userService.getUserPairingComment(page);
+		Page<PairingCommentDto.Response> responses = pairingCommentMapper.pairingCommentsToPageResponse(
+			pairingComments.getContent());
 
-		return null;
+		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), pairingComments));
+	}
+
+	/* 나의 레이팅 코멘트 */
+	@GetMapping("/mypage/comment/rating")
+	public ResponseEntity<MultiResponseDto<RatingCommentDto.Response>> getMyRatingComments(
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
+		Page<RatingComment> ratingComments = userService.getUserRatingComment(page);
+		Page<RatingCommentDto.Response> responses = ratingCommentMapper.ratingCommentsToResponsePage(ratingComments.getContent());
+
+		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), ratingComments));
 	}
 
 	/* 나의 페어링 */
