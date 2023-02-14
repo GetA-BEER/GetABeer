@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import be.domain.like.repository.RatingLikeRepository;
 import be.domain.rating.dto.RatingRequestDto;
 import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.entity.Rating;
@@ -17,7 +18,8 @@ public interface RatingMapper {
 
 	Rating ratingPatchDtoToRating(RatingRequestDto.Patch patch);
 
-	default Page<RatingResponseDto.Total> ratingToRatingResponse(List<Rating> ratings) {
+	default Page<RatingResponseDto.Total> ratingToRatingResponse(List<Rating> ratings,
+		RatingLikeRepository ratingLikeRepository) {
 		return new PageImpl<>(ratings.stream()
 			.map(rating ->
 				new RatingResponseDto.Total(
@@ -30,7 +32,7 @@ public interface RatingMapper {
 					rating.getStar(),
 					rating.getLikeCount(),
 					rating.getCommentCount(),
-					false,
+					ratingLikeRepository.findRatingLikeUser(rating.getId(), rating.getUser().getId()) != 0,
 					rating.getCreatedAt(),
 					rating.getModifiedAt())
 			).collect(Collectors.toList()));

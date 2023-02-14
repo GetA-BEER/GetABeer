@@ -1,5 +1,7 @@
 package be.domain.user.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import be.domain.like.repository.PairingLikeRepository;
+import be.domain.like.repository.RatingLikeRepository;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.mapper.PairingMapper;
@@ -42,7 +47,8 @@ public class UserController {
 	private final UserService userService;
 	private final RatingMapper ratingMapper;
 	private final PairingMapper pairingMapper;
-	// private final ImageHandler imageHandler;
+	private final RatingLikeRepository ratingLikeRepository;
+	private final PairingLikeRepository pairingLikeRepository;
 
 	/* 회원가입 */
 	@PostMapping("/register/user")
@@ -78,12 +84,11 @@ public class UserController {
 	}
 
 	/* 유저 정보 수정(프로필 이미지) */
-	// @PostMapping("/mypage/userinfo/profile")
-	// public ResponseEntity editProfileImage(@RequestParam(value = "image") MultipartFile image) {
-	// 	User user = userService.getLoginUser();
-	// 	String oldImageUrl = user.getImageUrl();
-	//
-	// }
+	@PatchMapping("/mypage/userinfo/profile")
+	public ResponseEntity<UserDto.UserInfoResponse> editProfileImage(@RequestParam(value = "image") MultipartFile image) throws IOException {
+		User user = userService.updateProfileImage(image);
+		return ResponseEntity.ok(userMapper.userToInfoResponse(user));
+	}
 
 	/* 유저정보 조회 */
 	@GetMapping("/user")
@@ -138,7 +143,8 @@ public class UserController {
 	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getMyRatings(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<Rating> ratings = userService.getUserRating(page);
-		Page<RatingResponseDto.Total> userRatingList = ratingMapper.ratingToRatingResponse(ratings.getContent());
+		Page<RatingResponseDto.Total> userRatingList = ratingMapper.ratingToRatingResponse(ratings.getContent(),
+			ratingLikeRepository);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(userRatingList.getContent(), userRatingList));
 	}
@@ -155,7 +161,8 @@ public class UserController {
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getMyPairing(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<Pairing> pairings = userService.getUserPairing(page);
-		Page<PairingResponseDto.Total> userPairingList = pairingMapper.pairingToPairingResponse(pairings.getContent());
+		Page<PairingResponseDto.Total> userPairingList = pairingMapper.pairingToPairingResponse(pairings.getContent(),
+			pairingLikeRepository);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(userPairingList.getContent(), userPairingList));
 	}
