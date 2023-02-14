@@ -67,6 +67,43 @@ public class MailService {
 		}
 	}
 
+	/* 소셜 로그인 시 임시 비밀번호 전송 */
+	public MimeMessage createPasswordMail(String password, String email) throws Exception {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+
+		helper.setTo(email);
+		helper.setSubject("Get A Beer 소셜로그인 비밀번호 입니다.");
+		helper.setText("임시 비밀번호를 절대 유출하지 마세요.\n 임시 비밀번호: " + password, true);
+		helper.setFrom("getabeer0310@gmail.com", "Get A Beer");
+
+		return message;
+	}
+
+	public void sendPWMail(String password, String email) throws Exception {
+		try {
+			MimeMessage mimeMessage = createPasswordMail(password, email);
+			javaMailSender.send(mimeMessage);
+		} catch (MailException mailException) {
+			mailException.printStackTrace();
+			throw new IllegalAccessException();
+		}
+	}
+
+	@Async("threadPoolTaskExecutor-Mail")
+	public void sendPasswordMail(String email, String password) throws BusinessLogicException {
+		if (nullUser(email).isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
+		}
+
+		try {
+			sendPWMail(password, email);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
+		}
+	}
+
 	public Optional<User> nullUser(String email) {
 		return userRepository.findByEmail(email);
 	}
