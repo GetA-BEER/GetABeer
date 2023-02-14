@@ -29,16 +29,13 @@ public class ProfileImage {
 	private String imageUrl;
 
 	@Column
-	private String imageName;
-
-	@Column
 	private String fileKey;
 
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public void setUser(User user ) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 }
