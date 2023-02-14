@@ -2,7 +2,7 @@ package be.domain.pairing.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,16 +13,16 @@ public class PairingRequestDto {
 	@Builder
 	public static class Post {
 
-		@NotBlank
+		@NotNull
 		private Long beerId;
 
-		@NotBlank
+		@NotNull
 		private Long userId;
 
-		@NotBlank
+		@NotNull
 		private String content;
 
-		@NotBlank
+		@NotNull
 		private String category;
 	}
 
@@ -30,15 +30,15 @@ public class PairingRequestDto {
 	@Builder
 	public static class Patch {
 
-		@NotBlank
+		@NotNull
 		private Long beerId;
 		private String content;
 
-		@NotBlank
+		@NotNull
 		private List<String> type;
 		private List<Long> url;
 
-		@NotBlank
+		@NotNull
 		private String category;
 	}
 }

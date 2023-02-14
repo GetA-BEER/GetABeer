@@ -285,7 +285,7 @@ public class RatingService {
 
 	private void cannotZeroStar(Double star) {
 		if (star == 0) {
-			throw new RuntimeException("0점은 줄 수 없습니다.");
+			throw new BusinessLogicException(ExceptionCode.ZERO_STAR);
 		}
 	}
 	private void saveBeerBeerTags(Beer findBeer, List<BeerTagType> beerTagTypeList) {

@@ -3,11 +3,13 @@ package be.domain.pairing.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +28,7 @@ import be.domain.pairing.mapper.PairingMapper;
 import be.domain.pairing.service.PairingService;
 import be.global.dto.MultiResponseDto;
 
+@Validated
 @RestController
 @RequestMapping("/api/pairings")
 public class PairingController {
@@ -39,7 +42,7 @@ public class PairingController {
 
 	/* 페어링 등록 */
 	@PostMapping
-	public ResponseEntity<String> post(@RequestPart(name = "post") PairingRequestDto.Post post,
+	public ResponseEntity<String> post(@RequestPart(name = "post") @Valid PairingRequestDto.Post post,
 		@RequestPart(name = "files", required = false) List<MultipartFile> files) throws IOException {
 		String message = pairingService.create(mapper.pairingPostDtoToPairing(post),
 			files, post.getCategory(), post.getBeerId(), post.getUserId());
@@ -51,7 +54,7 @@ public class PairingController {
 	@PatchMapping("/{pairingId}")
 	public ResponseEntity<String> patch(@PathVariable @Positive Long pairingId,
 		@RequestPart(name = "newFile") List<MultipartFile> files,
-		@RequestPart(name = "patch") PairingRequestDto.Patch patch) throws IOException {
+		@RequestPart(name = "patch") @Valid PairingRequestDto.Patch patch) throws IOException {
 		String message = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
 			pairingId, patch.getCategory(), patch.getType(), patch.getUrl(), files);
 

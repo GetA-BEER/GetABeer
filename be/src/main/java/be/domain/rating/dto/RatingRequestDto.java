@@ -1,6 +1,6 @@
 package be.domain.rating.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,26 +11,26 @@ public class RatingRequestDto {
 	@Builder
 	public static class Post {
 
-		@NotBlank
+		@NotNull
 		private Long beerId;
 
-		@NotBlank
+		@NotNull
 		private Long userId;
 		private String content;
 
-		@NotBlank
+		@NotNull
 		private Double star;
 
-		@NotBlank
+		@NotNull
 		private String color;
 
-		@NotBlank
+		@NotNull
 		private String taste;
 
-		@NotBlank
+		@NotNull
 		private String flavor;
 
-		@NotBlank
+		@NotNull
 		private String carbonation;
 	}
 
@@ -38,21 +38,21 @@ public class RatingRequestDto {
 	@Builder
 	public static class Patch {
 
-		@NotBlank
+		@NotNull
 		private Long beerId;
 		private String content;
 		private Double star;
 
-		@NotBlank
+		@NotNull
 		private String color;
 
-		@NotBlank
+		@NotNull
 		private String taste;
 
-		@NotBlank
+		@NotNull
 		private String flavor;
 
-		@NotBlank
+		@NotNull
 		private String carbonation;
 	}
 }
