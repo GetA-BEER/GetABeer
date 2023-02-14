@@ -148,7 +148,7 @@ public class PairingService {
 						PageRequest.of(page - 1, size, Sort.by("commentCount")));
 					break;
 				default:
-					throw new RuntimeException("잘못된 요청 주소입니다.");
+					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
 			}
 
 			responses.forEach(pairing -> pairing.addUserLike(false));
@@ -167,14 +167,16 @@ public class PairingService {
 						PageRequest.of(page - 1, size, Sort.by("commentCount")));
 					break;
 				default:
-					throw new RuntimeException("잘못된 요청 주소입니다.");
+					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
 			}
 
 			responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
 		}
 
 		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
-		// responses.forEach(pairing -> pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
+
+		// responses.forEach(pairing ->
+		// pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
 
 		return responses;
 	}

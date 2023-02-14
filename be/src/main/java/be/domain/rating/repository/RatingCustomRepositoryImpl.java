@@ -1,7 +1,6 @@
 package be.domain.rating.repository;
 
 import static be.domain.comment.entity.QRatingComment.*;
-import static be.domain.pairing.entity.QPairing.*;
 import static be.domain.rating.entity.QRating.*;
 import static be.domain.rating.entity.QRatingTag.*;
 

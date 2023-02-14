@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import be.domain.rating.dto.RatingRequestDto;
 import be.domain.rating.dto.RatingResponseDto;
-import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.mapper.RatingMapper;
 import be.domain.rating.mapper.RatingTagMapper;
@@ -69,8 +68,6 @@ public class RatingController {
 		return ResponseEntity.ok(ratingService.delete(ratingId));
 	}
 
-	//---------------------------------------------- 조회 세분화 -------------------------------------------------------
-
 	/* 특정 맥주 평가 상세 조회 */
 	@GetMapping("/{ratingId}")
 	public ResponseEntity<RatingResponseDto.Detail> getRating(@PathVariable @Positive Long ratingId) {
@@ -78,7 +75,7 @@ public class RatingController {
 		return ResponseEntity.ok(ratingService.getRatingResponse(ratingId));
 	}
 
-	/* 맥주 평가 페이지 조회 : 최신순 */
+	/* 맥주 평가 페이지 조회 */
 	@GetMapping("/page/{type}")
 	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByRecently(
 		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {

@@ -19,6 +19,7 @@ public interface RatingCustomRepository {
 	List<RatingCommentDto.Response> findRatingCommentResponse(Long ratingId);
 
 	Rating findRatingByUserId(Long userId);
+
 	Page<RatingResponseDto.Total> findRatingTotalResponseOrder(Long beerId, Pageable pageable);
 
 	Page<RatingResponseDto.Total> findRatingTotalResponseOrder(Long beerId, Long userId, Pageable pageable);

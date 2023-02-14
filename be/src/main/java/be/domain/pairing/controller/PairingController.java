@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.pairing.dto.PairingRequestDto;
 import be.domain.pairing.dto.PairingResponseDto;
-import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.mapper.PairingMapper;
 import be.domain.pairing.service.PairingService;
 import be.global.dto.MultiResponseDto;

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import be.domain.comment.dto.PairingCommentDto;
-import be.domain.comment.entity.PairingComment;
 import be.domain.pairing.entity.PairingCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
