@@ -79,30 +79,11 @@ public class RatingController {
 	}
 
 	/* 맥주 평가 페이지 조회 : 최신순 */
-	@GetMapping("/recency")
+	@GetMapping("/page/{type}")
 	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByRecently(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByRecent(beerId, page, size);
+		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
+		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderBy(beerId, page, size, type);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
 	}
-
-	/* 맥주 평가 페이지 조회 : 추천 순 */
-	@GetMapping("/mostlikes")
-	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByMoreLikes(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByMoreLikes(beerId, page, size);
-
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
-	}
-
-	/* 맥주 평가 페이지 조회 : 댓글 많은 순 */
-	@GetMapping("/mostcomments")
-	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByMoreComments(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByMoreComments(beerId, page, size);
-
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
-	}
-
 }
