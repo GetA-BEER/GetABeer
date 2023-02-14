@@ -170,7 +170,7 @@ public class UserService {
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 	}
 
-	public User getLoginUserForSort() {
+	public User getLoginUserReturnNull() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication == null) {

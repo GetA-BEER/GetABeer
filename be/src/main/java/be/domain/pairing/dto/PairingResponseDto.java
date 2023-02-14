@@ -40,6 +40,14 @@ public class PairingResponseDto {
 		public void addUserLike(Boolean isUserLikes) {
 			this.isUserLikes = isUserLikes;
 		}
+
+		public void addImageList(List<PairingImageDto.Response> imageList) {
+			this.imageList = imageList;
+		}
+
+		public void addCommentList(List<PairingCommentDto.Response> commentList) {
+			this.commentList = commentList;
+		}
 	}
 
 	@Getter

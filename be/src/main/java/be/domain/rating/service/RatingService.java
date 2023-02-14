@@ -121,8 +121,12 @@ public class RatingService {
 		response.addTag(getRatingTagList(ratingId));
 		response.addComment(ratingRepository.findRatingCommentResponse(ratingId));
 
-		User user = userService.getLoginUser();
-		response.addUserLike(getIsUserLikes(rating.getId(), user.getId()));
+		User user = userService.getLoginUserReturnNull();
+		if (user != null) {
+			response.addUserLike(getIsUserLikes(rating.getId(), user.getId()));
+		} else {
+			response.addUserLike(false);
+		}
 
 		return response;
 	}
@@ -155,7 +159,7 @@ public class RatingService {
 	/* 맥주 평가 페이지 조회 */
 	public Page<RatingResponseDto.Total> getRatingPageOrderBy(Long beerId, Integer page, Integer size, String type) {
 		Page<RatingResponseDto.Total> responses;
-		User user = userService.getLoginUserForSort();
+		User user = userService.getLoginUserReturnNull();
 
 		/* 로그인 유저가 없는 경우 */
 		if (user == null) {

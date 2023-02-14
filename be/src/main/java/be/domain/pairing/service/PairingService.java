@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
+import be.domain.comment.repository.PairingCommentRepository;
 import be.domain.like.repository.PairingLikeRepository;
 import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingResponseDto;
@@ -32,12 +33,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PairingService {
-	private final PairingRepository pairingRepository;
-	private final PairingImageRepository pairingImageRepository;
 	private final BeerService beerService;
-	private final PairingImageHandler pairingImageHandler;
 	private final UserService userService;
+	private final PairingImageHandler pairingImageHandler;
+	private final PairingRepository pairingRepository;
 	private final PairingLikeRepository pairingLikeRepository;
+	private final PairingImageRepository pairingImageRepository;
+	private final PairingCommentRepository pairingCommentRepository;
 
 	/* 페어링 등록 */
 	@Transactional
@@ -67,7 +69,7 @@ public class PairingService {
 		}
 
 		/* 페어링 등록하기 */
-		pairing.saveDefault(beer, user, thumbnail,pairingImages, new ArrayList<>(), 0, 0);
+		pairing.saveDefault(beer, user, thumbnail, pairingImages, new ArrayList<>(), 0, 0);
 		pairingRepository.save(pairing);
 
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
@@ -125,10 +127,16 @@ public class PairingService {
 		Pairing pairing = findVerifiedPairing(pairingId);
 
 		PairingResponseDto.Detail response = pairingRepository.findPairingDetailResponseDto(pairing.getId());
-		User user = userService.getLoginUser();
+		User user = userService.getLoginUserReturnNull();
 
+		if (user != null) {
+			response.addUserLike(getIsUserLikes(pairingId, user.getId()));
+		} else {
+			response.addUserLike(false);
+		}
 		response.addCategory(findCategory(pairing.getId()));
-		response.addUserLike(getIsUserLikes(pairingId, user.getId()));
+		response.addCommentList(pairingCommentRepository.findPairingCommentList(pairingId));
+		response.addImageList(pairingRepository.findPairingImageList(pairingId));
 
 		return response;
 	}
@@ -146,7 +154,7 @@ public class PairingService {
 		Long beerId, Integer page, Integer size, String type) {
 
 		Page<PairingResponseDto.Total> responses;
-		User user = userService.getLoginUserForSort();
+		User user = userService.getLoginUserReturnNull();
 
 		/* 로그인 유저가 없는 경우 */
 		if (user == null) {

@@ -56,16 +56,16 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 
 	@Override
 	public RatingTag findTagResponse(Long ratingId) {
-		var response = queryFactory.selectFrom(ratingTag)
+
+		return queryFactory.selectFrom(ratingTag)
 			.where(ratingTag.rating.id.eq(ratingId))
 			.fetchFirst();
-
-		return response;
 	}
 
 	@Override
 	public List<RatingCommentDto.Response> findRatingCommentResponse(Long ratingId) {
-		var list = queryFactory
+
+		return queryFactory
 			.select(new QRatingCommentDto_Response(
 				ratingComment.rating.id.as("ratingId"),
 				ratingComment.id.as("ratingCommentId"),
@@ -76,8 +76,6 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 				ratingComment.modifiedAt
 			)).from(ratingComment)
 			.where(ratingComment.rating.id.eq(ratingId)).fetch();
-
-		return list;
 	}
 
 	@Override
