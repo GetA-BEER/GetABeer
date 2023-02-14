@@ -77,7 +77,7 @@ public class PairingService {
 
 	public List<PairingImage> getImageList(Long pairingId) {
 
-		return pairingRepository.findPairingImage(pairingId);
+		return pairingImageRepository.findPairingImage(pairingId);
 	}
 
 	/* 페어링 수정 */
@@ -138,7 +138,7 @@ public class PairingService {
 		}
 		response.addCategory(findCategory(pairing.getId()));
 		response.addCommentList(pairingCommentRepository.findPairingCommentList(pairingId));
-		response.addImageList(pairingRepository.findPairingImageList(pairingId));
+		response.addImageList(pairingImageRepository.findPairingImageList(pairingId));
 
 		return response;
 	}
@@ -207,7 +207,7 @@ public class PairingService {
 
 	/* 일대다 이미지 리스트 가져오기 */
 	public List<PairingImageDto.Response> getImageDtoList(Long pairingId) {
-		return pairingRepository.findPairingImageList(pairingId);
+		return pairingImageRepository.findPairingImageList(pairingId);
 	}
 
 	/* 카테고리 정보 가져오기 */
