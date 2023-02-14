@@ -1,9 +1,15 @@
 package be.domain.comment.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.entity.PairingComment;
+import be.domain.pairing.dto.PairingResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface PairingCommentMapper {
@@ -25,5 +31,19 @@ public interface PairingCommentMapper {
 			.createdAt(pairingComment.getCreatedAt())
 			.modifiedAt(pairingComment.getModifiedAt())
 			.build();
+	}
+
+	default Page<PairingCommentDto.Response> pairingCommentsToPageResponse(List<PairingComment> pairingComments) {
+		return new PageImpl<>(pairingComments.stream()
+			.map(pairingComment ->
+				new PairingCommentDto.Response(
+					pairingComment.getPairing().getId(),
+					pairingComment.getId(),
+					pairingComment.getUser().getId(),
+					pairingComment.getUser().getNickname(),
+					pairingComment.getContent(),
+					pairingComment.getCreatedAt(),
+					pairingComment.getModifiedAt()
+				)).collect(Collectors.toList()));
 	}
 }

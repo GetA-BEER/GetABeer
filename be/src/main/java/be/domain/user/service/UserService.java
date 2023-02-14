@@ -24,6 +24,10 @@ import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.service.BeerTagService;
+import be.domain.comment.entity.PairingComment;
+import be.domain.comment.entity.RatingComment;
+import be.domain.comment.repository.PairingCommentRepository;
+import be.domain.comment.repository.RatingCommentRepository;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.repository.PairingRepository;
 import be.domain.rating.entity.Rating;
@@ -65,6 +69,8 @@ public class UserService {
 	private final UserBeerTagRepository userBeerTagRepository;
 	private final UserBeerTagQRepository userBeerTagQRepository;
 	private final ProfileImageRepository profileImageRepository;
+	private final RatingCommentRepository ratingCommentRepository;
+	private final PairingCommentRepository pairingCommentRepository;
 	private final UserBeerCategoryRepository userBeerCategoryRepository;
 	private final UserBeerCategoryQRepository userBeerCategoryQRepository;
 
@@ -347,9 +353,20 @@ public class UserService {
 		return ratingRepository.findRatingByUser(user, pageRequest);
 	}
 
-	/* 나의 코멘트 */
-	public void getUserComment() {
+	/* 나의 레이팅 코멘트 */
+	public Page<RatingComment> getUserRatingComment(int page) {
+		User user = getLoginUser();
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
 
+		return ratingCommentRepository.findRatingCommentByUser(user, pageRequest);
+	}
+
+	/* 나의 페어링 코멘트 */
+	public Page<PairingComment> getUserPairingComment(int page) {
+		User user = getLoginUser();
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return pairingCommentRepository.findPairingCommentByUser(user, pageRequest);
 	}
 
 	/* 나의 페어링 */
