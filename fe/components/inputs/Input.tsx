@@ -1,7 +1,16 @@
+import { Path, UseFormRegister } from 'react-hook-form';
+interface IFormValues {
+  email: string;
+  password: string;
+  text: string;
+}
+
 type InputProps = {
-  type: string;
+  type: Path<IFormValues>;
   placeholder: string;
   inputState: string;
+  register: UseFormRegister<IFormValues>;
+  required: boolean;
   setInputState: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -13,10 +22,13 @@ export const Input = ({
   type,
   placeholder,
   inputState,
+  register,
+  required,
   setInputState,
 }: InputProps) => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputState(e.target.value);
+    console.log(inputState);
   };
   return (
     <section className={inputContainerClassName}>
@@ -25,6 +37,7 @@ export const Input = ({
         type={type}
         placeholder={placeholder}
         value={inputState}
+        {...register(type, { required })}
         onChange={(e) => {
           onInputChange(e);
         }}

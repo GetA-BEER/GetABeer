@@ -4,8 +4,21 @@ import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoChevronBack } from 'react-icons/io5';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+interface IFormValues {
+  email: string;
+  password: string;
+  text: string;
+}
+
 export default function Email() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormValues>();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
+  const [inputEmail, setinputEmail] = useState('');
   const [content, setContent] = useState('');
   return (
     <>
@@ -28,8 +41,10 @@ export default function Email() {
           <Input
             type="email"
             placeholder="email@gmail.com"
-            inputState={content}
-            setInputState={setContent}
+            inputState={inputEmail}
+            register={register}
+            required
+            setInputState={setinputEmail}
           />
           <SubmitBtn onClick={handleClick}> 인증번호 전송 </SubmitBtn>
           <div className="my-5 flex justify-center gap-1.5 text-sm">
@@ -41,6 +56,8 @@ export default function Email() {
             type="text"
             placeholder="인증번호를 입력해주세요."
             inputState={content}
+            register={register}
+            required
             setInputState={setContent}
           />
           <SubmitBtn onClick={handleClick}> 확인 </SubmitBtn>
