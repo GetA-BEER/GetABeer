@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,6 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.service.BeerTagService;
 import be.domain.like.repository.RatingLikeRepository;
-import be.domain.like.service.RatingLikeService;
 import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
@@ -54,6 +54,9 @@ public class RatingService {
 
 		/* 회원 정보 가져오기 */
 		User user = userService.getUser(userId);
+
+		/* 이미 평가를 입력했던 유저라면 입력할 수 없음 */
+		verifyExistUser(user.getId());
 
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
@@ -118,8 +121,12 @@ public class RatingService {
 		response.addTag(getRatingTagList(ratingId));
 		response.addComment(ratingRepository.findRatingCommentResponse(ratingId));
 
-		User user = userService.getLoginUser();
-		response.addUserLike(getIsUserLikes(rating.getId(), user.getId()));
+		User user = userService.getLoginUserReturnNull();
+		if (user != null) {
+			response.addUserLike(getIsUserLikes(rating.getId(), user.getId()));
+		} else {
+			response.addUserLike(false);
+		}
 
 		return response;
 	}
@@ -149,42 +156,53 @@ public class RatingService {
 		return "맥주에 대한 평가가 성공적으로 삭제되었습니다.";
 	}
 
-	// ------------------------------------------- 조회 세분화 --------------------------------------------------------
+	/* 맥주 평가 페이지 조회 */
+	public Page<RatingResponseDto.Total> getRatingPageOrderBy(Long beerId, Integer page, Integer size, String type) {
+		Page<RatingResponseDto.Total> responses;
+		User user = userService.getLoginUserReturnNull();
 
-	/* 맥주 평가 페이지 조회 : 최신순 */
-	public Page<RatingResponseDto.Total> getRatingPageOrderByRecent(Long beerId, Integer page, Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingRepository.findRatingTotalResponseOrderByRecent(beerId,
-			PageRequest.of(page - 1, size));
+		/* 로그인 유저가 없는 경우 */
+		if (user == null) {
+			switch (type) {
+				case "recency":
+					responses = ratingRepository.findRatingTotalResponseOrder(beerId,
+						PageRequest.of(page - 1, size, Sort.by("ratingId")));
+					break;
+				case "mostlikes":
+					responses = ratingRepository.findRatingTotalResponseOrder(beerId,
+						PageRequest.of(page - 1, size, Sort.by("likeCount")));
+					break;
+				case "mostcomments":
+					responses = ratingRepository.findRatingTotalResponseOrder(beerId,
+						PageRequest.of(page - 1, size, Sort.by("commentCount")));
+					break;
+				default:
+					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
+			}
 
+			responses.forEach(pairing -> pairing.addUserLike(false));
+		} else { /* 로그인 유저가 있는 경우 */
+			switch (type) {
+				case "recency":
+					responses = ratingRepository.findRatingTotalResponseOrder(beerId, user.getId(),
+						PageRequest.of(page - 1, size, Sort.by("ratingId")));
+					break;
+				case "mostlikes":
+					responses = ratingRepository.findRatingTotalResponseOrder(beerId, user.getId(),
+						PageRequest.of(page - 1, size, Sort.by("likeCount")));
+					break;
+				case "mostcomments":
+					responses = ratingRepository.findRatingTotalResponseOrder(beerId, user.getId(),
+						PageRequest.of(page - 1, size, Sort.by("commentCount")));
+					break;
+				default:
+					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
+			}
+
+			responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
+		}
 		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
 
-		User user = userService.getLoginUser();
-		responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
-		return responses;
-	}
-
-	/* 맥주 평가 페이지 조회 : 추천 순 */
-	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreLikes(Long beerId, Integer page, Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingRepository.findRatingTotalResponseOrderByLikes(beerId,
-			PageRequest.of(page - 1, size));
-
-		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
-
-		User user = userService.getLoginUser();
-		responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
-
-		return responses;
-	}
-
-	/* 맥주 평가 페이지 조회 : 댓글 많은 순 */
-	public Page<RatingResponseDto.Total> getRatingPageOrderByMoreComments(Long beerId, Integer page, Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingRepository.findRatingTotalResponseOrderByComments(beerId,
-			PageRequest.of(page - 1, size));
-
-		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
-
-		User user = userService.getLoginUser();
-		responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
 		return responses;
 	}
 
@@ -212,6 +230,15 @@ public class RatingService {
 		}
 
 		return false;
+	}
+
+	/* 이미 평가를 등록한 적 있는 유저인지 확인 */
+	private void verifyExistUser(Long userId) {
+		Rating rating = ratingRepository.findRatingByUserId(userId);
+
+		if (rating != null) {
+			throw new BusinessLogicException(ExceptionCode.RATING_USER_EXISTS);
+		}
 	}
 
 	/* 존재하는 맥주 코멘트인지 확인 -> 존재하면 해당 맥주 코멘트 반환 */

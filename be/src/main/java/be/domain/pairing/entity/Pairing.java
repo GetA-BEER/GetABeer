@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -53,6 +52,8 @@ public class Pairing extends BaseTimeEntity {
 
 	@ColumnDefault("0")
 	private Integer commentCount;
+
+	private String thumbnail;
 
 	/* 🧡 페어링 - 페어링 이미지 일대다 연관관계 */
 	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -112,11 +113,12 @@ public class Pairing extends BaseTimeEntity {
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------
-	public void saveDefault(Beer beer, User user, List<PairingImage> pairingImageList,
+	public void saveDefault(Beer beer, User user, String thumbnail, List<PairingImage> pairingImageList,
 		List<PairingComment> pairingCommentList,
 		Integer likeCount, Integer commentCount) {
 		this.beer = beer;
 		this.user = user;
+		this.thumbnail = thumbnail;
 		this.pairingImageList = pairingImageList;
 		this.pairingCommentList = pairingCommentList;
 		this.likeCount = likeCount;
@@ -131,7 +133,8 @@ public class Pairing extends BaseTimeEntity {
 		this.pairingCategory = pairingCategory;
 	}
 
-	public void updateImageList(List<PairingImage> pairingImageList) {
+	public void updateImages(String thumbnail, List<PairingImage> pairingImageList) {
+		this.thumbnail = thumbnail;
 		this.pairingImageList = pairingImageList;
 	}
 

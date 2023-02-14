@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import be.domain.rating.dto.RatingRequestDto;
 import be.domain.rating.dto.RatingResponseDto;
-import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.mapper.RatingMapper;
 import be.domain.rating.mapper.RatingTagMapper;
@@ -69,8 +68,6 @@ public class RatingController {
 		return ResponseEntity.ok(ratingService.delete(ratingId));
 	}
 
-	//---------------------------------------------- 조회 세분화 -------------------------------------------------------
-
 	/* 특정 맥주 평가 상세 조회 */
 	@GetMapping("/{ratingId}")
 	public ResponseEntity<RatingResponseDto.Detail> getRating(@PathVariable @Positive Long ratingId) {
@@ -78,31 +75,12 @@ public class RatingController {
 		return ResponseEntity.ok(ratingService.getRatingResponse(ratingId));
 	}
 
-	/* 맥주 평가 페이지 조회 : 최신순 */
-	@GetMapping("/recency")
+	/* 맥주 평가 페이지 조회 */
+	@GetMapping("/page/{type}")
 	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByRecently(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByRecent(beerId, page, size);
+		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
+		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderBy(beerId, page, size, type);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
 	}
-
-	/* 맥주 평가 페이지 조회 : 추천 순 */
-	@GetMapping("/mostlikes")
-	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByMoreLikes(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByMoreLikes(beerId, page, size);
-
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
-	}
-
-	/* 맥주 평가 페이지 조회 : 댓글 많은 순 */
-	@GetMapping("/mostcomments")
-	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByMoreComments(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderByMoreComments(beerId, page, size);
-
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
-	}
-
 }
