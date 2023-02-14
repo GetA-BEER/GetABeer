@@ -33,12 +33,13 @@ public class BeerCategoryStatisticsQueryRepository {
 
 		beerCategoryStatisticsBuilder.week(LocalDate.now().minusWeeks(1).get(WeekFields.ISO.weekOfYear()));
 		beerCategoryStatisticsBuilder.ale(countList.get(0));
-		beerCategoryStatisticsBuilder.lager(countList.get(0));
-		beerCategoryStatisticsBuilder.weizen(countList.get(0));
-		beerCategoryStatisticsBuilder.dunkel(countList.get(0));
-		beerCategoryStatisticsBuilder.pilsener(countList.get(0));
-		beerCategoryStatisticsBuilder.fruitBeer(countList.get(0));
-		beerCategoryStatisticsBuilder.nonAlcoholic(countList.get(0));
+		beerCategoryStatisticsBuilder.lager(countList.get(1));
+		beerCategoryStatisticsBuilder.weizen(countList.get(2));
+		beerCategoryStatisticsBuilder.dunkel(countList.get(3));
+		beerCategoryStatisticsBuilder.pilsener(countList.get(4));
+		beerCategoryStatisticsBuilder.fruitBeer(countList.get(5));
+		beerCategoryStatisticsBuilder.nonAlcoholic(countList.get(6));
+		beerCategoryStatisticsBuilder.etc(countList.get(7));
 
 		beerCategoryStatisticsRepository.save(beerCategoryStatisticsBuilder.build());
 

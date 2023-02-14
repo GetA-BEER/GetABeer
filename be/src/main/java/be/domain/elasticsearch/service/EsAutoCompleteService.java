@@ -3,14 +3,13 @@ package be.domain.elasticsearch.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.elasticsearch.client.ElasticsearchClient;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Service;
 
-import be.domain.elasticsearch.entity.EsAutoComplete;
+import be.domain.elasticsearch.entity.AnalysisBeer;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,11 +23,11 @@ public class EsAutoCompleteService {
 	 */
 	public String createIndex() {
 
-		IndexCoordinates indexCoordinates = elasticsearchOperations.getIndexCoordinatesFor(EsAutoComplete.class);
+		IndexCoordinates indexCoordinates = elasticsearchOperations.getIndexCoordinatesFor(AnalysisBeer.class);
 
 		IndexQuery indexQuery = new IndexQueryBuilder()
 			.withId(UUID.randomUUID().toString())
-			.withObject(new EsAutoComplete())
+			.withObject(new AnalysisBeer())
 			.build();
 
 		return elasticsearchOperations.index(indexQuery, indexCoordinates);
@@ -37,7 +36,7 @@ public class EsAutoCompleteService {
 	/*
 	 * Document 삽입 메서드
 	 */
-	public List<EsAutoComplete> insertDocument(List<EsAutoComplete> esAutoCompleteList) {
-		return (List<EsAutoComplete>)elasticsearchOperations.save(esAutoCompleteList);
+	public List<AnalysisBeer> insertDocument(List<AnalysisBeer> analysisBeerList) {
+		return (List<AnalysisBeer>)elasticsearchOperations.save(analysisBeerList);
 	}
 }

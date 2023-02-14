@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.entity.WeeklyBeer;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beerwishlist.service.BeerWishlistService;
+import be.domain.rating.entity.Rating;
 import lombok.RequiredArgsConstructor;
 
 @Validated
@@ -93,9 +95,34 @@ public class BeerController {
 		return ResponseEntity.ok(responses);
 	}
 
+	@GetMapping("/category")
+	public ResponseEntity<PageImpl<BeerDto.SearchResponse>> getCategoryBeer(
+
+		@RequestParam(name = "category") String queryParam, @RequestParam(name = "page", defaultValue = "1") int page) {
+
+		Page<Beer> beerPage = beerService.findCategoryBeers(queryParam, page);
+
+		PageImpl<BeerDto.SearchResponse> responsePage = beerMapper.beersPageToSearchResponse(beerPage);
+
+		return ResponseEntity.ok().body(responsePage);
+	}
+
 	@GetMapping("/weekly")
 	public ResponseEntity<List<BeerDto.WeeklyBestResponse>> getWeeklyBeer() {
-		return null;
+
+		List<WeeklyBeer> weeklyBeerList = beerService.findWeeklyBeers();
+		List<BeerDto.WeeklyBestResponse> responses = beerMapper.beersToWeeklyBestBeerResponse(weeklyBeerList);
+
+		return ResponseEntity.ok(responses);
+	}
+
+	@GetMapping("/recommend")
+	public ResponseEntity<List<BeerDto.RecommendResponse>> getRecommendBeer() {
+
+		List<Beer> beerList = beerService.findRecommendBeers();
+		List<BeerDto.RecommendResponse> responses = beerMapper.beersToRecommendResponse(beerList);
+
+		return ResponseEntity.ok(responses);
 	}
 
 	@GetMapping("/similar")
@@ -107,13 +134,13 @@ public class BeerController {
 		return ResponseEntity.ok(responses);
 	}
 
-	@GetMapping("/users/mypage/beers")
-	public ResponseEntity<PageImpl<BeerDto.MyPageResponse>> getMyPageBeer(
-		@RequestParam(name = "page", defaultValue = "1") Integer page,
-		@PageableDefault(size = 10, sort = "username", direction = Sort.Direction.DESC) Pageable pageable) {
+	@GetMapping("/users/mypage/wishlist")
+	public ResponseEntity<PageImpl<BeerDto.WishlistResponse>> getMyPageBeer(
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 
-		Page<Beer> beerPage = beerService.findMyPageBeers(page);
-		PageImpl<BeerDto.MyPageResponse> responses = beerMapper.beersToMyPageResponse(beerPage);
+		Page<Beer> beerPage = beerService.findWishlistBeers(page);
+		List<Rating> ratingList = beerService.findMyRatingWithWishlist();
+		PageImpl<BeerDto.WishlistResponse> responses = beerMapper.beersToWishlistResponse(beerPage, ratingList);
 
 		return ResponseEntity.ok(responses);
 	}

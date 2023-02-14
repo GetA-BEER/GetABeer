@@ -14,9 +14,11 @@ import be.domain.beer.entity.BeerDetailsBasic;
 import be.domain.beer.entity.BeerDetailsCounts;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.entity.WeeklyBeer;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.rating.entity.Rating;
 
 @Mapper(componentModel = "spring")
 public interface BeerMapper {
@@ -102,6 +104,10 @@ public interface BeerMapper {
 
 	List<BeerDto.MonthlyBestResponse> beersToMonthlyBestBeerResponse(List<MonthlyBeer> beerList);
 
+	List<BeerDto.WeeklyBestResponse> beersToWeeklyBestBeerResponse(List<WeeklyBeer> beerList);
+
+	List<BeerDto.RecommendResponse> beersToRecommendResponse(List<Beer> beerList);
+
 	List<BeerDto.SimilarResponse> beersToSimilarBeerResponse(List<Beer> beerList);
 
 	default PageImpl<BeerDto.SearchResponse> beersPageToSearchResponse(Page<Beer> beerPage) {
@@ -127,8 +133,35 @@ public interface BeerMapper {
 			.collect(Collectors.toList()));
 	}
 
-	default PageImpl<BeerDto.MyPageResponse> beersToMyPageResponse(Page<Beer> beerPage) {
-		return null;
+	default PageImpl<BeerDto.WishlistResponse> beersToWishlistResponse(Page<Beer> beerPage, List<Rating> ratingList) {
+
+		if (beerPage == null) {
+			return null;
+		}
+
+		return new PageImpl<>(
+			beerPage.stream()
+				.map(beer -> {
+
+					BeerDto.WishlistResponse.WishlistResponseBuilder wishlistResponseBuilder = BeerDto.WishlistResponse.builder();
+					wishlistResponseBuilder.beerId(beer.getId());
+					wishlistResponseBuilder.korName(beer.getBeerDetailsBasic().getKorName());
+
+					Double myStar = ratingList.stream()
+						.filter(rating -> rating.getBeer().getId().equals(beer.getId()))
+						.map(Rating::getStar)
+						.mapToDouble(Double::doubleValue)
+						.findFirst()
+						.orElse(0.0);
+
+					wishlistResponseBuilder.myStar(myStar);
+					wishlistResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
+
+					return wishlistResponseBuilder.build();
+
+				}).collect(Collectors.toList())
+		);
+
 	}
 
 	private static List<BeerBeerCategory> getBeerBeerCategoriesFromResponseDto(
