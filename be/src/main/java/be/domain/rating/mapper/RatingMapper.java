@@ -30,6 +30,7 @@ public interface RatingMapper {
 					rating.getStar(),
 					rating.getLikeCount(),
 					rating.getCommentCount(),
+					false,
 					rating.getCreatedAt(),
 					rating.getModifiedAt())
 			).collect(Collectors.toList()));

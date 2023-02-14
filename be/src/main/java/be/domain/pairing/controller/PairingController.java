@@ -40,23 +40,22 @@ public class PairingController {
 
 	/* 페어링 등록 */
 	@PostMapping
-	public ResponseEntity<PairingResponseDto.Detail> post(@RequestPart(name = "post") PairingRequestDto.Post post,
+	public ResponseEntity<String> post(@RequestPart(name = "post") PairingRequestDto.Post post,
 		@RequestPart(name = "files", required = false) List<MultipartFile> files) throws IOException {
-		Pairing pairing = pairingService.create(mapper.pairingPostDtoToPairing(post),
+		String message = pairingService.create(mapper.pairingPostDtoToPairing(post),
 			files, post.getCategory(), post.getBeerId(), post.getUserId());
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}
 
 	/* 페어링 수정 */
 	@PatchMapping("/{pairingId}")
-	public ResponseEntity<PairingResponseDto.Detail> patch(@PathVariable @Positive Long pairingId,
+	public ResponseEntity<String> patch(@PathVariable @Positive Long pairingId,
 		@RequestBody PairingRequestDto.Patch patch) {
-		Pairing pairing = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
+		String message = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
 			pairingId, patch.getCategory(), patch.getImageUrl());
 
-		return ResponseEntity.ok(mapper.pairingToPairingResponseDto(pairing, pairing.getBeer().getId()));
+		return ResponseEntity.ok(message);
 	}
 
 	/* 특정 페어링 상세 조회 */
@@ -77,28 +76,10 @@ public class PairingController {
 	//------------------------------------------ 조회 세분화 ----------------------------------------------------
 
 	/* 페어링 페이지 조회 : 최신순 */
-	@GetMapping("/recency")
+	@GetMapping("/page/{uri-type}")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByRecent(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByRecent(beerId, page, size);
-
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
-	}
-
-	/* 페어링 페이지 조회 : 추천 순*/
-	@GetMapping("/mostlikes")
-	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByLikes(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByLikes(beerId, page, size);
-
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
-	}
-
-	/* 페어링 페이지 조회 : 댓글 많은 순*/
-	@GetMapping("/mostcomments")
-	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByComments(
-		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByComments(beerId, page, size);
+		@PathVariable("uri-type") String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
+		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByRecent(beerId, page, size, type);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
 	}

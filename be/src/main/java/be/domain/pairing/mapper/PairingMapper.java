@@ -102,6 +102,7 @@ public interface PairingMapper {
 					pairing.getPairingCategory(),
 					pairing.getLikeCount(),
 					pairing.getCommentCount(),
+					false,
 					pairing.getCreatedAt(),
 					pairing.getModifiedAt())
 			).collect(Collectors.toList()));

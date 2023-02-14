@@ -17,11 +17,11 @@ public interface PairingCustomRepository {
 	List<PairingImage> findPairingImage(Long pairingId);
 
 	PairingResponseDto.Detail findPairingDetailResponseDto(Long pairingId);
-	Page<PairingResponseDto.Total> findPairingTotalResponseOrderByRecent(Long beerId, Pageable pageable);
+	Page<PairingResponseDto.Total> findPairingTotalResponseOrder(Long beerId, Pageable pageable);
 
-	Page<PairingResponseDto.Total> findPairingTotalResponseOrderByLikes(Long beerId, Pageable pageable);
+	// ------------------------------------- 로그인 한 유저 -------------------------------------------------------------
+	Page<PairingResponseDto.Total> findPairingTotalResponseOrder(Long beerId, Long userId, Pageable pageable);
 
-	Page<PairingResponseDto.Total> findPairingTotalResponseOrderByComments(Long beerId, Pageable pageable);
-
+	// ---------------------------------------------------------------------------------------------------------------
 	Page<Pairing> findPairingByUser(User user, Pageable pageable);
 }
