@@ -23,6 +23,7 @@ public class PairingResponseDto {
 		private Long userId;
 		private String nickname;
 		private String content;
+		private String thumbnail;
 		private List<PairingImageDto.Response> imageList;
 		private List<PairingCommentDto.Response> commentList;
 		private PairingCategory category;
@@ -63,10 +64,6 @@ public class PairingResponseDto {
 
 		public void addCategory(PairingCategory category) {
 			this.category = category;
-		}
-
-		public void addThumbnail(String thumbnail) {
-			this.thumbnail = thumbnail;
 		}
 
 		public void addUserLike(Boolean isUserLikes) {

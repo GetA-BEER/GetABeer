@@ -59,8 +59,15 @@ public class PairingService {
 
 		List<PairingImage> pairingImages = pairingImageHandler.createPairingImage(pairing, files, user.getId(), beer);
 
+		String thumbnail = "";
+		if (pairingImages.size() != 0) {
+			if (pairingImages.get(0) != null) {
+				thumbnail = pairingImages.get(0).getImageUrl();
+			}
+		}
+
 		/* 페어링 등록하기 */
-		pairing.saveDefault(beer, user, pairingImages, new ArrayList<>(), 0, 0);
+		pairing.saveDefault(beer, user, thumbnail,pairingImages, new ArrayList<>(), 0, 0);
 		pairingRepository.save(pairing);
 
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
@@ -87,8 +94,17 @@ public class PairingService {
 		if (image.size() > 3) {
 			throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
 		}
-		List<PairingImage> result = updateImage(findPairing, findPairing.getPairingImageList(), image);
-		findPairing.updateImageList(result);
+
+		List<PairingImage> pairingImages = updateImage(findPairing, findPairing.getPairingImageList(), image);
+
+		String thumbnail = "";
+		if (pairingImages.size() != 0) {
+			if (pairingImages.get(0) != null) {
+				thumbnail = pairingImages.get(0).getImageUrl();
+			}
+		}
+
+		findPairing.updateImages(thumbnail, pairingImages);
 
 		/* 수정 내용 저장 */
 		pairingRepository.save(findPairing);
@@ -172,11 +188,7 @@ public class PairingService {
 
 			responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
 		}
-
 		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
-
-		// responses.forEach(pairing ->
-		// pairing.addThumbnail(getImageList(pairing.getPairingId()).get(0).getImageUrl()));
 
 		return responses;
 	}
