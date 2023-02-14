@@ -73,12 +73,10 @@ public class PairingController {
 		return ResponseEntity.ok(pairingService.delete(pairingId));
 	}
 
-	//------------------------------------------ 조회 세분화 ----------------------------------------------------
-
-	/* 페어링 페이지 조회 : 최신순 */
-	@GetMapping("/page/{uri-type}")
+	/* 페어링 페이지 조회 */
+	@GetMapping("/page/{type}")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByRecent(
-		@PathVariable("uri-type") String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
+		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
 		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByRecent(beerId, page, size, type);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
