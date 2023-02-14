@@ -16,12 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerBeerCategory;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.entity.WeeklyBeer;
 import be.domain.beer.repository.BeerBeerCategoryQueryRepository;
 import be.domain.beer.repository.BeerBeerCategoryRepository;
 import be.domain.beer.repository.BeerQueryRepository;
 import be.domain.beer.repository.BeerRepository;
 import be.domain.beer.repository.MonthlyBeerQueryRepository;
 import be.domain.beer.repository.MonthlyBeerRepository;
+import be.domain.beer.repository.WeeklyBeerQueryRepository;
+import be.domain.beer.repository.WeeklyBeerRepository;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
@@ -40,6 +43,8 @@ public class BeerServiceImpl implements BeerService {
 	private final UserService userService;
 	private final BeerRepository beerRepository;
 	private final BeerQueryRepository beerQueryRepository;
+	private final WeeklyBeerRepository weeklyBeerRepository;
+	private final WeeklyBeerQueryRepository weeklyBeerQueryRepository;
 	private final MonthlyBeerRepository monthlyBeerRepository;
 	private final MonthlyBeerQueryRepository monthlyBeerQueryRepository;
 	private final BeerCategoryService beerCategoryService;
@@ -130,6 +135,24 @@ public class BeerServiceImpl implements BeerService {
 
 	@Override
 	@Transactional
+	public void createWeeklyBeer() {
+
+		List<WeeklyBeer> weeklyBeersTemp = new ArrayList<>();
+		List<Beer> findBeers = beerQueryRepository.findWeeklyBeer();
+
+		findBeers.forEach(beer -> {
+			WeeklyBeer weeklyBeer = WeeklyBeer.builder().build();
+
+			weeklyBeer.create(beer);
+
+			weeklyBeersTemp.add(weeklyBeer);
+		});
+
+		weeklyBeerRepository.saveAll(weeklyBeersTemp);
+	}
+
+	@Override
+	@Transactional
 	public Beer getBeer(Long beerId) {
 
 		return findVerifiedBeer(beerId);
@@ -140,6 +163,41 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional(readOnly = true)
 	public List<MonthlyBeer> findMonthlyBeers() {
 		return monthlyBeerQueryRepository.findMonthlyBeer();
+	}
+
+	@Override
+	@Cacheable(MONTHLY_BEER)
+	@Transactional(readOnly = true)
+	public List<WeeklyBeer> findWeeklyBeers() {
+		return weeklyBeerQueryRepository.findWeeklyBeer();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Beer> findRecommendBeers() {
+
+		try {
+			userService.getLoginUser();
+		} catch (BusinessLogicException e) {
+			return null;
+		}
+
+		User findUser = userService.getLoginUser();
+
+		if (findUser.getUserBeerCategories().size() == 0) {
+			return beerRepository.findRandomBeer();
+		} else {
+			return beerQueryRepository.findRecommendBeer(findUser);
+		}
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Beer> findCategoryBeers(String queryParam, Integer page) {
+
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return beerQueryRepository.findCategoryBeers(queryParam, pageRequest);
 	}
 
 	@Override
@@ -157,14 +215,27 @@ public class BeerServiceImpl implements BeerService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Beer> findSimilarBeers(Beer beer) {
-		return null;
+		return beerQueryRepository.findSimilarBeer(beer);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<Beer> findMyPageBeers(Integer page) {
+	public Page<Beer> findWishlistBeers(Integer page) {
+
+		User loginUser = userService.getLoginUser();
+
 		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-		return null;
+
+		return beerQueryRepository.findMyPageBeers(loginUser, pageRequest);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Rating> findMyRatingWithWishlist() {
+
+		User loginUser = userService.getLoginUser();
+
+		return beerQueryRepository.findMyRatingWithWishlist(loginUser);
 	}
 
 	@Override

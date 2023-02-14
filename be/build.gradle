@@ -52,7 +52,7 @@ dependencies {
     implementation 'com.google.code.gson:gson' // Serialization, Deserialization
     //    ------------------------------ DATA COLLECTING AND ANALYSIS---------------------------------
 //    implementation 'org.springframework.data:spring-data-elasticsearch:4.2.2' // Elasticsearch
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.6.2' // Elasticsearch
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.7.6' // Elasticsearch
 //    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // Prometheus
     //    --------------------------------------- CRAWLING--------------------------------------------

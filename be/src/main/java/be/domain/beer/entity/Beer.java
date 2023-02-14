@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
@@ -63,6 +64,19 @@ public class Beer extends BaseTimeEntity implements Serializable {
 	@Embedded
 	@Nullable
 	private BeerDetailsStatistics beerDetailsStatistics;
+
+	// @PersistenceConstructor
+	public Beer(Long id, BeerDetailsBasic beerDetailsBasic, BeerDetailsStars beerDetailsStars,
+		BeerDetailsCounts beerDetailsCounts, BeerDetailsTopTags beerDetailsTopTags,
+		@Nullable BeerDetailsBestRating beerDetailsBestRating, @Nullable BeerDetailsStatistics beerDetailsStatistics) {
+		this.id = id;
+		this.beerDetailsBasic = beerDetailsBasic;
+		this.beerDetailsStars = beerDetailsStars;
+		this.beerDetailsCounts = beerDetailsCounts;
+		this.beerDetailsTopTags = beerDetailsTopTags;
+		this.beerDetailsBestRating = beerDetailsBestRating;
+		this.beerDetailsStatistics = beerDetailsStatistics;
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "similar_beer_id")

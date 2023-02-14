@@ -105,18 +105,41 @@ public class BeerDto {
 	public static class WeeklyBestResponse {
 
 		private Long beerId;
-
+		private String korName;
+		private String thumbnail;
+		private List<BeerCategoryDto.Response> beerCategories;
+		private String country;
+		private Double abv;
+		private Integer ibu;
+		private Double averageStar;
 	}
 
 	@Getter
 	@Builder
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
-	public static class MyPageResponse {
+	public static class RecommendResponse {
+
+		private Long beerId;
+		private String korName;
+		private String thumbnail;
+		private List<BeerCategoryDto.Response> beerCategories;
+		private String country;
+		private Double abv;
+		private Integer ibu;
+		private Double averageStar;
+	}
+
+	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor(access = AccessLevel.PROTECTED)
+	public static class WishlistResponse {
 
 		private Long beerId;
 		private String korName;
 		private Double myStar;
+		private String thumbnail;
 
 	}
 

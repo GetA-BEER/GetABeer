@@ -10,12 +10,14 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-@Document(indexName = "auto_complete")
-public class EsAutoComplete implements Persistable {
+@Document(indexName = "#{elasticsearchIndex}")
+public class AnalysisBeer implements Persistable {
 
 	@Id
 	@Field(type = FieldType.Long)
