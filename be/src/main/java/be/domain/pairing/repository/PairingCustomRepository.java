@@ -17,6 +17,7 @@ public interface PairingCustomRepository {
 	List<PairingImage> findPairingImage(Long pairingId);
 
 	PairingResponseDto.Detail findPairingDetailResponseDto(Long pairingId);
+
 	Page<PairingResponseDto.Total> findPairingTotalResponseOrder(Long beerId, Pageable pageable);
 
 	// ------------------------------------- 로그인 한 유저 -------------------------------------------------------------
