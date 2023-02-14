@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import be.domain.mail.controller.MailController;
+import be.domain.mail.dto.MailDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.UserRepository;
@@ -34,13 +36,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private final RedisTemplate<String, String> redisTemplate;
-	private final UserRepository userRepository;
 	private final JwtTokenizer jwtTokenizer;
-	private final CustomAuthorityUtils authorityUtils;
+	private final UserRepository userRepository;
+	private final MailController mailController;
 	private final PasswordEncoder passwordEncoder;
-
+	private final CustomAuthorityUtils authorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
 	@Override
+
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
 		try {
@@ -55,7 +58,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String provider = "google";
 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode("패스워드" + uuid);
+				String password = passwordEncoder.encode(uuid);
+
+				sendTempPassword(username, uuid);
 
 				List<String> authorities = authorityUtils.createRoles(username);
 
@@ -79,6 +84,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
 				String password = passwordEncoder.encode("패스워드" + uuid);
 
+				sendTempPassword(email, uuid);
+
 				if (userRepository.findByEmail(email).isEmpty()) {
 					saveUser(nickname, email, password, provider, imageUrl);
 				}
@@ -99,6 +106,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
 				String password = passwordEncoder.encode("패스워드" + uuid);
+
+				sendTempPassword(email, uuid);
 
 				List<String> authorities = authorityUtils.createRoles(email);
 
@@ -180,6 +189,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.port(8081)
 			.build()
 			.toUri();
+	}
+
+	private void sendTempPassword(String email, String uuid) {
+		MailDto.sendPWMail post = MailDto.sendPWMail.builder()
+			.email(email)
+			.password(uuid)
+			.build();
+
+		mailController.sendOAuth2PasswordEmail(post);
 	}
 
 }

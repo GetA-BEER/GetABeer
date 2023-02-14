@@ -14,6 +14,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import be.domain.mail.controller.MailController;
 import be.domain.user.repository.UserRepository;
 import be.domain.user.service.UserService;
 import be.global.security.auth.filter.JwtAuthenticationFilter;
@@ -34,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
+	private final MailController mailController;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
 
@@ -61,7 +63,7 @@ public class SecurityConfig {
 			.oauth2Login(oauth2 -> {
 				oauth2.authorizationEndpoint().baseUri("/oauth2/authorization");
 				oauth2.successHandler(
-					new OAuth2SuccessHandler(redisTemplate, userRepository, jwtTokenizer, customAuthorityUtils, passwordEncoder()));
+					new OAuth2SuccessHandler(jwtTokenizer, userRepository, mailController, passwordEncoder(), customAuthorityUtils, redisTemplate));
 				oauth2.userInfoEndpoint().userService(new CustomOAuth2UserService());
 			});
 

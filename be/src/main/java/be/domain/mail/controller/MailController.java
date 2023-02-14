@@ -34,6 +34,13 @@ public class MailController {
 		return ResponseEntity.ok("인증 코드가 전송되었습니다.");
 	}
 
+	@PostMapping("/mail/password")
+	public void sendOAuth2PasswordEmail(@RequestBody MailDto.sendPWMail post) {
+		mailService.sendPasswordMail(post.getEmail(), post.getPassword());
+
+		ResponseEntity.ok("임시 비밀번호가 전송되었습니다.");
+	}
+
 	@PostMapping("/mail/check")
 	public ResponseEntity<String> checkEmail(@RequestBody MailDto.checkMail checkMail) {
 		if (!Boolean.TRUE.equals(redisTemplate.hasKey(checkMail.getCode()))) {

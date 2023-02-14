@@ -30,4 +30,11 @@ public class MailDto {
 		private String code;
 		private String email;
 	}
+
+	@Getter
+	@Builder
+	public static class sendPWMail {
+		private String email;
+		private String password;
+	}
 }
