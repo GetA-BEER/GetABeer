@@ -1,6 +1,8 @@
 package be.domain.user.service;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
@@ -26,11 +29,13 @@ import be.domain.pairing.repository.PairingRepository;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.repository.RatingRepository;
 import be.domain.user.dto.UserDto;
+import be.domain.user.entity.ProfileImage;
 import be.domain.user.entity.User;
 import be.domain.user.entity.UserBeerCategory;
 import be.domain.user.entity.UserBeerTag;
 import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.UserStatus;
+import be.domain.user.repository.ProfileImageRepository;
 import be.domain.user.repository.UserBeerCategoryQRepository;
 import be.domain.user.repository.UserBeerCategoryRepository;
 import be.domain.user.repository.UserBeerTagQRepository;
@@ -38,6 +43,7 @@ import be.domain.user.repository.UserBeerTagRepository;
 import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
+import be.global.image.PairingImageHandler;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,19 +52,21 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-	private final PasswordEncoder passwordEncoder;
-	private final CustomAuthorityUtils authorityUtils;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final EntityManager em;
 	private final UserRepository userRepository;
 	private final BeerTagService beerTagService;
+	private final PasswordEncoder passwordEncoder;
+	private final RatingRepository ratingRepository;
+	private final CustomAuthorityUtils authorityUtils;
+	private final PairingRepository pairingRepository;
 	private final BeerCategoryService beerCategoryService;
+	private final PairingImageHandler pairingImageHandler;
+	private final RedisTemplate<String, String> redisTemplate;
 	private final UserBeerTagRepository userBeerTagRepository;
 	private final UserBeerTagQRepository userBeerTagQRepository;
+	private final ProfileImageRepository profileImageRepository;
 	private final UserBeerCategoryRepository userBeerCategoryRepository;
 	private final UserBeerCategoryQRepository userBeerCategoryQRepository;
-	private final RatingRepository ratingRepository;
-	private final PairingRepository pairingRepository;
-	private final EntityManager em;
 
 	/* 유저 회원가입 */
 	@Transactional
@@ -122,6 +130,41 @@ public class UserService {
 		em.flush();
 
 		return userRepository.findById(user.getId()).orElseThrow();
+	}
+
+	/* 유저 정보 수정 - 프로필 이미지 */
+	@Transactional
+	public User updateProfileImage(MultipartFile image) throws IOException {
+		User user = getLoginUser();
+		HashMap<String, Objects> map;
+		ProfileImage saved;
+
+		if (verifyProfileImage()) {
+			map = pairingImageHandler.createProfileImage(image, "/profileImage");
+
+			saved = ProfileImage.builder()
+				.imageUrl(map.get("url").toString())
+				.fileKey(map.get("fileKey").toString())
+				.user(user)
+				.build();
+		} else {
+			ProfileImage profileImage = user.getProfileImage();
+
+			map = pairingImageHandler.updateProfileImage(image, "/profileImage", profileImage.getFileKey());
+
+			saved = ProfileImage.builder()
+				.id(profileImage.getId())
+				.imageUrl(map.get("url").toString())
+				.fileKey(map.get("fileKey").toString())
+				.user(user)
+				.build();
+		}
+
+		profileImageRepository.save(saved);
+
+		user.setImageUrl(saved.getImageUrl());
+
+		return userRepository.save(user);
 	}
 
 	/* 비밀번호 수정 - 확인 */
@@ -283,6 +326,13 @@ public class UserService {
 				.build();
 			userBeerCategoryRepository.save(saved);
 		});
+	}
+
+	/* 이미지 유무 확인 */
+	public Boolean verifyProfileImage() {
+		User user = getLoginUser();
+
+		return user.getProfileImage() == null;
 	}
 
 	/**

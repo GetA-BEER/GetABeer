@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.entity.PairingComment;
+import be.domain.like.repository.PairingLikeRepository;
 import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingRequestDto;
 import be.domain.pairing.dto.PairingResponseDto;
@@ -89,7 +90,8 @@ public interface PairingMapper {
 		return result;
 	}
 
-	default Page<PairingResponseDto.Total> pairingToPairingResponse(List<Pairing> pairings) {
+	default Page<PairingResponseDto.Total> pairingToPairingResponse(List<Pairing> pairings,
+		PairingLikeRepository pairingLikeRepository) {
 		return new PageImpl<>(pairings.stream()
 			.map(pairing ->
 				new PairingResponseDto.Total(
@@ -98,10 +100,12 @@ public interface PairingMapper {
 					pairing.getUser().getId(),
 					pairing.getUser().getNickname(),
 					pairing.getContent(),
-					pairing.getPairingImageList().get(0).getImageUrl(),
+					"임시 썸네일인척",
+					// pairing.getPairingImageList().get(0).getImageUrl(),
 					pairing.getPairingCategory(),
 					pairing.getLikeCount(),
 					pairing.getCommentCount(),
+					pairingLikeRepository.findPairingLikeUser(pairing.getId(), pairing.getUser().getId()) != 0,
 					pairing.getCreatedAt(),
 					pairing.getModifiedAt())
 			).collect(Collectors.toList()));

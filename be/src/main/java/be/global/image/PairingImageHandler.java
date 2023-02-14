@@ -1,21 +1,28 @@
 package be.global.image;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import be.domain.beer.entity.Beer;
 import be.domain.pairing.entity.Pairing;
@@ -24,7 +31,9 @@ import be.domain.pairing.repository.PairingImageRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PairingImageHandler implements ImageHandler {
@@ -40,7 +49,7 @@ public class PairingImageHandler implements ImageHandler {
 	private static final long limit = 1024 * 1024 * 4;
 
 	@Override
-	public String createUserImage(MultipartFile file) throws IOException {
+	public HashMap createProfileImage(MultipartFile file, String folderSrc) throws IOException {
 		if (file.isEmpty()) {
 			return null;
 		}
@@ -69,18 +78,39 @@ public class PairingImageHandler implements ImageHandler {
 				ext = ".heic";
 			} else {
 				throw new BusinessLogicException(ExceptionCode.NOT_IMAGE_EXTENSION);
-			}}
+			}
+		}
 
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSS");
-		String fileName = "profileImage/" + LocalDateTime.now().format(format)+ "/" + originalName + ext;
+		String fileName = "profileImage/" + LocalDateTime.now().format(format) + ext;
+		String fileKey = UUID.randomUUID().toString().substring(0, 15) + "_" + fileName;
 
-		ObjectMetadata objMeta = new ObjectMetadata();
-		objMeta.setContentLength(file.getInputStream().available());
-		objMeta.setContentType(contentType);
+		try {
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentType(file.getContentType());
 
-		s3Client.putObject(bucket, fileName, file.getInputStream(), objMeta);
+			PutObjectRequest request = new PutObjectRequest(
+				bucket + folderSrc,
+				fileKey,
+				file.getInputStream(),
+				metadata);
+			s3Client.putObject(request); // Load
 
-		return s3Client.getUrl(bucket, fileName).toString();
+			URL url = s3Client.getUrl(bucket + folderSrc, fileKey);
+			HashMap map = new HashMap<>();
+			map.put("url", url);
+			map.put("fileKey", fileKey);
+
+			return map;
+		} catch (AmazonServiceException e) {
+			log.error("Upload To S3 AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
+		} catch (SdkClientException e) {
+			log.error("Upload To S3 SdkClientException filePath={}, error={}", e.getMessage());
+		} catch (Exception e) {
+			log.error("Upload To S3 SdkClientException filePath={}, error={}", e.getMessage());
+		}
+
+		return new HashMap<>();
 	}
 
 	@Override
@@ -147,5 +177,16 @@ public class PairingImageHandler implements ImageHandler {
 				result.add(pairingImage);
 			}
 		return result;
+	}
+
+	@Override
+	public void deleteProfileImage(String fileKey, String folderSrc) {
+		s3Client.deleteObject(bucket + folderSrc, fileKey);
+	}
+
+	@Override
+	public HashMap updateProfileImage(MultipartFile file, String folderSrc, String oldFileKey) throws IOException {
+		deleteProfileImage(oldFileKey, folderSrc);
+		return createProfileImage(file, folderSrc);
 	}
 }

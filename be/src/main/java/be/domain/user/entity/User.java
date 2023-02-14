@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
@@ -72,6 +73,13 @@ public class User {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles = new ArrayList<>();
+
+	@OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private ProfileImage profileImage;
+
+	public void setProfileImage(ProfileImage profileImage) {
+		this.profileImage = profileImage;
+	}
 
 	/* UserBeerCategory Join */
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -239,6 +247,10 @@ public class User {
 	public void randomProfileImage(String imageUrl) {
 		this.imageUrl =
 			imageUrl == null ? RandomProfile.values()[(int)(Math.random() * 4)].getValue() : this.imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public void setProvider() {
