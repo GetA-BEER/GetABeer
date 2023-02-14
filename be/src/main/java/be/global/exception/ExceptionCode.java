@@ -10,6 +10,7 @@ public enum ExceptionCode {
 	TOO_BIG_SIZE(400, "이미지 사이즈가 너무 큽니다."),
 
 	/* 평가, 페어링 관련 예외 */
+	RATING_USER_EXISTS(409, "작성한 평가가 존재합니다."),
 	RATING_NOT_FOUND(404, "맥주 평가 정보를 찾을 수 없습니다."),
 	PAIRING_NOT_FOUND(404, "페어링 정보를 찾을 수 없습니다."),
 	TAG_IS_WRONG(400, "태그 요청이 잘못 되었습니다."),
@@ -17,6 +18,7 @@ public enum ExceptionCode {
 	COMMENT_NOT_FOUND(404, "댓글이 존재하지 않습니다."),
 	NOT_CORRECT_USER(403, "유저 정보가 일치하지 않습니다."),
 	NOT_LIKE_WRITER(400, "본인이 작성한 글에 추천을 누를 수 없습니다."),
+	WRONG_URI(400, "잘못된 요청 주소입니다."),
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),

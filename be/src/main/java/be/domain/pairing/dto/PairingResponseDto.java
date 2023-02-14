@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import be.domain.comment.dto.PairingCommentDto;
-import be.domain.comment.entity.PairingComment;
 import be.domain.pairing.entity.PairingCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +23,7 @@ public class PairingResponseDto {
 		private Long userId;
 		private String nickname;
 		private String content;
+		private String thumbnail;
 		private List<PairingImageDto.Response> imageList;
 		private List<PairingCommentDto.Response> commentList;
 		private PairingCategory category;
@@ -39,6 +39,14 @@ public class PairingResponseDto {
 
 		public void addUserLike(Boolean isUserLikes) {
 			this.isUserLikes = isUserLikes;
+		}
+
+		public void addImageList(List<PairingImageDto.Response> imageList) {
+			this.imageList = imageList;
+		}
+
+		public void addCommentList(List<PairingCommentDto.Response> commentList) {
+			this.commentList = commentList;
 		}
 	}
 
@@ -64,10 +72,6 @@ public class PairingResponseDto {
 
 		public void addCategory(PairingCategory category) {
 			this.category = category;
-		}
-
-		public void addThumbnail(String thumbnail) {
-			this.thumbnail = thumbnail;
 		}
 
 		public void addUserLike(Boolean isUserLikes) {
