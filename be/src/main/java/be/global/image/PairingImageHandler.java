@@ -85,12 +85,6 @@ public class PairingImageHandler implements ImageHandler {
 		String fileName = "profileImage/" + LocalDateTime.now().format(format) + ext;
 		String fileKey = UUID.randomUUID().toString().substring(0, 15) + "_" + fileName;
 
-		// ObjectMetadata objMeta = new ObjectMetadata();
-		// objMeta.setContentLength(file.getInputStream().available());
-		// objMeta.setContentType(contentType);
-		//
-		// s3Client.putObject(bucket, fileName, file.getInputStream(), objMeta);
-
 		try {
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentType(file.getContentType());
@@ -117,8 +111,6 @@ public class PairingImageHandler implements ImageHandler {
 		}
 
 		return new HashMap<>();
-
-		// return s3Client.getUrl(bucket, fileName).toString();
 	}
 
 	@Override
