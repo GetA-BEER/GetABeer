@@ -36,7 +36,7 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 	@Override
 	public List<PairingImageDto.Response> findPairingImageList(Long pairingId) {
 
-		List<PairingImageDto.Response> result = queryFactory
+		return queryFactory
 			.select(new QPairingImageDto_Response(
 				pairingImage.id,
 				pairingImage.imageUrl,
@@ -44,20 +44,18 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			))
 			.from(pairingImage)
 			.where(pairingImage.pairing.id.eq(pairingId))
+			.orderBy(pairingImage.imagesOrder.asc())
 			.fetch();
-
-		return result;
 	}
 
 	@Override
 	public List<PairingImage> findPairingImage(Long pairingId) {
 
-		List<PairingImage> result = queryFactory
+		return queryFactory
 			.selectFrom(pairingImage)
 			.where(pairingImage.pairing.id.eq(pairingId))
+			.orderBy(pairingImage.imagesOrder.asc())
 			.fetch();
-
-		return result;
 	}
 
 	@Override
