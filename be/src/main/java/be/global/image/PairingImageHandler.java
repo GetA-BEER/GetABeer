@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -124,59 +123,130 @@ public class PairingImageHandler implements ImageHandler {
 
 		for (int i = 0; i < files.size(); i++) {
 			MultipartFile image = files.get(i);
+			PairingImage pairingImage = savePairingImage(pairing, image);
 
-			if (image.getSize() > limit) {
-				throw new BusinessLogicException(ExceptionCode.TOO_BIG_SIZE);
-			}
-
-			String originalName = Arrays.toString(Objects.requireNonNull(image.getOriginalFilename())
-				.replaceAll(" ", "")
-				.getBytes(StandardCharsets.UTF_8));
-			if (originalName.equals("")) {
-				throw new BusinessLogicException(ExceptionCode.CHECK_IMAGE_NAME);
-			}
-
-			String ext;
-			String contentType = image.getContentType();
-			if (ObjectUtils.isEmpty(contentType)) {
-				// throw new BusinessLogicException(ExceptionCode.NOT_IMAGE_EXTENSION);
-
-				/* 빈 파일이어도 1인 사이즈의 리스트가 들어오고 있기 때문에 예외 대신 result를 리턴, 만약에 이유를 찾으면 수정 예정 */
-				return result;
-			} else {
-				if (contentType.contains("image/jpeg")) {
-					ext = ".jpg";
-				} else if (contentType.contains("image/jpg")) {
-					ext = ".jpg";
-				} else if (contentType.contains("image/png")) {
-					ext = ".png";
-				} else if (contentType.contains("image/heic")) {
-					ext = ".heic";
-				} else {
-					throw new BusinessLogicException(ExceptionCode.NOT_IMAGE_EXTENSION);
-				}}
-
-				/* 이름 수정 */
-				String fileName = "pairing_images_" + beer.getId() + "_" + userId;
-				DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSS");
-				String s3FileName = dir + "/" + LocalDateTime.now().format(format) + "/" + fileName + ext;
-
-				ObjectMetadata objMeta = new ObjectMetadata();
-				objMeta.setContentLength(image.getInputStream().available());
-				objMeta.setContentType(contentType);
-
-				s3Client.putObject(bucket, s3FileName, image.getInputStream(), objMeta);
-
-				String url = s3Client.getUrl(bucket, s3FileName).toString();
-
-				PairingImage pairingImage = PairingImage.builder()
-					.imageUrl(url)
-					.fileName(s3FileName)
-					.pairing(pairing)
-					.build();
+			if (pairingImage != null) {
+				pairingImage.setImagesOrder(i + 1);
+				pairingImageRepository.save(pairingImage);
 				result.add(pairingImage);
 			}
+		}
 		return result;
+	}
+
+	@Override
+	public List<PairingImage> updatePairingImage(Pairing pairing, List<String> type, List<Long> url,
+		List<MultipartFile> files) throws IOException {
+		log.info("#### 페어링 입력 확인 : " + pairing.getId());
+		log.info("#### 페어링 겟 리스트 : " + pairing.getPairingImageList());
+		List<PairingImage> originImage = pairing.getPairingImageList();
+		List<PairingImage> result = new ArrayList<>();
+
+		boolean[] visited = new boolean[originImage.size()];
+		ArrayList<Long> originImageId = new ArrayList<>(originImage.size());
+
+		for (PairingImage image : originImage) {
+			originImageId.add(image.getId());
+		}
+
+		int urlIdx = 0;
+		int fileIdx = 0;
+		for (int i = 0; i < type.size(); i++) {
+			String typeName = type.get(i);
+
+			if (typeName.equals("url")) {
+				PairingImage pairingImage = findPairingImage(url.get(urlIdx));
+
+				int idx = originImageId.indexOf(pairingImage.getId());
+				visited[idx] = true;
+
+				result.add(pairingImage);
+
+				pairingImage.setImagesOrder(i + 1);
+				pairingImageRepository.save(pairingImage);
+
+				urlIdx++;
+			} else if (typeName.equals("file")) {
+				PairingImage pairingImage = savePairingImage(pairing, files.get(fileIdx));
+
+				if (pairingImage != null) {
+					pairingImage.setImagesOrder(i + 1);
+					pairingImageRepository.save(pairingImage);
+					result.add(pairingImage);
+				}
+
+				fileIdx++;
+			} else {
+				throw new RuntimeException("요청을 확인하십시오.");
+			}
+		}
+
+		for (int i = 0; i < originImageId.size(); i++) {
+			if (!visited[i]) {
+				PairingImage pairingImage = findPairingImage(originImageId.get(i));
+				deletePairingImage(pairingImage.getFileName());
+				pairingImageRepository.delete(pairingImage);
+			}
+		}
+
+		return result;
+	}
+
+	private PairingImage savePairingImage(Pairing pairing, MultipartFile file) throws IOException {
+
+		if (file.getSize() > limit) {
+			throw new BusinessLogicException(ExceptionCode.TOO_BIG_SIZE);
+		}
+
+		String ext;
+		String contentType = file.getContentType();
+		if (ObjectUtils.isEmpty(contentType)) {
+			return null;
+		} else {
+			if (contentType.contains("image/jpeg")) {
+				ext = ".jpg";
+			} else if (contentType.contains("image/jpg")) {
+				ext = ".jpg";
+			} else if (contentType.contains("image/png")) {
+				ext = ".png";
+			} else if (contentType.contains("image/heic")) {
+				ext = ".heic";
+			} else {
+				throw new BusinessLogicException(ExceptionCode.NOT_IMAGE_EXTENSION);
+			}
+		}
+
+		/* 이름 수정 */
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSS");
+		String fileName = dir + "/" + LocalDateTime.now().format(format) + "_pairing_images" + ext;
+
+		ObjectMetadata objMeta = new ObjectMetadata();
+		objMeta.setContentLength(file.getInputStream().available());
+		objMeta.setContentType(contentType);
+
+		s3Client.putObject(bucket, fileName, file.getInputStream(), objMeta);
+
+		String s3Url = s3Client.getUrl(bucket, fileName).toString();
+
+		return PairingImage.builder()
+			.imageUrl(s3Url)
+			.fileName(fileName)
+			.pairing(pairing)
+			.build();
+	}
+
+	private void deletePairingImage(String fileName) {
+		try {
+			s3Client.deleteObject(bucket, fileName);
+		} catch (AmazonServiceException e) {
+			System.err.println(e.getErrorMessage());
+		}
+	}
+
+	private PairingImage findPairingImage(Long pairingImageId) {
+
+		return pairingImageRepository.findById(pairingImageId)
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 이미지"));
 	}
 
 	@Override

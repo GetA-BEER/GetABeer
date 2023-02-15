@@ -1,10 +1,12 @@
 package be.domain.rating.controller;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,6 +25,7 @@ import be.domain.rating.mapper.RatingTagMapper;
 import be.domain.rating.service.RatingService;
 import be.global.dto.MultiResponseDto;
 
+@Validated
 @RestController
 @RequestMapping("/api/ratings")
 public class RatingController {
@@ -38,7 +41,7 @@ public class RatingController {
 
 	/* 맥주 평가 등록 -> 성공 실패 여부만 리턴 */
 	@PostMapping
-	public ResponseEntity<String> post(@RequestBody RatingRequestDto.Post post) {
+	public ResponseEntity<String> post(@RequestBody @Valid RatingRequestDto.Post post) {
 		ratingService.checkVerifiedTag(post.getColor(), post.getTaste(), post.getFlavor(), post.getCarbonation());
 
 		RatingTag ratingTag = tagMapper.ratingPostDtoToRatingTag(post);
@@ -51,7 +54,7 @@ public class RatingController {
 	/* 맥주 평가 수정 -> 성공 실패 여부만 리턴 */
 	@PatchMapping("/{ratingId}")
 	public ResponseEntity<String> patch(@PathVariable @Positive Long ratingId,
-		@RequestBody RatingRequestDto.Patch patch) {
+		@RequestBody @Valid RatingRequestDto.Patch patch) {
 
 		RatingTag ratingTag = tagMapper.ratingPatchDtoToRatingTag(patch);
 

@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.validator.constraints.Range;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,10 +24,14 @@ public class PairingImage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@Column(nullable = false)
 	private String imageUrl;
 
+	@Column(nullable = false)
 	private String fileName;
+
+	@Range(min = 1, max = 3)
+	private Integer imagesOrder;
 
 	/* 🧡 페어링 이미지 - 페어링 다대일 연관관계 */
 	@ManyToOne
@@ -45,7 +51,7 @@ public class PairingImage {
 		this.pairing = pairing;
 	}
 
-	public void updateImage(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImagesOrder(Integer imagesOrder) {
+		this.imagesOrder = imagesOrder;
 	}
 }

@@ -76,12 +76,14 @@ public class PairingService {
 	}
 
 	public List<PairingImage> getImageList(Long pairingId) {
-		return pairingRepository.findPairingImage(pairingId);
+
+		return pairingImageRepository.findPairingImage(pairingId);
 	}
 
 	/* 페어링 수정 */
 	@Transactional
-	public String update(Pairing pairing, long pairingId, String category, List<String> image) {
+	public String update(Pairing pairing, long pairingId, String category, List<String> type,
+		List<Long> url, List<MultipartFile> files) throws IOException {
 
 		/* 존재하는 페어링인지 확인 및 해당 페어링 정보 가져오기 */
 		Pairing findPairing = findVerifiedPairing(pairingId);
@@ -93,11 +95,11 @@ public class PairingService {
 		}
 
 		/* 이미지 수정 */
-		if (image.size() > 3) {
+		if (type.size() > 3) {
 			throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
 		}
 
-		List<PairingImage> pairingImages = updateImage(findPairing, findPairing.getPairingImageList(), image);
+		List<PairingImage> pairingImages = pairingImageHandler.updatePairingImage(findPairing, type, url, files);
 
 		String thumbnail = "";
 		if (pairingImages.size() != 0) {
@@ -136,7 +138,7 @@ public class PairingService {
 		}
 		response.addCategory(findCategory(pairing.getId()));
 		response.addCommentList(pairingCommentRepository.findPairingCommentList(pairingId));
-		response.addImageList(pairingRepository.findPairingImageList(pairingId));
+		response.addImageList(pairingImageRepository.findPairingImageList(pairingId));
 
 		return response;
 	}
@@ -205,7 +207,7 @@ public class PairingService {
 
 	/* 일대다 이미지 리스트 가져오기 */
 	public List<PairingImageDto.Response> getImageDtoList(Long pairingId) {
-		return pairingRepository.findPairingImageList(pairingId);
+		return pairingImageRepository.findPairingImageList(pairingId);
 	}
 
 	/* 카테고리 정보 가져오기 */
@@ -218,11 +220,7 @@ public class PairingService {
 	private Boolean getIsUserLikes(Long pairingId, Long userId) {
 		int userLikes = pairingLikeRepository.findPairingLikeUser(pairingId, userId);
 
-		if (userLikes != 0) {
-			return true;
-		}
-
-		return false;
+		return userLikes != 0;
 	}
 
 	/* 존재하는 페어링인지 확인 -> 존재하면 해당 페어링 반환 */
@@ -236,68 +234,5 @@ public class PairingService {
 	private PairingCategory findCategory(String category) {
 
 		return PairingCategory.valueOf(category);
-	}
-
-	/* 이미지 수정 -> 어떻게하면 더 효과적으로 이미지를 바꿀 수 있지? */
-	@Transactional
-	private List<PairingImage> updateImage(Pairing pairing, List<PairingImage> list, List<String> image) {
-		List<PairingImage> result = new ArrayList<>();
-
-		if (list.size() == image.size()) {
-			for (int i = 0; i < list.size(); i++) {
-				PairingImage pairingImage = list.get(i);
-				pairingImage.updateImage(image.get(i));
-				pairingImageRepository.save(pairingImage);
-				result.add(pairingImage);
-			}
-		} else if (list.size() < image.size()) {
-			if (list.size() == 0) {
-				for (int i = 0; i < image.size(); i++) {
-					PairingImage pairingImage = PairingImage.builder()
-						.imageUrl(image.get(i))
-						.pairing(pairing)
-						.build();
-					pairingImageRepository.save(pairingImage);
-					result.add(pairingImage);
-				}
-			} else {
-				for (int i = 0; i < list.size(); i++) {
-					PairingImage pairingImage = list.get(i);
-					pairingImage.updateImage(image.get(i));
-					pairingImageRepository.save(pairingImage);
-					result.add(pairingImage);
-				}
-
-				for (int j = list.size(); j < image.size(); j++) {
-					PairingImage pairingImage = PairingImage.builder()
-						.imageUrl(image.get(j))
-						.pairing(pairing)
-						.build();
-					pairingImageRepository.save(pairingImage);
-					result.add(pairingImage);
-				}
-			}
-		} else {
-			if (image.size() == 0) {
-				for (int i = 0; i < list.size(); i++) {
-					PairingImage pairingImage = list.get(i);
-					pairingImageRepository.delete(pairingImage);
-				}
-			} else {
-				for (int i = 0; i < image.size(); i++) {
-					PairingImage pairingImage = list.get(i);
-					pairingImage.updateImage(image.get(i));
-					pairingImageRepository.save(pairingImage);
-					result.add(pairingImage);
-				}
-
-				for (int j = image.size(); j < list.size(); j++) {
-					PairingImage pairingImage = list.get(j);
-					pairingImageRepository.delete(pairingImage);
-				}
-			}
-		}
-
-		return result;
 	}
 }
