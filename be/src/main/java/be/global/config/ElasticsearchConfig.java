@@ -9,9 +9,12 @@ import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+
+import be.domain.elasticsearch.repository.BeerSearchRepository;
 
 @Configuration
-// @EnableElasticsearchRepositories(basePackageClasses = BeerSearchRepository.class)
+@EnableElasticsearchRepositories(basePackageClasses = BeerSearchRepository.class)
 public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
 	@Value("${elasticsearch.host}")
@@ -25,7 +28,8 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
 		final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
 			.connectedTo(host + ":" + port)
-			.usingSsl()        // connect to https
+			// .usingSsl()        // connect to https
+			// .withBasicAuth("elastic", "changeme")
 			.build();
 
 		return RestClients.create(clientConfiguration).rest();

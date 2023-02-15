@@ -25,6 +25,14 @@ public class GetABeerScheduler {
 	}
 
 	/*
+	 * 매주 목요일 00시 5분에 이달의 맥주 갱신
+	 */
+	@Scheduled(cron = "0 5 0 * * THU")
+	public void createWeeklyBeer() {
+		beerService.createWeeklyBeer();
+	}
+
+	/*
 	 * 매주 월요일 00시 10분에 직전 주간 통계자료 생성
 	 */
 	@Scheduled(cron = "0 10 0 * * MON")
@@ -34,4 +42,5 @@ public class GetABeerScheduler {
 		statisticsService.createBeerTagStatistics();
 		statisticsService.createPairingCategoryStatistics();
 	}
+
 }

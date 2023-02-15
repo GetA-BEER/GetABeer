@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class VisionController {
-
 	private final ResourceLoader resourceLoader;
 	private final CloudVisionTemplate cloudVisionTemplate;
 	private final ImageAnnotatorClient imageAnnotatorClient;
@@ -61,5 +60,4 @@ public class VisionController {
 
 		return responseBuilder.toString();
 	}
-
 }

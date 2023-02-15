@@ -95,10 +95,10 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
-  cloud:
-    gcp:
-      credentials:
-        location: classpath:/getabeer-376509-6310d68578f1.json
+#  cloud:
+#    gcp:
+#      credentials:
+#        location: classpath:/getabeer-376509-6310d68578f1.json
 cloud:
   aws:
     credentials:
@@ -146,3 +146,11 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            client:
+              WIRE: TRACE

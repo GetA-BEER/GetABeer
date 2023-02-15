@@ -7,5 +7,6 @@ public enum BeerCategoryType {
 	DUNKEL(),
 	PILSENER(),
 	FRUIT_BEER(),
-	NON_ALCOHOLIC()
+	NON_ALCOHOLIC(),
+	ETC()
 }

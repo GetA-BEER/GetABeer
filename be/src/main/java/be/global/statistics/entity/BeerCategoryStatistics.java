@@ -39,5 +39,6 @@ public class BeerCategoryStatistics {
 	private Integer pilsener;
 	private Integer fruitBeer;
 	private Integer nonAlcoholic;
+	private Integer etc;
 
 }
