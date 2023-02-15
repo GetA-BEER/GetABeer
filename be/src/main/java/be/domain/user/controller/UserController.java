@@ -192,13 +192,4 @@ public class UserController {
 		return ResponseEntity.ok(new MultiResponseDto<>(userPairingList.getContent(), userPairingList));
 	}
 
-	/**
-	 * 토큰 재발급
-	 */
-	@PostMapping("/refresh")
-	public ResponseEntity<String> refresh(HttpServletRequest request, HttpServletResponse response) {
-		userService.refreshToken(request, response);
-
-		return ResponseEntity.ok("Access Token reissue Success.");
-	}
 }

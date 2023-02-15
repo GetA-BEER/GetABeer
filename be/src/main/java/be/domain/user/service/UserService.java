@@ -50,7 +50,7 @@ import be.domain.user.repository.UserBeerTagRepository;
 import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
-import be.global.image.PairingImageHandler;
+import be.global.image.ImageHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +61,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final EntityManager em;
-	private final JwtTokenizer jwtTokenizer;
+	private final ImageHandler imageHandler;
 	private final UserRepository userRepository;
 	private final BeerTagService beerTagService;
 	private final PasswordEncoder passwordEncoder;
@@ -69,7 +69,6 @@ public class UserService {
 	private final CustomAuthorityUtils authorityUtils;
 	private final PairingRepository pairingRepository;
 	private final BeerCategoryService beerCategoryService;
-	private final PairingImageHandler pairingImageHandler;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final UserBeerTagRepository userBeerTagRepository;
 	private final UserBeerTagQRepository userBeerTagQRepository;
@@ -151,7 +150,7 @@ public class UserService {
 		ProfileImage saved;
 
 		if (verifyProfileImage()) {
-			map = pairingImageHandler.createProfileImage(image, "/profileImage");
+			map = imageHandler.createProfileImage(image, "/profileImage");
 
 			saved = ProfileImage.builder()
 				.imageUrl(map.get("url").toString())
@@ -161,7 +160,7 @@ public class UserService {
 		} else {
 			ProfileImage profileImage = user.getProfileImage();
 
-			map = pairingImageHandler.updateProfileImage(image, "/profileImage", profileImage.getFileKey());
+			map = imageHandler.updateProfileImage(image, "/profileImage", profileImage.getFileKey());
 
 			saved = ProfileImage.builder()
 				.id(profileImage.getId())
@@ -393,44 +392,4 @@ public class UserService {
 		return pairingRepository.findPairingByUser(user, pageRequest);
 	}
 
-	/**
-	 * 토큰 재발급
-	 */
-	public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
-		User user = getLoginUser();
-
-		String[] cookies = request.getHeader("Set-Cookie").split(";");
-		Stream<String> stream = Arrays.stream(cookies)
-			.map(cookie -> cookie.replace(" ", ""))
-			.filter(c -> c.startsWith("refreshToken"));
-		String value = stream.reduce((first, second) -> second)
-			.map(v -> v.replace("refreshToken=", ""))
-			.orElse(null);
-
-		if (!Objects.equals(redisTemplate.opsForValue().get(user.getEmail()), value)) {
-			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
-		}
-
-		redisTemplate.delete(user.getEmail());
-
-		String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(), user.getProvider());
-		String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
-
-		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
-			redisTemplate.delete(user.getEmail());
-		}
-		redisTemplate.opsForValue()
-			.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
-
-		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-			.maxAge(7 * 24 * 60 * 60)
-			.path("/")
-			.secure(true)
-			.sameSite("None")
-			.httpOnly(true)
-			.build();
-
-		response.setHeader("Set-Cookie", cookie.toString());
-		response.setHeader("Authorization", "Bearer " + accessToken);
-	}
 }
