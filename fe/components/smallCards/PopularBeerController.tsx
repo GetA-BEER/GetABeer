@@ -26,12 +26,12 @@ export default function PopularBeerController(props: {
   return (
     <>
       <div className="mx-3 mt-6 text-base font-semibold">
-        <span className="text-y-brown">인기많은</span>
+        <span className="text-y-brown mr-1">인기 많은</span>
         <span className="text-black">맥주</span>
       </div>
       <div className="w-full ">
         <Swiper
-          className="w-full h-fit "
+          className="w-full h-fit"
           slidesPerView={2.4}
           spaceBetween={20}
           modules={[Pagination]}
