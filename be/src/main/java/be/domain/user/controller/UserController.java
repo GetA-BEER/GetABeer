@@ -3,7 +3,6 @@ package be.domain.user.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -35,6 +34,7 @@ import be.domain.pairing.mapper.PairingMapper;
 import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.mapper.RatingMapper;
+import be.domain.user.service.UserPageService;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
@@ -54,6 +54,7 @@ public class UserController {
 	private final UserService userService;
 	private final RatingMapper ratingMapper;
 	private final PairingMapper pairingMapper;
+	private final UserPageService userPageService;
 	private final RatingCommentMapper ratingCommentMapper;
 	private final PairingCommentMapper pairingCommentMapper;
 	private final RatingLikeRepository ratingLikeRepository;
@@ -141,7 +142,6 @@ public class UserController {
 	/**
 	 * 마이페이지
 	 */
-
 	@GetMapping("/mypage")
 	public ResponseEntity<SingleResponseDto<UserDto.UserInfoResponse>> getMyPage() {
 		User user = userService.getLoginUser();
@@ -152,7 +152,7 @@ public class UserController {
 	@GetMapping("/mypage/ratings")
 	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getMyRatings(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
-		Page<Rating> ratings = userService.getUserRating(page);
+		Page<Rating> ratings = userPageService.getUserRating(page);
 		Page<RatingResponseDto.Total> userRatingList = ratingMapper.ratingToRatingResponse(ratings.getContent(),
 			ratingLikeRepository);
 
@@ -163,7 +163,7 @@ public class UserController {
 	@GetMapping("/mypage/comment/pairing")
 	public ResponseEntity<MultiResponseDto<PairingCommentDto.Response>> getMyPairingComments(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
-		Page<PairingComment> pairingComments = userService.getUserPairingComment(page);
+		Page<PairingComment> pairingComments = userPageService.getUserPairingComment(page);
 		Page<PairingCommentDto.Response> responses = pairingCommentMapper.pairingCommentsToPageResponse(
 			pairingComments.getContent());
 
@@ -174,7 +174,7 @@ public class UserController {
 	@GetMapping("/mypage/comment/rating")
 	public ResponseEntity<MultiResponseDto<RatingCommentDto.Response>> getMyRatingComments(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
-		Page<RatingComment> ratingComments = userService.getUserRatingComment(page);
+		Page<RatingComment> ratingComments = userPageService.getUserRatingComment(page);
 		Page<RatingCommentDto.Response> responses = ratingCommentMapper.ratingCommentsToResponsePage(
 			ratingComments.getContent());
 
@@ -185,7 +185,7 @@ public class UserController {
 	@GetMapping("/mypage/pairing")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getMyPairing(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
-		Page<Pairing> pairings = userService.getUserPairing(page);
+		Page<Pairing> pairings = userPageService.getUserPairing(page);
 		Page<PairingResponseDto.Total> userPairingList = pairingMapper.pairingToPairingResponse(pairings.getContent(),
 			pairingLikeRepository);
 

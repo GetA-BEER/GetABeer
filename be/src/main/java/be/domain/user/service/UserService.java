@@ -6,16 +6,11 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,14 +22,6 @@ import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.service.BeerTagService;
-import be.domain.comment.entity.PairingComment;
-import be.domain.comment.entity.RatingComment;
-import be.domain.comment.repository.PairingCommentRepository;
-import be.domain.comment.repository.RatingCommentRepository;
-import be.domain.pairing.entity.Pairing;
-import be.domain.pairing.repository.PairingRepository;
-import be.domain.rating.entity.Rating;
-import be.domain.rating.repository.RatingRepository;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.ProfileImage;
 import be.domain.user.entity.User;
@@ -51,7 +38,6 @@ import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
-import be.global.security.auth.jwt.JwtTokenizer;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,16 +51,12 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final BeerTagService beerTagService;
 	private final PasswordEncoder passwordEncoder;
-	private final RatingRepository ratingRepository;
 	private final CustomAuthorityUtils authorityUtils;
-	private final PairingRepository pairingRepository;
 	private final BeerCategoryService beerCategoryService;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final UserBeerTagRepository userBeerTagRepository;
 	private final UserBeerTagQRepository userBeerTagQRepository;
 	private final ProfileImageRepository profileImageRepository;
-	private final RatingCommentRepository ratingCommentRepository;
-	private final PairingCommentRepository pairingCommentRepository;
 	private final UserBeerCategoryRepository userBeerCategoryRepository;
 	private final UserBeerCategoryQRepository userBeerCategoryQRepository;
 
@@ -137,7 +119,7 @@ public class UserService {
 			edit.getNickname(),
 			edit.getGender(),
 			edit.getAge());
-		em.flush();
+		// em.flush();
 
 		return userRepository.findById(user.getId()).orElseThrow();
 	}
@@ -354,42 +336,6 @@ public class UserService {
 		User user = getLoginUser();
 
 		return user.getProfileImage() == null;
-	}
-
-	/**
-	 * 마이페이지
-	 */
-
-	/* 나의 평가 */
-	public Page<Rating> getUserRating(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return ratingRepository.findRatingByUser(user, pageRequest);
-	}
-
-	/* 나의 레이팅 코멘트 */
-	public Page<RatingComment> getUserRatingComment(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return ratingCommentRepository.findRatingCommentByUser(user, pageRequest);
-	}
-
-	/* 나의 페어링 코멘트 */
-	public Page<PairingComment> getUserPairingComment(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return pairingCommentRepository.findPairingCommentByUser(user, pageRequest);
-	}
-
-	/* 나의 페어링 */
-	public Page<Pairing> getUserPairing(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return pairingRepository.findPairingByUser(user, pageRequest);
 	}
 
 }
