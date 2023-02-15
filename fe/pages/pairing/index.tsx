@@ -4,6 +4,8 @@ import SortBox, { Sort } from '@/components/selectBox/SortBox';
 import { useState } from 'react';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
+import CloseBtn from '@/components/button/CloseBtn';
+import SubmitBtn from '@/components/button/SubmitBtn';
 
 export default function Pairing() {
   const [sort, setSort] = useState<Sort>('mostlikes');

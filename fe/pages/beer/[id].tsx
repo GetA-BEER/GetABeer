@@ -142,12 +142,11 @@ export default function Beer() {
 
       <main className="m-auto h-screen max-w-4xl relative">
         <Image
-          className="w-full h-screen left-0 top-0 fixed -z-10"
+          className="w-full h-screen left-0 top-0 fixed -z-10 select-none"
           src="/images/background.png"
           alt="bg"
           width={500}
           height={500}
-          priority
         />
 
         <div className="m-3">

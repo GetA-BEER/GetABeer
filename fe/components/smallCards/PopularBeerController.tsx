@@ -6,6 +6,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Pagination } from 'swiper';
+import Link from 'next/link';
 
 export interface BeerInfo {
   id: number;
@@ -24,7 +25,7 @@ export default function PopularBeerController(props: {
   const [beerList, setBeerList] = useState<BeerInfo[]>(props.beerProps);
   return (
     <>
-      <div className="mx-3 mt-6 mb-2 text-base font-semibold">
+      <div className="mx-3 mt-6 text-base font-semibold">
         <span className="text-y-brown">인기많은</span>
         <span className="text-black">맥주</span>
       </div>
@@ -37,7 +38,9 @@ export default function PopularBeerController(props: {
         >
           {beerList?.map((popularBeer: BeerInfo, idx: number) => (
             <SwiperSlide key={popularBeer.id}>
-              <PopularBeer popularBeer={popularBeer} idx={idx} />
+              <Link href={`/beer/${popularBeer.id}`}>
+                <PopularBeer popularBeer={popularBeer} idx={idx} />
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

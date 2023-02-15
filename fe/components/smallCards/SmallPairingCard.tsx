@@ -42,7 +42,7 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
       let tagChildHeight = imageChild.clientHeight;
       let deschildHeight = deschild.clientHeight;
       if (parentHeight <= tagChildHeight + deschildHeight) setCollisions(true);
-      console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
+      // console.log(parentHeight, tagChildHeight, deschildHeight, collisions);
     }
   }, [collisions, props.pairingProps.pairingId]);
 
@@ -68,14 +68,15 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
         {props.pairingProps.thumbnail === undefined ? (
           <div id={`pairingImage${props.pairingProps.pairingId}`}></div>
         ) : (
-          <div className="h-[77px] overflow-hidden m-auto">
+          <div className="h-[77px] w-auto overflow-hidden ">
             <Image
               src={props.pairingProps.thumbnail}
               alt="img"
               width={100}
-              height={77}
-              className="m-auto"
+              height={100}
+              className="m-auto h-full w-auto select-none"
               id={`pairingImage${props.pairingProps.pairingId}`}
+              priority
             />
           </div>
         )}

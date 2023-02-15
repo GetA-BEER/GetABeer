@@ -6,7 +6,7 @@ export default function PopularBeer(props: {
   idx: number;
 }) {
   return (
-    <div className="rounded-2xl w-full ml-2 mb-8 bg-white text-y-black drop-shadow-xl text-[5px] border hover:scale-105 overflow-hidden">
+    <div className="rounded-2xl w-full ml-2 mt-2 mb-8 bg-white text-y-black drop-shadow-xl text-[5px] border hover:scale-105 overflow-hidden">
       <div
         className={`${
           props.idx % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'
@@ -16,11 +16,12 @@ export default function PopularBeer(props: {
         <div>{`${props.popularBeer.category} / ${props.popularBeer.country} ${props.popularBeer.level}% ${props.popularBeer.ibu}IBU`}</div>
       </div>
       <Image
-        className="pt-3 rounded-2xl m-auto"
+        className="pt-3 rounded-2xl m-auto select-none"
         alt="Beer"
         src={`${props.popularBeer.image}`}
         width={300}
         height={200}
+        priority
       />
     </div>
   );

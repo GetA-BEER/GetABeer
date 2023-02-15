@@ -64,7 +64,8 @@ export default function SmallCard(props: { cardProps: any }) {
             alt="star"
             width={20}
             height={20}
-            className="mr-1 mb-[3px] text-y-gold drop-shadow-md"
+            className="mr-1 mb-[3px] text-y-gold drop-shadow-md  select-none"
+            priority
           />
           {starScore}
         </span>

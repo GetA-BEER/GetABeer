@@ -1,5 +1,5 @@
 // 디테일 페이지 시간 조회
-export const DetailTime = (time: string) => {
+export const DetailTime = (time: string): string => {
   let nowTime = new Date();
   let createdTime = new Date(time);
   let elapsedMsec = nowTime.getTime() - createdTime.getTime();
@@ -38,13 +38,7 @@ export const DetailTime = (time: string) => {
         result = Math.floor(elsTime.elapsedSec) + '방금전';
       }
     }
-  }
-  if (elsTime.elapsedDay >= 1 && elsTime.elapsedDay < 2) {
-    result = Math.floor(elsTime.elapsedDay) + ' 어제';
-  } else if (elsTime.elapsedDay >= 2 && elsTime.elapsedDay < 3) {
-    result = Math.floor(elsTime.elapsedDay) + ' 일 전';
-  } else if (elsTime.elapsedDay >= 3) {
-    result = time?.slice(0, 10).split('-').join('.');
-  }
+  } else result = time?.slice(0, 10).split('-').join('.');
+
   return result;
 };

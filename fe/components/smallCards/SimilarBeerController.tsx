@@ -19,39 +19,10 @@ export interface BeerInfo {
 export default function SimilarBeerController(props: {
   beerProps: BeerInfo[];
 }) {
-  const BeerList = [
-    {
-      id: 1,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 2,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-    {
-      id: 3,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
-    },
-  ];
   const [beerList, setBeerList] = useState<BeerInfo[]>(props.beerProps);
   return (
     <>
-      <div className="flex justify-between mx-5 mb-4 mt-6 font-semibold text-sm">
+      <div className="flex justify-between mx-5 mt-6 font-semibold text-sm">
         비슷한 맥주
       </div>
       <div className="w-full">
