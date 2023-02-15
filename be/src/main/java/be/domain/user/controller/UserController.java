@@ -3,6 +3,7 @@ package be.domain.user.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -174,7 +175,8 @@ public class UserController {
 	public ResponseEntity<MultiResponseDto<RatingCommentDto.Response>> getMyRatingComments(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<RatingComment> ratingComments = userService.getUserRatingComment(page);
-		Page<RatingCommentDto.Response> responses = ratingCommentMapper.ratingCommentsToResponsePage(ratingComments.getContent());
+		Page<RatingCommentDto.Response> responses = ratingCommentMapper.ratingCommentsToResponsePage(
+			ratingComments.getContent());
 
 		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), ratingComments));
 	}
@@ -188,5 +190,15 @@ public class UserController {
 			pairingLikeRepository);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(userPairingList.getContent(), userPairingList));
+	}
+
+	/**
+	 * 토큰 재발급
+	 */
+	@PostMapping("/refresh")
+	public ResponseEntity<String> refresh(HttpServletRequest request, HttpServletResponse response) {
+		userService.refreshToken(request, response);
+
+		return ResponseEntity.ok("Access Token reissue Success.");
 	}
 }
