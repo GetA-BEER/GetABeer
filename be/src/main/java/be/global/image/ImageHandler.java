@@ -17,6 +17,8 @@ public interface ImageHandler {
 	List<PairingImage> createPairingImage(Pairing pairing,
 		List<MultipartFile> files, Long userId, Beer beer) throws IOException;
 
+	List<PairingImage> updatePairingImage(Pairing pairing, List<String> type, List<Long> url,
+		List<MultipartFile> files) throws IOException;
 	void deleteProfileImage(String fileKey, String folderSrc);
 
 	HashMap updateProfileImage(MultipartFile file, String folderSrc, String oldFileKey) throws IOException;

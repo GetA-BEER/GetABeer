@@ -58,6 +58,9 @@ public class RatingService {
 		/* 이미 평가를 입력했던 유저라면 입력할 수 없음 */
 		verifyExistUser(user.getId());
 
+		/* 0점은 줄 수 없음, MIN 은 Long 타입이라 여기서 한 번 거르기 */
+		cannotZeroStar(rating.getStar());
+
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
@@ -84,6 +87,10 @@ public class RatingService {
 		// User user = findRating.getUser();
 		// User loginUser = userService.getLoginUser();
 		// userService.checkUser(user.getId(), loginUser.getId());
+
+		if (rating.getStar() != null) {
+			cannotZeroStar(rating.getStar());
+		}
 
 		/* 레이팅 아이디로 맥주 조회 */
 		Beer findBeer = beerService.findBeerByRatingId(ratingId);
@@ -276,6 +283,11 @@ public class RatingService {
 		}
 	}
 
+	private void cannotZeroStar(Double star) {
+		if (star == 0) {
+			throw new BusinessLogicException(ExceptionCode.ZERO_STAR);
+		}
+	}
 	private void saveBeerBeerTags(Beer findBeer, List<BeerTagType> beerTagTypeList) {
 
 		beerTagTypeList
