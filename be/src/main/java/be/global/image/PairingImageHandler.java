@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ImageHandlerImpl implements ImageHandler {
+public class PairingImageHandler implements ImageHandler {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 

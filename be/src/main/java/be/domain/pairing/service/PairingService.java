@@ -27,7 +27,7 @@ import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
-import be.global.image.ImageHandler;
+import be.global.image.PairingImageHandler;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class PairingService {
 	private final BeerService beerService;
 	private final UserService userService;
-	private final ImageHandler imageHandler;
+	private final PairingImageHandler pairingImageHandler;
 	private final PairingRepository pairingRepository;
 	private final PairingLikeRepository pairingLikeRepository;
 	private final PairingImageRepository pairingImageRepository;
@@ -59,7 +59,7 @@ public class PairingService {
 			throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
 		}
 
-		List<PairingImage> pairingImages = imageHandler.createPairingImage(pairing, files, user.getId(), beer);
+		List<PairingImage> pairingImages = pairingImageHandler.createPairingImage(pairing, files, user.getId(), beer);
 
 		String thumbnail = "";
 		if (pairingImages.size() != 0) {
@@ -99,7 +99,7 @@ public class PairingService {
 			throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
 		}
 
-		List<PairingImage> pairingImages = imageHandler.updatePairingImage(findPairing, type, url, files);
+		List<PairingImage> pairingImages = pairingImageHandler.updatePairingImage(findPairing, type, url, files);
 
 		String thumbnail = "";
 		if (pairingImages.size() != 0) {
