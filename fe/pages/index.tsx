@@ -3,6 +3,7 @@ import Advertise from '@/components/mainPage/Advertise';
 import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
+import Footer from '@/components/Footer';
 
 export default function Main() {
   const beerProps = [
@@ -13,16 +14,7 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 2,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
+      image: '/images/121.jpeg',
     },
     {
       id: 3,
@@ -31,7 +23,7 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
+      image: '/images/123.jpeg',
     },
     {
       id: 4,
@@ -40,16 +32,25 @@ export default function Main() {
       country: '한국',
       level: 4.1,
       ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
+      image: '/images/124.jpeg',
     },
     {
-      id: 5,
+      id: 6,
       title: '필라이트',
       category: '에일',
       country: '한국',
       level: 4.1,
       ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
+      image: '/images/146.jpeg',
+    },
+    {
+      id: 7,
+      title: '필라이트',
+      category: '에일',
+      country: '한국',
+      level: 4.1,
+      ibu: 17.5,
+      image: '/images/150.jpeg',
     },
   ];
 
@@ -66,9 +67,11 @@ export default function Main() {
         <div className="m-auto">
           <BeerCategoryBtn />
           <PopularBeerController beerProps={beerProps} />
+          <PopularBeerController beerProps={beerProps} />
         </div>
         <div className="pb-14"></div>
         <NavBar />
+        <Footer />
       </main>
     </>
   );

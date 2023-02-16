@@ -2,6 +2,7 @@ import Head from 'next/head';
 import DetailCard from '@/components/pairing/DetailCard';
 import NavBar from '@/components/NavBar';
 import SpeechBalloon from '@/components/SpeechBalloon';
+import CommentInput from '@/components/inputs/CommentInput';
 
 // export interface PairingInfo {
 //   id: number;
@@ -44,7 +45,6 @@ export default function PairingDetail() {
         content: '페어링 댓글',
         createdAt: '2023-02-09T13:58:20.330872',
         modifiedAt: '2023-02-09T13:58:20.330872',
-        ment: '여기다 입력하면 글자가 써지는건가',
       },
       {
         pairingId: 1,
@@ -57,9 +57,9 @@ export default function PairingDetail() {
       },
     ],
     category: 'GRILL',
-    likeCount: 0,
+    likeCount: 3,
     commentCount: 2,
-
+    isUserLikes: true,
     createdAt: '2023-02-09T13:57:53.875197',
     modifiedAt: '2023-02-09T13:58:23.621731',
   };
@@ -75,11 +75,15 @@ export default function PairingDetail() {
         <div className="text-xl mt-4 mb-3 text-center font-semibold">
           페어링
         </div>
-        <DetailCard pairingProps={pairingProps} />
-        {pairingProps.commentList.map((el: any) => {
-          return <SpeechBalloon props={el} key={el.pairingCommentId} />;
-        })}
-
+        <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
+          <DetailCard pairingProps={pairingProps} />
+          <div className="mx-3 mb-5">
+            <CommentInput />
+          </div>
+          {pairingProps.commentList.map((el: any) => {
+            return <SpeechBalloon props={el} key={el.pairingCommentId} />;
+          })}
+        </div>
         <NavBar />
       </main>
     </>

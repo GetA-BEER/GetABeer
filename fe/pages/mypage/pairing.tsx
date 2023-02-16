@@ -5,40 +5,44 @@ import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 
 export default function Pairing() {
-  const pairingCardProps = [
-    {
-      id: 1,
-      title: '제주펠롱에일',
-      nickname: '나야',
-      date: '2023.41.30',
-      comment: 4,
-      thumb: 17,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
+  const pairingCardProps = {
+    data: [
+      {
+        beerId: 1,
+        pairingId: 1,
+        nickname: '김맥주',
+        content: '수정된 페어링',
+        thumbnail:
+          'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
+        category: 'SNACK',
+        likeCount: 3,
+        commentCount: 0,
+        isUserLikes: true,
+        createdAt: '2023-02-06T00:29:14.59836',
+        modifiedAt: '2023-02-06T00:31:11.1951',
+      },
+      {
+        beerId: 1,
+        pairingId: 2,
+        nickname: '김맥주',
+        content: '페어링 안내',
+        thumbnail:
+          'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
+        category: 'GRILL',
+        likeCount: 2,
+        commentCount: 0,
+        isUserLikes: false,
+        createdAt: '2023-02-06T00:35:58.259552',
+        modifiedAt: '2023-02-06T00:35:58.259552',
+      },
+    ],
+    pageInfo: {
+      page: 1,
+      size: 5,
+      totalElements: 2,
+      totalPages: 1,
     },
-    {
-      id: 2,
-      title: '제주펠롱에일',
-      nickname: '안유진',
-      date: '2023.41.30',
-      comment: 40,
-      thumb: 170,
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
-    },
-    {
-      id: 3,
-      title: '제주펠롱에일',
-      nickname: '유지니어스',
-      date: '2023.41.30',
-      comment: 40,
-      thumb: 170,
-      image: 'https://t1.daumcdn.net/cfile/tistory/99D743505B5482502A',
-      description:
-        '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다',
-    },
-  ];
+  };
   return (
     <>
       <Head>
@@ -54,7 +58,7 @@ export default function Pairing() {
         <div className="m-auto flex">
           <PairingBox />
         </div>
-        <PairingCardController pairingCardProps={pairingCardProps} />
+        <PairingCardController pairingCardProps={pairingCardProps.data} />
         <div className="pb-32"></div>
         <NavBar />
       </main>
