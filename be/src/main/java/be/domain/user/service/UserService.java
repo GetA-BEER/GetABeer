@@ -51,8 +51,8 @@ public class UserService {
 	@Transactional
 	public User registerUser(User user) {
 		verifyExistEmail(user.getEmail());
-		// verifiedEmail(user.getEmail()); // 이메일인증된 유저만 회원가입 가능
-		// verifyNickname(user.getNickname()); // 닉네임 중복 확인인데 왜 모든 닉네임이 중복되지..?
+		verifiedEmail(user.getEmail()); // 이메일인증된 유저만 회원가입 가능
+		verifyNickname(user.getNickname()); // 닉네임 중복 확인
 
 		User saved = User.builder()
 			.id(user.getId())
@@ -140,15 +140,6 @@ public class UserService {
 		return user;
 	}
 
-	/* 닉네임 확인 */
-	public Boolean verifyNickname(String nickname) {
-		if (userRepository.existsByNickname(nickname)) {
-			return true;
-		} else {
-			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
-		}
-	}
-
 	/* 유저 정보 조회 */
 	@Transactional(readOnly = true)
 	public User getUser(Long id) {
@@ -196,13 +187,6 @@ public class UserService {
 		return authentication;
 	}
 
-	/* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
-	public void checkUser(Long userId, Long loginUserId) {
-		if (!userId.equals(loginUserId)) {
-			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
-		}
-	}
-
 	/* 유저 상태 : 활동중, 휴면, 탈퇴유저 구분 */
 	public void verifyUserStatus(String status) {
 		UserStatus userStatus = Arrays.stream(UserStatus.values())
@@ -228,20 +212,28 @@ public class UserService {
 		redisTemplate.delete(email);
 	}
 
+	/* 닉네임 확인 */
+	public Boolean verifyNickname(String nickname) {
+		if (!userRepository.existsByNickname(nickname)) {
+			return true;
+		} else {
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+		}
+	}
+
 	/* 이미 가입한 이메일인지 확인 */
 	public boolean verifyExistEmail(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
 		}
-
 		return true;
 	}
 
 	/* 존재하는 유저인지 확인 및 ID 반환*/
 	public Long findUserEmail(String email) {
-		Optional<User> user = userRepository.findByEmail(email);
-		User findUser = user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+		User findUser = userRepository.findByEmail(email)
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 		return findUser.getId();
 	}
 
@@ -258,6 +250,13 @@ public class UserService {
 		}
 		if (Objects.equals(redisTemplate.opsForValue().get(email), "false")) {
 			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_EMAIL);
+		}
+	}
+
+	/* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
+	public void checkUser(Long userId, Long loginUserId) {
+		if (!userId.equals(loginUserId)) {
+			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
 		}
 	}
 
