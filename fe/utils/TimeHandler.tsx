@@ -1,5 +1,5 @@
 // 디테일 페이지 시간 조회
-export const TestTimeFunc = (time: any): any => {
+export const TimeHandler = (time: any): any => {
   let nowTime = new Date();
   let createdTime = new Date(time);
   let elapsedMsec = nowTime.getTime() - createdTime.getTime();
