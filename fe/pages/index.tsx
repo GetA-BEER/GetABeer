@@ -44,7 +44,7 @@ export default function Main() {
       image: '/images/146.jpeg',
     },
     {
-      id: 6,
+      id: 7,
       title: '필라이트',
       category: '에일',
       country: '한국',
