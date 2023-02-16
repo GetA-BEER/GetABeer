@@ -1,5 +1,5 @@
 // 디테일 페이지 시간 조회
-export const TimeFunc = (time: string): string => {
+export const TimeFunc = (time: any): string => {
   let nowTime = new Date();
   let createdTime = new Date(time);
   let elapsedMsec = nowTime.getTime() - createdTime.getTime();
