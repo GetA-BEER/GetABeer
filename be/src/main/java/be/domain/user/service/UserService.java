@@ -6,16 +6,11 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,35 +18,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import be.domain.beercategory.entity.BeerCategory;
-import be.domain.beercategory.service.BeerCategoryService;
-import be.domain.beertag.entity.BeerTag;
-import be.domain.beertag.service.BeerTagService;
-import be.domain.comment.entity.PairingComment;
-import be.domain.comment.entity.RatingComment;
-import be.domain.comment.repository.PairingCommentRepository;
-import be.domain.comment.repository.RatingCommentRepository;
-import be.domain.pairing.entity.Pairing;
-import be.domain.pairing.repository.PairingRepository;
-import be.domain.rating.entity.Rating;
-import be.domain.rating.repository.RatingRepository;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.ProfileImage;
 import be.domain.user.entity.User;
-import be.domain.user.entity.UserBeerCategory;
-import be.domain.user.entity.UserBeerTag;
 import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.ProfileImageRepository;
-import be.domain.user.repository.UserBeerCategoryQRepository;
-import be.domain.user.repository.UserBeerCategoryRepository;
-import be.domain.user.repository.UserBeerTagQRepository;
-import be.domain.user.repository.UserBeerTagRepository;
 import be.domain.user.repository.UserRepository;
+import be.domain.user.service.pattern.StateButton;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
-import be.global.image.PairingImageHandler;
-import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.image.ImageHandler;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,23 +38,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final EntityManager em;
-	private final JwtTokenizer jwtTokenizer;
+	private final ImageHandler imageHandler;
 	private final UserRepository userRepository;
-	private final BeerTagService beerTagService;
 	private final PasswordEncoder passwordEncoder;
-	private final RatingRepository ratingRepository;
 	private final CustomAuthorityUtils authorityUtils;
-	private final PairingRepository pairingRepository;
-	private final BeerCategoryService beerCategoryService;
-	private final PairingImageHandler pairingImageHandler;
 	private final RedisTemplate<String, String> redisTemplate;
-	private final UserBeerTagRepository userBeerTagRepository;
-	private final UserBeerTagQRepository userBeerTagQRepository;
+	private final UserPreferenceService userPreferenceService;
 	private final ProfileImageRepository profileImageRepository;
-	private final RatingCommentRepository ratingCommentRepository;
-	private final PairingCommentRepository pairingCommentRepository;
-	private final UserBeerCategoryRepository userBeerCategoryRepository;
-	private final UserBeerCategoryQRepository userBeerCategoryQRepository;
+	private static StateButton stateButton = new StateButton();
 
 	/* 유저 회원가입 */
 	@Transactional
@@ -109,8 +77,8 @@ public class UserService {
 		User user = userRepository.findById(post.getId())
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-		setUserBeerTags(post, user);
-		setUserBeerCategories(post, user);
+		userPreferenceService.setUserBeerTags(post, user);
+		userPreferenceService.setUserBeerCategories(post, user);
 		user.setUserInfo(post.getAge(), post.getGender());
 		em.flush();
 
@@ -127,11 +95,11 @@ public class UserService {
 		}
 
 		if (edit.getUserBeerCategories() != null) {
-			setUserBeerCategories(edit, user);
+			userPreferenceService.setUserBeerCategories(edit, user);
 		}
 
 		if (edit.getUserBeerTags() != null) {
-			setUserBeerTags(edit, user);
+			userPreferenceService.setUserBeerTags(edit, user);
 		}
 
 		user.edit(edit.getImageUrl(),
@@ -147,32 +115,9 @@ public class UserService {
 	@Transactional
 	public User updateProfileImage(MultipartFile image) throws IOException {
 		User user = getLoginUser();
-		HashMap<String, Objects> map;
-		ProfileImage saved;
-
-		if (verifyProfileImage()) {
-			map = pairingImageHandler.createProfileImage(image, "/profileImage");
-
-			saved = ProfileImage.builder()
-				.imageUrl(map.get("url").toString())
-				.fileKey(map.get("fileKey").toString())
-				.user(user)
-				.build();
-		} else {
-			ProfileImage profileImage = user.getProfileImage();
-
-			map = pairingImageHandler.updateProfileImage(image, "/profileImage", profileImage.getFileKey());
-
-			saved = ProfileImage.builder()
-				.id(profileImage.getId())
-				.imageUrl(map.get("url").toString())
-				.fileKey(map.get("fileKey").toString())
-				.user(user)
-				.build();
-		}
+		ProfileImage saved = stateButton.clickButton(stateButton, new HashMap<>(), image, imageHandler, user);
 
 		profileImageRepository.save(saved);
-
 		user.setImageUrl(saved.getImageUrl());
 
 		return userRepository.save(user);
@@ -212,36 +157,6 @@ public class UserService {
 		return findVerifiedUser(user.getId());
 	}
 
-	/* 로그인 유저 반환 */
-	public User getLoginUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		if (authentication == null) {
-			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
-		}
-
-		return userRepository.findByEmail(authentication.getName())
-			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-	}
-
-	public User getLoginUserReturnNull() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		if (authentication == null) {
-			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
-		}
-
-		return userRepository.findByEmail(authentication.getName())
-			.orElse(null);
-	}
-
-	/* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
-	public void checkUser(Long userId, Long loginUserId) {
-		if (!userId.equals(loginUserId)) {
-			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
-		}
-	}
-
 	/* 유저 탈퇴 */
 	@Transactional
 	public void withdraw() {
@@ -256,6 +171,36 @@ public class UserService {
 		User user = getLoginUser();
 		userRepository.delete(user);
 		return "유저 완전 삭제 성공";
+	}
+
+	/* 로그인 유저 반환 */
+	public User getLoginUser() {
+		Authentication authentication = verifiedAuthentication();
+
+		return userRepository.findByEmail(authentication.getName())
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+	}
+
+	public User getLoginUserReturnNull() {
+		Authentication authentication = verifiedAuthentication();
+
+		return userRepository.findByEmail(authentication.getName())
+			.orElse(null);
+	}
+
+	private Authentication verifiedAuthentication() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+		}
+		return authentication;
+	}
+
+	/* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
+	public void checkUser(Long userId, Long loginUserId) {
+		if (!userId.equals(loginUserId)) {
+			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
+		}
 	}
 
 	/* 유저 상태 : 활동중, 휴면, 탈퇴유저 구분 */
@@ -316,121 +261,4 @@ public class UserService {
 		}
 	}
 
-	/* set UserBeerTags */
-	private void setUserBeerTags(User post, User user) {
-		if (user.getUserBeerTags() != null) {
-			userBeerTagQRepository.delete(user.getId());
-		}
-
-		post.getUserBeerTags().forEach(userBeerTag -> {
-			BeerTag beerTag =
-				beerTagService.findVerifiedBeerTagByBeerTagType(userBeerTag.getBeerTag().getBeerTagType());
-			UserBeerTag saved = UserBeerTag.builder()
-				.user(user)
-				.beerTag(beerTag)
-				.build();
-			userBeerTagRepository.save(saved);
-		});
-	}
-
-	/* set BeerCategories */
-	private void setUserBeerCategories(User post, User user) {
-		if (user.getUserBeerCategories() != null) {
-			userBeerCategoryQRepository.delete(user.getId());
-		}
-
-		post.getUserBeerCategories().forEach(userBeerCategory -> {
-			BeerCategory beerCategory =
-				beerCategoryService.findVerifiedBeerCategory(userBeerCategory.getBeerCategory().getBeerCategoryType());
-			UserBeerCategory saved = UserBeerCategory.builder()
-				.user(user)
-				.beerCategory(beerCategory)
-				.build();
-			userBeerCategoryRepository.save(saved);
-		});
-	}
-
-	/* 이미지 유무 확인 */
-	public Boolean verifyProfileImage() {
-		User user = getLoginUser();
-
-		return user.getProfileImage() == null;
-	}
-
-	/**
-	 * 마이페이지
-	 */
-
-	/* 나의 평가 */
-	public Page<Rating> getUserRating(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return ratingRepository.findRatingByUser(user, pageRequest);
-	}
-
-	/* 나의 레이팅 코멘트 */
-	public Page<RatingComment> getUserRatingComment(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return ratingCommentRepository.findRatingCommentByUser(user, pageRequest);
-	}
-
-	/* 나의 페어링 코멘트 */
-	public Page<PairingComment> getUserPairingComment(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return pairingCommentRepository.findPairingCommentByUser(user, pageRequest);
-	}
-
-	/* 나의 페어링 */
-	public Page<Pairing> getUserPairing(int page) {
-		User user = getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return pairingRepository.findPairingByUser(user, pageRequest);
-	}
-
-	/**
-	 * 토큰 재발급
-	 */
-	public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
-		User user = getLoginUser();
-
-		String[] cookies = request.getHeader("Set-Cookie").split(";");
-		Stream<String> stream = Arrays.stream(cookies)
-			.map(cookie -> cookie.replace(" ", ""))
-			.filter(c -> c.startsWith("refreshToken"));
-		String value = stream.reduce((first, second) -> second)
-			.map(v -> v.replace("refreshToken=", ""))
-			.orElse(null);
-
-		if (!Objects.equals(redisTemplate.opsForValue().get(user.getEmail()), value)) {
-			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
-		}
-
-		redisTemplate.delete(user.getEmail());
-
-		String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(), user.getProvider());
-		String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
-
-		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
-			redisTemplate.delete(user.getEmail());
-		}
-		redisTemplate.opsForValue()
-			.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
-
-		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-			.maxAge(7 * 24 * 60 * 60)
-			.path("/")
-			.secure(true)
-			.sameSite("None")
-			.httpOnly(true)
-			.build();
-
-		response.setHeader("Set-Cookie", cookie.toString());
-		response.setHeader("Authorization", "Bearer " + accessToken);
-	}
 }
