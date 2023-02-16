@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
 import PairingImageCarousel from '@/components/pairing/PairingImageCarousel';
-import { TimeFunc } from '@/utils/TimeFunc';
+import { TimeFunc } from '../../utils/TimeFunc';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 
 export default function DetailCard(props: { pairingProps: any }) {

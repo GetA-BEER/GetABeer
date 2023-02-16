@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BiUser } from 'react-icons/bi';
 
-import { TimeFunc } from '@/utils/TimeFunc';
+import { TimeFunc } from '../utils/TimeFunc';
 
 export default function SpeechBalloon({ props }: any) {
   const [date, setDate] = useState<any>('');

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
-import { TimeFunc } from '@/utils/TimeFunc';
+import { TimeFunc } from '../../utils/TimeFunc';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 
 export default function PairingCard(props: { pairingCardProps: any }) {

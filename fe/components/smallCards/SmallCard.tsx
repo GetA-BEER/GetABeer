@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import SmallTag from '@/components/smallCards/SmallTag';
-import { TimeFunc } from '@/utils/TimeFunc';
+import { TimeFunc } from '../../utils/TimeFunc';
 
 export default function SmallCard(props: { cardProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
