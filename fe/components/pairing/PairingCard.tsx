@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
-import { TimeFunc } from '../../utils/TimeFunc';
+import { TestTimeFunc } from '@/utils/TestTimeFunc';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 
 export default function PairingCard(props: { pairingCardProps: any }) {
@@ -23,7 +23,7 @@ export default function PairingCard(props: { pairingCardProps: any }) {
 
   useEffect(() => {
     if (initialDate !== undefined) {
-      let tmpDate = TimeFunc(initialDate);
+      let tmpDate = TestTimeFunc(initialDate);
       setDate(tmpDate);
     }
   }, [initialDate]);

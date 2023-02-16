@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { BiUser } from 'react-icons/bi';
 
-import { TimeFunc } from '../utils/TimeFunc';
+import { TestTimeFunc } from '@/utils/TestTimeFunc';
 
 export default function SpeechBalloon({ props }: any) {
   const [date, setDate] = useState<any>('');
 
   useEffect(() => {
     if (props?.createdAt !== undefined) {
-      let tmpDate = TimeFunc(props?.createdAt);
+      let tmpDate = TestTimeFunc(props?.createdAt);
       setDate(tmpDate);
     }
   }, [props?.createdAt]);
+  console.log('DateDateDate', typeof date);
 
   return (
     <div className="mx-5 mb-4">

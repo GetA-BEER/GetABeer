@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import SmallTag from '@/components/smallCards/SmallTag';
-import { TimeFunc } from '../../utils/TimeFunc';
+import { TestTimeFunc } from '@/utils/TestTimeFunc';
 
 export default function SmallCard(props: { cardProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
@@ -31,7 +31,7 @@ export default function SmallCard(props: { cardProps: any }) {
 
   useEffect(() => {
     if (initialDate !== undefined) {
-      let tmpDate = TimeFunc(initialDate);
+      let tmpDate = TestTimeFunc(initialDate);
       setDate(tmpDate);
     }
   }, [initialDate]);

@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
 import PairingImageCarousel from '@/components/pairing/PairingImageCarousel';
-import { TimeFunc } from '../../utils/TimeFunc';
+import { TestTimeFunc } from '@/utils/TestTimeFunc';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 
 export default function DetailCard(props: { pairingProps: any }) {
@@ -23,7 +23,7 @@ export default function DetailCard(props: { pairingProps: any }) {
 
   useEffect(() => {
     if (initialDate !== undefined) {
-      let tmpDate = TimeFunc(initialDate);
+      let tmpDate = TestTimeFunc(initialDate);
       setDate(tmpDate);
     }
   }, [initialDate]);
