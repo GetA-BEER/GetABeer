@@ -183,7 +183,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("https")
-			.host("getabeer.co.kr")
+			.host("server.getabeer.co.kr")
 			// .port(8081)
 			.build()
 			.toUri();

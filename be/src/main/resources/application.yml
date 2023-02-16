@@ -10,7 +10,7 @@ spring:
   cache:
     type: redis
   redis:
-    host: localhost
+    host: localhost # ${SERVER_ENDPOINT}
     port: 6379
   datasource:
     url: jdbc:h2:mem:test
@@ -37,7 +37,7 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            redirect-uri: https://server.getabeer.co.kr/login/oauth2/code/google
             authorization-grant-type: authorization_code
             scope:
               - email
@@ -45,7 +45,7 @@ spring:
           kakao:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
-            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            redirect-uri: https://server.getabeer.co.kr/login/oauth2/code/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope:
@@ -56,7 +56,7 @@ spring:
           naver:
             client-id: ${NAVER_CLIENT_ID}
             client-secret: ${NAVER_CLIENT_SECRET}
-            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            redirect-uri: https://server.getabeer.co.kr/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             scope:
@@ -95,10 +95,10 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
-#  cloud:
-#    gcp:
-#      credentials:
-#        location: classpath:/getabeer-376509-6310d68578f1.json
+  cloud:
+    gcp:
+      credentials:
+        location: classpath:/getabeer-376509-6310d68578f1.json
 cloud:
   aws:
     credentials:
@@ -123,7 +123,7 @@ jwt:
 app:
   oauth2:
     authorizedRedirectUris:
-      - http://localhost:3000/oauth/redirect
+      - https://server.getabeer.co.kr/oauth/redirect
 webdriver:
   chrome:
     driverid: webdriver.chrome.driver
