@@ -12,7 +12,7 @@ import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 export default function PairingCard(props: { pairingCardProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [randomNum, setRandomNum] = useState(0);
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<any>('');
   const initialDate = props?.pairingCardProps?.createdAt;
   const [collisions, setCollisions] = useState<boolean>(false);
   const MAX_PARENT_HEIGHT = 96;

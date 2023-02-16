@@ -15,7 +15,7 @@ export default function SmallCard(props: { cardProps: any }) {
   const [starScore, setStarScore] = useState<number>(props?.cardProps?.star);
   const [collisions, setCollisions] = useState<boolean>(false);
   const [randomNum, setRandomNum] = useState(0);
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<any>('');
   const initialDate = props?.cardProps?.createdAt;
 
   useEffect(() => {

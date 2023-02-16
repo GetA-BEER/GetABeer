@@ -13,7 +13,7 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [randomNum, setRandomNum] = useState(0);
   const [collisions, setCollisions] = useState<boolean>(false);
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<any>('');
   const initialDate = props?.pairingProps?.createdAt;
 
   useEffect(() => {

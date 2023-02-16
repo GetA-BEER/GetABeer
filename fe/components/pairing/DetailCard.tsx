@@ -13,7 +13,7 @@ import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 export default function DetailCard(props: { pairingProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [randomNum, setRandomNum] = useState(0);
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<any>('');
   const initialDate = props?.pairingProps?.createdAt;
 
   useEffect(() => {
