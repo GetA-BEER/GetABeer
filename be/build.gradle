@@ -45,6 +45,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // View Template, Image Download
     //    --------------------------------------------------------------------------------------------
     implementation 'org.springframework.boot:spring-boot-starter-websocket' // WebSocket
+//    implementation 'org.springframework.kafka:spring-kafka' // Kafka
     implementation 'org.webjars:sockjs-client:1.5.1' // SockJS
     implementation 'org.webjars:stomp-websocket:2.3.4' // STOMP
     implementation 'org.springframework.boot:spring-boot-devtools:' // DevTools
@@ -94,6 +95,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-test' // JUnit4 Test
     testImplementation 'org.springframework.security:spring-security-test' // Spring Security Test
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // Spring Rest Docs
+//    testImplementation 'org.springframework.kafka:spring-kafka-test'
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor' // Spring Rest Docs, Asciidoctor
 }
 
@@ -125,9 +127,9 @@ bootJar {
     }
 }
 
-test { // 빌드시 테스트 제외
-    exclude '**/*'
-}
+//test { // 빌드시 테스트 제외
+//    exclude '**/*'
+//}
 
 //    ---------------------------------------Query DSL--------------------------------------------
 // 경로 지정
