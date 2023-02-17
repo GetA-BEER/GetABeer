@@ -3,10 +3,49 @@ import NavBar from '@/components/NavBar';
 import BigInput from '@/components/inputs/BigInput';
 import PairingBox from '@/components/selectBox/PairingBox';
 import ImageUpload from '../../components/postPairingPage/ImageUpload';
-import { useState } from 'react';
+import MiddleCard from '@/components/middleCards/MiddleCard';
+import CloseBtn from '@/components/button/CloseBtn';
+import SubmitBtn from '@/components/button/SubmitBtn';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+export interface MiddleCardInfo {
+  beerId: number;
+  thumbnail: string;
+  korName: string;
+  category: string[];
+  country: string;
+  abv: number;
+  ibu: number;
+  totalStarCount: number;
+  totalAverageStars: number;
+  beerTags: string[];
+}
+
+export const testBeer: MiddleCardInfo = {
+  beerId: 1,
+  thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
+  korName: '제주 슬라이스',
+  category: ['ALE', 'IPA'],
+  country: '한국',
+  abv: 4.5,
+  ibu: 28,
+  totalStarCount: 25,
+  totalAverageStars: 4.3,
+  beerTags: ['금색', '단맛', '과일향', '탄산 강'],
+};
 
 export default function PostPairing() {
   const [content, setContent] = useState('');
+  const router = useRouter();
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {}, []);
+
+  const handleSubmit = () => {
+    console.log('제출');
+  };
+
   return (
     <>
       <Head>
@@ -16,20 +55,34 @@ export default function PostPairing() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
 
-      <main className="m-auto h-screen max-w-4xl ">
+      <main className="m-auto h-screen max-w-4xl">
         <div className="p-5">
+          <MiddleCard cardProps={testBeer} />
           <div className="mt-6 mb-2 text-base font-semibold">
             페어링 카테고리
           </div>
           <PairingBox />
-
+          <ImageUpload />
           <div className="mt-6 mb-2 text-base font-semibold">설명</div>
           <BigInput
             placeholder="페어링을 추천하시는 이유를 적어주세요"
             inputState={content}
             setInputState={setContent}
           />
-          <ImageUpload />
+        </div>
+        <div className="flex">
+          <div className="flex-1">
+            <CloseBtn onClick={() => router.back()}>나가기</CloseBtn>
+          </div>
+          <div className="flex-1">
+            {isValid ? (
+              <SubmitBtn onClick={handleSubmit}>등록하기</SubmitBtn>
+            ) : (
+              <div className="flex justify-center items-center w-full h-11 rounded-xl m-2 bg-red-100 text-xs text-red-500 -ml-[1px]">
+                설명을 작성해주세요
+              </div>
+            )}
+          </div>
         </div>
         <NavBar />
       </main>

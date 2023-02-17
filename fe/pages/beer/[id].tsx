@@ -5,54 +5,103 @@ import SmallPairingController from '@/components/smallCards/SmallpairingControll
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
 import RatingTitle from '@/components/beerPage/RatingTitle';
 import PairingTitle from '@/components/beerPage/PairingTitle';
+import BeerDetailCard, { testBeer } from '@/components/beerPage/BeerDetailCard';
 import NavBar from '@/components/NavBar';
 
 export default function Beer() {
-  const cardProps = [
-    {
-      id: 1,
-      star: 4.0,
-      nickName: '유진님사진',
-      description: '라마바사아자차가나사아자차가나나사아자차가나나',
-      date: '2023.41.30',
-      comments: 5,
-      thumbs: 10,
-      tags: ['맛 태그', '향 태그', '강 탄산', '색 태그'],
+  const ratingProps = {
+    data: [
+      {
+        beerId: 1,
+        ratingId: 3,
+        userId: 2,
+        nickname: '닉네임2',
+        content: '맥주 향이 좋습니다.',
+        ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
+        star: 4.5,
+        likeCount: 0,
+        commentCount: 0,
+        isUserLikes: false,
+        createdAt: '2023-02-13T16:44:29.882045',
+        modifiedAt: '2023-02-13T16:44:29.882045',
+      },
+      {
+        beerId: 1,
+        ratingId: 2,
+        userId: 2,
+        nickname: '닉네임2',
+        content: '맥주 향이 좋습니다.',
+        ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
+        star: 4.5,
+        likeCount: 0,
+        commentCount: 0,
+        isUserLikes: false,
+        createdAt: '2023-02-13T16:44:29.312609',
+        modifiedAt: '2023-02-13T16:44:29.312609',
+      },
+      {
+        beerId: 1,
+        ratingId: 1,
+        userId: 2,
+        nickname: '닉네임2',
+        content: '맥주 향이 좋습니다.',
+        ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
+        star: 4.5,
+        likeCount: 1,
+        commentCount: 0,
+        isUserLikes: true,
+        createdAt: '2023-02-13T16:44:28.578757',
+        modifiedAt: '2023-02-13T16:44:34.0661',
+      },
+    ],
+    pageInfo: {
+      page: 1,
+      size: 5,
+      totalElements: 3,
+      totalPages: 1,
     },
-    {
-      id: 2,
-      star: 4.222,
-      nickName: '테스트',
-      description:
-        '가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나다라마바사아자차가나나',
-      date: '2023.41.30',
-      comments: 5,
-      thumbs: 10,
-      tags: ['맛 태그', '향 태그', '탄산', '색 태그'],
+  };
+
+  const pairingProps = {
+    data: [
+      {
+        beerId: 1,
+        pairingId: 1,
+        nickname: '김맥주',
+        content: '수정된 페어링',
+        thumbnail:
+          'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
+        category: 'SNACK',
+        likeCount: 3,
+        commentCount: 0,
+        isUserLikes: true,
+        createdAt: '2023-02-06T00:29:14.59836',
+        modifiedAt: '2023-02-06T00:31:11.1951',
+      },
+      {
+        beerId: 1,
+        pairingId: 2,
+        nickname: '김맥주',
+        content: '페어링 안내',
+        thumbnail:
+          'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
+        category: 'GRILL',
+        likeCount: 2,
+        commentCount: 0,
+        isUserLikes: false,
+        createdAt: '2023-02-06T00:35:58.259552',
+        modifiedAt: '2023-02-06T00:35:58.259552',
+      },
+    ],
+    pageInfo: {
+      page: 1,
+      size: 5,
+      totalElements: 2,
+      totalPages: 1,
     },
-  ];
-  const pairProps = [
-    {
-      id: 1,
-      pairing: '튀김',
-      nickName: '유진님',
-      description:
-        '펠롱은 반짝이라 의미제주 사투리 입니 의미의 제주 사투리 입니다,sss제주 사투리 입니다제주 사투리 입니다제주 사투리 입니다',
-      date: '2023.41.30',
-      comments: 5,
-      thumbs: 10,
-    },
-    {
-      id: 2,
-      pairing: '구이',
-      nickName: '테스트',
-      date: '2023.41.30',
-      comments: 5,
-      thumbs: 10,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-  ];
-  const beerProps = [
+  };
+
+  const BeerList = [
     {
       id: 1,
       title: '가든 바이젠',
@@ -80,27 +129,7 @@ export default function Beer() {
       ibu: 17.5,
       image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
     },
-    {
-      id: 4,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 5,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
   ];
-  let ratingCount = 35;
-  let pairngCount = 3;
 
   return (
     <>
@@ -113,25 +142,24 @@ export default function Beer() {
 
       <main className="m-auto h-screen max-w-4xl relative">
         <Image
-          className="w-full h-screen left-0 top-0 fixed -z-10"
+          className="w-full h-screen left-0 top-0 fixed -z-10 select-none"
           src="/images/background.png"
           alt="bg"
           width={500}
           height={500}
-          priority
         />
 
-        <div className="h-40 bg-white m-2 rounded-lg max-w-4xl">
-          제주슬라이스
+        <div className="m-3">
+          <BeerDetailCard cardProps={testBeer} />
         </div>
 
-        <RatingTitle ratingCount={ratingCount} />
-        <SmallCardController cardProps={cardProps} />
+        <RatingTitle ratingCount={ratingProps.pageInfo.totalElements} />
+        <SmallCardController cardProps={ratingProps.data} />
 
-        <PairingTitle pairngCount={pairngCount} />
-        <SmallPairingController pairProps={pairProps} />
+        <PairingTitle pairngCount={pairingProps.pageInfo.totalElements} />
+        <SmallPairingController pairProps={pairingProps.data} />
 
-        <SimilarBeerController beerProps={beerProps} />
+        <SimilarBeerController beerProps={BeerList} />
         <NavBar />
       </main>
     </>

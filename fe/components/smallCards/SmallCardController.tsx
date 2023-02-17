@@ -1,32 +1,38 @@
 import SmallCard from './SmallCard';
 import React, { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import Link from 'next/link';
 
-export interface SmallCardInfo {
-  id: number;
-  star: number;
-  nickName: string;
-  description?: string;
-  date: string;
-  comments: number;
-  thumbs: number;
-  tags: string[];
-}
+// export interface SmallCardInfo {
+//   id: number;
+//   star: number;
+//   nickName: string;
+//   description?: string;
+//   date: string;
+//   comments: number;
+//   thumbs: number;
+//   tags: string[];
+// }
 
-export default function SmallCardController(props: {
-  cardProps: SmallCardInfo[];
-}) {
-  const [cardPropsList, setCardPropsList] = useState<SmallCardInfo[]>(
-    props.cardProps
-  );
+export default function SmallCardController(props: { cardProps: any }) {
+  const [cardPropsList, setCardPropsList] = useState<any>(props.cardProps);
   return (
-    <div className="grid grid-cols-2 gap-3 px-3">
-      {cardPropsList?.map((cardProps: SmallCardInfo, idx: number) => (
-        <SmallCard
-          cardProps={cardProps}
-          idx={idx}
-          key={cardProps.id.toString()}
-        />
+    <Swiper
+      className="w-full h-fit"
+      slidesPerView={2.2}
+      spaceBetween={10}
+      modules={[Pagination]}
+    >
+      {cardPropsList?.map((cardProps: any) => (
+        <SwiperSlide key={cardProps.ratingId}>
+          <Link href={`/rating/${cardProps.ratingId}`}>
+            <SmallCard cardProps={cardProps} />
+          </Link>
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 }

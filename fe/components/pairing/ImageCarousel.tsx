@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
 import { useState } from 'react';
 
-export default function ImageCarouel(props: { imageProps: any }) {
+export default function ImageCarousel(props: { imageProps: any }) {
   const [imageList, setImageList] = useState(props?.imageProps);
   return (
     <Swiper

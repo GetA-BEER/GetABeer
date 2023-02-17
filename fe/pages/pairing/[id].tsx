@@ -1,34 +1,67 @@
 import Head from 'next/head';
 import DetailCard from '@/components/pairing/DetailCard';
 import NavBar from '@/components/NavBar';
+import SpeechBalloon from '@/components/SpeechBalloon';
+import CommentInput from '@/components/inputs/CommentInput';
 
-export interface PairingInfo {
-  id: number;
-  title: string;
-  nickname: string;
-  date: string;
-  category: string;
-  thumb: number;
-  image?: any;
-  description?: string;
-}
+// export interface PairingInfo {
+//   id: number;
+//   title: string;
+//   nickname: string;
+//   date: string;
+//   category: string;
+//   thumb: number;
+//   image?: any;
+//   description?: string;
+// }
 
 export default function PairingDetail() {
-  const pairingProps: PairingInfo = {
-    id: 1,
-    title: '제주펠롱에일',
-    nickname: '에일',
-    date: '2023.41.30',
-    category: '튀김',
-    thumb: 17,
-    image: [
+  const pairingProps: any = {
+    beerId: 1,
+    pairingId: 1,
+    userId: 1,
+    nickname: '닉네임1',
+    content: '페어링 안내',
+    imageList: [
       {
-        image1: 'https://t1.daumcdn.net/cfile/tistory/99D743505B5482502A',
-        image2: 'https://t1.daumcdn.net/cfile/tistory/99D743505B5482502A',
+        pairingImageId: 1,
+        imageUrl:
+          'https://getabeer.s3.ap-northeast-2.amazonaws.com/image/2023-02-09-13-57-53-233/pairing_images_1_1.png',
+        fileName: 'image/2023-02-09-13-57-53-233/pairing_images_1_1.png',
+      },
+      {
+        pairingImageId: 2,
+        imageUrl:
+          'https://getabeer.s3.ap-northeast-2.amazonaws.com/image/2023-02-09-13-57-53-713/pairing_images_1_1.png',
+        fileName: 'image/2023-02-09-13-57-53-713/pairing_images_1_1.png',
       },
     ],
-    description:
-      '펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입니다펠롱은 반짝이라는 의미의 제주 사투리 입니다.펠롱은 반짝이라는 의미제주 사투리 입니다,펠롱은 반짝이라는 의미의 제주 사투리 입니다,펠롱은반짝이라는 의미의 제주 사투리 입',
+    commentList: [
+      {
+        pairingId: 1,
+        pairingCommentId: 1,
+        userId: 1,
+        nickname: '닉네임1',
+        content: '페어링 댓글',
+        createdAt: '2023-02-09T13:58:20.330872',
+        modifiedAt: '2023-02-09T13:58:20.330872',
+      },
+      {
+        pairingId: 1,
+        pairingCommentId: 2,
+        userId: 1,
+        nickname: '닉네임1',
+        content: '페어링 댓글',
+        createdAt: '2023-02-09T13:58:23.619436',
+        modifiedAt: '2023-02-09T13:58:23.619436',
+      },
+    ],
+    category: 'GRILL',
+    likeCount: 3,
+    commentCount: 2,
+    isUserLikes: true,
+    createdAt: '2023-02-09T13:57:53.875197',
+    modifiedAt: '2023-02-09T13:58:23.621731',
   };
   return (
     <>
@@ -42,7 +75,15 @@ export default function PairingDetail() {
         <div className="text-xl mt-4 mb-3 text-center font-semibold">
           페어링
         </div>
-        <DetailCard pairingProps={pairingProps} />
+        <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
+          <DetailCard pairingProps={pairingProps} />
+          <div className="mx-3 mb-5">
+            <CommentInput />
+          </div>
+          {pairingProps.commentList.map((el: any) => {
+            return <SpeechBalloon props={el} key={el.pairingCommentId} />;
+          })}
+        </div>
         <NavBar />
       </main>
     </>
