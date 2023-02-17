@@ -1,25 +1,75 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
+import Router from 'next/router';
 import Link from 'next/link';
+import { BiErrorAlt } from 'react-icons/bi';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoChevronBack } from 'react-icons/io5';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Timer from '@/components/signup/Timer';
+import axios from 'axios';
 interface IFormValues {
   email: string;
   password: string;
+  name: string;
   text: string;
+  passwordConfirm: string;
 }
 
 export default function Email() {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<IFormValues>();
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
-  const [inputEmail, setinputEmail] = useState('');
-  const [content, setContent] = useState('');
+
+  const [showModal, setShowModal] = useState(false);
+  const [timeMessage, setTimeMessage] = useState('');
+  const onValid = (data: any) => {
+    // 기본으로 data 가져오기
+    console.log(data);
+    const { email } = getValues();
+    emailClick(email);
+  };
+  const onClickCheck = (data: any) => {
+    console.log(data);
+    const { email, text } = getValues();
+    handleClickCheck(email, text);
+  };
+  const emailClick = (email: string) => {
+    const reqBody = {
+      email: email,
+    };
+    axios
+      .post('/api/mail', reqBody)
+      .then((res) => {
+        console.log(res);
+        setShowModal(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleClickCheck = (email: string, text: string) => {
+    const reqBody = {
+      email: email,
+      code: text,
+    };
+    axios
+      .post('/api/mail/check', reqBody)
+      .then((res) => {
+        Router.push({
+          pathname: '/signup',
+          query: { email: res.data },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        setTimeMessage('올바른 인증코드가 아닙니다.');
+      });
+  };
   return (
     <>
       <Head>
@@ -38,29 +88,39 @@ export default function Email() {
           회원가입
         </div>
         <div className="m-auto max-w-md">
-          <Input
-            type="email"
-            placeholder="email@gmail.com"
-            inputState={inputEmail}
-            register={register}
-            required
-            setInputState={setinputEmail}
-          />
-          <SubmitBtn onClick={handleClick}> 인증번호 전송 </SubmitBtn>
-          <div className="my-5 flex justify-center gap-1.5 text-sm">
-            <div className="text-y-gray font-light">05:00</div>
-          </div>
-        </div>
-        <div className="m-auto max-w-md">
-          <Input
-            type="text"
-            placeholder="인증번호를 입력해주세요."
-            inputState={content}
-            register={register}
-            required
-            setInputState={setContent}
-          />
-          <SubmitBtn onClick={handleClick}> 확인 </SubmitBtn>
+          <form onSubmit={handleSubmit(onValid)}>
+            <Input
+              name="email"
+              type="email"
+              placeholder="email@gmail.com"
+              register={register}
+            />
+            <SubmitBtn onClick={undefined}> 이메일 인증 </SubmitBtn>
+          </form>
+          {showModal ? (
+            <div className="m-2 pb-2 pt-4 px-2 bg-gray-100 rounded-xl relative">
+              <label className="flex justify-center text-xs">
+                이메일로 전송된 인증코드를 입력해주세요.
+              </label>
+              <div className="max-w-md right-3 absolute p-4">
+                <Timer active />
+              </div>
+              <Input
+                name="text"
+                type="text"
+                placeholder="인증번호를 입력해주세요."
+                register={register}
+              />
+              {timeMessage ? (
+                <div className="flex justify-center gap-0.5 text-red-600 text-xs">
+                  <BiErrorAlt />
+                  올바른 인증코드가 아닙니다.
+                </div>
+              ) : null}
+
+              <SubmitBtn onClick={onClickCheck}> 확인 </SubmitBtn>
+            </div>
+          ) : null}
           <div className="my-3 flex justify-center gap-1.5 text-sm">
             <div className="text-y-gray font-light">이미 계정이 있다면?</div>
             <Link href={'/login'}>

@@ -1,6 +1,6 @@
 type ButtonProps = {
   children: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
   //onClick이벤트 타입
 };
 export default function SubmitBtn({ children, onClick }: ButtonProps) {

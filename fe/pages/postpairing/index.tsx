@@ -23,14 +23,14 @@ export default function PostPairing() {
           </div>
           <PairingBox />
 
-        <div className="mt-6 mb-2 text-base font-semibold">설명</div>
-        <BigInput
-          placeholder="페어링을 추천하시는 이유를 적어주세요"
-          inputState={content}
-          setInputState={setContent}
-        />
-        <ImageUpload />
-
+          <div className="mt-6 mb-2 text-base font-semibold">설명</div>
+          <BigInput
+            placeholder="페어링을 추천하시는 이유를 적어주세요"
+            inputState={content}
+            setInputState={setContent}
+          />
+          <ImageUpload />
+        </div>
         <NavBar />
       </main>
     </>

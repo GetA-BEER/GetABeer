@@ -14,7 +14,9 @@ import { useForm } from 'react-hook-form';
 interface IFormValues {
   email: string;
   password: string;
+  name: string;
   text: string;
+  passwordConfirm: string;
 }
 export default function Login() {
   const [, setAccessToken] = useRecoilState(accessToken);
@@ -22,13 +24,19 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<IFormValues>();
-
-  const handleClickLogin = () => {
+  const onValid = (data: any) => {
+    // 기본으로 data 가져오기
+    console.log(data);
+    const { email, password } = getValues();
+    handleClickLogin(email, password);
+  };
+  const handleClickLogin = (email: string, password: String) => {
     const reqBody = {
-      email: inputEmail,
-      password: inputPw,
+      email: email,
+      password: password,
     };
     axios
       .post('/api/login', reqBody)
@@ -44,8 +52,7 @@ export default function Login() {
   };
 
   const handleClick = () => {};
-  const [inputEmail, setinputEmail] = useState('');
-  const [inputPw, setInputPw] = useState('');
+
   return (
     <>
       <Head>
@@ -63,23 +70,25 @@ export default function Login() {
         <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           로그인
         </div>
-        <form onSubmit={handleSubmit(handleClickLogin)}>
+        <form onSubmit={handleSubmit(onValid)}>
           <div className="m-auto max-w-md">
             <Input
+              name="email"
               type="email"
               placeholder="email@gmail.com"
-              inputState={inputEmail}
               register={register}
-              required
-              setInputState={setinputEmail}
+              rules={{
+                required: true,
+              }}
             />
             <Input
+              name="password"
               type="password"
               placeholder="비밀번호를 입력하세요."
-              inputState={inputPw}
               register={register}
-              required
-              setInputState={setInputPw}
+              rules={{
+                required: true,
+              }}
             />
             {showLoginError ? (
               <div className="m-3 text-red-500 text-xs">
