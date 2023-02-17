@@ -1,4 +1,4 @@
-const list = ['남', '여', '입력안함'];
+const list = ['남', '여', '공개 안함'];
 
 export default function GenderBtn() {
   return (

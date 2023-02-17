@@ -1,12 +1,12 @@
 export default function BeerCategory() {
   const beerCategory = [
-    'Ale',
-    'IPA',
-    'Lager',
-    'Weizen',
-    'Dunkel',
-    'Pilsener',
-    'Non-Alcoholic',
+    '에일',
+    '라거',
+    '바이젠',
+    '흑맥주',
+    '필스너',
+    '과일 맥주',
+    '논 알콜',
   ];
 
   return (

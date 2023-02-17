@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 
 export default function AgeBox() {
-  const pairingList = ['20대', '30대', '40대', '50대', '60대 이상'];
+  const pairingList = [
+    '20대',
+    '30대',
+    '40대',
+    '50대',
+    '60대 이상',
+    '공개 안함',
+  ];
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
   const [category, setCategory] = useState('연령대');
