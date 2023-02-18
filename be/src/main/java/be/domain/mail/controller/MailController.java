@@ -43,10 +43,10 @@ public class MailController {
 
 	@PostMapping("/mail/check")
 	public ResponseEntity<String> checkEmail(@RequestBody MailDto.checkMail checkMail) {
-		if (!Boolean.TRUE.equals(redisTemplate.hasKey(checkMail.getCode()))) {
+		if (!Boolean.TRUE.equals(redisTemplate.hasKey(checkMail.getEmail()))) {
 			throw new BusinessLogicException(ExceptionCode.WRONG_CODE);
 		}
-		if (!Objects.equals(redisTemplate.opsForValue().get(checkMail.getCode()), checkMail.getEmail())) {
+		if (!Objects.equals(redisTemplate.opsForValue().get(checkMail.getEmail()), checkMail.getCode())) {
 			throw new BusinessLogicException(ExceptionCode.WRONG_CODE);
 		}
 
