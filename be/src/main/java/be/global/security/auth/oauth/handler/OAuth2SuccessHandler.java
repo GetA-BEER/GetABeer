@@ -81,7 +81,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String provider = "naver";
 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode("패스워드" + uuid);
+				String password = passwordEncoder.encode(uuid);
 
 				if (userRepository.findByEmail(email).isEmpty()) {
 					sendTempPassword(email, uuid);
@@ -103,7 +103,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String provider = "kakao";
 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode("패스워드" + uuid);
+				String password = passwordEncoder.encode(uuid);
 
 				List<String> authorities = authorityUtils.createRoles(email);
 
