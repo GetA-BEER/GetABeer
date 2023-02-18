@@ -60,11 +60,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
 				String password = passwordEncoder.encode(uuid);
 
-				sendTempPassword(username, uuid);
-
 				List<String> authorities = authorityUtils.createRoles(username);
 
 				if (userRepository.findByEmail(username).isEmpty()) {
+					sendTempPassword(username, uuid);
 					saveUser(nickname, username, password, provider, imageUrl);
 				}
 				redirect(request, response, username, provider, authorities);
@@ -84,9 +83,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
 				String password = passwordEncoder.encode("패스워드" + uuid);
 
-				sendTempPassword(email, uuid);
-
 				if (userRepository.findByEmail(email).isEmpty()) {
+					sendTempPassword(email, uuid);
 					saveUser(nickname, email, password, provider, imageUrl);
 				}
 				redirect(request, response, email, provider, authorities);
@@ -107,11 +105,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String uuid = UUID.randomUUID().toString().substring(0, 15);
 				String password = passwordEncoder.encode("패스워드" + uuid);
 
-				sendTempPassword(email, uuid);
-
 				List<String> authorities = authorityUtils.createRoles(email);
 
 				if (userRepository.findByEmail(email).isEmpty()) {
+					sendTempPassword(email, uuid);
 					saveUser(nickname, email, password, provider, imageUrl);
 				}
 
