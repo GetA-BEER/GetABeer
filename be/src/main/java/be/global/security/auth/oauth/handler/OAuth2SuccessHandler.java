@@ -66,6 +66,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 					sendTempPassword(username, uuid);
 					saveUser(nickname, username, password, provider, imageUrl);
 				}
+
 				redirect(request, response, username, provider, authorities);
 			}
 
@@ -74,20 +75,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 				HashMap userInfo = oAuth2User.getAttribute("response");
 				String email = userInfo.get("email").toString();
-				String imageUrl = userInfo.get("profile_image").toString();
-				String nickname = userInfo.get("nickname").toString();
-				List<String> authorities = authorityUtils.createRoles(email);
 
-				String provider = "naver";
-
-				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode(uuid);
-
-				if (userRepository.findByEmail(email).isEmpty()) {
-					sendTempPassword(email, uuid);
-					saveUser(nickname, email, password, provider, imageUrl);
-				}
-				redirect(request, response, email, provider, authorities);
+				createRedirect(request, response, userInfo, email, "naver");
 			}
 
 			if (authorizedClientRegistrationId.equals("kakao")) {
@@ -98,21 +87,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				HashMap account = oAuth2User.getAttribute("kakao_account");
 				String email = account.get("email").toString();
 
-				String nickname = userInfo.get("nickname").toString();
-				String imageUrl = userInfo.get("profile_image").toString();
-				String provider = "kakao";
-
-				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode(uuid);
-
-				List<String> authorities = authorityUtils.createRoles(email);
-
-				if (userRepository.findByEmail(email).isEmpty()) {
-					sendTempPassword(email, uuid);
-					saveUser(nickname, email, password, provider, imageUrl);
-				}
-
-				redirect(request, response, email, provider, authorities);
+				createRedirect(request, response, userInfo, email, "kakao");
 			}
 		} catch (Exception e) {
 			throw e;
@@ -179,9 +154,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		return UriComponentsBuilder
 			.newInstance()
-			.scheme("https")
-			.host("server.getabeer.co.kr")
-			// .port(8081)
+			// .scheme("https")
+			// .host("server.getabeer.co.kr")
+			// .host("www.getabeer.co.kr")
+			.scheme("http")
+			.host("localhost")
+			.port(3000)
 			.build()
 			.toUri();
 	}
@@ -193,6 +171,25 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.build();
 
 		mailController.sendOAuth2PasswordEmail(post);
+	}
+
+	private void createRedirect(HttpServletRequest request, HttpServletResponse response,
+		HashMap userInfo, String email, String provider) throws IOException {
+
+		String nickname = userInfo.get("nickname").toString();
+		String imageUrl = userInfo.get("profile_image").toString();
+
+		String uuid = UUID.randomUUID().toString().substring(0, 15);
+		String password = passwordEncoder.encode(uuid);
+
+		List<String> authorities = authorityUtils.createRoles(email);
+
+		if (userRepository.findByEmail(email).isEmpty()) {
+			sendTempPassword(email, uuid);
+			saveUser(nickname, email, password, provider, imageUrl);
+		}
+
+		redirect(request, response, email, provider, authorities);
 	}
 
 }
