@@ -6,8 +6,8 @@ import CameraModal from './modal/CameraModal';
 export default function NavBar() {
   return (
     <>
-      <nav className="w-full m-auto fixed bottom-0 z-20  border-gray-200 select-none">
-        <div className="max-w-4xl border-t grid grid-cols-5 px-5 bg-white text-center py-1">
+      <nav className="w-full m-auto fixed bottom-0 z-[9] border-gray-200 select-none">
+        <div className="max-w-4xl m-auto border-t grid grid-cols-5 px-5 bg-white text-center py-1">
           <Link href={'/'} className="hover:text-y-brown">
             <AiOutlineHome className="m-auto text-3xl py-[1px]" />
             <div className="text-[8px]">홈</div>
