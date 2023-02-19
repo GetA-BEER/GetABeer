@@ -7,14 +7,14 @@ export default function BigCard({ cardProps }: any) {
   return (
     <div className="flex flex-col rounded-lg bg-white text-y-black border border-y-lightGray m-2">
       <div className="flex">
-        <Image
-          className="pt-3"
-          alt={cardProps?.korName}
-          src={cardProps?.thumbnail}
-          width={100}
-          height={100}
-          priority
-        />
+        <div className="relative w-[120px] h-[150px]">
+          <Image
+            alt={cardProps?.korName}
+            src={cardProps?.thumbnail}
+            fill
+            className="object-none object-top "
+          />
+        </div>
         <div className="py-4">
           <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl">
             {cardProps?.korName}
@@ -27,7 +27,7 @@ export default function BigCard({ cardProps }: any) {
               ({cardProps?.totalStarCount} ratings)
             </span>
           </div>
-          <div>
+          <div className="flex flex-wrap">
             {cardProps?.beerTags.map((el: string, idx: number) => {
               return <Tag key={idx}>{el}</Tag>;
             })}

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Advertise from '@/components/mainPage/Advertise';
-import NavBar from '@/components/NavBar';
+// import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
 
@@ -68,7 +68,7 @@ export default function Main() {
           <PopularBeerController beerProps={beerProps} />
         </div>
         <div className="pb-14"></div>
-        <NavBar />
+        {/* <NavBar /> */}
       </main>
     </>
   );

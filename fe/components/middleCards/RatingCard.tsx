@@ -20,7 +20,7 @@ import { FaPen, FaTrash } from 'react-icons/fa';
 import Tag from '../Tag';
 import { TagMatcherToKor } from '@/utils/TagMatcher';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 
 export default function RatingCard(props: {
   cardProps: RatingCardProps;
@@ -32,7 +32,7 @@ export default function RatingCard(props: {
   };
 
   const deleteRating = () => {
-    axios.delete(`/api/ratings/${props.cardProps.ratingId}`);
+    axios.delete(`/ratings/${props.cardProps.ratingId}`);
     router.back();
   };
 
@@ -47,20 +47,20 @@ export default function RatingCard(props: {
           </span>
         </div>
         <span className="text-sm m-1">⭐️ {props.cardProps.star}</span>
-        {props.isMine ? (
-          <div className="flex-1 flex justify-end items-center text-sm text-y-brown mr-2">
-            <button className="flex items-center mr-2" onClick={editRating}>
-              <FaPen />
-              <span className="text-y-black">수정</span>
-            </button>
-            <button className="flex items-center" onClick={deleteRating}>
-              <FaTrash />
-              <span className="text-y-black">삭제</span>
-            </button>
-          </div>
-        ) : null}
       </div>
-      <div className="m-2">
+      {props.isMine ? (
+        <div className="flex-1 flex justify-end items-center text-sm text-y-brown mr-2">
+          <button className="flex items-center mr-2" onClick={editRating}>
+            <FaPen />
+            <span className="text-y-black">수정</span>
+          </button>
+          <button className="flex items-center" onClick={deleteRating}>
+            <FaTrash />
+            <span className="text-y-black">삭제</span>
+          </button>
+        </div>
+      ) : null}
+      <div className="m-2 flex flex-wrap">
         {props.cardProps.ratingTag.map((el, idx) => {
           return <Tag key={idx}>{TagMatcherToKor(el)}</Tag>;
         })}
