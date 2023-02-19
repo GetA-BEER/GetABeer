@@ -63,8 +63,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	}
 
 	private Map<String, Object> getUserAttributes(ResponseEntity<Map<String, Object>> response) {
-		Map<String, Object> userAttributes = response.getBody();
 
-		return userAttributes;
+		return response.getBody();
 	}
 }
