@@ -5,10 +5,19 @@ import SmallPairingController from '@/components/smallCards/SmallpairingControll
 import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
 import RatingTitle from '@/components/beerPage/RatingTitle';
 import PairingTitle from '@/components/beerPage/PairingTitle';
-import BeerDetailCard, { testBeer } from '@/components/beerPage/BeerDetailCard';
+import BeerDetailCard from '@/components/beerPage/BeerDetailCard';
 import NavBar from '@/components/NavBar';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function Beer() {
+  let router = useRouter();
+  const [curRoute, setCurRoute] = useState<any>();
+  useEffect(() => {
+    setCurRoute(router.query.id);
+  }, [router, curRoute]);
+
   const ratingProps = {
     data: [
       {
@@ -61,6 +70,43 @@ export default function Beer() {
       totalPages: 1,
     },
   };
+
+  const [beerInfo, setBeerInfo] = useState<any>();
+  const [commentInfo, setCommentInfo] = useState<any>();
+  const [pairingInfo, setPairingInfo] = useState<any>();
+  const [similarBeer, setSimilarBeer] = useState<any>();
+  useEffect(() => {
+    // 특정 맥주 조회
+    if (curRoute !== undefined) {
+      axios
+        .get(`http://localhost:8080/api/beers/${curRoute}`)
+        .then((response) => {
+          setBeerInfo(response.data);
+          setSimilarBeer(response.data.similarBeers);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [curRoute]);
+
+  // useEffect(() => {
+  //   // 특정 코멘트 조회
+  //   if (curRoute !== undefined) {
+  //     axios
+  //       .get(`http://localhost:8080/api/pairings/${curRoute}`)
+  //       .then((response) => console.log('response', response.data))
+  //       .catch((error) => console.log(error));
+  //   }
+  // }, [curRoute]);
+
+  // useEffect(() => {
+  //   // 특정 페어링 조회
+  //   if (curRoute !== undefined) {
+  //     axios
+  //       .get(`http://localhost:8080/api/pairings/${curRoute}`)
+  //       .then((response) => console.log('response', response.data))
+  //       .catch((error) => console.log(error));
+  //   }
+  // }, [curRoute]);
 
   const pairingProps = {
     data: [
@@ -150,7 +196,8 @@ export default function Beer() {
         />
 
         <div className="m-3">
-          <BeerDetailCard cardProps={testBeer} />
+          {/* 맥주 등록 이미지 없다. 현재 썸네일 이미지 경로 따로 없는 상태*/}
+          <BeerDetailCard cardProps={beerInfo} />
         </div>
 
         <RatingTitle ratingCount={ratingProps.pageInfo.totalElements} />
