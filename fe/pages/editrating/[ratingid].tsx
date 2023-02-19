@@ -1,4 +1,3 @@
-import StarRatingComponent from 'react-rating-stars-component';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ColorTag from '@/components/tag/ColorTag';
@@ -10,7 +9,9 @@ import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
 import MiddleCard, { testBeer } from '@/components/middleCards/MiddleCard';
 import { TagMatcherToEng, TagMatcherToKor } from '@/utils/TagMatcher';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
+import StarRating from '@/components/inputs/StarRating';
+import PageContainer from '@/components/PageContainer';
 
 export default function EditRatingPage() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function EditRatingPage() {
 
   useEffect(() => {
     if (ratingId !== undefined) {
-      axios.get(`/api/ratings/${ratingId}`).then((res) => {
+      axios.get(`/ratings/${ratingId}`).then((res) => {
         setStar(res.data.star);
         setContent(res.data.content);
         setColor(res.data.ratingTag[0]);
@@ -50,57 +51,62 @@ export default function EditRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.patch(`/api/ratings/${ratingId}`, reqBody).then((res) => {
+    axios.patch(`/ratings/${ratingId}`, reqBody).then((res) => {
       router.replace(`/rating/${ratingId}`);
     });
   };
 
   return (
-    <div className="m-auto h-screen max-w-4xl px-6">
-      <MiddleCard cardProps={testBeer} />
-      <div>
-        <div className="mt-5">
-          <div>별점</div>
-          <div className="flex justify-start items-center">
-            <StarRatingComponent
-              count={5}
-              size={50}
-              value={star}
-              onChange={ratingChanged}
-              isHalf={true}
-              color="#DDDDDD"
-              activeColor="#F1B31C"
+    <PageContainer>
+      <main className="px-6">
+        <MiddleCard cardProps={testBeer} />
+        <div>
+          <div className="mt-5">
+            <div>별점</div>
+            <div className="flex justify-start items-center">
+              <div className="flex items-center h-10 mb-8 -mt-3">
+                <StarRating star={star} setStar={setStar} />
+              </div>
+              <span className="text-2xl ml-[260px] mt-2">{star}</span>
+            </div>
+          </div>
+          <div className="mt-3">
+            <div>평가</div>
+            <ColorTag setSelected={setColor} checked={TagMatcherToKor(color)} />
+            <SmellTag
+              setSelected={setFlavor}
+              checked={TagMatcherToKor(flavor)}
             />
-            <span className="text-2xl ml-6">{star}</span>
+            <TasteTag setSelected={setTaste} checked={TagMatcherToKor(taste)} />
+            <CarbonatinTag
+              setSelected={setCarbonation}
+              checked={TagMatcherToKor(carbonation)}
+            />
+          </div>
+          <div className="mt-5">
+            <div className="mb-3">리뷰</div>
+            <BigInput
+              placeholder="맥주에 대한 평가를 남겨주세요"
+              inputState={content}
+              setInputState={setContent}
+            />
+          </div>
+          <div className="flex -ml-1">
+            <div className="flex-1">
+              <CloseBtn onClick={() => router.back()}>나가기</CloseBtn>
+            </div>
+            <div className="flex-1">
+              {star === 0 ? (
+                <div className="flex justify-center items-center w-full h-11 rounded-xl m-2 bg-red-100 text-xs text-red-500 -ml-[1px]">
+                  별점과 평가를 선택해주세요
+                </div>
+              ) : (
+                <SubmitBtn onClick={handleSubmit}>수정하기</SubmitBtn>
+              )}
+            </div>
           </div>
         </div>
-        <div className="mt-3">
-          <div>평가</div>
-          <ColorTag setSelected={setColor} checked={TagMatcherToKor(color)} />
-          <SmellTag setSelected={setFlavor} checked={TagMatcherToKor(flavor)} />
-          <TasteTag setSelected={setTaste} checked={TagMatcherToKor(taste)} />
-          <CarbonatinTag
-            setSelected={setCarbonation}
-            checked={TagMatcherToKor(carbonation)}
-          />
-        </div>
-        <div className="mt-5">
-          <div className="mb-3">리뷰</div>
-          <BigInput
-            placeholder="맥주에 대한 평가를 남겨주세요"
-            inputState={content}
-            setInputState={setContent}
-          />
-        </div>
-        <div className="flex -ml-1">
-          <div className="flex-1">
-            <CloseBtn onClick={() => router.back()}>나가기</CloseBtn>
-          </div>
-          <div className="flex-1">
-            <SubmitBtn onClick={handleSubmit}>수정하기</SubmitBtn>
-          </div>
-        </div>
-      </div>
-    </div>
+      </main>
+    </PageContainer>
   );
 }
