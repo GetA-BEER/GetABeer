@@ -18,13 +18,14 @@ export default function ColorTag({ setSelected, checked }: tagProps) {
               name="color"
               id={el}
               value={el}
-              defaultChecked={checked === el ? true : false}
               onClick={onClick}
               className="peer hidden"
             />
             <label
               htmlFor={el}
-              className="text-xs block cursor-pointer select-none rounded-xl p-2 text-center peer-checked: border-2 peer-checked:border-y-brown"
+              className={`${
+                checked === el ? 'border-2 border-y-brown' : ''
+              } text-xs block cursor-pointer select-none rounded-xl p-2 text-center peer-checked: border-2 peer-checked:border-y-brown`}
             >
               {el}
             </label>

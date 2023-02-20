@@ -38,36 +38,52 @@ export const TagMatcherToKor = (str: string) => {
 export const TagMatcherToEng = (str: string) => {
   switch (str) {
     case '짚색':
+    case 'STRAW':
       return 'STRAW';
     case '금색':
+    case 'GOLD':
       return 'GOLD';
     case '갈색':
+    case 'BROWN':
       return 'BROWN';
     case '흑색':
+    case 'BLACK':
       return 'BLACK';
     case '과일향':
+    case 'FRUITY':
       return 'FRUITY';
     case '꽃향':
+    case 'FLOWER':
       return 'FLOWER';
     case '맥아향':
+    case 'MALTY':
       return 'MALTY';
     case '無향':
+    case 'NO_SCENT':
       return 'NO_SCENT';
     case '단맛':
+    case 'SWEET':
       return 'SWEET';
     case '신맛':
+    case 'SOUR':
       return 'SOUR';
     case '쓴맛':
+    case 'BITTER':
       return 'BITTER';
     case '떫은맛':
+    case 'ROUGH':
       return 'ROUGH';
     case '탄산 약':
+    case 'WEAK':
       return 'WEAK';
     case '탄산 중':
+    case 'MIDDLE':
       return 'MIDDLE';
     case '탄산 강':
+    case 'STRONG':
       return 'STRONG';
     case '탄산 無':
+    case 'NO_CARBONATION':
       return 'NO_CARBONATION';
   }
 };

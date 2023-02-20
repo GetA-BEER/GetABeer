@@ -1,17 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { BiUser } from 'react-icons/bi';
-
+import { FaPen, FaTrash } from 'react-icons/fa';
+import { useRouter } from 'next/router';
+// import axios from '@/pages/api/axios';
 import { TimeHandler } from '@/utils/TimeHandler';
 
-export default function SpeechBalloon({ props }: any) {
+type CommentProps = {
+  props: {
+    ratingId: number;
+    ratingCommentId: number;
+    userId: number;
+    nickname: string;
+    content: string;
+    createdAt: string;
+    modifiedAt: string;
+    //유저 프로필이미지
+  };
+  isMine: boolean;
+};
+
+export default function SpeechBalloon({ props, isMine }: CommentProps) {
+  const router = useRouter();
+  const editRatingComment = () => {
+    // router.replace(`/editrating/${props.cardProps.ratingId}`);
+  };
+
+  const deleteRatingComment = () => {
+    // axios.delete(`/ratings/${props.cardProps.ratingId}`);
+    // router.back();
+  };
+
   const [date, setDate] = useState<any>('');
 
   useEffect(() => {
-    if (props?.createdAt !== undefined) {
-      let tmpDate = TimeHandler(props?.createdAt);
+    if (props?.modifiedAt !== undefined) {
+      let tmpDate = TimeHandler(props?.modifiedAt);
       setDate(tmpDate);
     }
-  }, [props?.createdAt]);
+  }, [props?.modifiedAt]);
   console.log('DateDateDate', typeof date);
 
   return (
@@ -24,6 +50,21 @@ export default function SpeechBalloon({ props }: any) {
             <span className="text-xs text-y-gray">{date}</span>
           </div>
         </div>
+        {isMine ? (
+          <div className="flex-1 flex justify-end items-center text-sm text-y-brown mr-2">
+            <button
+              className="flex items-center mr-2"
+              onClick={editRatingComment}
+            >
+              <FaPen />
+              <span className="text-y-black">수정</span>
+            </button>
+            <button className="flex items-center" onClick={deleteRatingComment}>
+              <FaTrash />
+              <span className="text-y-black">삭제</span>
+            </button>
+          </div>
+        ) : null}
         <div className="m-3 mt-5 text-sm font-light leading-6">
           {props.content}
         </div>

@@ -1,4 +1,5 @@
 import MonthlyCard from '@/components/middleCards/MonthlyCard';
+import PageContainer from '@/components/PageContainer';
 
 export default function MonthlyPage() {
   const beerProps = [
@@ -64,7 +65,7 @@ export default function MonthlyPage() {
     },
   ];
   return (
-    <div className="m-auto h-screen max-w-4xl">
+    <PageContainer>
       <div className="flex flex-col justify-center items-center my-6">
         <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-3">
           이달의 맥주
@@ -76,6 +77,6 @@ export default function MonthlyPage() {
       {beerProps.map((el, idx) => (
         <MonthlyCard key={el.id} cardProps={el} idx={idx} />
       ))}
-    </div>
+    </PageContainer>
   );
 }

@@ -16,8 +16,7 @@ export interface MiddleCardInfo {
 
 export const testBeer: MiddleCardInfo = {
   beerId: 1,
-  thumbnail:
-    'http://assabeer.com/web/product/big/20200324/0be547eff075d3cdc5c48afd483af272.jpg',
+  thumbnail: '/images/krin.jpeg',
   korName: '제주 슬라이스',
   category: ['ALE', 'IPA'],
   country: '한국',
@@ -31,13 +30,14 @@ export const testBeer: MiddleCardInfo = {
 export default function MiddleCard({ cardProps }: any) {
   return (
     <div className="flex rounded-lg bg-white text-y-black border border-y-lightGray px-3 py-5 my-2">
-      <Image
-        className="pt-3"
-        alt={cardProps?.korName}
-        src={cardProps?.thumbnail}
-        width={100}
-        height={200}
-      />
+      <div className="relative w-[130px] h-[160px]">
+        <Image
+          alt={cardProps?.korName}
+          src={cardProps?.thumbnail}
+          fill
+          className="object-cover"
+        />
+      </div>
       <div className="flex flex-col justify-center">
         <h1 className="font-bold text-xl sm:text-2xl lg:text-3xl">
           {cardProps?.korName}
@@ -65,7 +65,7 @@ export default function MiddleCard({ cardProps }: any) {
             ({cardProps?.totalStarCount} ratings)
           </span>
         </div>
-        <div>
+        <div className="flex flex-wrap">
           {cardProps?.beerTags.map((el: string, idx: number) => {
             return <Tag key={idx}>{el}</Tag>;
           })}

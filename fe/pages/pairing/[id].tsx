@@ -77,11 +77,9 @@ export default function PairingDetail() {
         </div>
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
           <DetailCard pairingProps={pairingProps} />
-          <div className="mx-3 mb-5">
-            <CommentInput />
-          </div>
+          <div className="mx-3 mb-5">{/* <CommentInput /> */}</div>
           {pairingProps.commentList.map((el: any) => {
-            return <SpeechBalloon props={el} key={el.pairingCommentId} />;
+            // return <SpeechBalloon props={el} key={el.pairingCommentId} />;
           })}
         </div>
         <NavBar />
