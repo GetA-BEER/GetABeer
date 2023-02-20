@@ -9,10 +9,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NotFound;
 
-import be.domain.beercategory.dto.BeerCategoryDto;
-import be.domain.beercategory.entity.BeerCategoryType;
-import be.domain.beertag.dto.BeerTagDto;
-import be.domain.beertag.entity.BeerTagType;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
 import lombok.AccessLevel;
@@ -37,7 +33,7 @@ public class UserDto {
 
 		@NotBlank
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String password;
 	}
 
@@ -53,11 +49,11 @@ public class UserDto {
 
 		@NotNull
 		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
-		private List<BeerCategoryDto.Response> userBeerCategories;
+		private List<String> userBeerCategories;
 
 		@NotNull
 		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		private List<BeerTagDto.Response> userBeerTags;
+		private List<String> userBeerTags;
 	}
 
 	@Getter
@@ -74,10 +70,10 @@ public class UserDto {
 		private Age age;
 
 		@Size(max = 2, message = "선호 맥주는 최대 2개까지 선택할 수 있습니다.")
-		private List<BeerCategoryDto.Response> userBeerCategories;
+		private List<String> userBeerCategories;
 
 		@Size(max = 4, message = "관심 태그는 최대 4개까지 선택할 수 있습니다.")
-		private List<BeerTagDto.Response> userBeerTags;
+		private List<String> userBeerTags;
 	}
 
 	@Getter
@@ -85,17 +81,17 @@ public class UserDto {
 	public static class EditPassword {
 
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String oldPassword;
 
 		@NotBlank
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String newPassword;
 
 		@NotBlank
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String newVerifyPassword;
 	}
 
@@ -113,9 +109,9 @@ public class UserDto {
 
 		private Age age;
 
-		private List<BeerCategoryType> userBeerCategories;
+		private List<String> userBeerCategories;
 
-		private List<BeerTagType> userBeerTags;
+		private List<String> userBeerTags;
 	}
 
 	@Getter
