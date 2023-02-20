@@ -77,7 +77,7 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private ProfileImage profileImage;
 
-	public void setProfileImage(ProfileImage profileImage) {
+	public void addProfileImage(ProfileImage profileImage) {
 		this.profileImage = profileImage;
 	}
 
@@ -219,20 +219,20 @@ public class User {
 		this.age = age == null ? this.age : age;
 	}
 
-	public void setUserInfo(Age age, Gender gender) {
+	public void putUserInfo(Age age, Gender gender) {
 		this.age = age;
 		this.gender = gender;
 	}
 
-	public void setUserBeerTags(List<UserBeerTag> userBeerTags) {
+	public void putUserBeerTags(List<UserBeerTag> userBeerTags) {
 		this.userBeerTags = this.userBeerTags == null ? userBeerTags : this.userBeerTags;
 	}
 
-	public void setUserBeerCategories(List<UserBeerCategory> userBeerCategories) {
+	public void putUserBeerCategories(List<UserBeerCategory> userBeerCategories) {
 		this.userBeerCategories = this.userBeerCategories == null ? userBeerCategories : this.userBeerCategories;
 	}
 
-	public void setId(Long id) {
+	public void putId(Long id) {
 		this.id = id;
 	}
 
@@ -249,11 +249,7 @@ public class User {
 			imageUrl == null ? RandomProfile.values()[(int)(Math.random() * 4)].getValue() : this.imageUrl;
 	}
 
-	public void setImageUrl(String imageUrl) {
+	public void putImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-	}
-
-	public void setProvider() {
-		this.provider = this.provider == null ? String.valueOf(ProviderType.LOCAL) : this.provider;
 	}
 }

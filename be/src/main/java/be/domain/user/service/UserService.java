@@ -73,16 +73,14 @@ public class UserService {
 
 	/* 회원가입 유저 정보 입력 - 연령, 성별, 태그, 카테고리 */
 	@Transactional
-	public User postUserInfo(User post) {
+	public void postUserInfo(User post) {
 		User user = userRepository.findById(post.getId())
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
 		userPreferenceService.setUserBeerTags(post, user);
 		userPreferenceService.setUserBeerCategories(post, user);
-		user.setUserInfo(post.getAge(), post.getGender());
+		user.putUserInfo(post.getAge(), post.getGender());
 		em.flush();
-
-		return user;
 	}
 
 	/* 유저 정보 수정 - 연령, 성별, 태그, 카테고리 */
@@ -118,7 +116,7 @@ public class UserService {
 		ProfileImage saved = stateButton.clickButton(stateButton, new HashMap<>(), image, imageHandler, user);
 
 		profileImageRepository.save(saved);
-		user.setImageUrl(saved.getImageUrl());
+		user.putImageUrl(saved.getImageUrl());
 
 		return userRepository.save(user);
 	}
@@ -213,21 +211,18 @@ public class UserService {
 	}
 
 	/* 닉네임 확인 */
-	public Boolean verifyNickname(String nickname) {
-		if (!userRepository.existsByNickname(nickname)) {
-			return true;
-		} else {
+	public void verifyNickname(String nickname) {
+		if (userRepository.existsByNickname(nickname)) {
 			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
 		}
 	}
 
 	/* 이미 가입한 이메일인지 확인 */
-	public boolean verifyExistEmail(String email) {
+	public void verifyExistEmail(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
 		}
-		return true;
 	}
 
 	/* 존재하는 유저인지 확인 및 ID 반환*/
@@ -248,15 +243,8 @@ public class UserService {
 		if (Boolean.FALSE.equals(redisTemplate.hasKey(email))) {
 			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_EMAIL);
 		}
-		if (Objects.equals(redisTemplate.opsForValue().get(email), "false")) {
+		if (!Objects.equals(redisTemplate.opsForValue().get(email), "true")) {
 			throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_EMAIL);
-		}
-	}
-
-	/* 접근 혹은 접근하려는 페이지의 유저와 로그인 유저가 일치하는 지 판별 */
-	public void checkUser(Long userId, Long loginUserId) {
-		if (!userId.equals(loginUserId)) {
-			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
 		}
 	}
 

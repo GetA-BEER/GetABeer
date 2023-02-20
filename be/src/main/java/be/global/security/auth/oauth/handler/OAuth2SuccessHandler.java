@@ -42,6 +42,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	private final PasswordEncoder passwordEncoder;
 	private final CustomAuthorityUtils authorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
+
 	@Override
 
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -55,19 +56,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				String nickname = String.valueOf(oAuth2User.getAttributes().get("name"));
 				String imageUrl = String.valueOf(oAuth2User.getAttributes().get("picture"));
 
-				String provider = "google";
-
-				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode(uuid);
-
-				sendTempPassword(username, uuid);
-
 				List<String> authorities = authorityUtils.createRoles(username);
 
-				if (userRepository.findByEmail(username).isEmpty()) {
-					saveUser(nickname, username, password, provider, imageUrl);
-				}
-				redirect(request, response, username, provider, authorities);
+				createRedirect(request, response, username, nickname, imageUrl, authorities, "google");
 			}
 
 			if (authorizedClientRegistrationId.equals("naver")) {
@@ -75,21 +66,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 				HashMap userInfo = oAuth2User.getAttribute("response");
 				String email = userInfo.get("email").toString();
-				String imageUrl = userInfo.get("profile_image").toString();
-				String nickname = userInfo.get("nickname").toString();
-				List<String> authorities = authorityUtils.createRoles(email);
 
-				String provider = "naver";
-
-				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode("패스워드" + uuid);
-
-				sendTempPassword(email, uuid);
-
-				if (userRepository.findByEmail(email).isEmpty()) {
-					saveUser(nickname, email, password, provider, imageUrl);
-				}
-				redirect(request, response, email, provider, authorities);
+				getUserInfo(request, response, userInfo, email, "naver");
 			}
 
 			if (authorizedClientRegistrationId.equals("kakao")) {
@@ -100,22 +78,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 				HashMap account = oAuth2User.getAttribute("kakao_account");
 				String email = account.get("email").toString();
 
-				String nickname = userInfo.get("nickname").toString();
-				String imageUrl = userInfo.get("profile_image").toString();
-				String provider = "kakao";
-
-				String uuid = UUID.randomUUID().toString().substring(0, 15);
-				String password = passwordEncoder.encode("패스워드" + uuid);
-
-				sendTempPassword(email, uuid);
-
-				List<String> authorities = authorityUtils.createRoles(email);
-
-				if (userRepository.findByEmail(email).isEmpty()) {
-					saveUser(nickname, email, password, provider, imageUrl);
-				}
-
-				redirect(request, response, email, provider, authorities);
+				getUserInfo(request, response, userInfo, email, "kakao");
 			}
 		} catch (Exception e) {
 			throw e;
@@ -182,9 +145,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		return UriComponentsBuilder
 			.newInstance()
-			.scheme("https")
-			.host("server.getabeer.co.kr")
-			// .port(8081)
+			// .scheme("https")
+			// .host("www.getabeer.co.kr")
+			.scheme("http")
+			.host("localhost")
+			.port(3000)
 			.build()
 			.toUri();
 	}
@@ -196,6 +161,30 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.build();
 
 		mailController.sendOAuth2PasswordEmail(post);
+	}
+
+	private void getUserInfo(HttpServletRequest request, HttpServletResponse response,
+		HashMap userInfo, String email, String provider) throws IOException {
+
+		String nickname = userInfo.get("nickname").toString();
+		String imageUrl = userInfo.get("profile_image").toString();
+
+		List<String> authorities = authorityUtils.createRoles(email);
+
+		createRedirect(request, response, email, nickname, imageUrl, authorities, provider);
+	}
+
+	private void createRedirect(HttpServletRequest request, HttpServletResponse response, String email,
+		String nickname, String imageUrl, List<String> authorities, String provider) throws IOException {
+		String uuid = UUID.randomUUID().toString().substring(0, 15);
+		String password = passwordEncoder.encode(uuid);
+
+		if (userRepository.findByEmail(email).isEmpty()) {
+			sendTempPassword(email, uuid);
+			saveUser(nickname, email, password, provider, imageUrl);
+		}
+
+		redirect(request, response, email, provider, authorities);
 	}
 
 }
