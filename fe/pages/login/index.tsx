@@ -7,7 +7,7 @@ import GoogleBtn from '@/components/login/Googlebtn';
 import KakaoBtn from '@/components/login/KakaoBtn';
 import Link from 'next/link';
 import { useState } from 'react';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import { accessToken } from '@/atoms/login';
@@ -42,7 +42,7 @@ export default function Login() {
       password: password,
     };
     axios
-      .post('/api/login', reqBody)
+      .post('/login', reqBody)
       .then((res) => {
         const accessToken = res.headers.authorization;
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정

@@ -7,7 +7,7 @@ import InterestTag from '@/components/signup/ InterestTag';
 import BeerCategory from '@/components/signup/BeerCategory';
 import { useForm } from 'react-hook-form';
 import Router from 'next/router';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 
 interface IFormValues {
   beerTagType: string;
@@ -49,7 +49,7 @@ export default function Information() {
       userBeerTags: beerTagType,
     };
     axios
-      .post(`/api/register/user/${Router.query.userId}`, reqBody)
+      .post(`/register/user/${Router.query.userId}`, reqBody)
       .then((res) => {
         console.log(res);
         Router.push({

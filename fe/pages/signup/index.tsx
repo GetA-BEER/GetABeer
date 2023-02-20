@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { IoChevronBack } from 'react-icons/io5';
 import { BiErrorAlt } from 'react-icons/bi';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 
@@ -39,7 +39,7 @@ export default function Signup() {
       password: password,
     };
     axios
-      .post('/api/register/user', reqBody)
+      .post('/register/user', reqBody)
       .then((res) => {
         console.log(res);
         Router.push({

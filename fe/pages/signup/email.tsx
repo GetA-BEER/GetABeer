@@ -8,7 +8,7 @@ import { IoChevronBack } from 'react-icons/io5';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Timer from '@/components/signup/Timer';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 interface IFormValues {
   email: string;
   password: string;
@@ -43,7 +43,7 @@ export default function Email() {
       email: email,
     };
     axios
-      .post('/api/mail', reqBody)
+      .post('/mail', reqBody)
       .then((res) => {
         console.log(res);
         setShowModal(true);
@@ -58,7 +58,7 @@ export default function Email() {
       code: text,
     };
     axios
-      .post('/api/mail/check', reqBody)
+      .post('/mail/check', reqBody)
       .then((res) => {
         Router.push({
           pathname: '/signup',

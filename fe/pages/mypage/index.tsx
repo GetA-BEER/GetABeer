@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useRecoilValue } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import axios from '@/pages/api/axios';
+
 import {
   IoHeartOutline,
   IoChevronForwardOutline,
@@ -19,7 +18,7 @@ export default function Mypage() {
   const [userName, setUserName] = useState('');
   const fetchUser = () => {
     axios
-      .get('/api/user')
+      .get('/user')
       .then((res) => {
         setUserName(res.data.nickname);
       })
