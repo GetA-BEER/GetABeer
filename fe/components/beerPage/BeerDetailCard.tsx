@@ -2,17 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
 import { AiOutlineHeart } from 'react-icons/ai';
-import { useRecoilState } from 'recoil';
-import { currentBeer } from '@/atoms/currentBeer';
-import { useEffect } from 'react';
 import StarScore from './StarScore';
 
 export default function BeerDetailCard({ cardProps }: any) {
-  const [curBeer, setCurBeer] = useRecoilState(currentBeer);
-  useEffect(() => {
-    setCurBeer(cardProps);
-  });
-
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
       <div className="flex m-auto">

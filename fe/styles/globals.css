@@ -35,3 +35,9 @@
 .swiper {
   --swiper-theme-color: #f1b31c;
 }
+
+@layer components {
+  .noneContent {
+    @apply bg-white m-2 py-8 text-xs text-y-gray rounded-lg shadow-sm flex justify-center items-center;
+  }
+}
