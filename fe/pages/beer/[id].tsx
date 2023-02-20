@@ -26,7 +26,7 @@ export default function Beer() {
   const [pairingInfo, setPairingInfo] = useState<any>();
   const [similarBeer, setSimilarBeer] = useState<any>();
   useEffect(() => {
-    // 특정 맥주 조회 및 현재 맥주 상태 저장
+    // 특정 맥주 조회
     if (curRoute !== undefined) {
       axios
         .get(`http://localhost:8080/api/beers/${curRoute}`)
@@ -216,7 +216,7 @@ export default function Beer() {
           pairngCount={pairingInfo?.pageInfo?.totalElements}
           beerId={curRoute}
         />
-        <SmallPairingController pairProps={pairingInfo.data} />
+        <SmallPairingController pairProps={pairingInfo?.data} />
 
         <SimilarBeerController beerProps={BeerList} />
         <NavBar />

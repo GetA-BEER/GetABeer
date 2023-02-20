@@ -10,7 +10,7 @@ export default function SmallCardController(props: { pairProps: any }) {
   const [smallPairingList, setSmallPairingList] = useState<any>(
     props?.pairProps
   );
-  console.log('smallPairingList?.length', smallPairingList.length);
+
   useEffect(() => {
     setSmallPairingList(props?.pairProps);
   }, [props.pairProps]);

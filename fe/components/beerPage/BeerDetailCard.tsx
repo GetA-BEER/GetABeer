@@ -20,7 +20,13 @@ export default function BeerDetailCard({ cardProps }: any) {
               priority
             />
           ) : (
-            <></>
+            <Image
+              className="pt-3"
+              alt="임시이미지"
+              src="https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg"
+              width={100}
+              height={200}
+            />
           )}
         </div>
         <div className="flex flex-col justify-center ml-1">

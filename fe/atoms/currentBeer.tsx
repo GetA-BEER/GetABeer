@@ -19,3 +19,7 @@ export const currentBeer = atom<any>({
 });
 
 // 참고: https://velog.io/@timosean/Web-Recoil-persist-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0
+
+// import { useRecoilState } from 'recoil';
+// import { currentBeer } from '@/atoms/currentBeer';
+//  const [아무거나] = useRecoilState(currentBeer);
