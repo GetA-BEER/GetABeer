@@ -14,7 +14,7 @@ type CommentProps = {
     content: string;
     createdAt: string;
     modifiedAt: string;
-    //유저 프로필이미지와 like 여부도 와야함!
+    //유저 프로필이미지
   };
   isMine: boolean;
 };
