@@ -54,7 +54,7 @@ export default function PostRatingPage() {
   const handleSubmit = () => {
     const reqBody = {
       beerId: 1,
-      userId: 5,
+      userId: 6,
       star,
       content,
       color: TagMatcherToEng(color),
