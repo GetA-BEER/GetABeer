@@ -2,11 +2,22 @@ import SubmitBtn from '@/components/button/SubmitBtn';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import { IoClose } from 'react-icons/io5';
-import NaverBtn from '@/components/login/NaverBtn';
-import GoogleBtn from '@/components/login/Googlebtn';
-import KakaoBtn from '@/components/login/KakaoBtn';
+import { useForm } from 'react-hook-form';
 
+interface IFormValues {
+  email: string;
+  password: string;
+  name: string;
+  text: string;
+  passwordConfirm: string;
+}
 export default function PwEdit() {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<IFormValues>({ mode: 'onChange' });
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
   return (
     <>
@@ -24,9 +35,24 @@ export default function PwEdit() {
           비밀번호 변경
         </div>
         <div className="m-auto max-w-md">
-          <Input type="password" placeholder="현재 비밀번호 입력" />
-          <Input type="password" placeholder="변경할 비밀번호 입력" />
-          <Input type="password" placeholder="변경할 비밀번호 확인" />
+          <Input
+            name="password"
+            type="password"
+            placeholder="현재 비밀번호 입력"
+            register={register}
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder="변경할 비밀번호 입력"
+            register={register}
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder="변경할 비밀번호 확인"
+            register={register}
+          />
           <SubmitBtn onClick={handleClick}> 로그인 </SubmitBtn>
         </div>
       </main>
