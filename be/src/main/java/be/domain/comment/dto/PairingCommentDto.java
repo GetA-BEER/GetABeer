@@ -36,6 +36,7 @@ public class PairingCommentDto {
 		private Long pairingCommentId;
 		private Long userId;
 		private String nickname;
+		private String userImage;
 		private String content;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
@@ -45,13 +46,13 @@ public class PairingCommentDto {
 
 		@Builder
 		@QueryProjection
-		public Response(Long pairingId, Long pairingCommentId, Long userId, String nickname, String content,
-			LocalDateTime createdAt,
-			LocalDateTime modifiedAt) {
+		public Response(Long pairingId, Long pairingCommentId, Long userId, String nickname, String userImage,
+			String content, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 			this.pairingId = pairingId;
 			this.pairingCommentId = pairingCommentId;
 			this.userId = userId;
 			this.nickname = nickname;
+			this.userImage = userImage;
 			this.content = content;
 			this.createdAt = createdAt;
 			this.modifiedAt = modifiedAt;

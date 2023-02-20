@@ -71,6 +71,7 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 				ratingComment.id.as("ratingCommentId"),
 				ratingComment.user.id.as("userId"),
 				ratingComment.user.nickname.as("nickname"),
+				ratingComment.user.imageUrl.as("userImage"),
 				ratingComment.content,
 				rating.createdAt,
 				ratingComment.modifiedAt
@@ -89,8 +90,9 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 	@Override
 	public Page<RatingResponseDto.Total> findRatingTotalResponseOrder(Long beerId, Pageable pageable) {
 		var list = orderByPageable(beerId, pageable);
+		var total = getTotalSize(beerId);
 
-		return PageableExecutionUtils.getPage(list, pageable, list::size);
+		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
 	@Override
@@ -103,7 +105,9 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 			list = orderByPageable(beerId, pageable);
 		}
 
-		return PageableExecutionUtils.getPage(list, pageable, list::size);
+		var total = getTotalSize(beerId);
+
+		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
 	/* 유저가 글을 작성하였는지 확인 */
@@ -165,6 +169,13 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 			.fetch();
 	}
 
+	private long getTotalSize(Long beerId) {
+
+		return queryFactory
+			.selectFrom(rating)
+			.where(rating.beer.id.eq(beerId))
+			.fetch().size();
+	}
 	private List<OrderSpecifier> createOrderSpecifier(Pageable pageable) {
 		List<OrderSpecifier> list = new ArrayList<>();
 		if (!pageable.getSort().isEmpty()) {
