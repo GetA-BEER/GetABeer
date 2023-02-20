@@ -3,6 +3,7 @@ import { GoTriangleDown } from 'react-icons/go';
 
 export default function PairingBox() {
   const pairingList = [
+    '전체',
     '튀김/부침',
     '구이/오븐',
     '생식/회',
@@ -12,21 +13,16 @@ export default function PairingBox() {
     '기타',
   ];
   const [showModal, setShowModal] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const [category, setCategory] = useState('Category');
+  const [category, setCategory] = useState('전체');
   const onCategoryChange = (select: string) => {
-    setChecked(true);
     setCategory(select);
     setShowModal(false);
-    console.log(checked);
   };
   return (
     <div className="m-2">
       <button
         onClick={() => setShowModal(!showModal)}
-        className={`${
-          checked ? 'text-black' : 'text-y-gray'
-        } flex items-center w-32 border border-y-gray pl-2 pr-3 py-1 text-xs rounded-md`}
+        className="flex items-center w-32 border border-y-gray pl-2 pr-3 py-1 text-xs rounded-md text-black"
       >
         <GoTriangleDown className="w-3 h-3 mb-[2px] mr-1 text-y-gray" />
         <span>{category}</span>

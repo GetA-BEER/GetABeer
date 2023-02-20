@@ -4,75 +4,34 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
-import { useState } from 'react';
 
-export default function PairingImageCarousel() {
-  // const [imageList, setImageList] = useState(imageProps?.imageProps);
-  console.log(11111111111111111);
-  // console.log('imageList', imageList);
+export default function PairingImageCarousel(props: { imageList: any }) {
   return (
     <Swiper
       pagination={true}
-      // navigation={true}
+      navigation={true}
       loop={true}
       modules={[Pagination, Navigation]}
-      className="mySwiper"
+      className="overflow-clip h-96"
     >
-      rrrrrrrrrrrrrr
-      {/* {imageList === undefined ? (
+      {props.imageList === undefined ? (
         <></>
       ) : (
-        <>
-          {imageList[0]?.image1 === undefined ? (
-            <></>
-          ) : (
-            <SwiperSlide>
+        <div>
+          {props.imageList.map((el: any) => (
+            <SwiperSlide key={el.pairingImageId} className="">
               <Image
-                className="w-4/5 m-auto"
-                src={imageList[0]?.image1}
-                alt="adv1"
-                width={250}
-                height={250}
-              />
-              <div className="absolute text-white left-20 bottom-10 text-2xl">
-                여기에 Get A Beer 첫번째 광고가 들어갑니다
-              </div>
-            </SwiperSlide>
-          )}
-          {imageList[0]?.image2 === undefined ? (
-            <></>
-          ) : (
-            <SwiperSlide>
-              <Image
-                className="w-4/5 m-auto"
-                src={imageList[0]?.image2}
-                alt="adv2"
-                width={250}
-                height={250}
-              />
-              <div className="absolute text-white left-20 bottom-10 text-2xl">
-                여기에 Get A Beer 두번째 광고가 들어갑니다
-              </div>
-            </SwiperSlide>
-          )}
-          {imageList[0]?.image3 === undefined ? (
-            <></>
-          ) : (
-            <SwiperSlide>
-              <Image
-                className="w-4/5 m-auto"
-                src={imageList[0]?.image3}
-                alt="adv3"
+                src={el.imageUrl}
+                alt="imageList"
                 width={300}
                 height={300}
+                className="m-auto h-full w-auto"
+                priority
               />
-              <div className="absolute text-white left-20 bottom-10 text-2xl">
-                여기에 Get A Beer 세번째 광고가 들어갑니다
-              </div>
             </SwiperSlide>
-          )}
-        </>
-      )} */}
+          ))}
+        </div>
+      )}
     </Swiper>
   );
 }

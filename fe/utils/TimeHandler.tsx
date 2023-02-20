@@ -1,18 +1,5 @@
-// 게시글, 내 여행 계획 이동 시간
-export const timeFunc = (time: number) => {
-  let totalTime = {
-    min: Math.ceil(time / 60),
-    hour: Math.floor(time / 3600),
-  };
-  if (totalTime.min < 60) {
-    return `약 ${totalTime.min}분`;
-  } else {
-    return `약 ${totalTime.hour}시간 ${totalTime.min - 60 * totalTime.hour}분`;
-  }
-};
-
 // 디테일 페이지 시간 조회
-export const detailPageTime = (time: number) => {
+export const TimeHandler = (time: any): any => {
   let nowTime = new Date();
   let createdTime = new Date(time);
   let elapsedMsec = nowTime.getTime() - createdTime.getTime();
@@ -48,17 +35,10 @@ export const detailPageTime = (time: number) => {
       if (Math.floor(elsTime.elapsedSec) === 1) {
         result = Math.floor(elsTime.elapsedSec) + ' 1초 전';
       } else {
-        result = Math.floor(elsTime.elapsedSec) + ' 초 전';
+        result = Math.floor(elsTime.elapsedSec) + '방금전';
       }
     }
-  }
-  if (elsTime.elapsedDay >= 1 && elsTime.elapsedDay < 2) {
-    result = Math.floor(elsTime.elapsedDay) + ' 어제';
-  } else if (elsTime.elapsedDay >= 2 && elsTime.elapsedDay < 3) {
-    result = Math.floor(elsTime.elapsedDay) + ' 일 전';
-  } else if (elsTime.elapsedDay >= 3) {
-    result = createdTime.toLocaleString('en');
-  }
+  } else result = time?.slice(0, 10).split('-').join('.');
 
   return result;
 };

@@ -40,17 +40,20 @@ export default function BeerDetailCard({ cardProps }: any) {
   useEffect(() => {
     setCurBeer(testBeer);
   });
-  console.log(curBeer);
+
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
       <div className="flex m-auto">
-        <Image
-          className="pt-3 "
-          alt={cardProps?.beerDetailsBasic.korName}
-          src={cardProps?.beerDetailsBasic.thumbnail}
-          width={100}
-          height={200}
-        />
+        <div className="w-[122px] select-none">
+          <Image
+            className="pt-3 w-full h-auto select-none"
+            alt={cardProps?.beerDetailsBasic.korName}
+            src={cardProps?.beerDetailsBasic.thumbnail}
+            width={100}
+            height={100}
+            priority
+          />
+        </div>
         <div className="flex flex-col justify-center ml-1">
           <h1 className="font-bold text-2xl">
             {cardProps?.beerDetailsBasic.korName}
