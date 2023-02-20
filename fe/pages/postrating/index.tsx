@@ -1,4 +1,3 @@
-import StarRatingComponent from 'react-rating-stars-component';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ColorTag from '@/components/tag/ColorTag';
@@ -10,7 +9,9 @@ import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
 import MiddleCard, { testBeer } from '@/components/middleCards/MiddleCard';
 import { TagMatcherToEng } from '@/utils/TagMatcher';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
+import StarRating from '@/components/inputs/StarRating';
+import PageContainer from '@/components/PageContainer';
 
 export default function PostRatingPage() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function PostRatingPage() {
   const handleSubmit = () => {
     const reqBody = {
       beerId: 1,
-      userId: 1,
+      userId: 10,
       star,
       content,
       color: TagMatcherToEng(color),
@@ -61,61 +62,57 @@ export default function PostRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.post('/api/ratings', reqBody).then((res) => {
+    axios.post('/ratings', reqBody).then((res) => {
       console.log(res);
       reset();
     });
   };
 
   return (
-    <div className="m-auto h-screen max-w-4xl px-6">
-      <MiddleCard cardProps={testBeer} />
-      <div>
-        <div className="mt-5">
-          <div>별점</div>
-          <div className="flex justify-start items-center">
-            <StarRatingComponent
-              count={5}
-              size={50}
-              value={star}
-              onChange={ratingChanged}
-              isHalf={true}
-              color="#DDDDDD"
-              activeColor="#F1B31C"
-            />
-            <span className="text-2xl ml-6">{star}</span>
-          </div>
-        </div>
-        <div className="mt-3">
-          <div>평가</div>
-          <ColorTag setSelected={setColor} checked={undefined} />
-          <SmellTag setSelected={setFlavor} checked={undefined} />
-          <TasteTag setSelected={setTaste} checked={undefined} />
-          <CarbonatinTag setSelected={setCarbonation} checked={undefined} />
-        </div>
-        <div className="mt-5">
-          <div className="mb-3">리뷰</div>
-          <BigInput
-            placeholder="맥주에 대한 평가를 남겨주세요"
-            inputState={content}
-            setInputState={setContent}
-          />
-        </div>
-        <div className="flex -ml-1">
-          <div className="flex-1">
-            <CloseBtn onClick={() => router.back()}>나가기</CloseBtn>
-          </div>
-          <div className="flex-1">
-            {isValid ? (
-              <SubmitBtn onClick={handleSubmit}>등록하기</SubmitBtn>
-            ) : (
-              <div className="flex justify-center items-center w-full h-11 rounded-xl m-2 bg-red-100 text-xs text-red-500 -ml-[1px]">
-                별점과 평가를 선택해주세요
+    <PageContainer>
+      <main className="px-6">
+        <MiddleCard cardProps={testBeer} />
+        <div>
+          <div className="mt-5">
+            <div>별점</div>
+            <div className="flex justify-start items-center">
+              <div className="flex items-center h-10 mb-8 -mt-3">
+                <StarRating star={star} setStar={setStar} />
               </div>
-            )}
+              <span className="text-2xl ml-[260px] mt-2">{star}</span>
+            </div>
+          </div>
+          <div className="mt-3">
+            <div>평가</div>
+            <ColorTag setSelected={setColor} checked={undefined} />
+            <SmellTag setSelected={setFlavor} checked={undefined} />
+            <TasteTag setSelected={setTaste} checked={undefined} />
+            <CarbonatinTag setSelected={setCarbonation} checked={undefined} />
+          </div>
+          <div className="mt-5">
+            <div className="mb-3">리뷰</div>
+            <BigInput
+              placeholder="맥주에 대한 평가를 남겨주세요"
+              inputState={content}
+              setInputState={setContent}
+            />
+          </div>
+          <div className="flex -ml-1">
+            <div className="flex-1">
+              <CloseBtn onClick={() => router.back()}>나가기</CloseBtn>
+            </div>
+            <div className="flex-1">
+              {isValid ? (
+                <SubmitBtn onClick={handleSubmit}>등록하기</SubmitBtn>
+              ) : (
+                <div className="flex justify-center items-center w-full h-11 rounded-xl m-2 bg-red-100 text-xs text-red-500 -ml-[1px]">
+                  별점과 평가를 선택해주세요
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </PageContainer>
   );
 }

@@ -9,13 +9,8 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
-  async rewrites() {
-    return [
-      {
-        source: '/api/:slug*',
-        destination: 'http://localhost:8080/api/:slug*',
-      },
-    ];
+  env: {
+    API_URL: process.env.API_URL,
   },
 };
 

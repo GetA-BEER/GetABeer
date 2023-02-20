@@ -1,15 +1,23 @@
+import axios from '@/pages/api/axios';
 import React, { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
-export default function CommentInput() {
-  const [inputState, setInputState] = useState<string | undefined>();
+type InputProps = {
+  inputState: string;
+  setInputState: React.Dispatch<React.SetStateAction<string>>;
+  postFunc: Function;
+};
+export default function CommentInput({
+  inputState,
+  setInputState,
+  postFunc,
+}: InputProps) {
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputState(e.target.value);
   };
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setInputState('');
-    //추후 코멘트 post 요청 로직 들어가야 함...!
+    postFunc();
   };
   return (
     <form className="flex">
