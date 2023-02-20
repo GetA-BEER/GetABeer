@@ -6,8 +6,27 @@ import GenderBtn from '@/components/signup/GenderBtn';
 import AgeBox from '@/components/signup/AgeBox';
 import InterestTag from '@/components/signup/ InterestTag';
 import BeerCategory from '@/components/signup/BeerCategory';
+import { useForm } from 'react-hook-form';
 
+interface IFormValues {
+  beerTagType: string;
+  gender: string;
+  age: string;
+  userBeerCategories: string;
+}
 export default function MyEdit() {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useForm<IFormValues>({
+    defaultValues: {
+      gender: 'REFUSE',
+    },
+    mode: 'onChange',
+  });
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
   return (
     <>
@@ -43,10 +62,10 @@ export default function MyEdit() {
                 placeholder="닉네임"
               ></input>
             </div>
-            <GenderBtn />
-            <AgeBox />
-            <BeerCategory />
-            <InterestTag />
+            <GenderBtn register={register} />
+            <AgeBox register={register} />
+            <BeerCategory register={register} />
+            <InterestTag register={register} />
             <button className="flex w-full px-3 py-4 justify-between">
               <div className="text-sm">비밀번호 변경</div>
               <IoChevronForwardOutline className="w-5 h-5 " />
