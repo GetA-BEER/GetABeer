@@ -5,9 +5,61 @@ import GenderBtn from '@/components/signup/GenderBtn';
 import AgeBox from '@/components/signup/AgeBox';
 import InterestTag from '@/components/signup/ InterestTag';
 import BeerCategory from '@/components/signup/BeerCategory';
+import { useForm } from 'react-hook-form';
+import Router from 'next/router';
+import axios from 'axios';
 
+interface IFormValues {
+  beerTagType: string;
+  gender: string;
+  age: string;
+  userBeerCategories: string;
+}
 export default function Information() {
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {};
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useForm<IFormValues>({
+    defaultValues: {
+      gender: 'REFUSE',
+    },
+    mode: 'onChange',
+  });
+
+  const onValid = (data: any) => {
+    // 기본으로 data 가져오기
+    console.log(data);
+    const { gender, age, userBeerCategories, beerTagType } = getValues();
+    signUpClick(gender, age, userBeerCategories, beerTagType);
+  };
+
+  const signUpClick = (
+    gender: string,
+    age: string,
+    userBeerCategories: any,
+    beerTagType: any
+  ) => {
+    const reqBody = {
+      gender: gender,
+      age: age,
+      userBeerCategories: userBeerCategories,
+      userBeerTags: beerTagType,
+    };
+    axios
+      .post(`/api/register/user/${Router.query.userId}`, reqBody)
+      .then((res) => {
+        console.log(res);
+        Router.push({
+          pathname: '/',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <Head>
@@ -23,21 +75,53 @@ export default function Information() {
         <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           회원정보 입력
         </div>
-        <div className="m-auto max-w-md mb-10 p-1">
-          <div className="border divide-y divide-gray-200 rounded-xl">
-            <GenderBtn />
-            <AgeBox />
-            <BeerCategory />
-            <InterestTag />
-            <SubmitBtn onClick={handleClick}>등록하기</SubmitBtn>
-          </div>
-          <div className="mt-1 pb-10 flex justify-center gap-1 text-sm">
-            <div className="text-y-gray font-light">
-              나중에 입력하고 싶다면?
+        <form onSubmit={handleSubmit(onValid)}>
+          <div className="m-auto max-w-md mb-10 p-1">
+            <div className="border divide-y divide-gray-200 rounded-xl">
+              <GenderBtn register={register} />
+              <AgeBox register={register} />
+              <div>
+                <BeerCategory
+                  register={register}
+                  rules={{
+                    validate: {
+                      validate: (interest) =>
+                        interest.length < 3 || '최대 2개까지 선택 가능합니다!',
+                    },
+                  }}
+                />
+                {errors.userBeerCategories && (
+                  <p className="flex text-xs mx-3 mb-1 gap-0.5 text-red-500 font-light">
+                    {errors.userBeerCategories.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <InterestTag
+                  register={register}
+                  rules={{
+                    validate: {
+                      validate: (interest) =>
+                        interest.length < 5 || '최대 4개까지 선택 가능합니다!',
+                    },
+                  }}
+                />
+                {errors.beerTagType && (
+                  <p className="flex text-xs  mx-3 mb-1 gap-0.5 text-red-500 font-light">
+                    {errors.beerTagType.message}
+                  </p>
+                )}
+              </div>
+              <SubmitBtn onClick={undefined}>등록하기</SubmitBtn>
             </div>
-            <button className="flex text-y-brown">Skip</button>
+            <div className="mt-2 pb-10 flex justify-center gap-1 text-sm">
+              <div className="text-y-gray font-light">
+                나중에 입력하고 싶다면?
+              </div>
+              <button className="flex text-y-brown">Skip</button>
+            </div>
           </div>
-        </div>
+        </form>
       </main>
     </>
   );

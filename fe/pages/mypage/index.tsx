@@ -1,4 +1,8 @@
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
 import {
   IoHeartOutline,
   IoChevronForwardOutline,
@@ -12,6 +16,18 @@ import {
   HiOutlineMapPin,
 } from 'react-icons/hi2';
 export default function Mypage() {
+  const [userName, setUserName] = useState('');
+  const fetchUser = () => {
+    axios
+      .get('/api/user')
+      .then((res) => {
+        setUserName(res.data.nickname);
+      })
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
   return (
     <>
       <Head>
@@ -27,7 +43,7 @@ export default function Mypage() {
         <div className="flex flex-col items-center my-6">
           <div className="w-24 h-24 bg-y-cream rounded-2xl"></div>
           <div className="flex justify-center items-center gap-1 mt-2">
-            <div className="text-sm">성유미님</div>
+            <div className="text-sm">{userName}님</div>
             <button className="w-5 h-5 text-y-brown">
               <HiPencil className="w-5 h-5" />
             </button>

@@ -8,9 +8,11 @@ import KakaoBtn from '@/components/login/KakaoBtn';
 import Link from 'next/link';
 import { useState } from 'react';
 import axios from 'axios';
-import { accessToken } from '@/atoms/login';
-import { useRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import Router from 'next/router';
+
 interface IFormValues {
   email: string;
   password: string;
@@ -33,6 +35,7 @@ export default function Login() {
     const { email, password } = getValues();
     handleClickLogin(email, password);
   };
+
   const handleClickLogin = (email: string, password: String) => {
     const reqBody = {
       email: email,
@@ -41,9 +44,14 @@ export default function Login() {
     axios
       .post('/api/login', reqBody)
       .then((res) => {
-        console.log(res);
-        console.log(res.headers.authorization);
+        const accessToken = res.headers.authorization;
+        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+        axios.defaults.headers.common['Authorization'] = `${accessToken}`;
         setAccessToken(res.headers.authorization);
+
+        Router.push({
+          pathname: '/',
+        });
       })
       .catch((err) => {
         console.log(err);
