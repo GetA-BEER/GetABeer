@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import NavBar from '@/components/NavBar';
 import BigInput from '@/components/inputs/BigInput';
 import PairingBox from '@/components/selectBox/PairingBox';
 import ImageUpload from '../../components/postPairingPage/ImageUpload';
@@ -25,15 +24,15 @@ export default function PostPairing() {
     category: '',
   });
   const [finalData, setFinalData] = useState<any>();
-
   // userId 로직 짜야함
   let TOKEN =
-    'Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlMUBtYWlsLmNvbSIsInN1YiI6ImUxQG1haWwuY29tIiwiaWF0IjoxNjc2ODk4Mzc5LCJleHAiOjE2NzY5MDU1Nzl9.4REO_Y0M8aGeVmFY99qEpQ88zuY1s1buUF777hKVh1xrOGC1Y2uYnApvu9-VLUqEY_fKF_1DqGsGfMJVrBAlrw';
+    'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlMUBtYWlsLmNvbSIsInN1YiI6ImUxQG1haWwuY29tIiwiaWF0IjoxNjc2OTEwODc0LCJleHAiOjE2NzY5MTgwNzR9.PrQgX4zRb0uGzHpRz4ILRpElgteUKKw4ZLa4me02EiXIsYNseTApyZsB8Nf7XFY3zZSB7PVU-cn9zVizFeiNQA';
   const config = {
     headers: {
-      Authorization: TOKEN,
+      authorization: TOKEN,
       'content-type': 'multipart/form-data',
     },
+    withCredentials: true,
   };
 
   useEffect(() => {
@@ -48,21 +47,23 @@ export default function PostPairing() {
       content: content,
       category: category,
     });
-
+    console.log(jsonData);
     const formData = new FormData();
     formData.append(
       'post',
-      new Blob([JSON.stringify(jsonData)], {
+      new Blob([JSON.stringify(finalData)], {
         type: 'application/json',
       })
     );
-    formData.append('files', new Blob([JSON.stringify({})]));
+    // formData.append('files', new Blob([JSON.stringify({})]));
     setFinalData(formData);
 
-    // axios
-    //   .post(`${process.env.API_URL}/pairings`, finalData, config)
-    //   .then((response) => console.log(response))
-    //   .catch((error) => console.log(error));
+    axios
+      .post(`http://localhost:8080/api/pairings`, jsonData, config)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -103,7 +104,7 @@ export default function PostPairing() {
             )}
           </div>
         </div>
-        <NavBar />
+        <div className="h-20"></div>
       </main>
     </>
   );

@@ -23,9 +23,7 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
 
   useEffect(() => {
     if (initialDate !== undefined) {
-      // console.log('initialDate', initialDate);
       let tmpDate = TimeHandler(initialDate);
-      // console.log('tmpDate', tmpDate);
       setDate(tmpDate);
     }
   }, [initialDate]);

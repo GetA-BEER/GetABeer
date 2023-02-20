@@ -5,6 +5,7 @@ import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function SmallCardController(props: { pairProps: any }) {
   const [smallPairingList, setSmallPairingList] = useState<any>(
@@ -18,7 +19,16 @@ export default function SmallCardController(props: { pairProps: any }) {
   return (
     <>
       {smallPairingList?.length === 0 ? (
-        <div className="noneContent">등록된 페어링이 없습니다</div>
+        <div className="noneContent">
+          <Image
+            className="m-auto pb-3 opacity-50"
+            src="/images/logo.png"
+            alt="logo"
+            width={40}
+            height={40}
+          />
+          등록된 페어링이 없습니다.
+        </div>
       ) : (
         <Swiper
           className="w-full h-fit"

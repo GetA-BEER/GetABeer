@@ -2,6 +2,7 @@ import SmallCard from './SmallCard';
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
+import Image from 'next/image';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Link from 'next/link';
@@ -15,7 +16,16 @@ export default function SmallCardController(props: { cardProps: any }) {
   return (
     <>
       {cardPropsList?.length === 0 ? (
-        <div className="noneContent">등록된 코멘트가 없습니다</div>
+        <div className="noneContent">
+          <Image
+            className="m-auto pb-3 opacity-50"
+            src="/images/logo.png"
+            alt="logo"
+            width={40}
+            height={40}
+          />
+          등록된 평가가 없습니다.
+        </div>
       ) : (
         <Swiper
           className="w-full h-fit"
