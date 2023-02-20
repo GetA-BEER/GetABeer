@@ -1,7 +1,15 @@
 package be.global.aop;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.annotation.WebListener;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -9,7 +17,10 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.repository.BeerRepository;
@@ -24,6 +35,8 @@ import be.domain.rating.service.RatingService;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Gender;
 import be.domain.user.service.UserService;
+import be.global.statistics.entity.TotalStatistics;
+import be.global.statistics.repository.TotalStatisticsQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +51,65 @@ public class GetABeerAop {
 	private final BeerTagService beerTagService;
 	private final RatingService ratingService;
 	private final BeerRepository beerRepository;
+	private final TotalStatisticsQueryRepository totalStatisticsQueryRepository;
+
+	@Before(value = "Pointcuts.getWeeklyBeer()")
+	public void calculateVisitorByMainPageView(JoinPoint joinPoint) {
+
+		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
+
+		ServletRequestAttributes attr = (ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
+
+		HttpServletRequest request = attr.getRequest(); // Http Request
+		HttpServletResponse response = attr.getResponse(); // Http Response
+		Cookie[] cookies = request.getCookies(); // Request Cookies
+		String token = request.getHeader("Cookie"); // Cookie에서 뜯어온 토큰들
+
+		if (cookies != null) { // 쿠키를 가진 경우
+
+			for (Cookie cookie : cookies) {
+
+				/*
+				 * 통계 쿠키가 있는데 오늘 방문한 적이 없을 경우
+				 * or
+				 * 통계 쿠키가 발급된 적이 없는 경우
+				 */
+				if ((cookie.getValue().contains("statistic") && !cookie.getValue()
+					.contains(request.getContextPath())) || !cookie.getValue()
+					.contains("statistic")) { // 통계 쿠키가 있지만 방문한 적 없을 경우
+
+					createStatCookie(request, response, cookie);
+
+					totalStatistics.addTotalVisitorCount();
+				}
+			}
+		} else if (cookies == null) { // 쿠키 자체가 없는 경우 새로 발급
+
+			String key = "visit_cookie";
+			String value =
+				"statistic" + "_" + "[" + LocalDateTime.now() + "]" + "_" + "[" + request.getContextPath()
+					+ "]";
+
+			ResponseCookie newStatCookie = ResponseCookie.from(key, value)
+				.maxAge(2 * 60 * 60) // 두 시간
+				.path("/")
+				.secure(true)
+				.sameSite("None")
+				.httpOnly(true)
+				.build();
+
+			response.setHeader("Set-Cookie", newStatCookie.toString());
+
+			totalStatistics.addTotalVisitorCount();
+		}
+
+	}
+
+	@Before(value = "Pointcuts.getBeer() && args(beerId)")
+	public void calculateStaticticsOnGetBeer(JoinPoint joinPoint, Long beerId) {
+		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
+		totalStatistics.addTotalBeerViewCount();
+	}
 
 	/*
 	 * 레이팅 새로 등록될 때마다 인기 태그, 베스트 레이팅, 평균 별점 계산 후 변경 사항 저장
@@ -45,6 +117,9 @@ public class GetABeerAop {
 	@AfterReturning(value = "Pointcuts.createRating() && args(rating, beerId, ratingTag, userId)")
 	public void calculateBeerDetailsOnCreation(JoinPoint joinPoint, Rating rating, Long beerId,
 		RatingTag ratingTag, Long userId) {
+
+		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
+		totalStatistics.addTotalRatingCount();
 
 		Beer findBeer = beerService.findVerifiedBeer(beerId);
 
@@ -217,6 +292,9 @@ public class GetABeerAop {
 	@AfterReturning(value = "Pointcuts.createPairing() && args(pairing, image, category, beerId)")
 	public void calculateBeerDetailsOnPairingCreation(JoinPoint joinPoint, Pairing pairing, List<String> image,
 		String category, Long beerId) {
+
+		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
+		totalStatistics.addTotalPairingCount();
 		// ---------------------------------------------------------------------------------------
 		// TODO: 페어링 생성시 각종 계산
 		// ---------------------------------------------------------------------------------------
@@ -241,5 +319,37 @@ public class GetABeerAop {
 	public void test(JoinPoint joinPoint, Long beerId) {
 		Beer beer = beerService.findVerifiedBeer(beerId);
 		beer.addStatViewCount();
+	}
+
+	private void createStatCookie(HttpServletRequest request, HttpServletResponse response, Cookie cookie) {
+
+		String key = "visit_cookie";
+		String value =
+			"statistic" + "_" + "[" + LocalDateTime.now() + "]" + "_" + "[" + request.getContextPath()
+				+ "]";
+
+		ResponseCookie newStatCookie = ResponseCookie.from(key, value)
+			.maxAge(2 * 60 * 60) // 두 시간
+			.path("/")
+			.secure(true)
+			.sameSite("None")
+			.httpOnly(true)
+			.build();
+
+		cookie.setMaxAge(0);
+
+		response.setHeader("Set-Cookie", newStatCookie.toString());
+	}
+
+	@WebListener
+	public static class sessionStatistics implements HttpSessionListener { // 세션 사용하게 되면 쓰기
+
+		@Override
+		public void sessionCreated(HttpSessionEvent httpSessionEvent) {
+		}
+
+		@Override
+		public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
+		}
 	}
 }

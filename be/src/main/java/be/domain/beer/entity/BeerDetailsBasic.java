@@ -22,7 +22,6 @@ public class BeerDetailsBasic {
 	private String thumbnail;
 	@NotBlank
 	private Double abv;
-	@NotBlank
 	private Integer ibu;
 
 	@Builder

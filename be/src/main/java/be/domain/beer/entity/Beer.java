@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.elasticsearch.annotations.Document;
+// import org.springframework.data.elasticsearch.annotations.Document;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.pairing.entity.Pairing;
@@ -78,11 +78,6 @@ public class Beer extends BaseTimeEntity implements Serializable {
 		this.beerDetailsStatistics = beerDetailsStatistics;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "similar_beer_id")
-	private Beer similarBeer;
-	@OneToMany(mappedBy = "similarBeer")
-	private List<Beer> similarBeers = new ArrayList<>();
 	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<BeerBeerCategory> beerBeerCategories = new ArrayList<>();
 	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)

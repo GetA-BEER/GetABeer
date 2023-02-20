@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.PageImpl;
 
 import be.domain.beer.dto.BeerDto;
-import be.domain.beer.dto.BeerDto.MyPageResponse;
 import be.domain.beer.entity.BeerDetailsBasic;
 import be.domain.beer.entity.BeerDetailsCounts;
 import be.domain.beer.entity.BeerDetailsStars;
@@ -126,14 +125,14 @@ public class BeerTestConstants {
 			GET_MONTHLY_BEER_RESPONSE,
 			GET_MONTHLY_BEER_RESPONSE);
 
-	public static final BeerDto.MyPageResponse GET_MY_PAGE_BEER_RESPONSE =
-		BeerDto.MyPageResponse.builder()
+	public static final BeerDto.WishlistResponse GET_MY_PAGE_BEER_RESPONSE =
+		BeerDto.WishlistResponse.builder()
 			.beerId(1L)
 			.korName("한글 이름")
 			.myStar(4.5)
 			.build();
 
-	public static final PageImpl<MyPageResponse> GET_MY_PAGE_RESPONSE_PAGE_IMPL =
+	public static final PageImpl<BeerDto.WishlistResponse> GET_MY_PAGE_RESPONSE_PAGE_IMPL =
 		new PageImpl<>(
 			List.of(GET_MY_PAGE_BEER_RESPONSE,
 				GET_MY_PAGE_BEER_RESPONSE,

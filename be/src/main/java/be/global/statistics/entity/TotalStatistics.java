@@ -30,9 +30,25 @@ public class TotalStatistics {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@CreatedDate
-	private LocalDateTime createdAt;
-	private LocalDate date;
-	private Long totalBeerViewCount;
-	private Long totalRatingCount;
-	private Long totalPairingCount;
+	private LocalDate createdAt;
+	private Integer totalVisitorCount;
+	private Integer totalBeerViewCount;
+	private Integer totalRatingCount;
+	private Integer totalPairingCount;
+
+	public void addTotalVisitorCount() {
+		this.totalVisitorCount++;
+	}
+
+	public void addTotalBeerViewCount() {
+		this.totalBeerViewCount++;
+	}
+
+	public void addTotalRatingCount() {
+		this.totalRatingCount++;
+	}
+
+	public void addTotalPairingCount() {
+		this.totalPairingCount++;
+	}
 }

@@ -214,8 +214,10 @@ public class BeerServiceImpl implements BeerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Beer> findSimilarBeers(Beer beer) {
-		return beerQueryRepository.findSimilarBeer(beer);
+	public List<Beer> findSimilarBeers(Long beerId) {
+
+		Beer findBeer = findVerifiedBeer(beerId);
+		return beerQueryRepository.findSimilarBeer(findBeer);
 	}
 
 	@Override

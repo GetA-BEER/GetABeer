@@ -53,7 +53,6 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
-		detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
 				.getBeerCategoryType())
@@ -72,7 +71,7 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
 		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
-		detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+		// detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
 				.getBeerCategoryType())
@@ -92,7 +91,7 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
 		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
 		detailsResponse.isWishlist(isWishlist);
-		detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
+		// detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
 				.getBeerCategoryType())
@@ -108,7 +107,28 @@ public interface BeerMapper {
 
 	List<BeerDto.RecommendResponse> beersToRecommendResponse(List<Beer> beerList);
 
-	List<BeerDto.SimilarResponse> beersToSimilarBeerResponse(List<Beer> beerList);
+	default List<BeerDto.SimilarResponse> beersToSimilarBeerResponse(List<Beer> beerList) {
+
+		return beerList.stream()
+			.map(beer -> {
+				return BeerDto.SimilarResponse.builder()
+					.beerId(beer.getId())
+					.korName(beer.getBeerDetailsBasic().getKorName())
+					.country(beer.getBeerDetailsBasic().getCountry())
+					.beerCategories(beer.getBeerBeerCategories().stream()
+						.map(category -> BeerCategoryDto.BeerResponse.builder()
+							.beerCategoryType(category.getBeerCategory().getBeerCategoryType())
+							.build())
+						.collect(Collectors.toList()))
+					.averageStar(beer.getBeerDetailsStars().getTotalAverageStars())
+					.starCount(beer.getBeerDetailsCounts().getRatingCount())
+					.thumbnail(beer.getBeerDetailsBasic().getThumbnail())
+					.abv(beer.getBeerDetailsBasic().getAbv())
+					.ibu(beer.getBeerDetailsBasic().getIbu())
+					.build();
+			})
+			.collect(Collectors.toList());
+	}
 
 	default PageImpl<BeerDto.SearchResponse> beersPageToSearchResponse(Page<Beer> beerPage) {
 

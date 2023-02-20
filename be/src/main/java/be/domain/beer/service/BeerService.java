@@ -35,7 +35,7 @@ public interface BeerService {
 
 	List<BeerTag> findTop4BeerTags(Beer beer);
 
-	List<Beer> findSimilarBeers(Beer beer);
+	List<Beer> findSimilarBeers(Long beerId);
 
 	Page<Beer> findWishlistBeers(Integer page);
 
