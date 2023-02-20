@@ -2,6 +2,7 @@ package be.domain.like.service;
 
 import org.springframework.stereotype.Service;
 
+import be.domain.like.dto.LikeResponseDto;
 import be.domain.like.entity.LikeStatus;
 import be.domain.like.entity.PairingLike;
 import be.domain.like.repository.PairingLikeRepository;
@@ -23,7 +24,7 @@ public class PairingLikeService {
 	private final PairingRepository pairingRepository;
 	private final PairingLikeRepository pairingLikeRepository;
 
-	public String clickLike(Long pairingId) {
+	public LikeResponseDto clickLike(Long pairingId) {
 		User user = userService.getLoginUser();
 		Pairing pairing = pairingService.findPairing(pairingId);
 
@@ -43,7 +44,9 @@ public class PairingLikeService {
 			pairing.calculateLikes(pairing.getPairingLikeList().size());
 			pairingRepository.save(pairing);
 
-			return "추천되었습니다.";
+			return LikeResponseDto.builder()
+				.isUserLikes(true)
+				.build();
 		} else {
 			PairingLike pairingLike = findPairingLike(pairing.getId(), user.getId());
 			pairingLikeRepository.delete(pairingLike);
@@ -51,7 +54,9 @@ public class PairingLikeService {
 			pairing.calculateLikes(pairing.getPairingLikeList().size());
 			pairingRepository.save(pairing);
 
-			return "추천이 취소되었습니다.";
+			return LikeResponseDto.builder()
+				.isUserLikes(false)
+				.build();
 		}
 	}
 
