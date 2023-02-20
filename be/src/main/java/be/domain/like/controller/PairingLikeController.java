@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import be.domain.like.dto.LikeResponseDto;
 import be.domain.like.service.PairingLikeService;
 
 @RestController
@@ -19,9 +20,9 @@ public class PairingLikeController {
 	}
 
 	@PostMapping
-	public ResponseEntity<String> clickLike(@RequestParam Long pairingId) {
-		String message = pairingLikeService.clickLike(pairingId);
+	public ResponseEntity<LikeResponseDto> clickLike(@RequestParam Long pairingId) {
+		LikeResponseDto response = pairingLikeService.clickLike(pairingId);
 
-		return ResponseEntity.ok(message);
+		return ResponseEntity.ok(response);
 	}
 }

@@ -32,6 +32,7 @@ public class RatingCommentCustomRepositoryImpl implements RatingCommentCustomRep
 				ratingComment.id,
 				ratingComment.user.id,
 				ratingComment.user.nickname,
+				ratingComment.user.imageUrl,
 				ratingComment.content,
 				ratingComment.createdAt,
 				ratingComment.modifiedAt

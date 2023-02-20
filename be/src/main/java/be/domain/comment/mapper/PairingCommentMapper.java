@@ -41,6 +41,7 @@ public interface PairingCommentMapper {
 					pairingComment.getId(),
 					pairingComment.getUser().getId(),
 					pairingComment.getUser().getNickname(),
+					pairingComment.getUser().getImageUrl(),
 					pairingComment.getContent(),
 					pairingComment.getCreatedAt(),
 					pairingComment.getModifiedAt()

@@ -54,8 +54,9 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 	@Override
 	public Page<PairingResponseDto.Total> findPairingTotalResponseOrder(Long beerId, Pageable pageable) {
 		var list = orderByPageable(beerId, pageable);
+		var total = getTotalSize(beerId);
 
-		return PageableExecutionUtils.getPage(list, pageable, list::size);
+		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
 	/* 로그인 유저가 있는 경우 */
@@ -70,7 +71,9 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			list = orderByPageable(beerId, pageable);
 		}
 
-		return PageableExecutionUtils.getPage(list, pageable, list::size);
+		var total = getTotalSize(beerId);
+
+		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
 	// -------------------------------------------- 조회 관련 메서드 ---------------------------------------------------
@@ -138,6 +141,12 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.fetch();
 	}
 
+	private long getTotalSize(Long beerId) {
+
+		return queryFactory.selectFrom(pairing)
+			.where(pairing.beer.id.eq(beerId))
+			.fetch().size();
+	}
 	private List<OrderSpecifier> createOrderSpecifier(Pageable pageable) {
 		List<OrderSpecifier> list = new ArrayList<>();
 		if (!pageable.getSort().isEmpty()) {

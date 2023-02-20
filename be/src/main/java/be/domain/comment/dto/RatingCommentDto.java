@@ -38,6 +38,7 @@ public class RatingCommentDto {
 		private Long userId;
 		private String nickname;
 		private String content;
+		private String userImage;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
 
@@ -46,12 +47,13 @@ public class RatingCommentDto {
 
 		@Builder
 		@QueryProjection
-		public Response(Long ratingId, Long ratingCommentId, Long userId, String nickname, String content,
-			LocalDateTime createdAt, LocalDateTime modifiedAt) {
+		public Response(Long ratingId, Long ratingCommentId, Long userId, String nickname, String userImage,
+			String content, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 			this.ratingId = ratingId;
 			this.ratingCommentId = ratingCommentId;
 			this.userId = userId;
 			this.nickname = nickname;
+			this.userImage = userImage;
 			this.content = content;
 			this.createdAt = createdAt;
 			this.modifiedAt = modifiedAt;
