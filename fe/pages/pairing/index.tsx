@@ -9,6 +9,7 @@ import SubmitBtn from '@/components/button/SubmitBtn';
 
 export default function Pairing() {
   const [sort, setSort] = useState<Sort>('mostlikes');
+  const [category, setCategory] = useState<string>('ALL');
 
   const pairingCardProps = {
     data: [
@@ -62,7 +63,7 @@ export default function Pairing() {
         </div>
         <div className="m-auto flex">
           <SortBox setSort={setSort} />
-          <PairingBox />
+          <PairingBox setCategory={setCategory} />
         </div>
         <PairingCardController pairingCardProps={pairingCardProps.data} />
         <div className="pb-32"></div>

@@ -1,11 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
+import { CategoryMatcherToEng } from '@/utils/CategryMatcher';
+export type Category =
+  | 'ALL'
+  | 'FRIED'
+  | 'GRILL'
+  | 'STIR'
+  | 'FRESH'
+  | 'DRY'
+  | 'SNACK'
+  | 'SOUP'
+  | 'ETC';
 
-export default function PairingBox() {
-  const pairingList = [
+export default function PairingBox({ setCategory }: any) {
+  type Props = {
+    setSort: React.Dispatch<React.SetStateAction<Category>>;
+  };
+
+  const categoryList = [
     '전체',
     '튀김/부침',
     '구이/오븐',
+    '볶음/조림',
     '생식/회',
     '마른안주/견과',
     '과자/디저트',
@@ -13,11 +29,15 @@ export default function PairingBox() {
     '기타',
   ];
   const [showModal, setShowModal] = useState(false);
-  const [category, setCategory] = useState('전체');
+  const [pairingState, setPairingState] = useState<string | undefined>('전체');
+
   const onCategoryChange = (select: string) => {
-    setCategory(select);
+    setPairingState(select);
+    let tmpPairing = CategoryMatcherToEng(select);
+    setCategory(tmpPairing);
     setShowModal(false);
   };
+
   return (
     <div className="m-2">
       <button
@@ -25,12 +45,12 @@ export default function PairingBox() {
         className="flex items-center w-32 border border-y-gray pl-2 pr-3 py-1 text-xs rounded-md text-black"
       >
         <GoTriangleDown className="w-3 h-3 mb-[2px] mr-1 text-y-gray" />
-        <span>{category}</span>
+        <span>{pairingState}</span>
       </button>
       {showModal ? (
         <div className="relative w-32 h-0">
           <ul className="bg-white border-2 w-full text-xs rounded-lg x-20 z-20 absolute right-0">
-            {pairingList.map((el: string, idx: number) => (
+            {categoryList.map((el: string, idx: number) => (
               <li
                 key={idx.toString()}
                 onClick={() => {

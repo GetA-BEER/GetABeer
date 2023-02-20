@@ -2,57 +2,32 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
 import { AiOutlineHeart } from 'react-icons/ai';
-import { useRecoilState } from 'recoil';
-import { currentBeer } from '@/atoms/currentBeer';
-import { useEffect } from 'react';
 import StarScore from './StarScore';
 
-export const testBeer: any = {
-  beerId: 1,
-  beerDetailsBasic: {
-    korName: '수정된 이름',
-    engName: 'updated Name',
-    country: '한국',
-    thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    abv: 4.5,
-    ibu: 25,
-  },
-  beerCategoryTypes: ['WEIZEN', 'DUNKEL'],
-  beerDetailsTopTags: null,
-  beerDetailsStars: {
-    totalAverageStars: 3.3,
-    femaleAverageStars: 0.5,
-    maleAverageStars: 2.5,
-  },
-  beerDetailsCounts: {
-    totalStarCount: 50,
-    femaleStarCount: 30,
-    maleStarCount: 20,
-    ratingCount: 15,
-    pairingCount: 10,
-  },
-  isWishListed: null,
-  similarBeers: [],
-};
-
 export default function BeerDetailCard({ cardProps }: any) {
-  const [curBeer, setCurBeer] = useRecoilState(currentBeer);
-  useEffect(() => {
-    setCurBeer(testBeer);
-  });
-
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
       <div className="flex m-auto">
         <div className="w-[122px] select-none">
-          <Image
-            className="pt-3 w-full h-auto select-none"
-            alt={cardProps?.beerDetailsBasic.korName}
-            src={cardProps?.beerDetailsBasic.thumbnail}
-            width={100}
-            height={100}
-            priority
-          />
+          {/* 이거 나중에 제대로 썸네일 들어오면  삭제해야 한다. */}
+          {cardProps?.beerDetailsBasic.thumbnail.includes('.') ? (
+            <Image
+              className="pt-3 w-full h-auto select-none"
+              alt={cardProps?.beerDetailsBasic.korName}
+              src={cardProps?.beerDetailsBasic.thumbnail}
+              width={100}
+              height={100}
+              priority
+            />
+          ) : (
+            <Image
+              className="pt-3"
+              alt="임시이미지"
+              src="https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg"
+              width={100}
+              height={200}
+            />
+          )}
         </div>
         <div className="flex flex-col justify-center ml-1">
           <h1 className="font-bold text-2xl">
