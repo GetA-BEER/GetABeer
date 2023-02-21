@@ -32,7 +32,7 @@ import be.domain.search.service.VisionService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/api/search")
 @RequiredArgsConstructor
 public class VisionController {
 	private final BeerMapper beerMapper;
