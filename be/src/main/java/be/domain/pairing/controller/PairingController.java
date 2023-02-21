@@ -45,7 +45,7 @@ public class PairingController {
 	public ResponseEntity<String> post(@RequestPart(value = "post") @Valid PairingRequestDto.Post post,
 		@RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
 		String message = pairingService.create(mapper.pairingPostDtoToPairing(post),
-			files, post.getCategory(), post.getBeerId(), post.getUserId());
+			files, post.getBeerId(), post.getUserId());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}
@@ -56,7 +56,7 @@ public class PairingController {
 		@RequestPart(value = "newFile") List<MultipartFile> files,
 		@RequestPart(value = "patch") @Valid PairingRequestDto.Patch patch) throws IOException {
 		String message = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
-			pairingId, patch.getCategory(), patch.getType(), patch.getUrl(), files);
+			pairingId, patch.getType(), patch.getUrl(), files);
 
 		return ResponseEntity.ok(message);
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import be.domain.pairing.entity.PairingCategory;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,7 +24,7 @@ public class PairingRequestDto {
 		private String content;
 
 		@NotNull
-		private String category;
+		private PairingCategory category;
 	}
 
 	@Getter
@@ -39,6 +40,6 @@ public class PairingRequestDto {
 		private List<Long> url;
 
 		@NotNull
-		private String category;
+		private  PairingCategory category;
 	}
 }

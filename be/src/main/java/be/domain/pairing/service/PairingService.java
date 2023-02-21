@@ -43,16 +43,13 @@ public class PairingService {
 
 	/* 페어링 등록 */
 	@Transactional
-	public String create(Pairing pairing, List<MultipartFile> files, String category,
-		Long beerId, Long userId) throws IOException {
+	public String create(Pairing pairing, List<MultipartFile> files, Long beerId, Long userId) throws IOException {
 
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
 		/* 존재하는 회원인지 확인 */
 		User user = userService.getUser(userId);
-
-		pairing.updateCategory(findCategory(category));
 
 		/* 이미지 저장하기 */
 		List<PairingImage> pairingImages;
@@ -74,7 +71,7 @@ public class PairingService {
 		}
 
 		/* 페어링 등록하기 */
-		pairing.saveDefault(beer, user, thumbnail, pairingImages, new ArrayList<>(), 0, 0);
+		pairing.saveDefault(beer, user, thumbnail, pairingImages);
 		pairingRepository.save(pairing);
 
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
@@ -87,7 +84,7 @@ public class PairingService {
 
 	/* 페어링 수정 */
 	@Transactional
-	public String update(Pairing pairing, long pairingId, String category, List<String> type,
+	public String update(Pairing pairing, long pairingId, List<String> type,
 		List<Long> url, List<MultipartFile> files) throws IOException {
 
 		/* 존재하는 페어링인지 확인 및 해당 페어링 정보 가져오기 */
@@ -95,9 +92,7 @@ public class PairingService {
 
 		/* 수정할 내용이 존재하면, 해당 정보 수정 후 저장*/
 		Optional.ofNullable(pairing.getContent()).ifPresent(findPairing::updateContent);
-		if (category != null) {
-			findPairing.updateCategory(findCategory(category));
-		}
+		Optional.ofNullable(pairing.getPairingCategory()).ifPresent(findPairing::updateCategory);
 
 		/* 이미지 수정 */
 		if (type.size() > 3) {
@@ -233,11 +228,5 @@ public class PairingService {
 
 		return pairingRepository.findById(pairingId)
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAIRING_NOT_FOUND));
-	}
-
-	/* 문자열로 카테고리 불러오기 */
-	private PairingCategory findCategory(String category) {
-
-		return PairingCategory.valueOf(category);
 	}
 }
