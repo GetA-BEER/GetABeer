@@ -39,7 +39,7 @@ export default function Beer() {
   }, [curRoute, setCurBeer]);
 
   useEffect(() => {
-    // 특정 코멘트 조회
+    // 코멘트 페이지 조회
     if (curRoute !== undefined) {
       axios
         .get(`/ratings/page/recency?beerId=${curRoute}&page=1&size=5`)
@@ -49,15 +49,16 @@ export default function Beer() {
   }, [curRoute]);
 
   useEffect(() => {
-    // 특정 페어링 조회
+    // 페어링 페이지 조회
     if (curRoute !== undefined) {
       axios
         .get(`/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setPairingInfo(response.data))
+        .then((response) => {
+          setPairingInfo(response.data);
+        })
         .catch((error) => console.log(error));
     }
   }, [curRoute]);
-
   const BeerList = [
     {
       id: 1,

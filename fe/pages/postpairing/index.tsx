@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import BigInput from '@/components/inputs/BigInput';
-import PairingBox from '@/components/selectBox/PairingBox';
+import PairingSelect from '@/components/selectBox/PairingSelect';
 import ImageUpload from '../../components/postPairingPage/ImageUpload';
 import PostDetailCard from '@/components/postPairingPage/PostDetailCard';
 import CloseBtn from '@/components/button/CloseBtn';
@@ -9,34 +9,26 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { currentBeer } from '@/atoms/currentBeer';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 
 export default function PostPairing() {
   const router = useRouter();
   const [beerInfo] = useRecoilState(currentBeer);
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('전체');
+  const [category, setCategory] = useState('카테고리');
   const [isValid, setIsValid] = useState(false);
+  const [imageData, setImageData] = useState([]);
   const [jsonData, setJsonData] = useState({
     beerId: beerInfo.beerId,
     userId: 1,
     content: '',
     category: '',
   });
-  const [finalData, setFinalData] = useState<any>();
+  const [finalData, setFinalData] = useState<any>('');
   // userId 로직 짜야함
-  let TOKEN =
-    'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlMUBtYWlsLmNvbSIsInN1YiI6ImUxQG1haWwuY29tIiwiaWF0IjoxNjc2OTEwODc0LCJleHAiOjE2NzY5MTgwNzR9.PrQgX4zRb0uGzHpRz4ILRpElgteUKKw4ZLa4me02EiXIsYNseTApyZsB8Nf7XFY3zZSB7PVU-cn9zVizFeiNQA';
-  // authorization: TOKEN,
-  const config = {
-    headers: {
-      'content-type': 'multipart/form-data',
-    },
-    withCredentials: true,
-  };
 
   useEffect(() => {
-    if (content.length >= 3 && category !== '') setIsValid(true);
+    if (content.length >= 3 && category !== '카테고리') setIsValid(true);
     else setIsValid(false);
   }, [content, category]);
 
@@ -47,24 +39,47 @@ export default function PostPairing() {
       content: content,
       category: category,
     });
-    console.log(jsonData);
+
     const formData = new FormData();
+
+    for (const file of imageData) {
+      formData.append('files', file);
+    }
+
     formData.append(
       'post',
-      new Blob([JSON.stringify(finalData)], {
-        type: 'application/json',
-      })
+      new Blob([JSON.stringify(jsonData)], { type: 'application/json' })
     );
-    // formData.append('files', new Blob([JSON.stringify({})]));
-    setFinalData(formData);
 
-    axios
-      .post(`http://localhost:8080/api/pairings`, jsonData, config)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => console.log(error));
+    setFinalData(formData);
+    // axios
+    //   .post(`/pairings`, formData, config)
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((error) => console.log(error));
   };
+
+  // 제출 로직 -> 500 뜨는거, 즉 한번에 잘 안들어가는거 행결해야함!!!
+  useEffect(() => {
+    const TOKEN = localStorage.getItem('accessToken');
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      withCredentials: true,
+    };
+    if (finalData !== '') {
+      console.log('finalData', finalData.get('post'));
+      axios
+        .post(`/pairings`, finalData, config)
+        .then((response) => {
+          console.log(response);
+          router.back();
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [finalData, router]);
 
   return (
     <>
@@ -81,11 +96,11 @@ export default function PostPairing() {
           <div className="mt-6 mb-2 text-base font-semibold">
             페어링 카테고리
           </div>
-          <PairingBox category={category} setCategory={setCategory} />
-          <ImageUpload />
+          <PairingSelect category={category} setCategory={setCategory} />
+          <ImageUpload imageData={imageData} setImageData={setImageData} />
           <div className="mt-6 mb-2 text-base font-semibold">설명</div>
           <BigInput
-            placeholder="추천 이유를 세글자 이상 적어주세요"
+            placeholder="세글자 이상 적어주세요"
             inputState={content}
             setInputState={setContent}
           />

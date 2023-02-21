@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: 'https://server.getabeer.co.kr/api',
   headers: {
     'Content-Type': 'application/json',
   },

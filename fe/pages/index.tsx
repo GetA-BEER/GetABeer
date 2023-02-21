@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Advertise from '@/components/mainPage/Advertise';
-// import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
 import Footer from '@/components/Footer';

@@ -47,15 +47,19 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
   }, [collisions, props.pairingProps.pairingId]);
 
   return (
-    <div className="w-full ml-2 mb-2 rounded-lg bg-white text-y-black drop-shadow-lg text-xs border">
+    <div className="w-full ml-2 mb-2 rounded-lg bg-white text-y-black drop-shadow-lg text-[8px] border">
       {/* 페어링,닉네임 */}
       <div className="flex justify-between py-1 px-2">
-        <span className="flex justify-center items-center px-3 py-[2px] rounded-md bg-y-gold text-white">
+        <span className="flex justify-center items-center px-2 py-[2px] rounded-md bg-y-gold text-white">
           {CategoryMatcherToKor(props.pairingProps.category)}
         </span>
-        <span className="flex justify-center items-center">
-          {props.pairingProps.nickname}
-          <BiUser className="ml-1 bg-y-brown text-white rounded-full w-4 h-4" />
+        <span className="flex justify-end items-center w-2/5">
+          <span className="w-[70%] text-end truncate pr-[2px]">
+            {' '}
+            {props.pairingProps.nickname}
+          </span>
+
+          <BiUser className="bg-y-brown text-white rounded-full w-4 h-4" />
         </span>
       </div>
       {/* 사진,설명 */}
@@ -65,7 +69,7 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
         }`}
         id="pairingParents"
       >
-        {props.pairingProps.thumbnail === undefined ? (
+        {props?.pairingProps?.thumbnail === '' ? (
           <div id={`pairingImage${props.pairingProps.pairingId}`}></div>
         ) : (
           <div className="h-[77px] w-auto overflow-hidden ">

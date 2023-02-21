@@ -1,11 +1,9 @@
 import Head from 'next/head';
-import NavBar from '@/components/NavBar';
 import SortBox, { Sort } from '@/components/selectBox/SortBox';
 import { useState } from 'react';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
-import CloseBtn from '@/components/button/CloseBtn';
-import SubmitBtn from '@/components/button/SubmitBtn';
+import axios from 'axios';
 
 export default function Pairing() {
   const [sort, setSort] = useState<Sort>('mostlikes');
@@ -67,7 +65,6 @@ export default function Pairing() {
         </div>
         <PairingCardController pairingCardProps={pairingCardProps.data} />
         <div className="pb-32"></div>
-        <NavBar />
       </main>
     </>
   );
