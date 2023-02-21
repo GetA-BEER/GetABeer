@@ -55,11 +55,16 @@ public class PairingService {
 		pairing.updateCategory(findCategory(category));
 
 		/* 이미지 저장하기 */
-		if (files.size() > 3) {
-			throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
-		}
+		List<PairingImage> pairingImages;
+		if (files == null) {
+			pairingImages = new ArrayList<>();
+		} else {
+			if (files.size() > 3) {
+				throw new BusinessLogicException(ExceptionCode.IMAGE_SIZE_OVER);
+			}
 
-		List<PairingImage> pairingImages = imageHandler.createPairingImage(pairing, files, user.getId(), beer);
+			pairingImages = imageHandler.createPairingImage(pairing, files, user.getId(), beer);
+		}
 
 		String thumbnail = "";
 		if (pairingImages.size() != 0) {

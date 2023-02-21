@@ -221,8 +221,8 @@ public class RatingService {
 		RatingTag ratingTag = ratingRepository.findTagResponse(ratingId);
 		List<BeerTagType> tag = new ArrayList<>();
 		tag.add(ratingTag.getColor());
-		tag.add(ratingTag.getTaste());
 		tag.add(ratingTag.getFlavor());
+		tag.add(ratingTag.getTaste());
 		tag.add(ratingTag.getCarbonation());
 
 		return tag;
@@ -232,11 +232,7 @@ public class RatingService {
 	private Boolean getIsUserLikes(Long ratingId, Long userId) {
 		int userLikes = ratingLikeRepository.findRatingLikeUser(ratingId, userId);
 
-		if (userLikes != 0) {
-			return true;
-		}
-
-		return false;
+		return userLikes != 0;
 	}
 
 	/* 이미 평가를 등록한 적 있는 유저인지 확인 */
@@ -271,7 +267,7 @@ public class RatingService {
 		}
 
 		if (!flavor.equalsIgnoreCase("FRUITY") && !flavor.equalsIgnoreCase("FLOWER")
-			&& !flavor.equalsIgnoreCase("MALTY") && !flavor.equalsIgnoreCase("HOPPY")) {
+			&& !flavor.equalsIgnoreCase("MALTY") && !flavor.equalsIgnoreCase("NO_SCENT")) {
 			log.error("향 태그가 잘못 요청 되었음.");
 			throw new BusinessLogicException(ExceptionCode.TAG_IS_WRONG);
 		}
