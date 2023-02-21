@@ -10,7 +10,7 @@ type Props = {
 export default function SortBox({ setSort }: Props) {
   const sortList = ['추천순', '최신순', '댓글 많은 순'];
   const [showModal, setShowModal] = useState(false);
-  const [category, setCategory] = useState('최신순');
+  const [category, setCategory] = useState('추천순');
 
   useEffect(() => {
     if (category === '추천순') {
