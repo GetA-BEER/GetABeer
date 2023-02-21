@@ -31,6 +31,7 @@ public class BeerCategoryStatistics {
 	private Long id;
 	@CreatedDate
 	private LocalDateTime createdAt;
+	private LocalDate date;
 	private Integer week;
 	private Integer ale;
 	private Integer lager;

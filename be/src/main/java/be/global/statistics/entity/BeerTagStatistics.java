@@ -31,6 +31,7 @@ public class BeerTagStatistics {
 	private Long id;
 	@CreatedDate
 	private LocalDateTime createdAt;
+	private LocalDate date;
 	private Integer week;
 	private Integer straw;
 	private Integer gold;

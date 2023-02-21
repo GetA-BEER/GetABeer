@@ -31,7 +31,8 @@ public class BeerCategoryStatisticsQueryRepository {
 
 		BeerCategoryStatistics.BeerCategoryStatisticsBuilder beerCategoryStatisticsBuilder = BeerCategoryStatistics.builder();
 
-		beerCategoryStatisticsBuilder.week(LocalDate.now().minusWeeks(1).get(WeekFields.ISO.weekOfYear()));
+		beerCategoryStatisticsBuilder.date(LocalDate.now().minusDays(1));
+		beerCategoryStatisticsBuilder.week(LocalDate.now().get(WeekFields.ISO.weekOfYear()));
 		beerCategoryStatisticsBuilder.ale(countList.get(0));
 		beerCategoryStatisticsBuilder.lager(countList.get(1));
 		beerCategoryStatisticsBuilder.weizen(countList.get(2));

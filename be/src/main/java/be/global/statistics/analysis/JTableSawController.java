@@ -15,8 +15,18 @@ import lombok.RequiredArgsConstructor;
 public class JTableSawController {
 	private final JTableSawService jTableSawService;
 
-	@GetMapping("/test")
+	@GetMapping("/statistics")
 	public void jTableSawTest() throws IOException {
-		jTableSawService.test();
+		jTableSawService.statistics();
+	}
+
+	@GetMapping("/visualization")
+	public void visualization() throws IOException {
+		jTableSawService.visualization();
+	}
+
+	@GetMapping("/scatterplot")
+	public void scatterPlot() throws IOException {
+		jTableSawService.scatterPlot();
 	}
 }

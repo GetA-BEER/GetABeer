@@ -31,6 +31,7 @@ public class PairingCategoryStatistics {
 	private Long id;
 	@CreatedDate
 	private LocalDateTime createdAt;
+	private LocalDate date;
 	private Integer week;
 	private Integer fried;
 	private Integer grill;
