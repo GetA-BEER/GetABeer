@@ -42,7 +42,6 @@ public class BeerDto {
 		private String thumbnail;
 		@NotNull
 		private Double abv;
-		@NotNull
 		private Integer ibu;
 
 	}
@@ -152,8 +151,8 @@ public class BeerDto {
 		private Long beerId;
 		private String korName;
 		private String country;
-		private List<BeerCategoryDto.Response> beerCategories;
-		private Double averageRating;
+		private List<BeerCategoryDto.BeerResponse> beerCategories;
+		private Double averageStar;
 		private Integer starCount;
 		private String thumbnail;
 		private Double abv;
