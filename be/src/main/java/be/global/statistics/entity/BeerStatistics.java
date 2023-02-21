@@ -38,6 +38,7 @@ public class BeerStatistics extends BaseTimeEntity {
 	private Long id;
 	@CreatedDate
 	private LocalDateTime createdAt;
+	private LocalDate date;
 	private Integer week;
 	private Long beerId;
 	private String korName;
@@ -50,7 +51,8 @@ public class BeerStatistics extends BaseTimeEntity {
 
 	public void create(Beer beer) {
 		this.createdAt = LocalDateTime.now();
-		this.week = LocalDate.now().minusWeeks(1).get(WeekFields.ISO.weekOfYear());
+		this.date = LocalDate.now().minusDays(1);
+		this.week = LocalDate.now().get(WeekFields.ISO.weekOfYear());
 		this.beerId = beer.getId();
 		this.korName = beer.getBeerDetailsBasic().getKorName();
 

@@ -31,6 +31,7 @@ public class TotalStatistics {
 	private Long id;
 	@CreatedDate
 	private LocalDate createdAt;
+	private LocalDate date;
 	private Integer totalVisitorCount;
 	private Integer totalBeerViewCount;
 	private Integer totalRatingCount;

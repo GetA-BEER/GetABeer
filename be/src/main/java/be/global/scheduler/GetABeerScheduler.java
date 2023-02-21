@@ -34,9 +34,9 @@ public class GetABeerScheduler {
 	}
 
 	/*
-	 * 매주 월요일 00시 10분에 직전 주간 통계자료 생성
+	 * 매일 00시 10분에 직전 일간 통계자료 생성
 	 */
-	@Scheduled(cron = "0 10 0 * * MON")
+	@Scheduled(cron = "0 10 0 * * *")
 	public void createBeerStatistics() {
 		statisticsService.createBeerStatistics();
 		statisticsService.createBeerCategoryStatistics();

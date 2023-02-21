@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.PersistenceConstructor;
-// import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.pairing.entity.Pairing;
@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @ToString
 @DynamicInsert
-// @Document(indexName = "beers")
+@Document(indexName = "beers")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Beer extends BaseTimeEntity implements Serializable {
