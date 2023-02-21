@@ -1,4 +1,3 @@
-// import { BeerInfo } from './SimilarBeerController';
 import Image from 'next/image';
 
 interface BeerInfo {

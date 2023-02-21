@@ -14,7 +14,7 @@ export default function PairingImageCarousel(props: { imageList: any }) {
         <Swiper
           pagination={true}
           navigation={true}
-          loop={true}
+          // loop={true}
           modules={[Pagination, Navigation]}
           className="overflow-clip h-72"
         >

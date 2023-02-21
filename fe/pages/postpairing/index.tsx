@@ -14,9 +14,9 @@ import axios from '@/pages/api/axios';
 export default function PostPairing() {
   const router = useRouter();
   const [beerInfo] = useRecoilState(currentBeer);
+
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('카테고리');
-  const [isValid, setIsValid] = useState(false);
   const [imageData, setImageData] = useState([]);
   const [jsonData, setJsonData] = useState({
     beerId: beerInfo.beerId,
@@ -25,13 +25,39 @@ export default function PostPairing() {
     category: '',
   });
   const [finalData, setFinalData] = useState<any>('');
-  // userId 로직 짜야함
 
+  // userInfo 로직, userId가 필요하다.
+  const [userInfo, setUserInfo] = useState();
+  const [TOKEN, setTOKEN] = useState();
+  // useEffect(() => {
+  //   const localInfo = window.localStorage.getItem('recoil-persist');
+  //   if (localInfo !== null) {
+  //     const tmpData = JSON.parse(localInfo);
+  //     setTOKEN(tmpData.accessToken);
+
+  //     const config = {
+  //       headers: {
+  //         authorization: TOKEN,
+  //         'content-type': 'multipart/form-data',
+  //       },
+  //       withCredentials: true,
+  //     };
+  //     axios
+  //       .get(`/api/user`, config)
+  //       .then((response) => setUserInfo(response.data))
+  //       .catch((error) => console.log(error));
+  //   }
+  // }, [TOKEN]);
+  // console.log('userInfo', userInfo);
+
+  // Vaild 로직
+  const [isValid, setIsValid] = useState(false);
   useEffect(() => {
     if (content.length >= 3 && category !== '카테고리') setIsValid(true);
     else setIsValid(false);
   }, [content, category]);
 
+  // Post 제출 로직
   const handleSubmit = () => {
     setJsonData({
       beerId: beerInfo.beerId,
@@ -41,28 +67,17 @@ export default function PostPairing() {
     });
 
     const formData = new FormData();
-
     for (const file of imageData) {
       formData.append('files', file);
     }
-
     formData.append(
       'post',
       new Blob([JSON.stringify(jsonData)], { type: 'application/json' })
     );
-
     setFinalData(formData);
-    // axios
-    //   .post(`/pairings`, formData, config)
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((error) => console.log(error));
   };
-
-  // 제출 로직 -> 500 뜨는거, 즉 한번에 잘 안들어가는거 행결해야함!!!
+  // Submit 과 formData 변경 감지 후 로직
   useEffect(() => {
-    const TOKEN = localStorage.getItem('accessToken');
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
@@ -70,7 +85,7 @@ export default function PostPairing() {
       withCredentials: true,
     };
     if (finalData !== '') {
-      console.log('finalData', finalData.get('post'));
+      // console.log(jsonData);
       axios
         .post(`/pairings`, finalData, config)
         .then((response) => {
