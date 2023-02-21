@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { HiShare } from 'react-icons/hi';
+import { RiKakaoTalkFill } from 'react-icons/ri';
+
 import { useRecoilValue, useRecoilState } from 'recoil';
 
 // 참고로, JS SDK는 PC 또는 모바일에 따라 동작이 변경되는 부분들이 있어서
 // user agent가 임의로 변경된 환경 (크롬 브라우저 > 개발자모드 > 모바일 설정)을 지원하지 않음
-const KakaoShareButton = () => {
+export default function KakaoShareButton() {
   useEffect(() => {
     createKakaoButton();
   }, []);
@@ -23,7 +25,7 @@ const KakaoShareButton = () => {
         container: '#kakao-link-btn',
         objectType: 'feed',
         content: {
-          title: '역이요',
+          title: 'GetABeer',
           description: `#태그입니다`,
           imageUrl:
             'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
@@ -63,5 +65,5 @@ const KakaoShareButton = () => {
       </span>
     </button>
   );
-};
-export default KakaoShareButton;
+}
+// export default KakaoShareButton;
