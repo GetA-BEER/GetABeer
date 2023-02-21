@@ -5,10 +5,8 @@ import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 
-import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.entity.BeerCategoryType;
-import be.domain.beertag.dto.BeerTagDto;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.user.dto.UserDto;
@@ -27,12 +25,12 @@ public interface UserMapper {
 	}
 
 	default UserDto.UserInfoResponse userToInfoResponse(User user) {
-		List<BeerTagType> userBeerTags = user.getUserBeerTags().stream().map(
-			userBeerTag -> userBeerTag.getBeerTag().getBeerTagType()
+		List<String> userBeerTags = user.getUserBeerTags().stream().map(
+			userBeerTag -> userBeerTag.getBeerTag().getBeerTagType().toString()
 		).collect(Collectors.toList());
 
-		List<BeerCategoryType> userBeerCategories = user.getUserBeerCategories().stream().map(
-			userBeerCategory -> userBeerCategory.getBeerCategory().getBeerCategoryType()
+		List<String> userBeerCategories = user.getUserBeerCategories().stream().map(
+			userBeerCategory -> userBeerCategory.getBeerCategory().getBeerCategoryType().toString()
 		).collect(Collectors.toList());
 
 		return UserDto.UserInfoResponse.builder()
@@ -76,22 +74,22 @@ public interface UserMapper {
 		return user;
 	}
 
-	private static List<UserBeerTag> getUserBeerTag(List<BeerTagDto.Response> responses) {
+	private static List<UserBeerTag> getUserBeerTag(List<String> responses) {
 		return responses.stream().map(
 			response -> UserBeerTag.builder()
 				.beerTag(BeerTag.builder()
-					.id(response.getBeerTagId())
-					.beerTagType(response.getBeerTagType())
+					// .id()
+					.beerTagType(BeerTagType.valueOf(response))
 					.build())
 				.build()).collect(Collectors.toList());
 	}
 
-	private static List<UserBeerCategory> getUserBeerCategory(List<BeerCategoryDto.Response> responses) {
+	private static List<UserBeerCategory> getUserBeerCategory(List<String> responses) {
 		return responses.stream().map(
 			response -> UserBeerCategory.builder()
 				.beerCategory(BeerCategory.builder()
-					.id(response.getBeerCategoryId())
-					.beerCategoryType(response.getBeerCategoryType())
+					// .id(response.getBeerCategoryId())
+					.beerCategoryType(BeerCategoryType.valueOf(response))
 					.build())
 				.build()).collect(Collectors.toList());
 	}
