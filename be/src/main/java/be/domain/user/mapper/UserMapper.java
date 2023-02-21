@@ -47,14 +47,14 @@ public interface UserMapper {
 
 	default User infoPostToUser(Long id, UserDto.UserInfoPost postInfo) {
 		User user = new User();
-		user.setId(id);
-		user.setUserInfo(postInfo.getAge(), postInfo.getGender());
+		user.putId(id);
+		user.putUserInfo(postInfo.getAge(), postInfo.getGender());
 
 		List<UserBeerTag> userBeerTags = getUserBeerTag(postInfo.getUserBeerTags());
-		user.setUserBeerTags(userBeerTags);
+		user.putUserBeerTags(userBeerTags);
 
 		List<UserBeerCategory> userBeerCategories = getUserBeerCategory(postInfo.getUserBeerCategories());
-		user.setUserBeerCategories(userBeerCategories);
+		user.putUserBeerCategories(userBeerCategories);
 
 		return user;
 	}
@@ -65,12 +65,12 @@ public interface UserMapper {
 
 		if (edit.getUserBeerTags() != null) {
 			List<UserBeerTag> userBeerTags = getUserBeerTag(edit.getUserBeerTags());
-			user.setUserBeerTags(userBeerTags);
+			user.putUserBeerTags(userBeerTags);
 		}
 
 		if (edit.getUserBeerCategories() != null) {
 			List<UserBeerCategory> userBeerCategories = getUserBeerCategory(edit.getUserBeerCategories());
-			user.setUserBeerCategories(userBeerCategories);
+			user.putUserBeerCategories(userBeerCategories);
 		}
 
 		return user;

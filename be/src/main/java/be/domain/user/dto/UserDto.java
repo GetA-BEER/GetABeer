@@ -32,10 +32,11 @@ public class UserDto {
 
 		@NotBlank
 		@NotFound
+		@Size(min = 2, max = 10, message = "2자에서 10자 이내로 가능합니다.")
 		private String nickname;
 
 		@NotBlank
-		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
+		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
 			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String password;
 	}
@@ -65,6 +66,7 @@ public class UserDto {
 
 		private String imageUrl;
 
+		@Size(min = 2, max = 10, message = "2자에서 10자 이내로 가능합니다.")
 		private String nickname;
 
 		private Gender gender;
@@ -82,17 +84,17 @@ public class UserDto {
 	@Builder
 	public static class EditPassword {
 
-		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
+		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
 			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String oldPassword;
 
 		@NotBlank
-		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
+		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
 			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String newPassword;
 
 		@NotBlank
-		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*?\\d)(?=.*?[#?!@$%^&*-]).{8,}$",
+		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
 			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String newVerifyPassword;
 	}

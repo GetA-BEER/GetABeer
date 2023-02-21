@@ -3,6 +3,7 @@ package be.domain.like.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.domain.like.dto.LikeResponseDto;
 import be.domain.like.entity.LikeStatus;
 import be.domain.like.entity.RatingLike;
 import be.domain.like.repository.RatingLikeRepository;
@@ -23,7 +24,7 @@ public class RatingLikeService {
 	private final RatingRepository ratingRepository;
 	private final RatingLikeRepository ratingLikeRepository;
 
-	public String clickLike(Long ratingId) {
+	public LikeResponseDto clickLike(Long ratingId) {
 		User user = userService.getLoginUser();
 		Rating rating = ratingService.findRating(ratingId);
 
@@ -42,7 +43,9 @@ public class RatingLikeService {
 			rating.calculateLikes(rating.getRatingLikeList().size());
 			ratingRepository.save(rating);
 
-			return "추천되었습니다.";
+			return LikeResponseDto.builder()
+				.isUserLikes(true)
+				.build();
 		} else {
 			RatingLike ratingLike = findRatingLike(rating.getId(), user.getId());
 			ratingLikeRepository.delete(ratingLike);
@@ -50,7 +53,9 @@ public class RatingLikeService {
 			rating.calculateLikes(rating.getRatingLikeList().size());
 			ratingRepository.save(rating);
 
-			return "추천이 취소되었습니다.";
+			return LikeResponseDto.builder()
+				.isUserLikes(false)
+				.build();
 		}
 	}
 

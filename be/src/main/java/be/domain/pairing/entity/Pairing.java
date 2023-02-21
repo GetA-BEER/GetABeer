@@ -41,7 +41,7 @@ public class Pairing extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String content;
 
 	@Enumerated(EnumType.STRING)

@@ -26,6 +26,7 @@ public interface PairingCommentMapper {
 			.pairingId(pairingComment.getPairing().getId())
 			.pairingCommentId(pairingComment.getId())
 			.userId(pairingComment.getUser().getId())
+			.userImage(pairingComment.getUser().getImageUrl())
 			.nickname(pairingComment.getUser().getNickname())
 			.content(pairingComment.getContent())
 			.createdAt(pairingComment.getCreatedAt())
@@ -41,6 +42,7 @@ public interface PairingCommentMapper {
 					pairingComment.getId(),
 					pairingComment.getUser().getId(),
 					pairingComment.getUser().getNickname(),
+					pairingComment.getUser().getImageUrl(),
 					pairingComment.getContent(),
 					pairingComment.getCreatedAt(),
 					pairingComment.getModifiedAt()

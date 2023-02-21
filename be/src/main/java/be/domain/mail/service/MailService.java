@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -21,9 +22,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MailService {
+	private final RedisUtil redisUtil;
 	private final JavaMailSender javaMailSender;
 	private final UserRepository userRepository;
-	private final RedisUtil redisUtil;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	private MimeMessage createMessage(String code, String email) throws Exception {
 		MimeMessage message = javaMailSender.createMimeMessage();
@@ -46,7 +48,7 @@ public class MailService {
 			throw new IllegalAccessException();
 		}
 
-		redisUtil.setDataExpire(code, email, 60 * 5L);
+		redisUtil.setDataExpire(email, code, 60 * 5L); // 인증번호 5분간 유효
 	}
 
 	@Async("threadPoolTaskExecutor-Mail")
@@ -55,10 +57,9 @@ public class MailService {
 			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
 		}
 
-		redisUtil.setData(email, "false");
-
 		try {
 			String code = UUID.randomUUID().toString().substring(0, 6);
+			verifyHasCode(email);
 			sendMail(code, email);
 			return code;
 		} catch (Exception exception) {
@@ -111,6 +112,13 @@ public class MailService {
 	/* 인증된 이메일 레디스 저장 */
 	public void setVerifiedEmail(String email) {
 		redisUtil.deleteData(email);
-		redisUtil.setDataExpire(email, "true", 60 * 30L);
+		redisUtil.setData(email, "true");
+	}
+
+	/* 인증 번호는 존재하지만 인증 안된 이메일인 경우 */
+	private void verifyHasCode(String email) {
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
+			redisTemplate.delete(email);
+		}
 	}
 }

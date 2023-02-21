@@ -1,7 +1,6 @@
 package be.domain.pairing.repository;
 
 import static be.domain.pairing.entity.QPairing.*;
-import static be.domain.pairing.entity.QPairingImage.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +17,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingResponseDto;
-import be.domain.pairing.dto.QPairingImageDto_Response;
 import be.domain.pairing.entity.Pairing;
-import be.domain.pairing.entity.PairingImage;
 import be.domain.user.entity.User;
 
 public class PairingCustomRepositoryImpl implements PairingCustomRepository {
@@ -31,33 +27,6 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 
 	public PairingCustomRepositoryImpl(JPAQueryFactory queryFactory) {
 		this.queryFactory = queryFactory;
-	}
-
-	@Override
-	public List<PairingImageDto.Response> findPairingImageList(Long pairingId) {
-
-		List<PairingImageDto.Response> result = queryFactory
-			.select(new QPairingImageDto_Response(
-				pairingImage.id,
-				pairingImage.imageUrl,
-				pairingImage.fileName
-			))
-			.from(pairingImage)
-			.where(pairingImage.pairing.id.eq(pairingId))
-			.fetch();
-
-		return result;
-	}
-
-	@Override
-	public List<PairingImage> findPairingImage(Long pairingId) {
-
-		List<PairingImage> result = queryFactory
-			.selectFrom(pairingImage)
-			.where(pairingImage.pairing.id.eq(pairingId))
-			.fetch();
-
-		return result;
 	}
 
 	@Override
@@ -85,8 +54,9 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 	@Override
 	public Page<PairingResponseDto.Total> findPairingTotalResponseOrder(Long beerId, Pageable pageable) {
 		var list = orderByPageable(beerId, pageable);
+		var total = getTotalSize(beerId);
 
-		return PageableExecutionUtils.getPage(list, pageable, list::size);
+		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
 	/* 로그인 유저가 있는 경우 */
@@ -101,7 +71,9 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			list = orderByPageable(beerId, pageable);
 		}
 
-		return PageableExecutionUtils.getPage(list, pageable, list::size);
+		var total = getTotalSize(beerId);
+
+		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
 	// -------------------------------------------- 조회 관련 메서드 ---------------------------------------------------
@@ -169,6 +141,12 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 			.fetch();
 	}
 
+	private long getTotalSize(Long beerId) {
+
+		return queryFactory.selectFrom(pairing)
+			.where(pairing.beer.id.eq(beerId))
+			.fetch().size();
+	}
 	private List<OrderSpecifier> createOrderSpecifier(Pageable pageable) {
 		List<OrderSpecifier> list = new ArrayList<>();
 		if (!pageable.getSort().isEmpty()) {

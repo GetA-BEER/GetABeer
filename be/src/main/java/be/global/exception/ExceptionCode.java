@@ -19,6 +19,7 @@ public enum ExceptionCode {
 	NOT_CORRECT_USER(403, "유저 정보가 일치하지 않습니다."),
 	NOT_LIKE_WRITER(400, "본인이 작성한 글에 추천을 누를 수 없습니다."),
 	WRONG_URI(400, "잘못된 요청 주소입니다."),
+	ZERO_STAR(400, "평점에 0점은 줄 수 없습니다."),
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),

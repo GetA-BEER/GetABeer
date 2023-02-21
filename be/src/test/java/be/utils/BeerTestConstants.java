@@ -125,6 +125,7 @@ public class BeerTestConstants {
 			GET_MONTHLY_BEER_RESPONSE,
 			GET_MONTHLY_BEER_RESPONSE);
 
+
 	public static final BeerDto.WishlistResponse GET_MY_PAGE_BEER_RESPONSE =
 		BeerDto.WishlistResponse.builder()
 			.beerId(1L)
@@ -140,5 +141,4 @@ public class BeerTestConstants {
 				GET_MY_PAGE_BEER_RESPONSE,
 				GET_MY_PAGE_BEER_RESPONSE
 			));
-
 }

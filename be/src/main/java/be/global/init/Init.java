@@ -239,8 +239,8 @@ public class Init {
 				.imageUrl(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
 				.build();
 
-			user.setUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.values()[(int)(Math.random() * 3)]);
-			user.setUserBeerTags(new ArrayList<>());
+			user.putUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.values()[(int)(Math.random() * 3)]);
+			user.putUserBeerTags(new ArrayList<>());
 
 			for (int j = 0; j < 4; j++) {
 				UserBeerTag userBeerTag =
@@ -251,7 +251,7 @@ public class Init {
 				user.addUserBeerTags(userBeerTag);
 			}
 
-			user.setUserBeerCategories(new ArrayList<>());
+			user.putUserBeerCategories(new ArrayList<>());
 
 			for (int j = 0; j < 2; j++) {
 				UserBeerCategory userBeerCategory =

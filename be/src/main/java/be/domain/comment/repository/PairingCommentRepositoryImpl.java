@@ -32,6 +32,7 @@ public class PairingCommentRepositoryImpl implements PairingCommentCustomReposit
 				pairingComment.id,
 				pairingComment.user.id,
 				pairingComment.user.nickname,
+				pairingComment.user.imageUrl,
 				pairingComment.content,
 				pairingComment.createdAt,
 				pairingComment.modifiedAt

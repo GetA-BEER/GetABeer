@@ -26,6 +26,7 @@ public interface RatingCommentMapper {
 			.ratingCommentId(ratingComment.getId())
 			.userId(ratingComment.getUser().getId())
 			.nickname(ratingComment.getUser().getNickname())
+			.userImage(ratingComment.getUser().getImageUrl())
 			.content(ratingComment.getContent())
 			.createdAt(ratingComment.getCreatedAt())
 			.modifiedAt(ratingComment.getModifiedAt())
@@ -42,6 +43,7 @@ public interface RatingCommentMapper {
 					ratingComment.getId(),
 					ratingComment.getUser().getId(),
 					ratingComment.getUser().getNickname(),
+					ratingComment.getUser().getImageUrl(),
 					ratingComment.getContent(),
 					ratingComment.getCreatedAt(),
 					ratingComment.getModifiedAt()
