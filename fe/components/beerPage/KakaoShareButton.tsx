@@ -26,7 +26,7 @@ export default function KakaoShareButton() {
         objectType: 'feed',
         content: {
           title: 'GetABeer',
-          description: `#태그입니다`,
+          description: `#맥주가 #땡길땐 #GetABeer`,
           imageUrl:
             'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
           link: {

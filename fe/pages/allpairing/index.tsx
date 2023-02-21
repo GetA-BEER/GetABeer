@@ -1,52 +1,61 @@
 import Head from 'next/head';
 import SortBox, { Sort } from '@/components/selectBox/SortBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 
-export default function Pairing() {
+export default function AllPairing() {
   const [sort, setSort] = useState<Sort>('mostlikes');
   const [category, setCategory] = useState<string>('ALL');
-
-  const pairingCardProps = {
-    data: [
-      {
-        beerId: 1,
-        pairingId: 1,
-        nickname: '김맥주',
-        content: '수정된 페어링',
-        thumbnail:
-          'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
-        category: 'SNACK',
-        likeCount: 3,
-        commentCount: 0,
-        isUserLikes: true,
-        createdAt: '2023-02-06T00:29:14.59836',
-        modifiedAt: '2023-02-06T00:31:11.1951',
-      },
-      {
-        beerId: 1,
-        pairingId: 2,
-        nickname: '김맥주',
-        content: '페어링 안내',
-        thumbnail:
-          'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
-        category: 'GRILL',
-        likeCount: 2,
-        commentCount: 0,
-        isUserLikes: false,
-        createdAt: '2023-02-06T00:35:58.259552',
-        modifiedAt: '2023-02-06T00:35:58.259552',
-      },
-    ],
-    pageInfo: {
-      page: 1,
-      size: 5,
-      totalElements: 2,
-      totalPages: 1,
-    },
-  };
+  const [pairingCardProps, setPairingCardProps] = useState<any>();
+  useEffect(() => {
+    axios
+      .get(`/pairings/page/recency?beerId=1&page=1&size=5`)
+      .then((response) => setPairingCardProps(response.data))
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+  console.log('pairingCardProps', pairingCardProps);
+  // const pairingCardProps = {
+  //   data: [
+  //     {
+  //       beerId: 1,
+  //       pairingId: 1,
+  //       nickname: '김맥주',
+  //       content: '수정된 페어링',
+  //       thumbnail:
+  //         'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
+  //       category: 'SNACK',
+  //       likeCount: 3,
+  //       commentCount: 0,
+  //       isUserLikes: true,
+  //       createdAt: '2023-02-06T00:29:14.59836',
+  //       modifiedAt: '2023-02-06T00:31:11.1951',
+  //     },
+  //     {
+  //       beerId: 1,
+  //       pairingId: 2,
+  //       nickname: '김맥주',
+  //       content: '페어링 안내',
+  //       thumbnail:
+  //         'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
+  //       category: 'GRILL',
+  //       likeCount: 2,
+  //       commentCount: 0,
+  //       isUserLikes: false,
+  //       createdAt: '2023-02-06T00:35:58.259552',
+  //       modifiedAt: '2023-02-06T00:35:58.259552',
+  //     },
+  //   ],
+  //   pageInfo: {
+  //     page: 1,
+  //     size: 5,
+  //     totalElements: 2,
+  //     totalPages: 1,
+  //   },
+  // };
   return (
     <>
       <Head>
