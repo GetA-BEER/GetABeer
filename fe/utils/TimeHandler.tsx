@@ -15,7 +15,7 @@ export const TimeHandler = (time: any): any => {
   if (elsTime.elapsedDay < 1) {
     if (elsTime.elapsedHour >= 1 && elsTime.elapsedHour < 24) {
       if (Math.floor(elsTime.elapsedHour) === 1) {
-        result = Math.floor(elsTime.elapsedHour) + ' 한 시간 전';
+        result = '한 시간 전';
       } else {
         result = Math.floor(elsTime.elapsedHour) + ' 시간 전';
       }
@@ -24,7 +24,7 @@ export const TimeHandler = (time: any): any => {
   if (elsTime.elapsedHour < 1) {
     if (elsTime.elapsedMin >= 1 && elsTime.elapsedMin < 60) {
       if (Math.floor(elsTime.elapsedMin) === 1) {
-        result = Math.floor(elsTime.elapsedMin) + ' 1분 전';
+        result = '1분 전';
       } else {
         result = Math.floor(elsTime.elapsedMin) + ' 분 전';
       }
@@ -32,11 +32,7 @@ export const TimeHandler = (time: any): any => {
   }
   if (elsTime.elapsedMin < 1) {
     if (elsTime.elapsedSec >= 0 && elsTime.elapsedSec < 60) {
-      if (Math.floor(elsTime.elapsedSec) === 1) {
-        result = Math.floor(elsTime.elapsedSec) + ' 1초 전';
-      } else {
-        result = Math.floor(elsTime.elapsedSec) + '방금전';
-      }
+      result = '방금 전';
     }
   } else result = time?.slice(0, 10).split('-').join('.');
 
