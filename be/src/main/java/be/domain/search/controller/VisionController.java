@@ -1,11 +1,16 @@
 package be.domain.search.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,11 +25,18 @@ import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 
+import be.domain.beer.dto.BeerDto;
+import be.domain.beer.entity.Beer;
+import be.domain.beer.mapper.BeerMapper;
+import be.domain.search.service.VisionService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequestMapping("/api/search")
 @RequiredArgsConstructor
 public class VisionController {
+	private final BeerMapper beerMapper;
+	private final VisionService visionService;
 	private final ResourceLoader resourceLoader;
 	private final CloudVisionTemplate cloudVisionTemplate;
 	private final ImageAnnotatorClient imageAnnotatorClient;
@@ -59,5 +71,14 @@ public class VisionController {
 			.forEach(str -> responseBuilder.append(str).append("\n"));
 
 		return responseBuilder.toString();
+	}
+
+	@GetMapping("/image")
+	public ResponseEntity gcpTest(@RequestParam(value = "image") MultipartFile multipartFile) throws IOException {
+		List<String> engNameList = visionService.getSimilarProductsFile(multipartFile);
+		List<Beer> beerList = visionService.findBeersListByImage(engNameList);
+		List<BeerDto.SearchResponse> responseList = beerMapper.beersListToSearchResponse(beerList);
+
+		return ResponseEntity.ok(responseList);
 	}
 }

@@ -1,6 +1,7 @@
 package be.domain.beer.mapper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
@@ -151,6 +152,30 @@ public interface BeerMapper {
 				return searchResponseBuilder.build();
 			})
 			.collect(Collectors.toList()));
+	}
+
+	default List<BeerDto.SearchResponse> beersListToSearchResponse(List<Beer> beerList) {
+
+		return beerList.stream()
+			.filter(Objects::nonNull)
+			.map(beer -> {
+
+				BeerDto.SearchResponse.SearchResponseBuilder searchResponseBuilder = BeerDto.SearchResponse.builder();
+
+				searchResponseBuilder.beerId(beer.getId());
+				searchResponseBuilder.korName(beer.getBeerDetailsBasic().getKorName());
+				searchResponseBuilder.engName(beer.getBeerDetailsBasic().getEngName());
+				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+				searchResponseBuilder.averageStar(beer.getBeerDetailsStars().getTotalAverageStars());
+				searchResponseBuilder.ratingCount(beer.getBeerDetailsCounts().getRatingCount());
+				searchResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
+				if (beer.getBeerDetailsBestRating() != null) {
+					searchResponseBuilder.bestRating(beer.getBeerDetailsBestRating().createRating());
+				}
+
+				return searchResponseBuilder.build();
+			})
+			.collect(Collectors.toList());
 	}
 
 	default PageImpl<BeerDto.WishlistResponse> beersToWishlistResponse(Page<Beer> beerPage, List<Rating> ratingList) {

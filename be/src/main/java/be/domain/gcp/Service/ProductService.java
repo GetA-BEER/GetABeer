@@ -100,8 +100,7 @@ public class ProductService {
 		}
 	}
 
-	public void deleteProduct(String productId)
-		throws IOException {
+	public void deleteProduct(String productId) throws IOException {
 		try (ProductSearchClient client = ProductSearchClient.create()) {
 
 			// Get the full path of the product.
@@ -110,6 +109,50 @@ public class ProductService {
 			// Delete a product.
 			client.deleteProduct(formattedName);
 			System.out.println("Product deleted.");
+		}
+	}
+
+	public void getProduct() throws IOException {
+		try (ProductSearchClient client = ProductSearchClient.create()) {
+
+			// Get the full path of the product.
+			String formattedName = ProductName.format(PROJECT_ID, COMPUTE_REGION, PRODUCT_ENGNAME[0]);
+			// Get complete detail of the product.
+			Product product = client.getProduct(formattedName);
+			// Display the product information
+			System.out.println(String.format("Product name: %s", product.getName()));
+			System.out.println(
+				String.format(
+					"Product id: %s",
+					product.getName().substring(product.getName().lastIndexOf('/') + 1)));
+			System.out.println(String.format("Product display name: %s", product.getDisplayName()));
+			System.out.println(String.format("Product description: %s", product.getDescription()));
+			System.out.println(String.format("Product category: %s", product.getProductCategory()));
+			System.out.println(String.format("Product labels: "));
+			for (Product.KeyValue element : product.getProductLabelsList()) {
+				System.out.println(String.format("%s: %s", element.getKey(), element.getValue()));
+			}
+		}
+	}
+
+	public void getProductSet() throws IOException {
+		try (ProductSearchClient client = ProductSearchClient.create()) {
+
+			// Get the full path of the product set.
+			String formattedName = ProductSetName.format(PROJECT_ID, COMPUTE_REGION, PRODUCT_SET_ID);
+			// Get complete detail of the product set.
+			ProductSet productSet = client.getProductSet(formattedName);
+			// Display the product set information
+			System.out.println(String.format("Product set name: %s", productSet.getName()));
+			System.out.println(
+				String.format(
+					"Product set id: %s",
+					productSet.getName().substring(productSet.getName().lastIndexOf('/') + 1)));
+			System.out.println(
+				String.format("Product set display name: %s", productSet.getDisplayName()));
+			System.out.println("Product set index time:");
+			System.out.println(String.format("\tseconds: %s", productSet.getIndexTime().getSeconds()));
+			System.out.println(String.format("\tnanos: %s", productSet.getIndexTime().getNanos()));
 		}
 	}
 }

@@ -242,4 +242,16 @@ public class BeerQueryRepository {
 			.where(beerWishlist.user.eq(loginUser))
 			.fetch();
 	}
+
+	public List<Beer> findBeersListByImage(List<String> engNameList) {
+
+		List<Beer> result = new ArrayList<>();
+
+		for (String engName : engNameList) {
+			result.add(jpaQueryFactory.selectFrom(beer)
+				.where(beer.beerDetailsBasic.engName.eq(engName))
+				.fetchFirst());
+		}
+		return result;
+	}
 }

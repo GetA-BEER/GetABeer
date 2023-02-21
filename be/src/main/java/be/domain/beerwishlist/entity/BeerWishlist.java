@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import be.domain.beer.entity.Beer;
 import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
@@ -32,6 +34,7 @@ public class BeerWishlist extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "beer_id")
 	private Beer beer;
