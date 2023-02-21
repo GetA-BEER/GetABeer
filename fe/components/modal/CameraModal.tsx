@@ -92,18 +92,19 @@ export default function CameraModal() {
           <button
             type="button"
             onClick={() => setShowModal(false)}
-            className="fixed p-5 w-full bottom-40 left-0 z-[1]"
+            className="fixed p-5 w-full bottom-44 left-0 z-[1]"
           >
             <div className="w-fit m-auto border-dashed border-2 border-yellow-200 p-2">
               <Image
                 className="w-3/5 m-auto"
                 src="/images/example.png"
-                alt="adv1"
+                alt="notice"
                 width={80}
                 height={80}
               />
               <div className="text-yellow-200 mt-1 text-sm font-light">
-                위와 같이 <br />잘 나온 사진으로 검색하세요
+                위와 같이 <br />
+                정확한 사진으로 검색하세요
               </div>
             </div>
           </button>
