@@ -20,6 +20,7 @@ public enum ExceptionCode {
 	NOT_LIKE_WRITER(400, "본인이 작성한 글에 추천을 누를 수 없습니다."),
 	WRONG_URI(400, "잘못된 요청 주소입니다."),
 	ZERO_STAR(400, "평점에 0점은 줄 수 없습니다."),
+	NOT_FOUND_CATEGORY(404, "카테고리가 존재하지 않습니다."),
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),

@@ -15,12 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import be.domain.beer.entity.Beer;
 import be.domain.comment.entity.PairingComment;
 import be.domain.like.entity.PairingLike;
-import be.domain.pairing.dto.PairingImageDto;
 import be.domain.user.entity.User;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -47,10 +44,10 @@ public class Pairing extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private PairingCategory pairingCategory;
 
-	@ColumnDefault("0")
+	@Column
 	private Integer likeCount;
 
-	@ColumnDefault("0")
+	@Column
 	private Integer commentCount;
 
 	private String thumbnail;
@@ -80,7 +77,7 @@ public class Pairing extends BaseTimeEntity {
 
 	/* 💚 페어링 - 페어링 댓글 일대다 연관관계 */
 	@OneToMany(mappedBy = "pairing", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	private List<PairingComment> pairingCommentList = new ArrayList<>();
+	private List<PairingComment> pairingCommentList;
 
 	/* 💚 페어링 - 페어링 댓글 일대다 연관관계 편의 메서드 */
 	public void addPairingCommentList(PairingComment pairingComment) {
@@ -113,16 +110,11 @@ public class Pairing extends BaseTimeEntity {
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------
-	public void saveDefault(Beer beer, User user, String thumbnail, List<PairingImage> pairingImageList,
-		List<PairingComment> pairingCommentList,
-		Integer likeCount, Integer commentCount) {
+	public void saveDefault(Beer beer, User user, String thumbnail, List<PairingImage> pairingImageList) {
 		this.beer = beer;
 		this.user = user;
 		this.thumbnail = thumbnail;
 		this.pairingImageList = pairingImageList;
-		this.pairingCommentList = pairingCommentList;
-		this.likeCount = likeCount;
-		this.commentCount = commentCount;
 	}
 
 	public void updateContent(String content) {

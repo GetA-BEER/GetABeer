@@ -56,7 +56,7 @@ public class RatingService {
 		User user = userService.getUser(userId);
 
 		/* 이미 평가를 입력했던 유저라면 입력할 수 없음 */
-		verifyExistUser(user.getId());
+		verifyExistUser(user.getId(), beerId);
 
 		/* 0점은 줄 수 없음, MIN 은 Long 타입이라 여기서 한 번 거르기 */
 		cannotZeroStar(rating.getStar());
@@ -65,7 +65,8 @@ public class RatingService {
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
 		/* 기본 설정 저장하기 */
-		rating.saveDefault(beer, user, ratingTag, user.getNickname(),0, 0, new ArrayList<>());
+		rating.saveDefault(beer, user, ratingTag, user.getNickname(),
+			0, 0, new ArrayList<>());
 		ratingTag.saveRating(rating);
 
 		/* 다대다 연관관계 생성 및 저장 */
@@ -221,8 +222,8 @@ public class RatingService {
 		RatingTag ratingTag = ratingRepository.findTagResponse(ratingId);
 		List<BeerTagType> tag = new ArrayList<>();
 		tag.add(ratingTag.getColor());
-		tag.add(ratingTag.getTaste());
 		tag.add(ratingTag.getFlavor());
+		tag.add(ratingTag.getTaste());
 		tag.add(ratingTag.getCarbonation());
 
 		return tag;
@@ -232,16 +233,12 @@ public class RatingService {
 	private Boolean getIsUserLikes(Long ratingId, Long userId) {
 		int userLikes = ratingLikeRepository.findRatingLikeUser(ratingId, userId);
 
-		if (userLikes != 0) {
-			return true;
-		}
-
-		return false;
+		return userLikes != 0;
 	}
 
 	/* 이미 평가를 등록한 적 있는 유저인지 확인 */
-	private void verifyExistUser(Long userId) {
-		Rating rating = ratingRepository.findRatingByUserId(userId);
+	private void verifyExistUser(Long userId, Long beerId) {
+		Rating rating = ratingRepository.findRatingByUserId(userId, beerId);
 
 		if (rating != null) {
 			throw new BusinessLogicException(ExceptionCode.RATING_USER_EXISTS);
@@ -271,7 +268,7 @@ public class RatingService {
 		}
 
 		if (!flavor.equalsIgnoreCase("FRUITY") && !flavor.equalsIgnoreCase("FLOWER")
-			&& !flavor.equalsIgnoreCase("MALTY") && !flavor.equalsIgnoreCase("HOPPY")) {
+			&& !flavor.equalsIgnoreCase("MALTY") && !flavor.equalsIgnoreCase("NO_SCENT")) {
 			log.error("향 태그가 잘못 요청 되었음.");
 			throw new BusinessLogicException(ExceptionCode.TAG_IS_WRONG);
 		}
@@ -288,6 +285,7 @@ public class RatingService {
 			throw new BusinessLogicException(ExceptionCode.ZERO_STAR);
 		}
 	}
+
 	private void saveBeerBeerTags(Beer findBeer, List<BeerTagType> beerTagTypeList) {
 
 		beerTagTypeList

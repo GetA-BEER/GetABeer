@@ -80,10 +80,10 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 	}
 
 	@Override
-	public Rating findRatingByUserId(Long userId) {
+	public Rating findRatingByUserId(Long userId, Long beerId) {
 
 		return queryFactory.selectFrom(rating)
-			.where(rating.user.id.eq(userId))
+			.where(rating.beer.id.eq(beerId).and(rating.user.id.eq(userId)))
 			.fetchFirst();
 	}
 
