@@ -109,33 +109,43 @@ public class BeerQueryRepository {
 	public List<Beer> findSimilarBeer(Beer findBeer) {
 
 		List<String> beerCategories = findBeer.getBeerBeerCategories().stream()
-			.map(beerBeerCategory1 -> beerBeerCategory1.getBeerCategory().toString())
+			.map(beerBeerCategory1 -> beerBeerCategory1.getBeerCategory().getBeerCategoryType().toString())
 			.collect(Collectors.toList());
 
 		List<Beer> result = new ArrayList<>();
+		List<Beer> beerList = new ArrayList<>();
 
-		for (String category : beerCategories) {
-
-			List<Beer> beerList = jpaQueryFactory
+		if (findBeer.getBeerDetailsTopTags() != null) {
+			beerList = jpaQueryFactory
 				.selectFrom(beer)
 				.join(beer.beerBeerCategories, beerBeerCategory)
 				.join(beerBeerCategory.beerCategory, beerCategory)
-				.where(beerCategory.beerCategoryType.stringValue().eq(category)
-					.and(beer.beerDetailsTopTags.tag1.eq(beerCategories.get(0))
-						.or(beer.beerDetailsTopTags.tag1.eq(beerCategories.get(1))))
-					.or(beer.beerDetailsTopTags.tag2.eq(beerCategories.get(0))
-						.or(beer.beerDetailsTopTags.tag2.eq(beerCategories.get(1)))))
+				.where(beerCategory.beerCategoryType.stringValue().eq(beerCategories.get(0))
+					.and(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag1())
+						.or(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag2())))
+					.or(beer.beerDetailsTopTags.tag2.eq(findBeer.getBeerDetailsTopTags().getTag1())
+						.or(beer.beerDetailsTopTags.tag2.eq(findBeer.getBeerDetailsTopTags().getTag2()))))
+				.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
+				.limit(5)
 				.fetch();
-
-			result.addAll(beerList);
 		}
 
-		return result.stream()
-			.distinct()
-			.sorted((a, b) -> (int)((b.getBeerDetailsStars().getTotalAverageStars() * 100)
-				- (a.getBeerDetailsStars().getTotalAverageStars() * 100)))
-			.limit(5)
-			.collect(Collectors.toList());
+		if (beerList.size() < 5) {
+			List<Beer> tempList = jpaQueryFactory
+				.selectFrom(beer)
+				.join(beer.beerBeerCategories, beerBeerCategory)
+				.join(beerBeerCategory.beerCategory, beerCategory)
+				.where(beerCategory.beerCategoryType.stringValue().eq(beerCategories.get(0)))
+				.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
+				.limit(5 - beerList.size())
+				.fetch();
+
+			beerList.addAll(tempList);
+		}
+
+		result.addAll(beerList);
+
+		return result;
 	}
 
 	public Beer findBeerByRatingId(Long ratingId) {
@@ -231,5 +241,17 @@ public class BeerQueryRepository {
 			.from(rating)
 			.where(beerWishlist.user.eq(loginUser))
 			.fetch();
+	}
+
+	public List<Beer> findBeersListByImage(List<String> engNameList) {
+
+		List<Beer> result = new ArrayList<>();
+
+		for (String engName : engNameList) {
+			result.add(jpaQueryFactory.selectFrom(beer)
+				.where(beer.beerDetailsBasic.engName.eq(engName))
+				.fetchFirst());
+		}
+		return result;
 	}
 }

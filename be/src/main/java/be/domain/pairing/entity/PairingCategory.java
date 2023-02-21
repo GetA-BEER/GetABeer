@@ -9,8 +9,4 @@ public enum PairingCategory {
 	SNACK,
 	SOUP,
 	ETC;
-
-	public String getPairingName() {
-		return name();
-	}
 }

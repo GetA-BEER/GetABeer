@@ -10,14 +10,23 @@ import javax.validation.constraints.NotBlank;
 
 public class BeerCategoryDto {
 
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Response {
+	@Getter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Response {
 
-        private Long beerCategoryId;
-        @NotBlank
-        private BeerCategoryType beerCategoryType;
-    }
+		private Long beerCategoryId;
+		@NotBlank
+		private BeerCategoryType beerCategoryType;
+	}
+
+	@Getter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class BeerResponse {
+		@NotBlank
+		private BeerCategoryType beerCategoryType;
+	}
 }

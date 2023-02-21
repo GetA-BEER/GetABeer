@@ -5,6 +5,7 @@ import static be.domain.rating.entity.QRating.*;
 import static be.domain.user.entity.QUser.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +39,15 @@ public class BeerTagStatisticsQueryRepository {
 		for (int i = 0; i < 3; i++) {
 			genderCountList.add(jpaQueryFactory.select(rating)
 				.join(rating.user, user)
+				.where(rating.createdAt.eq(LocalDateTime.now().minusDays(1)))
 				.where(rating.user.gender.eq(Gender.values()[i]))
 				.fetch().size());
 		}
 
 		BeerTagStatistics.BeerTagStatisticsBuilder beerTagStatisticsBuilder = BeerTagStatistics.builder();
 
-		beerTagStatisticsBuilder.week(LocalDate.now().minusWeeks(1).get(WeekFields.ISO.weekOfYear()));
+		beerTagStatisticsBuilder.date(LocalDate.now().minusDays(1));
+		beerTagStatisticsBuilder.week(LocalDate.now().get(WeekFields.ISO.weekOfYear()));
 		beerTagStatisticsBuilder.straw(countList.get(0));
 		beerTagStatisticsBuilder.gold(countList.get(1));
 		beerTagStatisticsBuilder.brown(countList.get(2));

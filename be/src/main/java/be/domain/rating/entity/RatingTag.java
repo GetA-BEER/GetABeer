@@ -75,6 +75,6 @@ public class RatingTag {
 	}
 
 	public List<BeerTagType> createBeerTagTypeList() {
-		return List.of(color, taste, flavor, carbonation);
+		return List.of(color, flavor, taste, carbonation);
 	}
 }

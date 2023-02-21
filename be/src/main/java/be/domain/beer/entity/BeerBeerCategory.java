@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import be.domain.beercategory.entity.BeerCategory;
 import be.global.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -36,10 +38,12 @@ public class BeerBeerCategory extends BaseTimeEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "beer_beer_category_id")
 	private Long id;
+	@JsonBackReference
 	@JoinColumn(name = "beer_id")
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Beer beer;
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "beer_category_id")
 	private BeerCategory beerCategory;

@@ -2,7 +2,13 @@ package be.global.init;
 
 import static be.global.init.InitConstant.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -60,7 +66,7 @@ public class Init {
 		BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository,
 		BeerCategoryService beerCategoryService) {
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 8; i++) {
 			BeerCategory beerCategory = BeerCategory.builder()
 				.beerCategoryType(BeerCategoryType.values()[i])
 				.build();
@@ -78,26 +84,37 @@ public class Init {
 		 * BEER STUB DATA
 		 */
 
-		for (int i = 1; i <= 30; i++) {
+		String FILE_PATH = "src/main/java/be/global/init/Get_A_Beer_Products.csv";
 
-			int rand7 = (int)(Math.random() * 7);
+		List<List<String>> csvList = new ArrayList<List<String>>();
 
-			BeerCategoryDto.Response beerCategoryDto =
-				BeerCategoryDto.Response.builder()
-					.beerCategoryId((long)rand7 + 1)
-					.beerCategoryType(BeerCategoryType.values()[rand7])
-					.build();
+		File csv = new File(FILE_PATH);
+		BufferedReader br = null;
+		String line = "";
 
-			BeerDto.Post postBeer =
-				BeerDto.Post.builder()
-					.korName("한글 이름" + i)
-					.engName("EngName" + i)
-					.country("Germany")
-					.beerCategories(List.of(beerCategoryDto))
-					.thumbnail("썸네일 이미지 경로" + i)
-					.abv(4.5)
-					.ibu(20)
-					.build();
+		try {
+			br = new BufferedReader(new FileReader(csv));
+			while ((line = br.readLine()) != null) { // readLine()은 파일에서 개행된 한 줄의 데이터를 읽어온다.
+				List<String> aLine = new ArrayList<String>();
+				String[] lineArr = line.split(","); // 파일의 한 줄을 ,로 나누어 배열에 저장 후 리스트로 변환한다.
+				aLine = Arrays.asList(lineArr);
+				csvList.add(aLine);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null) {
+					br.close(); // 사용 후 BufferedReader를 닫아준다.
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		for (int i = 1; i < 31; i++) {
 
 			BeerDetailsStars beerDetailsStars =
 				BeerDetailsStars.builder()
@@ -106,14 +123,86 @@ public class Init {
 					.maleAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
 					.build();
 
-			beerController.postBeer(postBeer);
+			List<String> list = csvList.get(i);
+
+			BeerDto.Post.PostBuilder postBuilder = BeerDto.Post.builder();
+
+			postBuilder.korName(list.get(0));
+			postBuilder.engName(list.get(1));
+			postBuilder.country(list.get(2));
+			if (!list.get(4).contains("")) {
+				postBuilder.beerCategories(List.of(
+					BeerCategoryDto.Response.builder()
+						// .beerCategoryId((long)BeerCategoryType.valueOf(list.get(3)).ordinal() + 1)
+						.beerCategoryType(BeerCategoryType.valueOf(list.get(3)))
+						.build(),
+					BeerCategoryDto.Response.builder()
+						// .beerCategoryId((long)BeerCategoryType.valueOf(list.get(4)).ordinal() + 1)
+						.beerCategoryType(BeerCategoryType.valueOf(list.get(4)))
+						.build()
+				));
+			} else {
+				postBuilder.beerCategories(List.of(
+					BeerCategoryDto.Response.builder()
+						// .beerCategoryId((long)BeerCategoryType.valueOf(list.get(3)).ordinal() + 1)
+						.beerCategoryType(BeerCategoryType.valueOf(list.get(3)))
+						.build()));
+			}
+			postBuilder.abv(Double.valueOf(list.get(5)));
+			if (!list.get(6).isBlank()) {
+				postBuilder.ibu(Integer.valueOf(list.get(6)));
+			}
+			postBuilder.thumbnail(list.get(7));
+
+			beerController.postBeer(postBuilder.build());
 
 			Beer findBeer = beerService.findVerifiedBeer((long)i);
-			findBeer.addBeerDetailsCounts(BEER_DETAILS_COUNTS);
+
 			findBeer.addBeerDetailsStars(beerDetailsStars);
 
 			beerRepository.save(findBeer);
 		}
+
+
+		/*
+		 * BEER STUB DATA
+		 */
+		// for (int i = 1; i <= 30; i++) {
+		//
+		// 	int rand7 = (int)(Math.random() * 7);
+		//
+		// 	BeerCategoryDto.Response beerCategoryDto =
+		// 		BeerCategoryDto.Response.builder()
+		// 			.beerCategoryId((long)rand7 + 1)
+		// 			.beerCategoryType(BeerCategoryType.values()[rand7])
+		// 			.build();
+		//
+		// 	BeerDto.Post postBeer =
+		// 		BeerDto.Post.builder()
+		// 			.korName("한글 이름" + i)
+		// 			.engName("EngName" + i)
+		// 			.country("Germany")
+		// 			.beerCategories(List.of(beerCategoryDto))
+		// 			.thumbnail("썸네일 이미지 경로" + i)
+		// 			.abv(4.5)
+		// 			.ibu(20)
+		// 			.build();
+		//
+		// 	BeerDetailsStars beerDetailsStars =
+		// 		BeerDetailsStars.builder()
+		// 			.totalAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
+		// 			.femaleAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
+		// 			.maleAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
+		// 			.build();
+		//
+		// 	beerController.postBeer(postBeer);
+		//
+		// 	Beer findBeer = beerService.findVerifiedBeer((long)i);
+		// 	findBeer.addBeerDetailsCounts(BEER_DETAILS_COUNTS);
+		// 	findBeer.addBeerDetailsStars(beerDetailsStars);
+		//
+		// 	beerRepository.save(findBeer);
+		// }
 
 		/*
 		 * RATING STUB DATA

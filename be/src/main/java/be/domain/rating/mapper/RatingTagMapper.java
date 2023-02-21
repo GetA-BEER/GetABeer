@@ -52,7 +52,7 @@ public interface RatingTagMapper {
 		}
 
 		if (flavor.equalsIgnoreCase("FRUITY") || flavor.equalsIgnoreCase("FLOWER")
-			|| flavor.equalsIgnoreCase("MALTY") || flavor.equalsIgnoreCase("HOPPY")) {
+			|| flavor.equalsIgnoreCase("MALTY") || flavor.equalsIgnoreCase("NO_SCENT")) {
 			tag.flavor(BeerTagType.valueOf(flavor));
 		} else if (flavor.equals("")) {
 			tag.flavor(null);

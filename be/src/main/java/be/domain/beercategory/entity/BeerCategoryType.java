@@ -5,8 +5,17 @@ public enum BeerCategoryType {
 	LAGER(),
 	WEIZEN(),
 	DUNKEL(),
-	PILSENER(),
-	FRUIT_BEER(),
+	PILSNER(),
+	FRUIT(),
 	NON_ALCOHOLIC(),
-	ETC()
+	ETC();
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	public Integer toInteger(BeerCategoryType beerCategoryType) {
+		return beerCategoryType.ordinal();
+	}
 }

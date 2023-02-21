@@ -6,6 +6,10 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class Pointcuts {
 
+	@Pointcut("execution(* be.domain.beer.controller.BeerController.getWeeklyBeer())")
+	public void getWeeklyBeer() {
+	}
+
 	@Pointcut("execution(* be.domain.beer.service.BeerServiceImpl.getBeer(..))")
 	public void getBeer() {
 	}

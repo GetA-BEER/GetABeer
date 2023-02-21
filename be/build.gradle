@@ -39,7 +39,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // OAuth 2.0
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // OAuth 2.0
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-aop' // Spring AOP
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // View Template, Image Download
@@ -60,6 +60,8 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.1.2' // Crawling
     implementation group: 'org.apache.poi', name: 'poi', version: '5.0.0' // 데이터 <-> 문서
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0' // 데이터 <-> 문서
+    implementation group: 'tech.tablesaw', name: 'tablesaw-core', version: '0.43.1' // 데이터 분석
+    implementation group: 'tech.tablesaw', name: 'tablesaw-jsplot', version: '0.43.1' // 데이터 시각화
     implementation platform('com.google.cloud:libraries-bom:26.4.0') // Google Cloud
     implementation('com.google.cloud:spring-cloud-gcp-starter-vision:3.2.1') // Google Vision API
     //    ------------------------------------------JWT-----------------------------------------------
@@ -128,9 +130,9 @@ bootJar {
     }
 }
 
-//test { // 빌드시 테스트 제외
-//    exclude '**/*'
-//}
+test { // 빌드시 테스트 제외
+    exclude '**/*'
+}
 
 //    ---------------------------------------Query DSL--------------------------------------------
 // 경로 지정
