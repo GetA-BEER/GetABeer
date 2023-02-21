@@ -8,10 +8,11 @@ export default function PairingCardController(props: {
 }) {
   const [cardPropsList, setCardPropsList] = useState<any>();
   useEffect(() => {
-    if (props.pairingCardProps !== undefined)
-      setCardPropsList(props.pairingCardProps.data);
-  }, [props.pairingCardProps]);
-  console.log('cardPropsList', cardPropsList);
+    if (props.pairingCardProps !== undefined) {
+      setCardPropsList(props.pairingCardProps);
+    }
+  }, [props]);
+
   return (
     <>
       {cardPropsList?.length === 0 ? (

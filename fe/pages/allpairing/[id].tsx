@@ -1,24 +1,31 @@
 import Head from 'next/head';
 import SortBox, { Sort } from '@/components/selectBox/SortBox';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
 
 export default function AllPairing() {
+  let router = useRouter();
+  const [curRoute, setCurRoute] = useState<any>();
   const [sort, setSort] = useState<Sort>('mostlikes');
   const [category, setCategory] = useState<string>('ALL');
   const [pairingCardProps, setPairingCardProps] = useState<any>();
   useEffect(() => {
-    axios
-      .get(`/pairings/page/recency?beerId=1&page=1&size=5`)
-      .then((response) => setPairingCardProps(response.data))
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-  console.log('pairingCardProps', pairingCardProps);
-  // const pairingCardProps = {
+    setCurRoute(router.query.id);
+  }, [router, curRoute]);
+  useEffect(() => {
+    if (curRoute !== undefined) {
+      axios
+        .get(`/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
+        .then((response) => setPairingCardProps(response.data))
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [curRoute]);
+
   //   data: [
   //     {
   //       beerId: 1,
@@ -72,7 +79,7 @@ export default function AllPairing() {
           <SortBox setSort={setSort} />
           <PairingBox setCategory={setCategory} />
         </div>
-        <PairingCardController pairingCardProps={pairingCardProps.data} />
+        <PairingCardController pairingCardProps={pairingCardProps?.data} />
         <div className="pb-32"></div>
       </main>
     </>
