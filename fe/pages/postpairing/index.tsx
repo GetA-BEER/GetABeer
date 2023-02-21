@@ -27,9 +27,9 @@ export default function PostPairing() {
   // userId 로직 짜야함
   let TOKEN =
     'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlMUBtYWlsLmNvbSIsInN1YiI6ImUxQG1haWwuY29tIiwiaWF0IjoxNjc2OTEwODc0LCJleHAiOjE2NzY5MTgwNzR9.PrQgX4zRb0uGzHpRz4ILRpElgteUKKw4ZLa4me02EiXIsYNseTApyZsB8Nf7XFY3zZSB7PVU-cn9zVizFeiNQA';
+  // authorization: TOKEN,
   const config = {
     headers: {
-      authorization: TOKEN,
       'content-type': 'multipart/form-data',
     },
     withCredentials: true,
