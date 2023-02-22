@@ -10,7 +10,7 @@ spring:
   cache:
     type: redis
   redis:
-    host: redis-getabeer.xufbcr.ng.0001.apn2.cache.amazonaws.com
+    host: ${REDIS_ENDPOINT}
     port: 6379
   datasource:
     url: jdbc:h2:mem:test
