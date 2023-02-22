@@ -43,7 +43,7 @@ jobs:
         env:
           spring:
             redis:
-              host: ${{ secrets.SERVER_ENDPOINT }}
+              host: ${{ secrets.REDIS_ENDPOINT }}
             security:
               oauth2:
                 client:
