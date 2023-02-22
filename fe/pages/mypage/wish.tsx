@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import NavBar from '@/components/NavBar';
 import WishCardController from '@/components/wish/WishCardController';
 
 export default function Wish() {
@@ -71,7 +70,6 @@ export default function Wish() {
           </div>
           <WishCardController wishProps={wishProps} />
           <div className="pb-14"></div>
-          <NavBar />
         </div>
       </main>
     </>

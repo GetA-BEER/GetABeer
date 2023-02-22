@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import NavBar from '@/components/NavBar';
 import BigInput from '@/components/inputs/BigInput';
 import PairingBox from '@/components/selectBox/PairingBox';
 import ImageUpload from '../../components/postPairingPage/ImageUpload';
@@ -31,7 +30,6 @@ export default function EditPairing() {
           />
           <ImageUpload />
         </div>
-        <NavBar />
       </main>
     </>
   );
