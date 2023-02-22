@@ -14,13 +14,16 @@ public class BeerDetailsBestRating {
 
 	private Long bestRatingId;
 	private String bestNickname;
+	private String profileImage;
 	private Double bestStar;
 	private String bestContent;
 
 	@Builder
-	public BeerDetailsBestRating(Long bestRatingId, String bestNickname, Double bestStar, String bestContent) {
+	public BeerDetailsBestRating(Long bestRatingId, String bestNickname, String profileImage, Double bestStar,
+		String bestContent) {
 		this.bestRatingId = bestRatingId;
 		this.bestNickname = bestNickname;
+		this.profileImage = profileImage;
 		this.bestStar = bestStar;
 		this.bestContent = bestContent;
 	}

@@ -23,9 +23,11 @@ import be.domain.beer.controller.BeerController;
 import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerDetailsStars;
+import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.repository.BeerBeerTagRepository;
 import be.domain.beer.repository.BeerRepository;
+import be.domain.beer.repository.MonthlyBeerRepository;
 import be.domain.beer.service.BeerService;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
@@ -64,7 +66,7 @@ public class Init {
 		BeerRepository beerRepository, BeerTagService beerTagService, UserBeerTagRepository userBeerTagRepository,
 		BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
 		BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository,
-		BeerCategoryService beerCategoryService) {
+		BeerCategoryService beerCategoryService, MonthlyBeerRepository monthlyBeerRepository) {
 
 		for (int i = 0; i < 8; i++) {
 			BeerCategory beerCategory = BeerCategory.builder()
@@ -114,7 +116,7 @@ public class Init {
 			}
 		}
 
-		for (int i = 1; i < 31; i++) {
+		for (int i = 1; i < 180; i++) {
 
 			BeerDetailsStars beerDetailsStars =
 				BeerDetailsStars.builder()
@@ -148,7 +150,11 @@ public class Init {
 						.beerCategoryType(BeerCategoryType.valueOf(list.get(3)))
 						.build()));
 			}
-			postBuilder.abv(Double.valueOf(list.get(5)));
+			if (list.get(5).isEmpty()) {
+				postBuilder.abv(0.0);
+			} else {
+				postBuilder.abv(Double.valueOf(list.get(5)));
+			}
 			if (!list.get(6).isBlank()) {
 				postBuilder.ibu(Integer.valueOf(list.get(6)));
 			}
@@ -163,6 +169,20 @@ public class Init {
 			beerRepository.save(findBeer);
 		}
 
+		/*
+		 * MONTHLY BEER STUB DATA
+		 */
+		for (int i = 0; i < 5; i++) {
+			Long rand = (long)(Math.random() * 179 + 1);
+
+			Beer findBeer = beerService.findVerifiedBeer(rand);
+
+			MonthlyBeer monthlyBeer = MonthlyBeer.builder().build();
+
+			monthlyBeer.create(findBeer);
+
+			monthlyBeerRepository.save(monthlyBeer);
+		}
 
 		/*
 		 * BEER STUB DATA

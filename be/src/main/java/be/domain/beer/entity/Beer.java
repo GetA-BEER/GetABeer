@@ -13,13 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -27,7 +23,6 @@ import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.global.BaseTimeEntity;
-import be.global.statistics.entity.BeerStatistics;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @ToString
 @DynamicInsert
-@Document(indexName = "beers")
+// @Document(indexName = "beers")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Beer extends BaseTimeEntity implements Serializable {
@@ -181,6 +176,7 @@ public class Beer extends BaseTimeEntity implements Serializable {
 			BeerDetailsBestRating.builder()
 				.bestRatingId(rating.getId())
 				.bestStar(rating.getStar())
+				.profileImage(rating.getUser().getImageUrl())
 				.bestNickname(rating.getNickname())
 				.bestContent(rating.getContent())
 				.build();

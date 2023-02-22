@@ -35,28 +35,47 @@ public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String korName;
-	private String country;
+	// private String country;
 	private String thumbnail;
-	private String categoryString;
+	// @Embedded
+	// private MonthlyBeerCategory monthlyBeerCategory;
 	@Embedded
 	private BeerDetailsTopTags beerDetailsTopTags;
-	private Double abv;
-	private Integer ibu;
+	// private Double abv;
+	// private Integer ibu;
 	private Double averageStar;
 	private Integer ratingCount;
+	@Embedded
+	private BeerDetailsBestRating beerDetailsBestRating;
 
 	public void create(Beer beer) {
 		this.id = beer.getId();
 		this.korName = beer.getBeerDetailsBasic().getKorName();
-		this.country = beer.getBeerDetailsBasic().getCountry();
 		this.thumbnail = beer.getBeerDetailsBasic().getThumbnail();
-		this.categoryString = beer.getBeerBeerCategories().stream()
-			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory().toString())
-			.collect(Collectors.joining(", "));
 		this.beerDetailsTopTags = beer.getBeerDetailsTopTags();
-		this.abv = beer.getBeerDetailsBasic().getAbv();
-		this.ibu = beer.getBeerDetailsBasic().getIbu();
 		this.averageStar = beer.getBeerDetailsStars().getTotalAverageStars();
 		this.ratingCount = beer.getBeerDetailsCounts().getRatingCount();
+		this.beerDetailsBestRating = beer.getBeerDetailsBestRating();
 	}
+
+	// public void create(Beer beer) {
+	// 	this.id = beer.getId();
+	// 	this.korName = beer.getBeerDetailsBasic().getKorName();
+	// 	this.country = beer.getBeerDetailsBasic().getCountry();
+	// 	this.thumbnail = beer.getBeerDetailsBasic().getThumbnail();
+	// 	List<String> categoryString = beer.getBeerBeerCategories().stream()
+	// 		.map(beerBeerCategory -> beerBeerCategory.getBeerCategory().toString())
+	// 		.collect(Collectors.toList());
+	// 	if (categoryString.size() == 2) {
+	// 		this.monthlyBeerCategory.addCategories(categoryString);
+	// 	} else {
+	// 		this.monthlyBeerCategory.addCategory(categoryString.get(0));
+	// 	}
+	// 	this.beerDetailsTopTags = beer.getBeerDetailsTopTags();
+	// 	this.abv = beer.getBeerDetailsBasic().getAbv();
+	// 	this.ibu = beer.getBeerDetailsBasic().getIbu();
+	// 	this.averageStar = beer.getBeerDetailsStars().getTotalAverageStars();
+	// 	this.ratingCount = beer.getBeerDetailsCounts().getRatingCount();
+	// 	this.beerDetailsBestRating = beer.getBeerDetailsBestRating();
+	// }
 }
