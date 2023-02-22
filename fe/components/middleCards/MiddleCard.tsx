@@ -52,7 +52,7 @@ export default function MiddleCard({
         </h1>
         <div className="text-xs sm:text-sm lg:text-lg">
           <span>
-            {cardProps?.category.map((el: string, idx: number) => {
+            {cardProps?.category?.map((el: string, idx: number) => {
               return (
                 <span className="mx-0.5" key={idx}>
                   {BeerCategoryMatcherToKor(el)}
