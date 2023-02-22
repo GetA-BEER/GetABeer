@@ -1,6 +1,6 @@
 import { UseFormRegister, RegisterOptions } from 'react-hook-form';
 interface IFormValues {
-  beerTagType: string;
+  userBeerTags: string;
   gender: string;
   age: string;
   userBeerCategories: string;

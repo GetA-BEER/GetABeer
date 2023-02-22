@@ -6,6 +6,7 @@ interface IFormValues {
   name: string;
   text: string;
   passwordConfirm: string;
+  editpassword: string;
 }
 
 type InputProps = {

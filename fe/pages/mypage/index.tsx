@@ -1,7 +1,11 @@
 import Head from 'next/head';
+import Image from 'next/image';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import { useCookies } from 'react-cookie';
 import { useEffect, useState } from 'react';
 import axios from '@/pages/api/axios';
-
+import Link from 'next/link';
 import {
   IoHeartOutline,
   IoChevronForwardOutline,
@@ -14,19 +18,37 @@ import {
   HiOutlineChartPie,
   HiOutlineMapPin,
 } from 'react-icons/hi2';
+import Router from 'next/router';
 export default function Mypage() {
+  const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
+  const [, setAccessToken] = useRecoilState(accessToken);
   const [userName, setUserName] = useState('');
+  const [userImge, setUserImge] = useState('');
   const fetchUser = () => {
     axios
       .get('/user')
       .then((res) => {
         setUserName(res.data.nickname);
+        setUserImge(res.data.imageUrl);
       })
       .catch((err) => console.log(err));
   };
   useEffect(() => {
     fetchUser();
   }, []);
+  const handleClickLogout = () => {
+    axios
+      .post('/user/logout')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setAccessToken('');
+    removeCookie('refreshToken');
+    window.location.href = '/';
+  };
   return (
     <>
       <Head>
@@ -40,23 +62,34 @@ export default function Mypage() {
           마이 페이지
         </div>
         <div className="flex flex-col items-center my-6">
-          <div className="w-24 h-24 bg-y-cream rounded-2xl"></div>
+          <Image
+            className="rounded-2xl"
+            alt="프로필사진"
+            src={userImge}
+            width={80}
+            height={80}
+          />
           <div className="flex justify-center items-center gap-1 mt-2">
             <div className="text-sm">{userName}님</div>
-            <button className="w-5 h-5 text-y-brown">
-              <HiPencil className="w-5 h-5" />
-            </button>
+            <Link href={'/myedit'} className="hover:text-y-brown">
+              <button className="w-5 h-5 text-y-brown">
+                <HiPencil className="w-5 h-5" />
+              </button>
+            </Link>
           </div>
         </div>
         <div className="m-auto max-w-md px-3 pb-5">
           <div className="border divide-y divide-gray-200 rounded-xl text-sm">
-            <button className="flex w-full p-5 rounded-t-xl justify-between hover:bg-gray-200 ">
+            <Link
+              href={'/mypage/wish'}
+              className="flex w-full p-5 rounded-t-xl justify-between hover:bg-gray-200 "
+            >
               <div className="flex gap-2">
                 <IoHeartOutline className="self-center w-5 h-5" />
                 위시 페이지
               </div>
               <IoChevronForwardOutline className="w-5 h-5 " />
-            </button>
+            </Link>
             <button className="flex w-full p-5 justify-between hover:bg-gray-200 ">
               <div className="flex gap-2 ">
                 <HiOutlinePencil className="self-center w-5 h-5" />
@@ -64,13 +97,16 @@ export default function Mypage() {
               </div>
               <IoChevronForwardOutline className="w-5 h-5" />
             </button>
-            <button className="flex w-full p-5 justify-between hover:bg-gray-200 ">
+            <Link
+              href={'/mypage/pairing'}
+              className="flex w-full p-5 justify-between hover:bg-gray-200 "
+            >
               <div className="flex gap-2 ">
                 <HiOutlineChartPie className="self-center w-5 h-5" />
                 나의 페어링
               </div>
               <IoChevronForwardOutline className="w-5 h-5" />
-            </button>
+            </Link>
             <button className="flex w-full p-5 justify-between hover:bg-gray-200">
               <div className="flex gap-2 ">
                 <IoChatboxEllipsesOutline className="self-center w-5 h-5" />
@@ -85,7 +121,10 @@ export default function Mypage() {
               </div>
               <IoChevronForwardOutline className="w-5 h-5" />
             </button>
-            <button className="flex w-full p-5 rounded-b-xl justify-between hover:bg-gray-200">
+            <button
+              onClick={handleClickLogout}
+              className="flex w-full p-5 rounded-b-xl justify-between hover:bg-gray-200"
+            >
               <div className="flex gap-2 ">
                 <IoLogOutOutline className="self-center w-5 h-5" />
                 로그아웃

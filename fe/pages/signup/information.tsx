@@ -10,11 +10,12 @@ import Router from 'next/router';
 import axios from '@/pages/api/axios';
 
 interface IFormValues {
-  beerTagType: string;
+  userBeerTags: string;
   gender: string;
   age: string;
   userBeerCategories: string;
 }
+
 export default function Information() {
   const {
     register,
@@ -25,6 +26,9 @@ export default function Information() {
   } = useForm<IFormValues>({
     defaultValues: {
       gender: 'REFUSE',
+      age: 'REFUSE',
+      userBeerCategories: '',
+      userBeerTags: '',
     },
     mode: 'onChange',
   });
@@ -32,21 +36,21 @@ export default function Information() {
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
     console.log(data);
-    const { gender, age, userBeerCategories, beerTagType } = getValues();
-    signUpClick(gender, age, userBeerCategories, beerTagType);
+    const { gender, age, userBeerCategories, userBeerTags } = getValues();
+    signUpClick(gender, age, userBeerCategories, userBeerTags);
   };
 
   const signUpClick = (
     gender: string,
     age: string,
     userBeerCategories: any,
-    beerTagType: any
+    userBeerTags: any
   ) => {
     const reqBody = {
       gender: gender,
       age: age,
       userBeerCategories: userBeerCategories,
-      userBeerTags: beerTagType,
+      userBeerTags: userBeerTags,
     };
     axios
       .post(`/register/user/${Router.query.userId}`, reqBody)
@@ -85,8 +89,9 @@ export default function Information() {
                   register={register}
                   rules={{
                     validate: {
-                      validate: (interest) =>
-                        interest.length < 3 || '최대 2개까지 선택 가능합니다!',
+                      validate: (userBeerCategories) =>
+                        userBeerCategories.length < 3 ||
+                        '최대 2개까지 선택 가능합니다!',
                     },
                   }}
                 />
@@ -101,14 +106,15 @@ export default function Information() {
                   register={register}
                   rules={{
                     validate: {
-                      validate: (interest) =>
-                        interest.length < 5 || '최대 4개까지 선택 가능합니다!',
+                      validate: (userBeerTags) =>
+                        userBeerTags.length < 5 ||
+                        '최대 4개까지 선택 가능합니다!',
                     },
                   }}
                 />
-                {errors.beerTagType && (
+                {errors.userBeerTags && (
                   <p className="flex text-xs  mx-3 mb-1 gap-0.5 text-red-500 font-light">
-                    {errors.beerTagType.message}
+                    {errors.userBeerTags.message}
                   </p>
                 )}
               </div>

@@ -1,14 +1,8 @@
 import { UseFormRegister, RegisterOptions } from 'react-hook-form';
 import { useEffect } from 'react';
-export type Sort =
-  | 'TEENAGER'
-  | 'TWENTIES'
-  | 'THIRTIES'
-  | 'FORTIES'
-  | 'OVER'
-  | 'REFUSE';
+
 interface IFormValues {
-  beerTagType: string;
+  userBeerTags: string;
   gender: string;
   age: string;
   userBeerCategories: string;

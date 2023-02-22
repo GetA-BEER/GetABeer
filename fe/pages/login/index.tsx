@@ -19,6 +19,7 @@ interface IFormValues {
   name: string;
   text: string;
   passwordConfirm: string;
+  editpassword: string;
 }
 export default function Login() {
   const [, setAccessToken] = useRecoilState(accessToken);
