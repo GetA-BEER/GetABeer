@@ -29,20 +29,20 @@ export default function PostRatingPage() {
   const [isValid, setIsValid] = useState(false);
 
   const cardProps: MiddleCardInfo = {
-    beerId: beerInfo.beerId,
+    beerId: beerInfo?.beerId,
     thumbnail: '/images/krin.jpeg',
     // thumbnail: beerInfo.beerDetailsBasic.thumbnail,
-    korName: beerInfo.beerDetailsBasic.korName,
-    category: beerInfo.beerCategoryTypes,
-    country: beerInfo.beerDetailsBasic.country,
-    abv: beerInfo.beerDetailsBasic.abv,
-    ibu: beerInfo.beerDetailsBasic.ibu,
+    korName: beerInfo?.beerDetailsBasic?.korName,
+    category: beerInfo?.beerCategoryTypes,
+    country: beerInfo?.beerDetailsBasic?.country,
+    abv: beerInfo?.beerDetailsBasic?.abv,
+    ibu: beerInfo?.beerDetailsBasic?.ibu,
     totalStarCount:
-      beerInfo.beerDetailsCounts.totalStarCount ||
-      beerInfo.beerDetailsCounts.femaleStarCount +
-        beerInfo.beerDetailsCounts.maleStarCount,
-    totalAverageStars: beerInfo.beerDetailsStars.totalAverageStars,
-    beerTags: beerInfo.beerDetailsTopTags || [],
+      beerInfo?.beerDetailsCounts?.totalStarCount ||
+      beerInfo?.beerDetailsCounts?.femaleStarCount +
+        beerInfo?.beerDetailsCounts?.maleStarCount,
+    totalAverageStars: beerInfo?.beerDetailsStars?.totalAverageStars,
+    beerTags: beerInfo?.beerDetailsTopTags || [],
   };
 
   useEffect(() => {
