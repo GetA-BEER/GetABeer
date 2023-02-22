@@ -29,6 +29,7 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.service.BeerTagService;
 import be.domain.pairing.entity.Pairing;
+import be.domain.pairing.service.PairingService;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.service.RatingService;
@@ -233,7 +234,7 @@ public class GetABeerAop {
 	}
 
 	@Around(value = "Pointcuts.deleteRating() && args(ratingId)")
-	public Object calculateBeerDetailsOnDeletion(ProceedingJoinPoint joinPoint, long ratingId) throws Throwable {
+	public Object calculateBeerDetailsOnDeletion(ProceedingJoinPoint joinPoint, Long ratingId) throws Throwable {
 
 		Beer findBeer = beerService.findBeerByRatingId(ratingId);
 		User loginUser = userService.getLoginUser();
@@ -301,7 +302,7 @@ public class GetABeerAop {
 	}
 
 	@AfterReturning(value = "Pointcuts.updatePairing() && args(pairing, pairingId, category, image)")
-	public void calculateBeerDetailsOnPairingUpdate(JoinPoint joinPoint, Pairing pairing, long pairingId,
+	public void calculateBeerDetailsOnPairingUpdate(JoinPoint joinPoint, Pairing pairing, Long pairingId,
 		String category, List<String> image) {
 		// ---------------------------------------------------------------------------------------
 		// TODO: 페어링 수정시 각종 계산
@@ -309,7 +310,7 @@ public class GetABeerAop {
 	}
 
 	@Before(value = "Pointcuts.deletePairing() && args(pairingId)")
-	public void calculateBeerDetailsOnPairingDeletion(JoinPoint joinPoint, long pairingId) {
+	public void calculateBeerDetailsOnPairingDeletion(JoinPoint joinPoint, Long pairingId) {
 		// ---------------------------------------------------------------------------------------
 		// TODO: 페어링 삭제시 각종 계산
 		// ---------------------------------------------------------------------------------------
@@ -319,6 +320,22 @@ public class GetABeerAop {
 	public void test(JoinPoint joinPoint, Long beerId) {
 		Beer beer = beerService.findVerifiedBeer(beerId);
 		beer.addStatViewCount();
+	}
+
+	@AfterReturning(value = "Pointcuts.clickPairingLike() && args(ratingId)")
+	public void calculateBestPairingOnPairingLike(JoinPoint joinPoint, Long ratingId) {
+
+		Rating findRating = ratingService.findRating(ratingId);
+		Beer findBeer = beerService.findBeerByRatingId(ratingId);
+
+		Long bestRatingId = findBeer.getBeerDetailsBestRating().getBestRatingId();
+		Integer bestRatingStarCount = ratingService.findRating(bestRatingId).getLikeCount();
+
+		if (findRating.getId().equals(bestRatingId)
+			|| findRating.getLikeCount() > bestRatingStarCount) { // 좋아요 찍힌게 베스트 레이팅이거나 순위가 바뀌면 새로 계산
+			Rating bestRating = beerService.findBestRating(findBeer);
+			findBeer.updateBestRating(bestRating);
+		}
 	}
 
 	private void createStatCookie(HttpServletRequest request, HttpServletResponse response, Cookie cookie) {

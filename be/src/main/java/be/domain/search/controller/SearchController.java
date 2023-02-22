@@ -17,6 +17,7 @@ import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.search.service.SearchService;
+import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Validated
@@ -29,14 +30,16 @@ public class SearchController {
 	private final BeerMapper beerMapper;
 
 	@GetMapping
-	public ResponseEntity<PageImpl<BeerDto.SearchResponse>> getSearchResult(
+	public ResponseEntity<MultiResponseDto<BeerDto.SearchResponse>> getSearchResult(
 		@RequestParam("query") String queryParam,
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
+
+		System.out.println(queryParam);
 
 		Page<Beer> beerPage = searchService.findBeersPageByQueryParam(queryParam, page);
 
 		PageImpl<BeerDto.SearchResponse> responsePage = beerMapper.beersPageToSearchResponse(beerPage);
 
-		return ResponseEntity.ok().body(responsePage);
+		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), beerPage));
 	}
 }

@@ -9,6 +9,7 @@ import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beerwishlist.service.BeerWishlistService;
 import be.domain.rating.entity.Rating;
+import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -85,7 +86,7 @@ public class BeerController {
 	}
 
 	@GetMapping("/category")
-	public ResponseEntity<PageImpl<BeerDto.SearchResponse>> getCategoryBeer(
+	public ResponseEntity<MultiResponseDto<BeerDto.SearchResponse>> getCategoryBeer(
 
 		@RequestParam(name = "category") String queryParam, @RequestParam(name = "page", defaultValue = "1") int page) {
 
@@ -93,7 +94,7 @@ public class BeerController {
 
 		PageImpl<BeerDto.SearchResponse> responsePage = beerMapper.beersPageToSearchResponse(beerPage);
 
-		return ResponseEntity.ok().body(responsePage);
+		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), beerPage));
 	}
 
 	@GetMapping("/weekly")
@@ -124,13 +125,13 @@ public class BeerController {
 	}
 
 	@GetMapping("/users/mypage/wishlist")
-	public ResponseEntity<PageImpl<BeerDto.WishlistResponse>> getMyPageBeer(
+	public ResponseEntity<MultiResponseDto<BeerDto.WishlistResponse>> getMyPageBeer(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 
 		Page<Beer> beerPage = beerService.findWishlistBeers(page);
 		List<Rating> ratingList = beerService.findMyRatingWithWishlist();
 		PageImpl<BeerDto.WishlistResponse> responses = beerMapper.beersToWishlistResponse(beerPage, ratingList);
 
-		return ResponseEntity.ok(responses);
+		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), beerPage));
 	}
 }

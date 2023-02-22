@@ -1,0 +1,39 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "korName": {
+      "type": "keyword"
+    },
+    "engName": {
+      "type": "keyword"
+    },
+    "country": {
+      "type": "text"
+    },
+    "category": {
+      "type": "keyword"
+    },
+    "beerDetailsTopTags": {
+      "properties": {
+        "tag1": {
+          "type": "text"
+        },
+        "tag2": {
+          "type": "text"
+        },
+        "tag3": {
+          "type": "text"
+        },
+        "tag4": {
+          "type": "text"
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "analyzer": "korean"
+    }
+  }
+}

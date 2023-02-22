@@ -6,6 +6,7 @@ import static be.domain.beer.entity.QBeerBeerTag.*;
 import static be.domain.beercategory.entity.QBeerCategory.*;
 import static be.domain.beertag.entity.QBeerTag.*;
 import static be.domain.beerwishlist.entity.QBeerWishlist.*;
+import static be.domain.pairing.entity.QPairing.*;
 import static be.domain.rating.entity.QRating.*;
 import static be.domain.user.entity.QUser.*;
 

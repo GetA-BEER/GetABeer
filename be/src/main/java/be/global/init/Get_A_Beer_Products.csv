@@ -22,7 +22,7 @@
 시메이 레드,CHIMAY PERES TRAPPISTES,BELGIUM,ALE,,7.0 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/21.jpeg
 시메이 화이트,CHIMAY PERES TRAPPISTES TRIPLE,BELGIUM,ALE,,8.0 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/22.jpeg
 쿠어스,COORS,UNITED STATES,LAGER,,4.2 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/23.jpeg
-코로나 엑스트라,CORONA EXTRA,MEXICOMEXICO,LAGER,,4.5 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/24.jpeg
+코로나 엑스트라,CORONA EXTRA,MEXICO,LAGER,,4.5 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/24.jpeg
 콜센동크 파터,CORSENDONK PATER,BELGIUM,ALE,,6.5 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/25.jpeg
 크루져 라즈베리향,CRUISER RASPBERRY,UNITED STATES,ETC,FRUIT,4.2 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/26.jpeg
 컷워터 데킬라 마가리타,CUTWATER TEQUILA MARGARITA,SOUTH KOREA,ETC,,12.5 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/27.jpeg
@@ -33,7 +33,7 @@ J 에게 복숭아 에일,DEAR J PEACH ALE,SOUTH KOREA,ALE,FRUIT,4.0 ,5,https://
 듀체스 드 부르고뉴,DUCHESSE DE BOURGOGNE,BELGIUM,ALE,,6.2 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/32.jpeg
 덕덕구스 세션 아이피에이,DUCK DUCK GOOSE SESSION IPA,UNITED STATES,ALE,,4.7 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/33.jpeg
 듀벨,DUVEL,BELGIUM,ALE,,8.5 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/34.jpeg
-"듀벨 6,66","DUVEL 6,66",BELGIUM,ALE,,6.6 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/35.jpeg
+듀벨 6.66,DUVEL 6.66,BELGIUM,ALE,,6.6 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/35.jpeg
 에델바이스,EDELWEISS,AUSTRIA,WEIZEN,,5.3 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/36.jpeg
 에델바이스 피치,EDELWEISS PEACH,AUSTRIA,WEIZEN,FRUIT,4.5 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/37.jpeg
 에페스 필스너,EFES PILSNER,TURKEY,PILSNER,,5.0 ,,https://getabeer.s3.ap-northeast-2.amazonaws.com/GetABeer_Products/38.jpeg
