@@ -12,10 +12,7 @@ import static be.domain.user.entity.QUser.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -216,21 +213,6 @@ public class BeerQueryRepository {
 		return jpaQueryFactory.selectFrom(rating)
 			.where(rating.beer.eq(findBeer))
 			.fetchFirst();
-	}
-
-	public Page<Beer> findMyPageBeers(User loginUser, Pageable pageable) {
-
-		List<Beer> beerList = jpaQueryFactory.select(beer)
-			.join(beer.beerWishlists, beerWishlist)
-			.join(beerWishlist.user, user)
-			.from(beer)
-			.where(beerWishlist.user.eq(loginUser))
-			.orderBy(beerWishlist.createdAt.desc())
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
-
-		return new PageImpl<>(beerList, pageable, beerList.size());
 	}
 
 	public List<Rating> findMyRatingWithWishlist(User loginUser) {

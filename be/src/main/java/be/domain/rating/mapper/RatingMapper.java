@@ -18,15 +18,16 @@ public interface RatingMapper {
 
 	Rating ratingPatchDtoToRating(RatingRequestDto.Patch patch);
 
-	default Page<RatingResponseDto.Total> ratingToRatingResponse(List<Rating> ratings,
+	default Page<RatingResponseDto.MyPageResponse> ratingToRatingResponse(List<Rating> ratings,
 		RatingLikeRepository ratingLikeRepository) {
 		return new PageImpl<>(ratings.stream()
 			.map(rating ->
-				new RatingResponseDto.Total(
+				new RatingResponseDto.MyPageResponse(
 					rating.getBeer().getId(),
 					rating.getId(),
 					rating.getUser().getId(),
 					rating.getUser().getNickname(),
+					rating.getUser().getImageUrl(),
 					rating.getContent(),
 					rating.getRatingTag().createBeerTagTypeList(),
 					rating.getStar(),
