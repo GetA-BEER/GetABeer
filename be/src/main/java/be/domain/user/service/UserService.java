@@ -222,8 +222,11 @@ public class UserService {
 
 	/* 닉네임 확인 */
 	public void verifyNickname(String nickname) {
+		User user = getLoginUser();
 		if (userRepository.existsByNickname(nickname)) {
-			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+			if (!nickname.equals(user.getNickname())) {
+				throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+			}
 		}
 	}
 

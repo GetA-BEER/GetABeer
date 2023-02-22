@@ -48,7 +48,7 @@ public class PairingCommentRepositoryImpl implements PairingCommentCustomReposit
 		List<PairingComment> pairingComments = queryFactory
 			.select(pairingComment)
 			.from(pairingComment)
-			.where(pairingComment.user.eq(user))
+			.where(pairingComment.user.id.eq(user.getId()))
 			.orderBy(pairingComment.createdAt.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())

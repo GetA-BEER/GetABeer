@@ -1,36 +1,47 @@
 package be.domain.beerwishlist.controller;
 
-import org.springframework.http.HttpStatus;
+import javax.validation.constraints.Positive;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.domain.beerwishlist.service.BeerWishlistServiceImpl;
+import be.domain.beerwishlist.dto.BeerWishlistDto;
+import be.domain.beerwishlist.entity.BeerWishlist;
+import be.domain.beerwishlist.mapper.BeerWishlistMapper;
+import be.domain.beerwishlist.service.BeerWishlistService;
+import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Validated
 @RestController
-@RequestMapping({"/api/beers"})
+@RequestMapping({"/api/beers", "/api"})
 @RequiredArgsConstructor
 public class BeerWishlistController {
-	private final BeerWishlistServiceImpl beerWishlistServiceImpl;
+	private final BeerWishlistMapper beerWishlistMapper;
+	private final BeerWishlistService beerWishlistService;
 
-	@PatchMapping("/{beer_id}/wishlist/add")
-	public ResponseEntity<HttpStatus> postWishlist(@PathVariable("beer_id") Long beerId) {
+	@PatchMapping("/{beer-id}/wish")
+	public ResponseEntity<String> wishBeer(@PathVariable("beer-id") @Positive Long beerId) {
+		beerWishlistService.verifyWishState(beerId);
 
-		beerWishlistServiceImpl.createWishlist(beerId);
-
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseEntity.ok("Success to click Wish.");
 	}
 
-	@PatchMapping("/{beer_id}/wishlist/remove")
-	public ResponseEntity<HttpStatus> deleteWishlist(@PathVariable("beer_id") Long beerId) {
+	@GetMapping("/mypage/wishlist")
+	public ResponseEntity<MultiResponseDto<BeerWishlistDto.UserWishlist>> getMyPageBeer(
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 
-		beerWishlistServiceImpl.deleteWishlist(beerId);
+		Page<BeerWishlist> beerWishlists = beerWishlistService.getUserWishlist(page);
+		Page<BeerWishlistDto.UserWishlist> responses = beerWishlistMapper.beersAndWishlistToResponse(
+			beerWishlists.getContent());
 
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), beerWishlists));
 	}
 }

@@ -48,7 +48,7 @@ public class RatingCommentCustomRepositoryImpl implements RatingCommentCustomRep
 		List<RatingComment> ratingComments = queryFactory
 			.select(ratingComment)
 			.from(ratingComment)
-			.where(ratingComment.user.eq(user))
+			.where(ratingComment.user.id.eq(user.getId()))
 			.orderBy(ratingComment.createdAt.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())

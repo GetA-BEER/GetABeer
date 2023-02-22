@@ -1,6 +1,5 @@
 package be.domain.beer.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -13,14 +12,12 @@ import be.domain.beer.entity.BeerDetailsTopTags;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategoryType;
 import be.domain.beertag.dto.BeerTagDto;
-import be.domain.beertag.entity.BeerTagType;
 import be.domain.rating.entity.Rating;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
 public class BeerDto {
 
@@ -137,9 +134,11 @@ public class BeerDto {
 
 		private Long beerId;
 		private String korName;
-		private Double myStar;
+		private List<BeerCategoryDto.BeerResponse> beerCategories;
 		private String thumbnail;
-
+		private String country;
+		private Double abv;
+		private Integer ibu;
 	}
 
 	@Getter

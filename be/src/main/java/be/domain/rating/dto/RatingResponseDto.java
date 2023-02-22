@@ -73,4 +73,23 @@ public class RatingResponseDto {
 			this.isUserLikes = isUserLikes;
 		}
 	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class MyPageResponse {
+		private Long beerId;
+		private Long ratingId;
+		private Long userId;
+		private String nickname;
+		private String userImage;
+		private String content;
+		private List<BeerTagType> ratingTag;
+		private Double star;
+		private Integer likeCount;
+		private Integer commentCount;
+		private Boolean isUserLikes;
+		private LocalDateTime createdAt;
+		private LocalDateTime modifiedAt;
+	}
 }

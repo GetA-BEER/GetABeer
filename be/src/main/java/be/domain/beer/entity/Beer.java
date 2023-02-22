@@ -13,12 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -27,7 +24,6 @@ import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.global.BaseTimeEntity;
-import be.global.statistics.entity.BeerStatistics;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -88,7 +84,7 @@ public class Beer extends BaseTimeEntity implements Serializable {
 	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
 	@JsonManagedReference
-	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
+	@OneToMany(mappedBy = "beer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<BeerWishlist> beerWishlists = new ArrayList<>();
 	@JsonManagedReference
 	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
