@@ -17,24 +17,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import be.domain.beer.entity.Beer;
+import be.domain.beer.service.BeerService;
 import be.domain.rating.dto.RatingRequestDto;
 import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.mapper.RatingMapper;
 import be.domain.rating.mapper.RatingTagMapper;
 import be.domain.rating.service.RatingService;
-import be.global.dto.MultiResponseDto;
+import be.global.dto.MultiResponseDtoWithBeerInfo;
 
 @Validated
 @RestController
 @RequestMapping("/api/ratings")
 public class RatingController {
 	private final RatingService ratingService;
+	private final BeerService beerService;
 	private final RatingMapper ratingMapper;
 	private final RatingTagMapper tagMapper;
 
-	public RatingController(RatingService ratingService, RatingMapper ratingMapper, RatingTagMapper tagMapper) {
+	public RatingController(RatingService ratingService, BeerService beerService,
+		RatingMapper ratingMapper, RatingTagMapper tagMapper) {
 		this.ratingService = ratingService;
+		this.beerService = beerService;
 		this.ratingMapper = ratingMapper;
 		this.tagMapper = tagMapper;
 	}
@@ -80,10 +85,12 @@ public class RatingController {
 
 	/* 맥주 평가 페이지 조회 */
 	@GetMapping("/page/{type}")
-	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getRatingPageOrderByRecently(
+	public ResponseEntity<MultiResponseDtoWithBeerInfo<RatingResponseDto.Total>> getRatingPageOrderByRecently(
 		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
 		Page<RatingResponseDto.Total> responses = ratingService.getRatingPageOrderBy(beerId, page, size, type);
+		Beer beer = beerService.getBeer(beerId);
 
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
+		return ResponseEntity.ok(new MultiResponseDtoWithBeerInfo<RatingResponseDto.Total>(
+			responses.getContent(), responses, beer));
 	}
 }
