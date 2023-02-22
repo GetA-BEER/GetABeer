@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import PageContainer from '@/components/PageContainer';
+import Pagenation from '@/components/Pagenation';
 
 export default function AllRating() {
   const router = useRouter();
@@ -15,13 +16,14 @@ export default function AllRating() {
   const [sort, setSort] = useState<Sort>('mostlikes');
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   useEffect(() => {
     if (beerId !== undefined) {
       axios
         .get(`/ratings/page/${sort}?beerId=${beerId}&page=${page}&size=5`)
         .then((res) => {
-          // console.log(res.data.pageInfo);
           setRatingList(res.data.data);
+          setTotalPages(res.data.pageInfo.totalPages);
         });
     }
   }, [beerId, sort, page]);
@@ -35,7 +37,7 @@ export default function AllRating() {
         />
         <div className="flex justify-center my-4">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            제주 펠롱 에일
+            맥주 이름
           </h1>
         </div>
         <SortBox setSort={setSort} />
@@ -44,12 +46,17 @@ export default function AllRating() {
             return (
               <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
                 <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
-                  <RatingCard cardProps={el} isMine={false} />
+                  <RatingCard
+                    cardProps={el}
+                    isMine={false}
+                    count={el.commentCount}
+                  />
                 </div>
               </Link>
             );
           })}
         </div>
+        <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
       </main>
     </PageContainer>
   );
