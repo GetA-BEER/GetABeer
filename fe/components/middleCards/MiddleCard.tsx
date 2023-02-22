@@ -1,5 +1,9 @@
 import Tag from '../Tag';
 import Image from 'next/image';
+import {
+  BeerCategoryMatcherToKor,
+  BeerCountryMatcherToKor,
+} from '@/utils/BeerMatcher';
 
 export interface MiddleCardInfo {
   beerId: number;
@@ -27,7 +31,11 @@ export const testBeer: MiddleCardInfo = {
   beerTags: ['금색', '단맛', '과일향', '탄산 강'],
 };
 
-export default function MiddleCard({ cardProps }: any) {
+export default function MiddleCard({
+  cardProps,
+}: {
+  cardProps: MiddleCardInfo;
+}) {
   return (
     <div className="flex rounded-lg bg-white text-y-black border border-y-lightGray px-3 py-5 my-2">
       <div className="relative w-[130px] h-[160px]">
@@ -43,17 +51,16 @@ export default function MiddleCard({ cardProps }: any) {
           {cardProps?.korName}
         </h1>
         <div className="text-xs sm:text-sm lg:text-lg">
-          <span>{cardProps?.country}</span>
           <span>
-            /
-            {cardProps?.category.map((el: string, idx: number) => {
+            {cardProps?.category?.map((el: string, idx: number) => {
               return (
                 <span className="mx-0.5" key={idx}>
-                  {el}
+                  {BeerCategoryMatcherToKor(el)}
                 </span>
               );
             })}
           </span>
+          <span>/ {BeerCountryMatcherToKor(cardProps?.country)}</span>
           <span>/ {cardProps?.abv}%</span>
           <span>/ {cardProps?.ibu} IBU</span>
         </div>
