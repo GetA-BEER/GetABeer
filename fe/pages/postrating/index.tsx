@@ -7,15 +7,19 @@ import CarbonatinTag from '@/components/tag/CarbonationTag';
 import BigInput from '@/components/inputs/BigInput';
 import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
-import MiddleCard, { testBeer } from '@/components/middleCards/MiddleCard';
+import MiddleCard, {
+  MiddleCardInfo,
+} from '@/components/middleCards/MiddleCard';
 import { TagMatcherToEng } from '@/utils/TagMatcher';
 import axios from '@/pages/api/axios';
 import StarRating from '@/components/inputs/StarRating';
 import PageContainer from '@/components/PageContainer';
+import { useRecoilState } from 'recoil';
+import { currentBeer } from '@/atoms/currentBeer';
 
 export default function PostRatingPage() {
   const router = useRouter();
-
+  const [beerInfo] = useRecoilState(currentBeer);
   const [star, setStar] = useState(0);
   const [content, setContent] = useState('');
   const [color, setColor] = useState('');
@@ -23,6 +27,23 @@ export default function PostRatingPage() {
   const [taste, setTaste] = useState('');
   const [carbonation, setCarbonation] = useState('');
   const [isValid, setIsValid] = useState(false);
+
+  const cardProps: MiddleCardInfo = {
+    beerId: beerInfo.beerId,
+    thumbnail: '/images/krin.jpeg',
+    // thumbnail: beerInfo.beerDetailsBasic.thumbnail,
+    korName: beerInfo.beerDetailsBasic.korName,
+    category: beerInfo.beerCategoryTypes,
+    country: beerInfo.beerDetailsBasic.country,
+    abv: beerInfo.beerDetailsBasic.abv,
+    ibu: beerInfo.beerDetailsBasic.ibu,
+    totalStarCount:
+      beerInfo.beerDetailsCounts.totalStarCount ||
+      beerInfo.beerDetailsCounts.femaleStarCount +
+        beerInfo.beerDetailsCounts.maleStarCount,
+    totalAverageStars: beerInfo.beerDetailsStars.totalAverageStars,
+    beerTags: beerInfo.beerDetailsTopTags || [],
+  };
 
   useEffect(() => {
     if (
@@ -38,10 +59,6 @@ export default function PostRatingPage() {
     }
   }, [star, content, color, flavor, taste, carbonation]);
 
-  const ratingChanged = (newRating: number) => {
-    setStar(newRating);
-  };
-
   const reset = () => {
     setStar(0);
     setContent('');
@@ -53,8 +70,8 @@ export default function PostRatingPage() {
 
   const handleSubmit = () => {
     const reqBody = {
-      beerId: 1,
-      userId: 6,
+      beerId: beerInfo.beerId,
+      userId: 4,
       star,
       content,
       color: TagMatcherToEng(color),
@@ -63,7 +80,7 @@ export default function PostRatingPage() {
       carbonation: TagMatcherToEng(carbonation),
     };
     axios.post('/ratings', reqBody).then((res) => {
-      console.log(res);
+      router.back();
       reset();
     });
   };
@@ -71,7 +88,7 @@ export default function PostRatingPage() {
   return (
     <PageContainer>
       <main className="px-6">
-        <MiddleCard cardProps={testBeer} />
+        <MiddleCard cardProps={cardProps} />
         <div>
           <div className="mt-5">
             <div>별점</div>
