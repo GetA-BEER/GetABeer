@@ -26,10 +26,15 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      - name: Add permission
+        run: chmod +x gradlew
+
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
         with:
-          arguments: build
+          name: "getabeer-376509-6310d68578f1.json"
+          json: ${{ secrets.GOOGLE_JSON}}
 
       - name: Set Yml
         uses: microsoft/variable-substitution@v1
@@ -58,6 +63,11 @@ jobs:
           cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
           cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
 
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: build
+
       # build한 후 프로젝트를 압축합니다.
       - name: Make zip file
         run: zip -r ./getabeer-deploy.zip
@@ -73,7 +83,7 @@ jobs:
 
       # 압축한 프로젝트를 S3로 전송
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./getabeer-deploy.zip s3://$S3_BUCKET_NAME/deploy/getabeer-deploy.zip
+        run: aws s3 cp --region ap-northeast-2 ./getabeer-deploy.zip s3://$S3_BUCKET_NAME/getabeer-deploy.zip
 
         # CodeDeploy 에 배포 명령을 내림
       - name: Code Deploy
