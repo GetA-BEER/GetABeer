@@ -2,9 +2,8 @@ package be.global.security.auth.oauth.handler;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
@@ -14,20 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import be.domain.mail.controller.MailController;
-import be.domain.mail.dto.MailDto;
 import be.domain.user.entity.User;
-import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.UserRepository;
 import be.global.security.auth.jwt.JwtTokenizer;
-import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,80 +32,29 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
-	private final MailController mailController;
-	private final PasswordEncoder passwordEncoder;
-	private final CustomAuthorityUtils authorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
 
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
-		try {
-			String authorizedClientRegistrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
+		String authorizedClientRegistrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
+		OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
+
+		String nickname;
+		if (oAuth2User.getAttributes().get("properties") == null) {
 			if (authorizedClientRegistrationId.equals("google")) {
-				var oAuth2User = (OAuth2User)authentication.getPrincipal();
-
-				String username = String.valueOf(oAuth2User.getAttributes().get("email"));
-				String nickname = String.valueOf(oAuth2User.getAttributes().get("name"));
-				String imageUrl = String.valueOf(oAuth2User.getAttributes().get("picture"));
-
-				List<String> authorities = authorityUtils.createRoles(username);
-
-				createRedirect(request, response, username, nickname, imageUrl, authorities, "google");
+				nickname = oAuth2User.getAttributes().get("name").toString();
+			} else {
+				nickname = oAuth2User.getAttributes().get("nickname").toString();
 			}
-
-			if (authorizedClientRegistrationId.equals("naver")) {
-				var oAuth2User = (OAuth2User)authentication.getPrincipal();
-
-				HashMap userInfo = oAuth2User.getAttribute("response");
-				String email = userInfo.get("email").toString();
-
-				getUserInfo(request, response, userInfo, email, "naver");
-			}
-
-			if (authorizedClientRegistrationId.equals("kakao")) {
-				var oAuth2User = (OAuth2User)authentication.getPrincipal();
-
-				HashMap userInfo = oAuth2User.getAttribute("properties");
-
-				HashMap account = oAuth2User.getAttribute("kakao_account");
-				String email = account.get("email").toString();
-
-				getUserInfo(request, response, userInfo, email, "kakao");
-			}
-		} catch (Exception e) {
-			throw e;
+		} else {
+			nickname = ((Map)oAuth2User.getAttributes().get("properties")).get("nickname").toString();
 		}
-	}
 
-	private void saveUser(String nickname, String email, String password, String provider, String imageUrl) {
-		User user = User.builder()
-			.email(email)
-			.nickname(nickname)
-			.provider(provider)
-			.password(password)
-			.imageUrl(imageUrl)
-			.build();
+		User user = userRepository.findByNickname(nickname);
 
-		registerUser(user);
-	}
-
-	private void registerUser(User user) {
-		User saved = User.builder()
-			.id(user.getId())
-			.email(user.getEmail())
-			.nickname(user.getNickname())
-			.status(UserStatus.ACTIVE_USER.getStatus())
-			.provider(user.getProvider().toUpperCase())
-			.imageUrl(user.getImageUrl())
-			.roles(authorityUtils.createRoles(user.getEmail()))
-			.password(passwordEncoder.encode(user.getPassword()))
-			.build();
-
-		saved.randomProfileImage(saved.getImageUrl());
-
-		userRepository.save(saved);
+		redirect(request, response, user.getEmail(), user.getProvider(), user.getRoles());
 	}
 
 	private void redirect(HttpServletRequest request, HttpServletResponse response, String email, String provider,
@@ -152,39 +95,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.port(3000)
 			.build()
 			.toUri();
-	}
-
-	private void sendTempPassword(String email, String uuid) {
-		MailDto.sendPWMail post = MailDto.sendPWMail.builder()
-			.email(email)
-			.password(uuid)
-			.build();
-
-		mailController.sendOAuth2PasswordEmail(post);
-	}
-
-	private void getUserInfo(HttpServletRequest request, HttpServletResponse response,
-		HashMap userInfo, String email, String provider) throws IOException {
-
-		String nickname = userInfo.get("nickname").toString();
-		String imageUrl = userInfo.get("profile_image").toString();
-
-		List<String> authorities = authorityUtils.createRoles(email);
-
-		createRedirect(request, response, email, nickname, imageUrl, authorities, provider);
-	}
-
-	private void createRedirect(HttpServletRequest request, HttpServletResponse response, String email,
-		String nickname, String imageUrl, List<String> authorities, String provider) throws IOException {
-		String uuid = UUID.randomUUID().toString().substring(0, 15);
-		String password = passwordEncoder.encode(uuid);
-
-		if (userRepository.findByEmail(email).isEmpty()) {
-			sendTempPassword(email, uuid);
-			saveUser(nickname, email, password, provider, imageUrl);
-		}
-
-		redirect(request, response, email, provider, authorities);
 	}
 
 }

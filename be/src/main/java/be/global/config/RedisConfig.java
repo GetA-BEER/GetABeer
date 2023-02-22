@@ -50,6 +50,8 @@ public class RedisConfig extends CachingConfigurerSupport {
 		redisTemplate.setConnectionFactory(connectionFactory);
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+		// redisTemplate.setDefaultSerializer(new StringRedisSerializer());
+		redisTemplate.afterPropertiesSet();
 		return redisTemplate;
 	}
 
@@ -76,6 +78,11 @@ public class RedisConfig extends CachingConfigurerSupport {
 			.cacheDefaults(redisCacheConfig)
 			.build();
 	}
+
+	// @Bean
+	// public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+	// 	return new GenericJackson2JsonRedisSerializer();
+	// }
 }
 
 // package be.global.config;

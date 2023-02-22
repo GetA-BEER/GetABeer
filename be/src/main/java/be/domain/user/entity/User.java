@@ -1,5 +1,6 @@
 package be.domain.user.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User implements Serializable {
 
 	@Id
 	@Column(name = "user_id")

@@ -1,3 +1,4 @@
+
 package be.controller;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -416,3 +417,4 @@ public class BeerControllerRestDocs {
 	}
 
 }
+

@@ -9,10 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,7 @@ import be.domain.user.service.pattern.StateButton;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
+import be.global.security.auth.constant.SessionKey;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final EntityManager em;
+	private final HttpSession httpSession;
 	private final ImageHandler imageHandler;
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -200,6 +204,11 @@ public class UserService {
 		}
 	}
 
+	@Transactional
+	public void login() {
+		httpSession.setAttribute(SessionKey.LOGIN_USER_ID, getLoginUser().getEmail());
+	}
+
 	/* 로그아웃 */
 	public void logout(HttpServletRequest request, String email) {
 		redisTemplate.opsForValue()
@@ -208,6 +217,7 @@ public class UserService {
 				30 * 60 * 1000L,
 				TimeUnit.MILLISECONDS);
 		redisTemplate.delete(email);
+		httpSession.removeAttribute(SessionKey.LOGIN_USER_ID);
 	}
 
 	/* 닉네임 확인 */
