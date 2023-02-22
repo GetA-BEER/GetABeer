@@ -13,7 +13,7 @@ export default function MonthlyCard(props: { cardProps: any; idx: number }) {
             alt={props.cardProps?.korName}
             src={props.cardProps?.thumbnail}
             fill
-            className="object-cover mt-[10px]"
+            className="object-cover rounded-lg -mt-1"
           />
         </div>
       </div>

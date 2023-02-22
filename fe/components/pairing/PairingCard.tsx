@@ -49,7 +49,7 @@ export default function PairingCard(props: { pairingCardProps: any }) {
 
       {/* 사진,설명 */}
       <div className="grid grid-cols-3 gap-3 px-3 h-24">
-        {props?.pairingCardProps?.thumbnail === undefined ? (
+        {props?.pairingCardProps?.thumbnail === '' ? (
           <div className="col-span-3 h-24 overflow-hidden w-full leading-6 relative">
             {props?.pairingCardProps?.content === undefined ? (
               <div className="text-y-gray">

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
 import { AiOutlineHeart } from 'react-icons/ai';
 import StarScore from './StarScore';
+import KakaoShareButton from './KakaoShareButton';
 
 export default function BeerDetailCard({ cardProps }: any) {
   return (
@@ -89,11 +90,8 @@ export default function BeerDetailCard({ cardProps }: any) {
                 <HiChartPie className="inline" /> 페어링
               </span>
             </Link>
-            <Link href={'/postpairing'} className="hover:text-y-gold mr-1">
-              <span className="mr-1">
-                <HiShare className="inline" /> 공유하기
-              </span>
-            </Link>
+
+            <KakaoShareButton />
           </div>
         </div>
       </div>

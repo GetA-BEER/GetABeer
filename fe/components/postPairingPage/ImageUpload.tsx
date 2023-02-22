@@ -3,7 +3,7 @@ import { AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
 import imageCompression from 'browser-image-compression';
 import { useState } from 'react';
 
-export default function ImageUpload() {
+export default function ImageUpload({ imageData, setImageData }: any) {
   interface FileData {
     lastModified: number;
     name: string;
@@ -11,30 +11,28 @@ export default function ImageUpload() {
     type: string;
   }
 
-  const [uploadImg, setUploadImg] = useState<FileData | null>(null);
   const [preImg, setPreImg] = useState<string[]>([]);
+
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files !== null) {
       const imageFile = e.target.files[0];
       console.log('imageFile', imageFile);
       const options = {
         //옵션 설정 필요
-        maxSizeMB: 1,
+        maxSizeMB: 4,
         maxWidthOrHeight: 1920,
         useWebWorker: true,
       };
-      console.log('1번위치');
+
       try {
         const compressedFile = await imageCompression(imageFile, options);
-        setUploadImg(compressedFile);
+        setImageData([...imageData, compressedFile]);
         let tmpUrl = URL.createObjectURL(compressedFile);
         setPreImg([...preImg, tmpUrl]);
-        console.log('compressedFile', compressedFile);
-        console.log('tmpUrl', tmpUrl);
         // console.log(
         //   `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
         // );
-        await console.log('compressedFile', uploadImg);
+        await console.log('compressedFile', imageData);
       } catch (error) {
         console.log(error);
       }
@@ -44,22 +42,27 @@ export default function ImageUpload() {
   // 파일 삭제
   const handleDelete = (e: React.MouseEvent<HTMLElement>, idx: number) => {
     e.preventDefault();
-    // const copyImg = uploadImg.slice();
+
     const copyUrl = preImg.slice();
-    // copyImg.splice(idx, 1);
+    const copyUploadUrl = imageData.slice();
+
     copyUrl.splice(idx, 1);
-    // setUploadImg(copyImg);
+    copyUploadUrl.splice(idx, 1);
+
     setPreImg(copyUrl);
+    setImageData(copyUploadUrl);
   };
 
   // 썸네일 사진 선택
   const selectThumnail = (idx: number) => {
-    // let copyImg = image.slice();
     let copyUrl = preImg.slice();
-    // let selectImg = copyImg.splice(idx, 1);
+    const copyUploadUrl = imageData.slice();
+
     let selectUrl = copyUrl.splice(idx, 1);
-    // setUploadImg([...selectImg, ...copyImg]);
+    let selectUploadUrl = copyUploadUrl.splice(idx, 1);
+
     setPreImg([...selectUrl, ...copyUrl]);
+    setImageData([...selectUploadUrl, ...copyUploadUrl]);
   };
 
   return (

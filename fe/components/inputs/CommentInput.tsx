@@ -1,5 +1,3 @@
-import axios from '@/pages/api/axios';
-import React, { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 type InputProps = {
@@ -30,6 +28,11 @@ export default function CommentInput({
         maxLength={1000}
         onChange={(e) => {
           onInputChange(e);
+        }}
+        onKeyUp={(e) => {
+          if (e.key === 'Enter') {
+            postFunc();
+          }
         }}
       />
       <button

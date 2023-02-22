@@ -1,32 +1,37 @@
 export interface RatingCardProps {
   beerId: number;
-  commentCount: number;
-  content: string;
-  createdAt: string;
-  likeCount: number;
-  modifiedAt: string;
-  nickname: string;
   ratingId: number;
-  ratingTag: [string, string, string, string];
-  star: number;
   userId: number;
+  nickname: string;
   //여기 유저 이미지 url도 들어와야함!
+  star: number;
+  ratingTag: [string, string, string, string];
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+  modifiedAt: string;
+  isUserLikes: boolean;
 }
 import { ToDateString } from '@/utils/ToDateString';
 import { BiUser } from 'react-icons/bi';
 import { HiOutlineChat } from 'react-icons/hi';
-import { FiThumbsUp } from 'react-icons/fi';
+import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import Tag from '../Tag';
 import { TagMatcherToKor } from '@/utils/TagMatcher';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
+import { useState } from 'react';
 
 export default function RatingCard(props: {
   cardProps: RatingCardProps;
   isMine: boolean;
+  count: number;
 }) {
   const router = useRouter();
+  const [isLike, setIsLike] = useState<boolean>(props.cardProps.isUserLikes);
+  const [likeCount, setLikeCount] = useState<number>(props.cardProps.likeCount);
   const editRating = () => {
     router.replace(`/editrating/${props.cardProps.ratingId}`);
   };
@@ -34,6 +39,28 @@ export default function RatingCard(props: {
   const deleteRating = () => {
     axios.delete(`/ratings/${props.cardProps.ratingId}`);
     router.back();
+  };
+
+  const isUserLikeHandler = () => {
+    axios
+      .post(
+        `/ratings/likes?ratingId=${props.cardProps.ratingId}`,
+        {},
+        {
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlM0BtYWlsLmNvbSIsInN1YiI6ImUzQG1haWwuY29tIiwiaWF0IjoxNjc2OTg2OTc1LCJleHAiOjE2NzY5OTQxNzV9.g7tfklHn9chf2M4hRSh2hNIzhYHgbwMK4fXpklXrXAjulM10FKb_9wWfRoHYTiL9KMw2vYJoaBngKK36OtgwBA',
+          },
+        }
+      )
+      .then((res) => {
+        setIsLike(!isLike);
+        if (isLike) {
+          setLikeCount(likeCount - 1);
+        } else {
+          setLikeCount(likeCount + 1);
+        }
+      });
   };
 
   return (
@@ -71,16 +98,15 @@ export default function RatingCard(props: {
       <div className="flex justify-end mr-1">
         <div className="flex justify-center items-center">
           <HiOutlineChat />
-          <span className="text-sm ml-0.5 mr-2 mt-0.5">
-            {props.cardProps.commentCount}
-          </span>
+          <span className="text-sm ml-0.5 mr-2 mt-0.5">{props.count}</span>
         </div>
-        <div className="flex justify-center items-center">
-          <FiThumbsUp />
-          <span className="text-sm ml-0.5 mr-1 mt-0.5">
-            {props.cardProps.likeCount}
-          </span>
-        </div>
+        <button
+          className="flex justify-center items-center"
+          onClick={isUserLikeHandler}
+        >
+          {isLike ? <FaThumbsUp /> : <FaRegThumbsUp />}
+          <span className="text-sm ml-0.5 mr-1 mt-0.5">{likeCount}</span>
+        </button>
       </div>
     </div>
   );

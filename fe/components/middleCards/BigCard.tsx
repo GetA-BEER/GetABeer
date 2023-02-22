@@ -12,7 +12,7 @@ export default function BigCard({ cardProps }: any) {
             alt={cardProps?.korName}
             src={cardProps?.thumbnail}
             fill
-            className="object-none object-top "
+            className="rounded-lg object-none object-top "
           />
         </div>
         <div className="py-4">
