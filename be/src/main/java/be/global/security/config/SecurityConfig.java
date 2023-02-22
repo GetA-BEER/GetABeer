@@ -9,14 +9,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import be.domain.mail.controller.MailController;
 import be.domain.user.repository.UserRepository;
-import be.domain.user.service.UserService;
 import be.global.security.auth.filter.JwtAuthenticationFilter;
 import be.global.security.auth.filter.JwtVerificationFilter;
 import be.global.security.auth.handler.UserAccessDeniedHandler;
@@ -26,6 +24,7 @@ import be.global.security.auth.handler.UserAuthenticationSuccessHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
 import be.global.security.auth.oauth.handler.OAuth2SuccessHandler;
 import be.global.security.auth.oauth.service.CustomOAuth2UserService;
+import be.global.security.auth.session.SecuritySessionExpiredStrategy;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +37,7 @@ public class SecurityConfig {
 	private final MailController mailController;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
+	private final SecuritySessionExpiredStrategy securitySessionExpiredStrategy;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,8 +48,11 @@ public class SecurityConfig {
 			.csrf().disable()
 			.cors(withDefaults())
 			// .and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
+			.sessionManagement(s ->
+				s.maximumSessions(1) // 동일 세션 개수 제한 (중복 로그인 방지)
+					.maxSessionsPreventsLogin(false) // 중복 로그인 시 먼저 로그인한 사용자 로그아웃
+					.expiredSessionStrategy(securitySessionExpiredStrategy)) // 세션 만료 시 전략
+			// .and()
 			.formLogin().disable()
 			.httpBasic().disable()
 			.exceptionHandling()
@@ -63,8 +66,10 @@ public class SecurityConfig {
 			.oauth2Login(oauth2 -> {
 				oauth2.authorizationEndpoint().baseUri("/oauth2/authorization");
 				oauth2.successHandler(
-					new OAuth2SuccessHandler(jwtTokenizer, userRepository, mailController, passwordEncoder(), customAuthorityUtils, redisTemplate));
-				oauth2.userInfoEndpoint().userService(new CustomOAuth2UserService());
+					new OAuth2SuccessHandler(jwtTokenizer, userRepository, redisTemplate));
+				oauth2.userInfoEndpoint().userService(
+					new CustomOAuth2UserService(userRepository, mailController, passwordEncoder(),
+						customAuthorityUtils));
 			});
 
 		return http.build();
