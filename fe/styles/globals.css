@@ -38,6 +38,6 @@
 
 @layer components {
   .noneContent {
-    @apply bg-white m-2 py-10 text-xs border text-y-gray rounded-xl shadow-sm flex justify-center items-center;
+    @apply bg-white m-2 py-5 text-xs border text-y-gray rounded-xl shadow-sm text-center;
   }
 }

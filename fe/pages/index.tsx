@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Advertise from '@/components/mainPage/Advertise';
-// import NavBar from '@/components/NavBar';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
 import Footer from '@/components/Footer';
@@ -66,7 +65,15 @@ export default function Main() {
         <Advertise />
         <div className="m-auto">
           <BeerCategoryBtn />
+          <div className="mx-3 mt-6 text-base font-semibold">
+            <span className="text-y-brown mr-1">인기 많은</span>
+            <span className="text-black">맥주</span>
+          </div>
           <PopularBeerController beerProps={beerProps} />
+          <div className="mx-3 mt-6 text-base font-semibold">
+            <span className="text-y-brown mr-1">유미님의</span>
+            <span className="text-black">추천 맥주</span>
+          </div>
           <PopularBeerController beerProps={beerProps} />
         </div>
         <div className="pb-14"></div>

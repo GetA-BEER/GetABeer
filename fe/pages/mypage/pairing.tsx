@@ -1,48 +1,39 @@
 import Head from 'next/head';
-import NavBar from '@/components/NavBar';
 // import SortBox from '@/components/selectBox/SortBox';
-import PairingBox from '@/components/selectBox/PairingBox';
+// import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
+import axios from '@/pages/api/axios';
+import { useEffect, useState } from 'react';
 
 export default function Pairing() {
-  const pairingCardProps = {
-    data: [
-      {
-        beerId: 1,
-        pairingId: 1,
-        nickname: '김맥주',
-        content: '수정된 페어링',
-        thumbnail:
-          'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
-        category: 'SNACK',
-        likeCount: 3,
-        commentCount: 0,
-        isUserLikes: true,
-        createdAt: '2023-02-06T00:29:14.59836',
-        modifiedAt: '2023-02-06T00:31:11.1951',
-      },
-      {
-        beerId: 1,
-        pairingId: 2,
-        nickname: '김맥주',
-        content: '페어링 안내',
-        thumbnail:
-          'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
-        category: 'GRILL',
-        likeCount: 2,
-        commentCount: 0,
-        isUserLikes: false,
-        createdAt: '2023-02-06T00:35:58.259552',
-        modifiedAt: '2023-02-06T00:35:58.259552',
-      },
-    ],
-    pageInfo: {
-      page: 1,
-      size: 5,
-      totalElements: 2,
-      totalPages: 1,
-    },
-  };
+  const [name, setName] = useState();
+  const [TOKEN, setTOKEN] = useState();
+
+  const [pariginCardPops, setPairingCardProps] = useState();
+  useEffect(() => {
+    const localInfo = window.localStorage.getItem('recoil-persist');
+    if (localInfo !== null) {
+      const tmpData = JSON.parse(localInfo);
+      setTOKEN(tmpData.accessToken);
+      setName(tmpData.name);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (TOKEN !== undefined) {
+      const config = {
+        headers: {
+          authorization: TOKEN,
+        },
+        withCredentials: true,
+      };
+      axios
+        .get(`/mypage/pairing`, config)
+        .then((response) => setPairingCardProps(response.data))
+        .catch((error) => console.log(error));
+    }
+  }, [TOKEN]);
+
   return (
     <>
       <Head>
@@ -53,14 +44,13 @@ export default function Pairing() {
       </Head>
       <main className="m-auto h-screen max-w-4xl">
         <div className="my-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
-          유미님의 페어링
+          {name}님의 페어링
         </div>
-        <div className="m-auto flex">
+        {/* <div className="m-auto flex">
           <PairingBox />
-        </div>
-        <PairingCardController pairingCardProps={pairingCardProps.data} />
+        </div> */}
+        <PairingCardController pairingCardProps={pariginCardPops} />
         <div className="pb-32"></div>
-        <NavBar />
       </main>
     </>
   );

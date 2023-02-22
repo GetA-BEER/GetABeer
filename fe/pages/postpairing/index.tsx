@@ -1,7 +1,6 @@
 import Head from 'next/head';
-import NavBar from '@/components/NavBar';
 import BigInput from '@/components/inputs/BigInput';
-import PairingBox from '@/components/selectBox/PairingBox';
+import PairingSelect from '@/components/selectBox/PairingSelect';
 import ImageUpload from '../../components/postPairingPage/ImageUpload';
 import PostDetailCard from '@/components/postPairingPage/PostDetailCard';
 import CloseBtn from '@/components/button/CloseBtn';
@@ -10,37 +9,55 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { currentBeer } from '@/atoms/currentBeer';
-import axios from 'axios';
+import axios from '@/pages/api/axios';
 
 export default function PostPairing() {
   const router = useRouter();
   const [beerInfo] = useRecoilState(currentBeer);
+
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('전체');
-  const [isValid, setIsValid] = useState(false);
+  const [category, setCategory] = useState('카테고리');
+  const [imageData, setImageData] = useState([]);
   const [jsonData, setJsonData] = useState({
     beerId: beerInfo.beerId,
     userId: 1,
     content: '',
     category: '',
   });
-  const [finalData, setFinalData] = useState<any>();
+  const [finalData, setFinalData] = useState<any>('');
 
-  // userId 로직 짜야함
-  let TOKEN =
-    'Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlMUBtYWlsLmNvbSIsInN1YiI6ImUxQG1haWwuY29tIiwiaWF0IjoxNjc2ODk4Mzc5LCJleHAiOjE2NzY5MDU1Nzl9.4REO_Y0M8aGeVmFY99qEpQ88zuY1s1buUF777hKVh1xrOGC1Y2uYnApvu9-VLUqEY_fKF_1DqGsGfMJVrBAlrw';
-  const config = {
-    headers: {
-      Authorization: TOKEN,
-      'content-type': 'multipart/form-data',
-    },
-  };
+  // userInfo 로직, userId가 필요하다.
+  const [userInfo, setUserInfo] = useState();
+  const [TOKEN, setTOKEN] = useState();
+  // useEffect(() => {
+  //   const localInfo = window.localStorage.getItem('recoil-persist');
+  //   if (localInfo !== null) {
+  //     const tmpData = JSON.parse(localInfo);
+  //     setTOKEN(tmpData.accessToken);
 
+  //     const config = {
+  //       headers: {
+  //         authorization: TOKEN,
+  //         'content-type': 'multipart/form-data',
+  //       },
+  //       withCredentials: true,
+  //     };
+  //     axios
+  //       .get(`/api/user`, config)
+  //       .then((response) => setUserInfo(response.data))
+  //       .catch((error) => console.log(error));
+  //   }
+  // }, [TOKEN]);
+  // console.log('userInfo', userInfo);
+
+  // Vaild 로직
+  const [isValid, setIsValid] = useState(false);
   useEffect(() => {
-    if (content.length >= 3 && category !== '') setIsValid(true);
+    if (content.length >= 3 && category !== '카테고리') setIsValid(true);
     else setIsValid(false);
   }, [content, category]);
 
+  // Post 제출 로직
   const handleSubmit = () => {
     setJsonData({
       beerId: beerInfo.beerId,
@@ -50,20 +67,34 @@ export default function PostPairing() {
     });
 
     const formData = new FormData();
+    for (const file of imageData) {
+      formData.append('files', file);
+    }
     formData.append(
       'post',
-      new Blob([JSON.stringify(jsonData)], {
-        type: 'application/json',
-      })
+      new Blob([JSON.stringify(jsonData)], { type: 'application/json' })
     );
-    formData.append('files', new Blob([JSON.stringify({})]));
     setFinalData(formData);
-
-    // axios
-    //   .post(`${process.env.API_URL}/pairings`, finalData, config)
-    //   .then((response) => console.log(response))
-    //   .catch((error) => console.log(error));
   };
+  // Submit 과 formData 변경 감지 후 로직
+  useEffect(() => {
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      withCredentials: true,
+    };
+    if (finalData !== '') {
+      // console.log(jsonData);
+      axios
+        .post(`/pairings`, finalData, config)
+        .then((response) => {
+          console.log(response);
+          router.back();
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [finalData, router]);
 
   return (
     <>
@@ -80,11 +111,11 @@ export default function PostPairing() {
           <div className="mt-6 mb-2 text-base font-semibold">
             페어링 카테고리
           </div>
-          <PairingBox category={category} setCategory={setCategory} />
-          <ImageUpload />
+          <PairingSelect category={category} setCategory={setCategory} />
+          <ImageUpload imageData={imageData} setImageData={setImageData} />
           <div className="mt-6 mb-2 text-base font-semibold">설명</div>
           <BigInput
-            placeholder="추천 이유를 세글자 이상 적어주세요"
+            placeholder="세글자 이상 적어주세요"
             inputState={content}
             setInputState={setContent}
           />
@@ -103,7 +134,7 @@ export default function PostPairing() {
             )}
           </div>
         </div>
-        <NavBar />
+        <div className="h-20"></div>
       </main>
     </>
   );

@@ -14,7 +14,7 @@ export default function PairingTitle(props: {
       {props?.pairngCount === 0 ? (
         <></>
       ) : (
-        <Link href={`/pairing/${props.beerId}`}>
+        <Link href={`/allpairing/${props.beerId}`}>
           <span className="text-xs flex items-end">모두보기</span>
         </Link>
       )}

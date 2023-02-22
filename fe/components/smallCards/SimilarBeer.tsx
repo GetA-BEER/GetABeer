@@ -1,4 +1,3 @@
-// import { BeerInfo } from './SimilarBeerController';
 import Image from 'next/image';
 
 interface BeerInfo {
@@ -14,7 +13,7 @@ interface BeerInfo {
 
 export default function SimilarBeer(props: { similarBeer: BeerInfo }) {
   return (
-    <div className="rounded-2xl w-full m-2 bg-white text-y-black drop-shadow-lg border mb-24 overflow-hidden">
+    <div className="rounded-2xl w-full m-2 bg-white text-y-black drop-shadow-lg border mb-20 overflow-hidden">
       <div className="border-b-2 p-4">
         <div className="text-sm font-semibold">{props.similarBeer.title}</div>
         <div className="text-[8px]">{`${props.similarBeer.category}/${props.similarBeer.country} ${props.similarBeer.level}% ${props.similarBeer.ibu}IBU`}</div>
