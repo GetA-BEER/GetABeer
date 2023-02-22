@@ -1,3 +1,4 @@
+
 package be.controller;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -402,7 +403,7 @@ public class BeerControllerRestDocs {
 		doNothing().when(beerService).deleteBeer(anyLong());
 
 		mockMvc.perform(
-				RestDocumentationRequestBuilders.delete("/beers//{beer_id}/delete", beerId)
+				RestDocumentationRequestBuilders.delete("/api/beers/{beer_id}/delete", beerId)
 			)
 			.andExpect(status().isNoContent())
 			.andDo(
@@ -416,3 +417,4 @@ public class BeerControllerRestDocs {
 	}
 
 }
+

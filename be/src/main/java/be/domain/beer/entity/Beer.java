@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -38,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @ToString
 @DynamicInsert
-@Document(indexName = "beers")
+// @Document(indexName = "beers")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Beer extends BaseTimeEntity implements Serializable {
@@ -177,6 +176,7 @@ public class Beer extends BaseTimeEntity implements Serializable {
 			BeerDetailsBestRating.builder()
 				.bestRatingId(rating.getId())
 				.bestStar(rating.getStar())
+				.profileImage(rating.getUser().getImageUrl())
 				.bestNickname(rating.getNickname())
 				.bestContent(rating.getContent())
 				.build();

@@ -38,4 +38,8 @@ public class Pointcuts {
 	public void deletePairing() {
 	}
 
+	@Pointcut("execution(* be.domain.like.controller.RatingLikeController.clickLike(..))")
+	public void clickRatingLike() {
+	}
+
 }

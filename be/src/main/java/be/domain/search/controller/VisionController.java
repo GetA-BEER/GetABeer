@@ -74,7 +74,7 @@ public class VisionController {
 	}
 
 	@GetMapping("/image")
-	public ResponseEntity gcpTest(@RequestParam(value = "image") MultipartFile multipartFile) throws IOException {
+	public ResponseEntity imageSearch(@RequestParam(value = "image") MultipartFile multipartFile) throws IOException {
 		List<String> engNameList = visionService.getSimilarProductsFile(multipartFile);
 		List<Beer> beerList = visionService.findBeersListByImage(engNameList);
 		List<BeerDto.SearchResponse> responseList = beerMapper.beersListToSearchResponse(beerList);

@@ -105,7 +105,26 @@ public interface BeerMapper {
 		return detailsResponse.build();
 	}
 
-	List<BeerDto.MonthlyBestResponse> beersToMonthlyBestBeerResponse(List<MonthlyBeer> beerList);
+	default List<BeerDto.MonthlyBestResponse> beersToMonthlyBestBeerResponse(List<MonthlyBeer> beerList) {
+
+		return beerList.stream()
+			.map(monthlyBeer -> {
+
+				BeerDto.MonthlyBestResponse.MonthlyBestResponseBuilder monthlyBestResponse = BeerDto.MonthlyBestResponse.builder();
+
+				monthlyBestResponse.beerId(monthlyBeer.getId());
+				monthlyBestResponse.korName(monthlyBeer.getKorName());
+				monthlyBestResponse.thumbnail(monthlyBeer.getThumbnail());
+				monthlyBestResponse.totalAverageStars(monthlyBeer.getAverageStar());
+				monthlyBestResponse.totalStarCount(monthlyBeer.getRatingCount());
+				monthlyBestResponse.beerDetailsTopTags(monthlyBeer.getBeerDetailsTopTags());
+
+				monthlyBestResponse.bestRating(monthlyBeer.getBeerDetailsBestRating());
+
+				return monthlyBestResponse.build();
+
+			}).collect(Collectors.toList());
+	}
 
 	List<BeerDto.WeeklyBestResponse> beersToWeeklyBestBeerResponse(List<WeeklyBeer> beerList);
 
@@ -143,14 +162,16 @@ public interface BeerMapper {
 
 				searchResponseBuilder.beerId(beer.getId());
 				searchResponseBuilder.korName(beer.getBeerDetailsBasic().getKorName());
-				searchResponseBuilder.engName(beer.getBeerDetailsBasic().getEngName());
-				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
-				searchResponseBuilder.averageStar(beer.getBeerDetailsStars().getTotalAverageStars());
-				searchResponseBuilder.ratingCount(beer.getBeerDetailsCounts().getRatingCount());
 				searchResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
-				if (beer.getBeerDetailsBestRating() != null) {
-					searchResponseBuilder.bestRating(beer.getBeerDetailsBestRating().createRating());
-				}
+				searchResponseBuilder.country(beer.getBeerDetailsBasic().getCountry());
+				searchResponseBuilder.category(beer.getBeerBeerCategories().stream()
+					.map(beerBeerCategory -> beerBeerCategory.getBeerCategory().getBeerCategoryType().toString())
+					.collect(Collectors.toList()));
+				searchResponseBuilder.abv(beer.getBeerDetailsBasic().getAbv());
+				searchResponseBuilder.ibu(beer.getBeerDetailsBasic().getIbu());
+				searchResponseBuilder.totalAverageStar(beer.getBeerDetailsStars().getTotalAverageStars());
+				searchResponseBuilder.totalStarcount(beer.getBeerDetailsCounts().getRatingCount());
+				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
 
 				return searchResponseBuilder.build();
 			})
@@ -167,14 +188,16 @@ public interface BeerMapper {
 
 				searchResponseBuilder.beerId(beer.getId());
 				searchResponseBuilder.korName(beer.getBeerDetailsBasic().getKorName());
-				searchResponseBuilder.engName(beer.getBeerDetailsBasic().getEngName());
-				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
-				searchResponseBuilder.averageStar(beer.getBeerDetailsStars().getTotalAverageStars());
-				searchResponseBuilder.ratingCount(beer.getBeerDetailsCounts().getRatingCount());
 				searchResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
-				if (beer.getBeerDetailsBestRating() != null) {
-					searchResponseBuilder.bestRating(beer.getBeerDetailsBestRating().createRating());
-				}
+				searchResponseBuilder.country(beer.getBeerDetailsBasic().getCountry());
+				searchResponseBuilder.category(beer.getBeerBeerCategories().stream()
+					.map(beerBeerCategory -> beerBeerCategory.getBeerCategory().getBeerCategoryType().toString())
+					.collect(Collectors.toList()));
+				searchResponseBuilder.abv(beer.getBeerDetailsBasic().getAbv());
+				searchResponseBuilder.ibu(beer.getBeerDetailsBasic().getIbu());
+				searchResponseBuilder.totalAverageStar(beer.getBeerDetailsStars().getTotalAverageStars());
+				searchResponseBuilder.totalStarcount(beer.getBeerDetailsCounts().getRatingCount());
+				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
 
 				return searchResponseBuilder.build();
 			})

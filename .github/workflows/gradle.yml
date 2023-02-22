@@ -1,0 +1,94 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    paths: [ 'be/**' ]
+    branches: [ "dev-be" ]
+  pull_request:
+    branches: [ "dev-be" ]
+
+permissions:
+  contents: read
+
+env:
+  S3_BUCKET_NAME: getabeer
+  RESOURCE_PATH: ./be/src/main/resources/application-dev.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Add permission
+        run: chmod +x gradlew
+
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "getabeer-376509-6310d68578f1.json"
+          json: ${{ secrets.GOOGLE_JSON}}
+
+      - name: Set Yml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.RESOURCE_PATH }}
+        env:
+          spring:
+            redis:
+              host: ${{ secrets.REDIS_ENDPOINT }}
+            security:
+              oauth2:
+                client:
+                  registration:
+                    google:
+                      client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+                      client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+                    kakao :
+                      client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+                      client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
+                    naver :
+                      client-id: ${{ secrets.NAVER_CLIENT_ID }}
+                      client-secret: ${{ secrets.NAVER_CLIENT_SECRET }}
+          spring.mail.username : ${{ secrets.SMTP_GOOGLE_ACCOUNT}}
+          spring.mail.password : ${{ secrets.SMTP_GOOGLE_PASSWORD}}
+          jwt.secret-key: ${{ secrets.JWT_SECRET_KEY}}
+          cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: build
+
+      # build한 후 프로젝트를 압축합니다.
+      - name: Make zip file
+        run: zip -r ./getabeer-deploy.zip
+        shell: bash
+
+      # Access Key와 Secret Access Key를 통해 권한 확인
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      # 압축한 프로젝트를 S3로 전송
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./getabeer-deploy.zip s3://$S3_BUCKET_NAME/getabeer-deploy.zip
+
+        # CodeDeploy 에 배포 명령을 내림
+      - name: Code Deploy
+        run: >
+          aws deploy create-deployment --application-name getabeer
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name be-1-Bhinney-group
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getabeer-deploy.zip

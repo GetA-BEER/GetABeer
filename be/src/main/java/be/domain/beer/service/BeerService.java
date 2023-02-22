@@ -41,6 +41,6 @@ public interface BeerService {
 	List<Rating> findMyRatingWithWishlist();
 
 	Beer findBeerByRatingId(Long ratingId);
-
+	
 	Beer findVerifiedBeer(Long beerId);
 }

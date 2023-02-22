@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import be.domain.beer.entity.Beer;
+import be.domain.elasticsearch.entity.BeerDocument;
 
-public interface BeerSearchRepository extends ElasticsearchRepository<Beer, Long>, BeerSearchCustomRepository {
+public interface BeerSearchRepository extends ElasticsearchRepository<BeerDocument, Long> {
 
-	List<Beer> findByBeerDetailsBasic_KorNameContains(String korName);
+	List<BeerDocument> findByKorName(String korName);
 }

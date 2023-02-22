@@ -14,7 +14,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import be.domain.elasticsearch.repository.BeerSearchRepository;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackageClasses = BeerSearchRepository.class)
+@EnableElasticsearchRepositories
 public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
 	@Value("${elasticsearch.host}")

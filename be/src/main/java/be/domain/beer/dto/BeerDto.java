@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import be.domain.beer.entity.BeerDetailsBasic;
+import be.domain.beer.entity.BeerDetailsBestRating;
 import be.domain.beer.entity.BeerDetailsCounts;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.BeerDetailsTopTags;
@@ -67,12 +68,14 @@ public class BeerDto {
 
 		private Long beerId;
 		private String korName;
-		private String engName;
+		private String country;
+		private List<String> category;
+		private Double abv;
+		private Integer ibu;
 		private BeerDetailsTopTags beerDetailsTopTags;
-		private Double averageStar;
-		private Integer ratingCount;
+		private Double totalAverageStar;
+		private Integer totalStarcount;
 		private String thumbnail;
-		private Rating bestRating;
 	}
 
 	@Getter
@@ -83,14 +86,11 @@ public class BeerDto {
 
 		private Long beerId;
 		private String korName;
-		private String country;
-		private List<BeerCategoryDto.Response> beerCategories;
-		private List<BeerTagDto.Response> beerTags;
-		private Double averageStar;
-		private Integer starCount;
+		private BeerDetailsTopTags beerDetailsTopTags;
+		private Double totalAverageStars;
+		private Integer totalStarCount;
 		private String thumbnail;
-		private Double abv;
-		private Integer ibu;
+		private BeerDetailsBestRating bestRating;
 
 	}
 

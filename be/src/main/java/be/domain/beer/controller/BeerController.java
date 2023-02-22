@@ -28,6 +28,7 @@ import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.beerwishlist.service.BeerWishlistService;
+import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Validated
@@ -94,7 +95,7 @@ public class BeerController {
 	}
 
 	@GetMapping("/category")
-	public ResponseEntity<PageImpl<BeerDto.SearchResponse>> getCategoryBeer(
+	public ResponseEntity<MultiResponseDto<BeerDto.SearchResponse>> getCategoryBeer(
 
 		@RequestParam(name = "category") String queryParam, @RequestParam(name = "page", defaultValue = "1") int page) {
 
@@ -102,7 +103,7 @@ public class BeerController {
 
 		PageImpl<BeerDto.SearchResponse> responsePage = beerMapper.beersPageToSearchResponse(beerPage);
 
-		return ResponseEntity.ok().body(responsePage);
+		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), beerPage));
 	}
 
 	@GetMapping("/weekly")
