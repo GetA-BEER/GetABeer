@@ -18,13 +18,13 @@ export default function AllPairing() {
   useEffect(() => {
     if (curRoute !== undefined) {
       axios
-        .get(`/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
+        .get(`/pairings/page/${sort}?beerId=${curRoute}&page=1&size=5`)
         .then((response) => setPairingCardProps(response.data))
         .catch((error) => {
           console.log(error);
         });
     }
-  }, [curRoute]);
+  }, [curRoute, sort]);
 
   //   data: [
   //     {

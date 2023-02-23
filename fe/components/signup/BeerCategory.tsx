@@ -1,9 +1,11 @@
 import { UseFormRegister, RegisterOptions } from 'react-hook-form';
 interface IFormValues {
-  beerTagType: string;
+  userBeerTags: Array<string>;
   gender: string;
   age: string;
-  userBeerCategories: string;
+  userBeerCategories: Array<string>;
+  nickname: string;
+  image: string[];
 }
 type InputProps = {
   register: UseFormRegister<IFormValues>;
@@ -21,7 +23,7 @@ export default function BeerCategory({ rules, register }: InputProps) {
     },
     {
       type: 'WEIZEN',
-      text: '바이젠',
+      text: '밀맥주',
     },
     {
       type: 'DUNKEL',
@@ -33,14 +35,27 @@ export default function BeerCategory({ rules, register }: InputProps) {
     },
     {
       type: 'FRUIT_BEER',
-      text: '과일 맥주',
+      text: '과일',
     },
     {
       type: 'NON_ALCOHOLIC',
-      text: '논 알콜',
+      text: '무알콜',
+    },
+    {
+      type: 'ETC',
+      text: '기타',
     },
   ];
-
+  // const beerCategory = [
+  //   '에일',
+  //   '라거',
+  //   '밀맥주',
+  //   '흑맥주',
+  //   '필스너',
+  //   '과일',
+  //   '무알콜',
+  //   '기타',
+  // ];
   return (
     <div className="px-2 pt-2">
       <div className="text-sm">선호 맥주 (최대 2개까지 선택 가능)</div>

@@ -15,6 +15,7 @@ interface IFormValues {
   name: string;
   text: string;
   passwordConfirm: string;
+  editpassword: string;
 }
 
 export default function Email() {
@@ -27,6 +28,7 @@ export default function Email() {
 
   const [showModal, setShowModal] = useState(false);
   const [timeMessage, setTimeMessage] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
     console.log(data);
@@ -43,13 +45,16 @@ export default function Email() {
       email: email,
     };
     axios
-      .post('/mail', reqBody)
+      .post('/api/mail', reqBody)
       .then((res) => {
         console.log(res);
         setShowModal(true);
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.data.status === 409) {
+          setEmailMessage(err.response.data.message);
+        }
       });
   };
   const handleClickCheck = (email: string, text: string) => {
@@ -58,7 +63,7 @@ export default function Email() {
       code: text,
     };
     axios
-      .post('/mail/check', reqBody)
+      .post('/api/mail/check', reqBody)
       .then((res) => {
         Router.push({
           pathname: '/signup',
@@ -94,7 +99,16 @@ export default function Email() {
               type="email"
               placeholder="email@gmail.com"
               register={register}
+              rules={{
+                required: true,
+              }}
             />
+            {emailMessage ? (
+              <div className="flex px-3 gap-0.5 text-red-600 text-xs">
+                <BiErrorAlt />
+                {emailMessage}
+              </div>
+            ) : null}
             <SubmitBtn onClick={undefined}> 이메일 인증 </SubmitBtn>
           </form>
           {showModal ? (

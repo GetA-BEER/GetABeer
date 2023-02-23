@@ -55,7 +55,7 @@ export default function DetailCard(props: { pairingProps: any }) {
           withCredentials: true,
         };
         axios
-          .delete(`/pairings/${curRoute}`, config)
+          .delete(`/api/pairings/${curRoute}`, config)
           .then(() => {
             router.back();
           })

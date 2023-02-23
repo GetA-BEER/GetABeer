@@ -19,6 +19,7 @@ interface IFormValues {
   name: string;
   text: string;
   passwordConfirm: string;
+  editpassword: string;
 }
 export default function Login() {
   const [, setAccessToken] = useRecoilState(accessToken);
@@ -42,7 +43,7 @@ export default function Login() {
       password: password,
     };
     axios
-      .post('/login', reqBody)
+      .post('/api/login', reqBody)
       .then((res) => {
         const accessToken = res.headers.authorization;
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
@@ -104,14 +105,7 @@ export default function Login() {
                 확인해주세요.
               </div>
             ) : null}
-            <div className="m-2">
-              <button
-                type="submit"
-                className="flex justify-center items-center w-full h-11 rounded-xl bg-y-gold hover:bg-orange-400 text-xs"
-              >
-                로그인
-              </button>
-            </div>
+            <SubmitBtn onClick={undefined}>로그인</SubmitBtn>
             <div className="my-3 flex justify-center gap-1.5 text-sm">
               <div className="text-y-gray font-light">만약 계정이 없다면?</div>
               <Link href={'/signup/email'}>
@@ -119,19 +113,19 @@ export default function Login() {
               </Link>
             </div>
           </div>
-          <div className="flex items-center justify-center space-x-2 my-6">
-            <span className="h-px w-3/12  bg-gray-200"></span>
-            <span className="text-y-gray text-sm font-light">
-              소셜 계정 로그인
-            </span>
-            <span className="h-px w-3/12 bg-gray-200"></span>
-          </div>
-          <div className="flex justify-center gap-5">
-            <KakaoBtn onClick={handleClick} />
-            <NaverBtn onClick={handleClick} />
-            <GoogleBtn onClick={handleClick} />
-          </div>
         </form>
+        <div className="flex items-center justify-center space-x-2 my-6">
+          <span className="h-px w-3/12  bg-gray-200"></span>
+          <span className="text-y-gray text-sm font-light">
+            소셜 계정 로그인
+          </span>
+          <span className="h-px w-3/12 bg-gray-200"></span>
+        </div>
+        <div className="flex justify-center gap-5">
+          <KakaoBtn />
+          <NaverBtn />
+          <GoogleBtn />
+        </div>
       </main>
     </>
   );

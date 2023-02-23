@@ -15,6 +15,7 @@ interface IFormValues {
   name: string;
   text: string;
   passwordConfirm: string;
+  editpassword: string;
 }
 export default function Signup() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function Signup() {
       password: password,
     };
     axios
-      .post('/register/user', reqBody)
+      .post('/api/register/user', reqBody)
       .then((res) => {
         console.log(res);
         Router.push({

@@ -3,6 +3,8 @@ import Advertise from '@/components/mainPage/Advertise';
 import PopularBeerController from '@/components/smallCards/PopularBeerController';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
 import Footer from '@/components/Footer';
+import axios from '@/pages/api/axios';
+import { useEffect, useState } from 'react';
 
 export default function Main() {
   const beerProps = [
@@ -52,6 +54,22 @@ export default function Main() {
       image: '/images/150.jpeg',
     },
   ];
+  const [popularBeer, setPopularBeer] = useState();
+  const [recommendBeer, setRecommendBeer] = useState();
+
+  // 인기맥주
+  useEffect(() => {
+    axios
+      .get(`/api/beers/weekly`)
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error)); // 500
+  }, []);
+  // 추천맥주
+  useEffect(() => {
+    axios
+      .get(`/api/beers/recommend`)
+      .then((response) => setPopularBeer(response.data));
+  }, []);
 
   return (
     <>
@@ -70,11 +88,18 @@ export default function Main() {
             <span className="text-black">맥주</span>
           </div>
           <PopularBeerController beerProps={beerProps} />
-          <div className="mx-3 mt-6 text-base font-semibold">
-            <span className="text-y-brown mr-1">유미님의</span>
-            <span className="text-black">추천 맥주</span>
-          </div>
-          <PopularBeerController beerProps={beerProps} />
+
+          {popularBeer === '' ? (
+            <></>
+          ) : (
+            <>
+              <div className="mx-3 mt-6 text-base font-semibold">
+                <span className="text-y-brown mr-1">유미님의</span>
+                <span className="text-black">추천 맥주</span>
+              </div>
+              <PopularBeerController beerProps={popularBeer} />
+            </>
+          )}
         </div>
         <div className="pb-14"></div>
         <Footer />
