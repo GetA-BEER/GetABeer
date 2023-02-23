@@ -37,22 +37,13 @@ export default function RatingCard(props: {
   };
 
   const deleteRating = () => {
-    axios.delete(`/ratings/${props.cardProps.ratingId}`);
+    axios.delete(`/api/ratings/${props.cardProps.ratingId}`);
     router.back();
   };
 
   const isUserLikeHandler = () => {
     axios
-      .post(
-        `/ratings/likes?ratingId=${props.cardProps.ratingId}`,
-        {},
-        {
-          headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlM0BtYWlsLmNvbSIsInN1YiI6ImUzQG1haWwuY29tIiwiaWF0IjoxNjc2OTg2OTc1LCJleHAiOjE2NzY5OTQxNzV9.g7tfklHn9chf2M4hRSh2hNIzhYHgbwMK4fXpklXrXAjulM10FKb_9wWfRoHYTiL9KMw2vYJoaBngKK36OtgwBA',
-          },
-        }
-      )
+      .post(`/api/ratings/likes?ratingId=${props.cardProps.ratingId}`)
       .then((res) => {
         setIsLike(!isLike);
         if (isLike) {

@@ -20,7 +20,7 @@ export default function AllRating() {
   useEffect(() => {
     if (beerId !== undefined) {
       axios
-        .get(`/ratings/page/${sort}?beerId=${beerId}&page=${page}&size=5`)
+        .get(`/api/ratings/page/${sort}?beerId=${beerId}&page=${page}&size=5`)
         .then((res) => {
           setRatingList(res.data.data);
           setTotalPages(res.data.pageInfo.totalPages);

@@ -23,7 +23,7 @@ export default function Rating() {
   useEffect(() => {
     if (ratingId !== undefined) {
       axios
-        .get(`/ratings/${ratingId}`)
+        .get(`/api/ratings/${ratingId}`)
         .then((res) => {
           setCardProps(res.data);
           setRatingCommentList(res.data.ratingCommentList);
@@ -40,7 +40,7 @@ export default function Rating() {
         content: inputState,
       };
       axios
-        .post('/ratings/comments', reqBody)
+        .post('/api/ratings/comments', reqBody)
         .then((res) => {
           if (ratingCommentList === null) {
             setRatingCommentList([res.data]);
@@ -55,7 +55,7 @@ export default function Rating() {
 
   const deleteRatingComment = (ratingCommentId: number) => {
     axios
-      .delete(`/ratings/comments/${ratingCommentId}`)
+      .delete(`/api/ratings/comments/${ratingCommentId}`)
       .then((res) => {
         if (ratingCommentList !== null) {
           const filtered = ratingCommentList.filter((el) => {

@@ -16,7 +16,7 @@ export default function MyRating() {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    // axios.get('/mypage/ratings').then((res) => {
+    // axios.get('/api/mypage/ratings').then((res) => {
     //   setRatingList(res.data.data);
     //   setTotalPages(res.data.pageInfo.totalPages);
     // });

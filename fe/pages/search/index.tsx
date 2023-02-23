@@ -19,10 +19,12 @@ export default function Search() {
   );
 
   useEffect(() => {
-    axios.get(`/search?query=${router.query.q}&page=${page}`).then((res) => {
-      setSearchResultList(res.data.data);
-      setTotalPages(res.data.pageInfo.totalPages);
-    });
+    axios
+      .get(`/api/search?query=${router.query.q}&page=${page}`)
+      .then((res) => {
+        setSearchResultList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      });
   }, [router.query.q, page]);
 
   return (
