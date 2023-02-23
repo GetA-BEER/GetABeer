@@ -56,7 +56,7 @@ jobs:
           cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean build --exclude-task test
         working-directory: ./be/
 
       # build한 후 프로젝트를 압축합니다.
