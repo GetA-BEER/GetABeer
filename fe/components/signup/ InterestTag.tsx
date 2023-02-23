@@ -1,9 +1,11 @@
 import { UseFormRegister, RegisterOptions } from 'react-hook-form';
 interface IFormValues {
-  beerTagType: string;
+  userBeerTags: Array<string>;
   gender: string;
   age: string;
-  userBeerCategories: string;
+  userBeerCategories: Array<string>;
+  nickname: string;
+  image: string[];
 }
 type InputProps = {
   register: UseFormRegister<IFormValues>;
@@ -38,27 +40,11 @@ export default function InterestTag({ rules, register }: InputProps) {
     },
     {
       type: 'MALTY',
-      text: '몰트향',
+      text: '맥아향',
     },
     {
-      type: 'HOPPY',
-      text: '홉향',
-    },
-    {
-      type: 'WEAK',
-      text: '탄산 약',
-    },
-    {
-      type: 'MIDDLE',
-      text: '탄산 중',
-    },
-    {
-      type: 'STRONG',
-      text: '탄산 강',
-    },
-    {
-      type: 'NO_CARBONATION',
-      text: '탄산 無',
+      type: 'NO_SCENT',
+      text: '無향',
     },
     {
       type: 'SWEET',
@@ -76,8 +62,41 @@ export default function InterestTag({ rules, register }: InputProps) {
       type: 'ROUGH',
       text: '떫은맛',
     },
+    {
+      type: 'WEAK',
+      text: '탄산 약',
+    },
+    {
+      type: 'MIDDLE',
+      text: '탄산 중',
+    },
+    {
+      type: 'STRONG',
+      text: '탄산 강',
+    },
+    {
+      type: 'NO_CARBONATION',
+      text: '탄산 無',
+    },
   ];
-
+  // const interestList = [
+  //   '짚색',
+  //   '금색',
+  //   '갈색',
+  //   '흑색',
+  //   '과일향',
+  //   '꽃향',
+  //   '맥아향',
+  //   '無향',
+  //   '단맛',
+  //   '신맛',
+  //   '쓴맛',
+  //   '떫은맛',
+  //   '탄산 약',
+  //   '탄산 중',
+  //   '탄산강',
+  //   '탄산 無',
+  // ];
   return (
     <div className="px-2 pt-2">
       <div className="text-sm">관심 태그 (최대 4개까지 선택 가능)</div>
@@ -89,7 +108,7 @@ export default function InterestTag({ rules, register }: InputProps) {
               id={el.type}
               value={el.type}
               className="peer hidden"
-              {...(register && register('beerTagType', rules))}
+              {...(register && register('userBeerTags', rules))}
             />
             <label
               htmlFor={el.type}

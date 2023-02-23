@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import WishCardController from '@/components/wish/WishCardController';
-
+import { IoChevronBack } from 'react-icons/io5';
+import Link from 'next/link';
 export default function Wish() {
   const wishProps = [
     {
@@ -64,6 +65,11 @@ export default function Wish() {
       </Head>
 
       <main className="m-auto h-screen mx-4">
+        <Link href={'/mypage'}>
+          <button className="m-4">
+            <IoChevronBack className="w-6 h-6" />
+          </button>
+        </Link>
         <div className=" max-w-4xl m-auto">
           <div className="text-xl my-10 text-center font-semibold">
             유미님의 위시 맥주

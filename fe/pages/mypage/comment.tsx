@@ -1,5 +1,5 @@
 import PageContainer from '@/components/PageContainer';
-import { FaArrowLeft } from 'react-icons/fa';
+import { IoChevronBack } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import axios from '@/pages/api/axios';
@@ -120,10 +120,11 @@ export default function MyComment() {
   return (
     <PageContainer>
       <main className="px-2">
-        <FaArrowLeft
-          onClick={() => router.back()}
-          className="text-xl text-y-gray mt-2"
-        />
+        <Link href={'/mypage'}>
+          <button className="m-4">
+            <IoChevronBack className="w-6 h-6" />
+          </button>
+        </Link>
         <div className="flex justify-center my-4">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
             나의 댓글
