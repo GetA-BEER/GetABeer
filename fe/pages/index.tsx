@@ -61,8 +61,8 @@ export default function Main() {
   useEffect(() => {
     axios
       .get(`/api/beers/weekly`)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error)); // 500
+      .then((response) => setRecommendBeer(response.data));
+    // .catch((error) => console.log(error)); // 500
   }, []);
   // 추천맥주
   useEffect(() => {
