@@ -181,6 +181,13 @@ public class UserService {
 			.orElse(null);
 	}
 
+	public User findLoginUser() {
+		Authentication authentication = verifiedAuthentication();
+
+		return userRepository.findByEmail(authentication.getName())
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_LOGIN));
+	}
+
 	private Authentication verifiedAuthentication() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
@@ -261,4 +268,9 @@ public class UserService {
 		}
 	}
 
+	public void checkUser(Long userId, Long loginUserId) {
+		if (!userId.equals(loginUserId)) {
+			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
+		}
+	}
 }
