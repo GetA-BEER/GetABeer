@@ -50,12 +50,12 @@ export default function MyEdit() {
   const [nameMessage, setNameMessage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
   const image = watch('image');
-  useEffect(() => {
-    if (image && image.length > 0) {
-      const file = image[0];
-      setImagePreview(URL.createObjectURL(file));
-    }
-  }, [image]);
+  // useEffect(() => {
+  //   if (image && image.length > 0) {
+  //     const file = image[0];
+  //     setImagePreview(URL.createObjectURL(file));
+  //   }
+  // }, [image]);
   useEffect(() => {
     axios
       .get('api/user')
@@ -95,9 +95,9 @@ export default function MyEdit() {
       .patch(`/api/mypage/userinfo`, reqBody)
       .then((res) => {
         console.log(res.data);
-        // Router.push({
-        //   pathname: '/mypage',
-        // });
+        Router.push({
+          pathname: '/mypage',
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -154,15 +154,17 @@ export default function MyEdit() {
               </div>
               {imagePreview ? (
                 <Image
+                  unoptimized
                   alt="프로필사진"
                   src={imagePreview}
                   width={80}
                   height={80}
-                  className="rounded-full"
+                  className="h-20 w-20 rounded-full"
                 />
               ) : (
                 <Image
-                  className="rounded-full"
+                  unoptimized
+                  className="h-20 w-20 rounded-full"
                   alt="프로필사진"
                   src={userImge}
                   width={80}
