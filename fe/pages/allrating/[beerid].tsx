@@ -36,9 +36,7 @@ export default function AllRating() {
           className="text-xl text-y-gray mt-2"
         />
         <div className="flex justify-center my-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            맥주 이름
-          </h1>
+          <h1 className="text-xl lg:text-2xl font-bold">맥주 이름</h1>
         </div>
         <SortBox setSort={setSort} />
         <div className="mt-3">

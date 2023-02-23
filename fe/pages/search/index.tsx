@@ -35,7 +35,7 @@ export default function Search() {
           className="text-xl text-y-gray mt-2"
         />
         <div className="flex justify-center m-4">
-          <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl">
+          <h1 className="font-bold text-xl lg:text-2xl">
             <span className="text-y-brown">&apos;{router.query.q}&apos;</span>{' '}
             검색 결과
           </h1>

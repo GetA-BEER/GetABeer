@@ -40,7 +40,7 @@ export default function SearchCard(props: {
         } flex-auto flex justify-center py-4 rounded-r-lg`}
       >
         <div className="flex flex-col justify-center items-center">
-          <h1 className="mb-2 font-bold text-2xl sm:text-3xl lg:text-4xl">
+          <h1 className="mb-2 font-bold text-xl lg:text-2xl">
             {props.cardProps?.korName}
           </h1>
           <div className="text-xs sm:text-sm lg:text-lg">

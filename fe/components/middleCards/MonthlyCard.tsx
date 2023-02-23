@@ -40,7 +40,7 @@ export default function MonthlyCard({
           />
         </div>
         <div className="py-4">
-          <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl">
+          <h1 className="font-bold text-xl lg:text-2xl">
             {cardProps?.korName}
           </h1>
           <div className="my-2">
