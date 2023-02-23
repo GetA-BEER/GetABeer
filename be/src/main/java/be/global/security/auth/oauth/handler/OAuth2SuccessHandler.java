@@ -112,8 +112,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		return UriComponentsBuilder
 			.newInstance()
-			// .scheme("https")
-			.scheme("http")
+			.scheme("https")
+			// .scheme("http")
 			.host("www.getabeer.co.kr")
 			// .host("localhost")
 			// .port(3000)
@@ -125,9 +125,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		return UriComponentsBuilder
 			.newInstance()
-			.scheme("http")
-			.host("localhost")
-			.port(8080)
+			.scheme("https")
+			.host("server.getabeer.co.kr")
+			// .port(8080)
 			.path("/api/session")
 			.build()
 			.toUri();
