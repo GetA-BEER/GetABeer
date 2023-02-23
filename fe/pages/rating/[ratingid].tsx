@@ -1,4 +1,4 @@
-import { FaArrowLeft } from 'react-icons/fa';
+import { IoChevronBack } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
@@ -70,7 +70,7 @@ export default function Rating() {
   return (
     <PageContainer>
       <div className="px-2">
-        <FaArrowLeft
+        <IoChevronBack
           onClick={() => router.back()}
           className="text-xl text-y-gray my-2"
         />
