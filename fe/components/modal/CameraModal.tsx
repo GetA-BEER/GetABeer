@@ -20,7 +20,7 @@ export default function CameraModal() {
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files !== null) {
       const imageFile = e.target.files[0];
-      console.log(imageFile);
+      // console.log(imageFile);
       const options = {
         //옵션 설정 필요
         maxSizeMB: 4,
@@ -30,11 +30,11 @@ export default function CameraModal() {
       try {
         const compressedFile = await imageCompression(imageFile, options);
         setUploadImg(compressedFile);
-        console.log(
-          `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
-        );
+        // console.log(
+        //   `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+        // );
         // await uploadToServer(compressedFile);
-        await console.log(uploadImg);
+        // await console.log(uploadImg);
       } catch (error) {
         console.log(error);
       }

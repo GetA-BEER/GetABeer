@@ -20,7 +20,7 @@ export default function PostPairing() {
   const [imageData, setImageData] = useState([]);
   const [jsonData, setJsonData] = useState({
     beerId: beerInfo.beerId,
-    userId: 1,
+    // userId: 1,
     content: '',
     category: '',
   });
@@ -62,7 +62,7 @@ export default function PostPairing() {
   const handleSubmit = () => {
     setJsonData({
       beerId: beerInfo.beerId,
-      userId: 1,
+      // userId: 1,
       content: content,
       category: category,
     });
@@ -87,14 +87,12 @@ export default function PostPairing() {
     };
     if (finalData !== '' && !isSubmit) {
       // console.log(jsonData);
-      axios
-        .post(`/api/pairings`, finalData, config)
-        .then((response) => {
-          console.log(response);
-          router.back();
-          setIsSubmit(true);
-        })
-        .catch((error) => console.log(error));
+      axios.post(`/api/pairings`, finalData, config).then((response) => {
+        // console.log(response);
+        router.back();
+        setIsSubmit(true);
+      });
+      // .catch((error) => console.log(error));
     }
   }, [finalData, router, isSubmit]);
 

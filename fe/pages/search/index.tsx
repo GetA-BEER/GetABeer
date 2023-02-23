@@ -1,5 +1,5 @@
 import PageContainer from '@/components/PageContainer';
-import { FaArrowLeft } from 'react-icons/fa';
+import { IoChevronBack } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import SearchCard, {
@@ -30,7 +30,7 @@ export default function Search() {
   return (
     <PageContainer>
       <main className="px-2">
-        <FaArrowLeft
+        <IoChevronBack
           onClick={() => router.back()}
           className="text-xl text-y-gray mt-2"
         />

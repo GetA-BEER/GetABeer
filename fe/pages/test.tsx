@@ -13,7 +13,7 @@ export default function Test() {
   const [input, setInput] = useState('');
 
   const post = () => {
-    console.log(input);
+    // console.log(input);
   };
 
   return (
