@@ -71,7 +71,7 @@ public class SecurityConfig {
 				oauth2.successHandler(
 					new OAuth2SuccessHandler(httpSession, jwtTokenizer, userRepository, redisTemplate));
 				oauth2.userInfoEndpoint().userService(
-					new CustomOAuth2UserService(httpSession, userRepository, mailController, passwordEncoder(),
+					new CustomOAuth2UserService(userRepository, mailController, passwordEncoder(),
 						customAuthorityUtils));
 			});
 
