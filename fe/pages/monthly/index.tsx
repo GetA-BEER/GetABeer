@@ -1,69 +1,21 @@
-import MonthlyCard from '@/components/middleCards/MonthlyCard';
+import MonthlyCard, {
+  MonthlyCardProps,
+} from '@/components/middleCards/MonthlyCard';
 import PageContainer from '@/components/PageContainer';
+import axios from '@/pages/api/axios';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function MonthlyPage() {
-  const beerProps = [
-    {
-      id: 1,
-      korName: '가든 바이젠',
-      category: ['에일'],
-      country: '한국',
-      abv: 4.1,
-      ibu: 17.5,
-      totalAverageStars: 4.9,
-      totalStarCount: 55,
-      beerTags: ['금색', '단맛', '과일향', '탄산 강'],
-      thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 2,
-      korName: '필라이트',
-      category: ['에일'],
-      country: '한국',
-      abv: 4.1,
-      ibu: 17.5,
-      totalAverageStars: 4.8,
-      totalStarCount: 45,
-      beerTags: ['금색', '단맛', '과일향', '탄산 강'],
-      thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-    {
-      id: 3,
-      korName: '가든 바이젠',
-      category: ['에일'],
-      country: '한국',
-      abv: 4.1,
-      ibu: 17.5,
-      totalAverageStars: 4.7,
-      totalStarCount: 45,
-      beerTags: ['금색', '단맛', '과일향', '탄산 강'],
-      thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
-    },
-    {
-      id: 4,
-      korName: '가든 바이젠',
-      category: ['에일'],
-      country: '한국',
-      abv: 4.1,
-      ibu: 17.5,
-      totalAverageStars: 4.6,
-      totalStarCount: 38,
-      beerTags: ['금색', '단맛', '과일향', '탄산 강'],
-      thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 5,
-      korName: '필라이트',
-      category: ['에일'],
-      country: '한국',
-      abv: 4.1,
-      ibu: 17.5,
-      totalAverageStars: 4.5,
-      totalStarCount: 29,
-      beerTags: ['금색', '단맛', '과일향', '탄산 강'],
-      thumbnail: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-  ];
+  const [monthlyBeerList, setMonthlyBeerList] = useState<MonthlyCardProps[]>(
+    []
+  );
+  useEffect(() => {
+    axios.get('/beers/monthly').then((res) => {
+      console.log(res.data);
+      setMonthlyBeerList(res.data);
+    });
+  }, []);
   return (
     <PageContainer>
       <div className="flex flex-col justify-center items-center my-6">
@@ -74,8 +26,10 @@ export default function MonthlyPage() {
           지난 달 가장 높은 점수를 받은 이달의 맥주를 만나보세요
         </h2>
       </div>
-      {beerProps.map((el, idx) => (
-        <MonthlyCard key={el.id} cardProps={el} idx={idx} />
+      {monthlyBeerList.map((el, idx) => (
+        <Link key={el.beerId} href={`/beer/${el.beerId}`}>
+          <MonthlyCard cardProps={el} idx={idx} />
+        </Link>
       ))}
     </PageContainer>
   );
