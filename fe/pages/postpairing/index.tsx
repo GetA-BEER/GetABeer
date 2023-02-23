@@ -87,14 +87,12 @@ export default function PostPairing() {
     };
     if (finalData !== '' && !isSubmit) {
       // console.log(jsonData);
-      axios
-        .post(`/api/pairings`, finalData, config)
-        .then((response) => {
-          console.log(response);
-          router.back();
-          setIsSubmit(true);
-        })
-        .catch((error) => console.log(error));
+      axios.post(`/api/pairings`, finalData, config).then((response) => {
+        // console.log(response);
+        router.back();
+        setIsSubmit(true);
+      });
+      // .catch((error) => console.log(error));
     }
   }, [finalData, router, isSubmit]);
 
