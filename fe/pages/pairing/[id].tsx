@@ -65,7 +65,7 @@ export default function PairingDetail() {
     // 특정 페어링 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/pairings/${curRoute}`)
+        .get(`/api/pairings/${curRoute}`)
         .then((response) => {
           setPairingProps(response.data);
         })

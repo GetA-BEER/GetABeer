@@ -1,13 +1,13 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import { BiUser } from 'react-icons/bi';
 import { FaRegCommentDots } from 'react-icons/fa';
-import { FiThumbsUp } from 'react-icons/fi';
-// import { PairingCardInfo } from './SmallpairingController';
 import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { TimeHandler } from '@/utils/TimeHandler';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
+import PairingThumbs from '../PairingThumbs';
 
 export default function SmallPairingCard(props: { pairingProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
@@ -63,49 +63,51 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
         </span>
       </div>
       {/* 사진,설명 */}
-      <div
-        className={`p-2 h-28 w-full border-y-2 border-gray-200 leading-5 relative ${
-          collisions ? 'overflow-hidden' : ''
-        }`}
-        id="pairingParents"
-      >
-        {props?.pairingProps?.thumbnail === '' ? (
-          <div id={`pairingImage${props.pairingProps.pairingId}`}></div>
-        ) : (
-          <div className="h-[77px] w-auto overflow-hidden ">
-            <Image
-              src={props.pairingProps.thumbnail}
-              alt="img"
-              width={100}
-              height={100}
-              className="m-auto h-full w-auto select-none"
-              id={`pairingImage${props.pairingProps.pairingId}`}
-              priority
-            />
-          </div>
-        )}
-        {props.pairingProps.content === undefined ? (
-          <div
-            className="text-y-gray"
-            id={`pairingDescribe${props.pairingProps.pairingId}`}
-          >
-            {noReviewState[randomNum]?.contents}
-          </div>
-        ) : collisions ? (
-          <>
+      <Link href={`/pairing/${props.pairingProps.pairingId}`}>
+        <div
+          className={`p-2 h-28 w-full border-y-2 border-gray-200 leading-5 relative ${
+            collisions ? 'overflow-hidden' : ''
+          }`}
+          id="pairingParents"
+        >
+          {props?.pairingProps?.thumbnail === '' ? (
+            <div id={`pairingImage${props.pairingProps.pairingId}`}></div>
+          ) : (
+            <div className="h-[77px] w-auto overflow-hidden ">
+              <Image
+                src={props.pairingProps.thumbnail}
+                alt="img"
+                width={100}
+                height={100}
+                className="m-auto h-full w-auto select-none"
+                id={`pairingImage${props.pairingProps.pairingId}`}
+                priority
+              />
+            </div>
+          )}
+          {props.pairingProps.content === undefined ? (
+            <div
+              className="text-y-gray"
+              id={`pairingDescribe${props.pairingProps.pairingId}`}
+            >
+              {noReviewState[randomNum]?.contents}
+            </div>
+          ) : collisions ? (
+            <>
+              <div id={`pairingDescribe${props.pairingProps.pairingId}`}>
+                {props.pairingProps.content}
+              </div>
+              <div className="absolute -bottom-[0.5px] right-1 px-1 bg-white">
+                ...<span className="text-y-gold">더보기</span>
+              </div>
+            </>
+          ) : (
             <div id={`pairingDescribe${props.pairingProps.pairingId}`}>
               {props.pairingProps.content}
             </div>
-            <div className="absolute -bottom-[0.5px] right-1 px-1 bg-white">
-              ...<span className="text-y-gold">더보기</span>
-            </div>
-          </>
-        ) : (
-          <div id={`pairingDescribe${props.pairingProps.pairingId}`}>
-            {props.pairingProps.content}
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </Link>
       {/* 날짜,코멘트수,엄지수 */}
       <div className="p-2 flex justify-between items-center text-[8px]">
         <div className="text-y-gray">{date}</div>
@@ -114,10 +116,12 @@ export default function SmallPairingCard(props: { pairingProps: any }) {
             <FaRegCommentDots className="mr-[2px] mt-[1px] w-3 h-3" />
             {props.pairingProps.commentCount}
           </span>
-          <span className="ml-1 flex justify-center">
-            <FiThumbsUp className="w-3 h-3" />
-            {props.pairingProps.likeCount}
-          </span>
+
+          <PairingThumbs
+            isUserLikes={props?.pairingProps?.isUserLikes}
+            likeCount={props?.pairingProps?.likeCount}
+            pairingId={props?.pairingProps?.pairingId}
+          />
         </div>
       </div>
     </div>

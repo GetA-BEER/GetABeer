@@ -19,10 +19,8 @@ export interface BeerInfo {
   image: string;
 }
 
-export default function PopularBeerController(props: {
-  beerProps: BeerInfo[];
-}) {
-  const [beerList, setBeerList] = useState<BeerInfo[]>(props.beerProps);
+export default function PopularBeerController(props: { beerProps: any }) {
+  const [beerList, setBeerList] = useState<any>(props.beerProps);
   return (
     <div className="w-full ">
       <Swiper
