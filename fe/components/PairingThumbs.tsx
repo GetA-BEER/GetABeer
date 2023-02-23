@@ -22,7 +22,7 @@ export default function PairingThumbs({
       };
 
       // axios
-      //   .post(`/pairings/likes?pairingId=${pairingId}`, {}, config)
+      //   .post(`/api/pairings/likes?pairingId=${pairingId}`, {}, config)
       //   .then((response) => {
       //     console.log(response);
       setLikesState(!likesState);
