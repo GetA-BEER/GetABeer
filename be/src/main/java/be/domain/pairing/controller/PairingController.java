@@ -45,7 +45,7 @@ public class PairingController {
 	public ResponseEntity<String> post(@RequestPart(value = "post") @Valid PairingRequestDto.Post post,
 		@RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
 		String message = pairingService.create(mapper.pairingPostDtoToPairing(post),
-			files, post.getBeerId(), post.getUserId());
+			files, post.getBeerId());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}

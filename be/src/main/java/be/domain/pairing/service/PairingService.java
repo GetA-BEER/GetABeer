@@ -43,13 +43,13 @@ public class PairingService {
 
 	/* 페어링 등록 */
 	@Transactional
-	public String create(Pairing pairing, List<MultipartFile> files, Long beerId, Long userId) throws IOException {
+	public String create(Pairing pairing, List<MultipartFile> files, Long beerId) throws IOException {
+
+		/* 존재하는 회원인지 확인 */
+		User user = userService.findLoginUser();
 
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
-
-		/* 존재하는 회원인지 확인 */
-		User user = userService.getUser(userId);
 
 		/* 이미지 저장하기 */
 		List<PairingImage> pairingImages;
@@ -77,11 +77,6 @@ public class PairingService {
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
 	}
 
-	public List<PairingImage> getImageList(Long pairingId) {
-
-		return pairingImageRepository.findPairingImage(pairingId);
-	}
-
 	/* 페어링 수정 */
 	@Transactional
 	public String update(Pairing pairing, long pairingId, List<String> type,
@@ -89,6 +84,11 @@ public class PairingService {
 
 		/* 존재하는 페어링인지 확인 및 해당 페어링 정보 가져오기 */
 		Pairing findPairing = findVerifiedPairing(pairingId);
+
+		/* 로그인 한 유저가 페어링을 작성한 유저가 맞는지 확인 */
+		User user = findPairing.getUser();
+		User loginUser = userService.findLoginUser();
+		userService.checkUser(user.getId(), loginUser.getId());
 
 		/* 수정할 내용이 존재하면, 해당 정보 수정 후 저장*/
 		Optional.ofNullable(pairing.getContent()).ifPresent(findPairing::updateContent);
@@ -117,6 +117,7 @@ public class PairingService {
 	}
 
 	/* 특정 페어링 상세 조회 : 평가 조회 */
+	@Transactional(readOnly = true)
 	public Pairing findPairing(Long pairingId) {
 
 		return findVerifiedPairing(pairingId);
@@ -204,11 +205,6 @@ public class PairingService {
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
-
-	/* 일대다 이미지 리스트 가져오기 */
-	public List<PairingImageDto.Response> getImageDtoList(Long pairingId) {
-		return pairingImageRepository.findPairingImageList(pairingId);
-	}
 
 	/* 카테고리 정보 가져오기 */
 	public PairingCategory findCategory(Long pairingId) {
