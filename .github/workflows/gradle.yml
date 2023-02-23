@@ -56,9 +56,8 @@ jobs:
           cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-        with:
-          arguments: build
+        run: ./gradlew build
+        working-directory: ./be/
 
       # build한 후 프로젝트를 압축합니다.
       - name: Make zip file
