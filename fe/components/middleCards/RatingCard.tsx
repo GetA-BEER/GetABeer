@@ -3,7 +3,7 @@ export interface RatingCardProps {
   ratingId: number;
   userId: number;
   nickname: string;
-  //여기 유저 이미지 url도 들어와야함!
+  userImage: string;
   star: number;
   ratingTag: [string, string, string, string];
   content: string;
