@@ -6,7 +6,7 @@ import axios from '@/pages/api/axios';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
+import { IoChevronBack } from 'react-icons/io5';
 import PageContainer from '@/components/PageContainer';
 import Pagenation from '@/components/Pagenation';
 
@@ -31,7 +31,7 @@ export default function AllRating() {
   return (
     <PageContainer>
       <main className="px-2">
-        <FaArrowLeft
+        <IoChevronBack
           onClick={() => router.back()}
           className="text-xl text-y-gray mt-2"
         />
