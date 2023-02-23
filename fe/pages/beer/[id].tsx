@@ -28,7 +28,7 @@ export default function Beer() {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/beers/${curRoute}`)
+        .get(`/api/beers/${curRoute}`)
         .then((response) => {
           setBeerInfo(response.data);
           setCurBeer(response.data);
@@ -42,7 +42,7 @@ export default function Beer() {
     // 코멘트 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/ratings/page/recency?beerId=${curRoute}&page=1&size=5`)
+        .get(`/api/ratings/page/recency?beerId=${curRoute}&page=1&size=5`)
         .then((response) => setCommentInfo(response.data))
         .catch((error) => console.log(error));
     }
@@ -52,7 +52,7 @@ export default function Beer() {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
+        .get(`/api/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
         .then((response) => {
           setPairingInfo(response.data);
         })
