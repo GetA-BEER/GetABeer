@@ -28,6 +28,7 @@ jobs:
 
       - name: Add permission
         run: chmod +x gradlew
+        working-directory: ./be/
 
       - name: create-json
         id: create-json
