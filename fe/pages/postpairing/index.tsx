@@ -52,6 +52,7 @@ export default function PostPairing() {
 
   // Vaild 로직
   const [isValid, setIsValid] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   useEffect(() => {
     if (content.length >= 3 && category !== '카테고리') setIsValid(true);
     else setIsValid(false);
@@ -84,17 +85,18 @@ export default function PostPairing() {
       },
       withCredentials: true,
     };
-    if (finalData !== '') {
+    if (finalData !== '' && !isSubmit) {
       // console.log(jsonData);
       axios
-        .post(`/pairings`, finalData, config)
+        .post(`/api/pairings`, finalData, config)
         .then((response) => {
           console.log(response);
           router.back();
+          setIsSubmit(true);
         })
         .catch((error) => console.log(error));
     }
-  }, [finalData, router]);
+  }, [finalData, router, isSubmit]);
 
   return (
     <>

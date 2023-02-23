@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import Link from 'next/link';
 import Image from 'next/image';
 
 export default function SmallCardController(props: { pairProps: any }) {
@@ -38,9 +37,7 @@ export default function SmallCardController(props: { pairProps: any }) {
         >
           {smallPairingList?.map((pairingProps: any, idx: number) => (
             <SwiperSlide key={pairingProps.pairingId}>
-              <Link href={`/pairing/${pairingProps.pairingId}`}>
-                <SmallPairingCard pairingProps={pairingProps} />
-              </Link>
+              <SmallPairingCard pairingProps={pairingProps} />
             </SwiperSlide>
           ))}
         </Swiper>
