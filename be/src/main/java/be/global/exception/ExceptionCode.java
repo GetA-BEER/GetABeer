@@ -24,6 +24,7 @@ public enum ExceptionCode {
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),
+	USER_NOT_LOGIN(404, "로그인하지 않은 사용자입니다."),
 	USER_ID_EXISTS(409, "User ID Exists"),
 	NICKNAME_EXISTS(409, "Nickname Exists"),
 	UNAUTHORIZED(401, "Unauthorized"), // 인증이 필요한 상태
