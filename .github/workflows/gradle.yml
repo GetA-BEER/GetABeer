@@ -41,22 +41,13 @@ jobs:
         with:
           files: ${{ env.RESOURCE_PATH }}
         env:
-          spring:
-            redis:
-              host: ${{ secrets.REDIS_ENDPOINT }}
-            security:
-              oauth2:
-                client:
-                  registration:
-                    google:
-                      client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
-                      client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-                    kakao :
-                      client-id: ${{ secrets.KAKAO_CLIENT_ID }}
-                      client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
-                    naver :
-                      client-id: ${{ secrets.NAVER_CLIENT_ID }}
-                      client-secret: ${{ secrets.NAVER_CLIENT_SECRET }}
+          spring.redis.host: ${{ secrets.REDIS_ENDPOINT }}
+          spring.security.oauth2.client.registration.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+          spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.naver.client-id: ${{ secrets.NAVER_CLIENT_ID }}
+          spring.security.oauth2.client.registration.naver.client-secret: ${{ secrets.NAVER_CLIENT_SECRET }}
           spring.mail.username : ${{ secrets.SMTP_GOOGLE_ACCOUNT}}
           spring.mail.password : ${{ secrets.SMTP_GOOGLE_PASSWORD}}
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY}}
@@ -90,5 +81,5 @@ jobs:
         run: >
           aws deploy create-deployment --application-name getabeer
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name be-1-Bhinney-group
+          --deployment-group-name getabeer-group
           --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=getabeer-deploy.zip
