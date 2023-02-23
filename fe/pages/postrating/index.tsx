@@ -30,7 +30,7 @@ export default function PostRatingPage() {
 
   const cardProps: MiddleCardInfo = {
     beerId: beerInfo?.beerId,
-    thumbnail: beerInfo.beerDetailsBasic.thumbnail,
+    thumbnail: beerInfo?.beerDetailsBasic?.thumbnail,
     korName: beerInfo?.beerDetailsBasic?.korName,
     category: beerInfo?.beerCategoryTypes,
     country: beerInfo?.beerDetailsBasic?.country,
