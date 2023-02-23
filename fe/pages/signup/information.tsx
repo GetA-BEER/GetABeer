@@ -37,7 +37,7 @@ export default function Information() {
 
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
-    console.log(data);
+    // console.log(data);
     const { gender, age, userBeerCategories, userBeerTags } = getValues();
     signUpClick(gender, age, userBeerCategories, userBeerTags);
   };
@@ -45,8 +45,8 @@ export default function Information() {
   const signUpClick = (
     gender: string,
     age: string,
-    userBeerCategories: Array<string>,
-    userBeerTags: Array<string>
+    userBeerCategories: string[],
+    userBeerTags: string[]
   ) => {
     const reqBody = {
       gender: gender,
@@ -57,14 +57,14 @@ export default function Information() {
     axios
       .post(`/api/register/user/${Router.query.userId}`, reqBody)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         Router.push({
           pathname: '/',
         });
-      })
-      .catch((err) => {
-        console.log(err);
       });
+    // .catch((err) => {
+    //   console.log(err);
+    // });
   };
   return (
     <>

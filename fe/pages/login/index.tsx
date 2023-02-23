@@ -32,7 +32,7 @@ export default function Login() {
   } = useForm<IFormValues>();
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
-    console.log(data);
+    // console.log(data);
     const { email, password } = getValues();
     handleClickLogin(email, password);
   };
@@ -55,12 +55,10 @@ export default function Login() {
         });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setShowLoginError(true);
       });
   };
-
-  const handleClick = () => {};
 
   return (
     <>
