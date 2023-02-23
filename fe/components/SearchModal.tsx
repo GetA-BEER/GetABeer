@@ -19,19 +19,6 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
   const [inputState, setInputState] = useState<string>('');
   const [searchHistoryList, setSearchHistoryList] =
     useRecoilState(searchHistory);
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const history = localStorage.getItem('searchHistoryList') || '[]';
-      setSearchHistoryList(JSON.parse(history));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(
-      'searchHistoryList',
-      JSON.stringify(searchHistoryList)
-    );
-  }, [searchHistoryList]);
 
   const beerCategoryList = [
     '@에일',
@@ -154,8 +141,8 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
           </div>
           <ul className="font-light">
             {searchHistoryList.length
-              ? searchHistoryList?.map((el: searchWord) => {
-                  return (
+              ? searchHistoryList?.map((el: searchWord, idx: number) => {
+                  return idx < 3 ? (
                     <li
                       key={el.id}
                       className="flex justify-between p-1 hover:bg-y-lightGray/80"
@@ -168,6 +155,8 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
                         <MdCancel className="mx-1 w-5 h-4" />
                       </button>
                     </li>
+                  ) : (
+                    removeSearchHistory(el.id)
                   );
                 })
               : null}
