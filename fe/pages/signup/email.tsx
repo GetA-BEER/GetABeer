@@ -51,7 +51,7 @@ export default function Email() {
         setShowModal(true);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
         if (err.response.data.status === 409) {
           setEmailMessage(err.response.data.message);
         }
