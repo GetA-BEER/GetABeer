@@ -229,8 +229,8 @@ public class UserService {
 
 	/* 닉네임 확인 */
 	public void verifyNickname(String nickname) {
-		User user = getLoginUser();
 		if (userRepository.existsByNickname(nickname)) {
+			User user = getLoginUser();
 			if (!nickname.equals(user.getNickname())) {
 				throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
 			}
@@ -241,7 +241,7 @@ public class UserService {
 	public void verifyExistEmail(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
 		}
 	}
 
