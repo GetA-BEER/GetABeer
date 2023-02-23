@@ -9,10 +9,12 @@ import Link from 'next/link';
 import { IoChevronBack } from 'react-icons/io5';
 import PageContainer from '@/components/PageContainer';
 import Pagenation from '@/components/Pagenation';
+import Image from 'next/image';
 
 export default function AllRating() {
   const router = useRouter();
   const beerId = router.query.beerid;
+  const [title, setTitle] = useState<string>('');
   const [sort, setSort] = useState<Sort>('mostlikes');
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -24,6 +26,7 @@ export default function AllRating() {
         .then((res) => {
           setRatingList(res.data.data);
           setTotalPages(res.data.pageInfo.totalPages);
+          setTitle(res.data.pageInfo.beerKorName);
         });
     }
   }, [beerId, sort, page]);
@@ -36,9 +39,7 @@ export default function AllRating() {
           className="text-xl text-y-gray mt-2"
         />
         <div className="flex justify-center my-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            맥주 이름
-          </h1>
+          <h1 className="text-xl lg:text-2xl font-bold">{title}</h1>
         </div>
         <SortBox setSort={setSort} />
         <div className="mt-3">
@@ -56,7 +57,20 @@ export default function AllRating() {
             );
           })}
         </div>
-        <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+        {ratingList.length ? (
+          <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+        ) : (
+          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+            <Image
+              className="m-auto pb-3 opacity-50"
+              src="/images/logo.png"
+              alt="logo"
+              width={40}
+              height={40}
+            />
+            <span>등록된 평가가 없습니다</span>
+          </div>
+        )}
       </main>
     </PageContainer>
   );

@@ -16,42 +16,10 @@ export default function MyRating() {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    // axios.get('/api/mypage/ratings').then((res) => {
-    //   setRatingList(res.data.data);
-    //   setTotalPages(res.data.pageInfo.totalPages);
-    // });
-    setRatingList([
-      {
-        beerId: 1,
-        ratingId: 1,
-        userId: 1,
-        nickname: '최대열글자까지됩니다',
-        userImage: '',
-        star: 4.5,
-        ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
-        content: '맥주 향이 좋습니다.',
-        likeCount: 2,
-        commentCount: 0,
-        createdAt: '2023-02-13T14:17:15.091737',
-        modifiedAt: '2023-02-13T14:17:15.091737',
-        isUserLikes: true,
-      },
-      {
-        beerId: 2,
-        ratingId: 2,
-        userId: 1,
-        nickname: '최대열글자까지됩니다',
-        userImage: '',
-        star: 3.5,
-        ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
-        content: '이것도 좋습니다!',
-        likeCount: 0,
-        commentCount: 0,
-        createdAt: '2023-02-13T14:17:15.091737',
-        modifiedAt: '2023-02-13T14:17:15.091737',
-        isUserLikes: false,
-      },
-    ]);
+    axios.get('/api/mypage/ratings').then((res) => {
+      setRatingList(res.data.data);
+      setTotalPages(res.data.pageInfo.totalPages);
+    });
   }, []);
 
   return (
@@ -63,9 +31,7 @@ export default function MyRating() {
           </button>
         </Link>
         <div className="flex justify-center my-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            나의 평가
-          </h1>
+          <h1 className="text-xl lg:text-2xl font-bold">나의 평가</h1>
         </div>
         <div className="mt-3">
           {ratingList.map((el: RatingCardProps) => {
