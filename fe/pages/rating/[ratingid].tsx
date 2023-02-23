@@ -35,7 +35,6 @@ export default function Rating() {
   const postRatingComment = () => {
     if (inputState !== '') {
       const reqBody = {
-        userId: 1,
         ratingId: Number(ratingId),
         content: inputState,
       };
