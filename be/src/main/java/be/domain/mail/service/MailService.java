@@ -52,10 +52,7 @@ public class MailService {
 	}
 
 	@Async("threadPoolTaskExecutor-Mail")
-	public String sendCertificationMail(String email) throws BusinessLogicException {
-		if (nullUser(email).isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
-		}
+	public String sendCertificationMail(String email) {
 
 		try {
 			String code = UUID.randomUUID().toString().substring(0, 6);
@@ -64,7 +61,7 @@ public class MailService {
 			return code;
 		} catch (Exception exception) {
 			exception.printStackTrace();
-			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
 		}
 	}
 
@@ -92,21 +89,14 @@ public class MailService {
 	}
 
 	@Async("threadPoolTaskExecutor-Mail")
-	public void sendPasswordMail(String email, String password) throws BusinessLogicException {
-		if (nullUser(email).isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
-		}
+	public void sendPasswordMail(String email, String password) {
 
 		try {
 			sendPWMail(password, email);
 		} catch (Exception exception) {
 			exception.printStackTrace();
-			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
 		}
-	}
-
-	public Optional<User> nullUser(String email) {
-		return userRepository.findByEmail(email);
 	}
 
 	/* 인증된 이메일 레디스 저장 */
@@ -119,6 +109,12 @@ public class MailService {
 	private void verifyHasCode(String email) {
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
 			redisTemplate.delete(email);
+		}
+	}
+
+	public void verifyEmail(String email) {
+		if (userRepository.findByEmail(email).isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
 		}
 	}
 }

@@ -24,7 +24,7 @@ public enum ExceptionCode {
 
 	/* USER 관련 예외 */
 	USER_NOT_FOUND(404, "User Not Found"),
-	USER_ID_EXISTS(409, "User ID Exists"),
+	EMAIL_EXIST(409, "이미 가입된 이메일입니다. 로그인을 진행해주세요."),
 	NICKNAME_EXISTS(409, "Nickname Exists"),
 	UNAUTHORIZED(401, "Unauthorized"), // 인증이 필요한 상태
 	FORBIDDEN(403, "Forbidden"), // 인증은 되었으나 권한이 없는 상태
@@ -45,6 +45,7 @@ public enum ExceptionCode {
 	CAN_NOT_EXECUTE_GREP(500, "can not execute grep process command"),
 	CAN_NOT_EXECUTE_REDIS_SERVER(500, "can not execute redis server"),
 	NOT_FOUND_AVAILABLE_PORT(500, "not found available port");
+
 	@Getter
 	private int status;
 	@Getter

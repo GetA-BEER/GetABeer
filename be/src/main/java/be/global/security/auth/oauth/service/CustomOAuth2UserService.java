@@ -3,6 +3,8 @@ package be.global.security.auth.oauth.service;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -22,6 +24,7 @@ import be.global.security.auth.oauth.strategy.userinfo.GoogleUserInfo;
 import be.global.security.auth.oauth.strategy.userinfo.KakaoUserInfo;
 import be.global.security.auth.oauth.strategy.userinfo.NaverUserInfo;
 import be.global.security.auth.oauth.strategy.userinfo.OAuth2UserInfo;
+import be.global.security.auth.session.user.SessionUser;
 import be.global.security.auth.userdetails.AuthUser;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private OAuth2UserInfo oAuth2UserInfo;
+	private final HttpSession httpSession;
 	private final UserRepository userRepository;
 	private final MailController mailController;
 	private final PasswordEncoder passwordEncoder;
