@@ -88,7 +88,7 @@ export default function SpeechBalloon({
             postFunc={() => {
               if ('ratingCommentId' in props) {
                 axios
-                  .patch(`/ratings/comments/${props.ratingCommentId}`, {
+                  .patch(`/api/ratings/comments/${props.ratingCommentId}`, {
                     content: content,
                   })
                   .catch((err) => console.log(err));

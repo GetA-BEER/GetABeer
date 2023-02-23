@@ -33,18 +33,17 @@ export default function EditRatingPage() {
 
   useEffect(() => {
     if (ratingId !== undefined) {
-      axios.get(`/ratings/${ratingId}`).then((res) => {
+      axios.get(`/api/ratings/${ratingId}`).then((res) => {
         setStar(res.data.star);
         setContent(res.data.content);
         setColor(res.data.ratingTag[0]);
         setFlavor(res.data.ratingTag[1]);
         setTaste(res.data.ratingTag[2]);
         setCarbonation(res.data.ratingTag[3]);
-        axios.get(`/beers/${res.data.beerId}`).then((res) => {
+        axios.get(`/api/beers/${res.data.beerId}`).then((res) => {
           const beerIInfo: MiddleCardInfo = {
             beerId: res.data.beerId,
-            thumbnail: '/images/krin.jpeg',
-            // thumbnail: res.data.beerDetailsBasic.thumbnail,
+            thumbnail: res.data.beerDetailsBasic.thumbnail,
             korName: res.data.beerDetailsBasic.korName,
             category: res.data.beerCategoryTypes,
             country: res.data.beerDetailsBasic.country,
@@ -74,7 +73,7 @@ export default function EditRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.patch(`/ratings/${ratingId}`, reqBody).then((res) => {
+    axios.patch(`/api/ratings/${ratingId}`, reqBody).then((res) => {
       router.replace(`/rating/${ratingId}`);
     });
   };

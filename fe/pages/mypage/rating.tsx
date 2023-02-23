@@ -16,7 +16,7 @@ export default function MyRating() {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    // axios.get('/mypage/ratings').then((res) => {
+    // axios.get('/api/mypage/ratings').then((res) => {
     //   setRatingList(res.data.data);
     //   setTotalPages(res.data.pageInfo.totalPages);
     // });
@@ -26,7 +26,7 @@ export default function MyRating() {
         ratingId: 1,
         userId: 1,
         nickname: '최대열글자까지됩니다',
-        //여기 유저 이미지 url도 들어와야함!
+        userImage: '',
         star: 4.5,
         ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
         content: '맥주 향이 좋습니다.',
@@ -41,7 +41,7 @@ export default function MyRating() {
         ratingId: 2,
         userId: 1,
         nickname: '최대열글자까지됩니다',
-        //여기 유저 이미지 url도 들어와야함!
+        userImage: '',
         star: 3.5,
         ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
         content: '이것도 좋습니다!',
