@@ -9,7 +9,7 @@ export default function WishCard(props: { wishProps: WishInfo; idx: number }) {
     if (heart === 0) setHeart(1);
     else setHeart(0);
   };
-  console.log('idx', props.idx);
+  // console.log('idx', props.idx);
 
   return (
     <div className="rounded-2xl max-w-4xl bg-white text-y-black drop-shadow-xl text-[5px] border">
