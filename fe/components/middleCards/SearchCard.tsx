@@ -11,7 +11,7 @@ export interface SearchCardProps {
   country: string;
   category: string[];
   abv: number | null;
-  ibu: number;
+  ibu: number | null;
   beerDetailsTopTags: [string, string, string, string] | null;
   totalAverageStars: number;
   totalStarCount: number;
