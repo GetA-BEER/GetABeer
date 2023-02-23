@@ -14,8 +14,6 @@ public class RatingRequestDto {
 		@NotNull
 		private Long beerId;
 
-		@NotNull
-		private Long userId;
 		private String content;
 
 		@NotNull
