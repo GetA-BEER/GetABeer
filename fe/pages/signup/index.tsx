@@ -39,16 +39,18 @@ export default function Signup() {
       nickname: name,
       password: password,
     };
-    axios.post('/api/register/user', reqBody).then((res) => {
-      // console.log(res);
-      Router.push({
-        pathname: '/signup/information',
-        query: { userId: res.data },
+    axios
+      .post('/api/register/user', reqBody)
+      .then((res) => {
+        // console.log(res);
+        Router.push({
+          pathname: '/signup/information',
+          query: { userId: res.data },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
-    // .catch((err) => {
-    //   console.log(err);
-    // });
   };
   return (
     <>
