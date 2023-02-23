@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
@@ -22,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
 import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.session.user.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+	private final HttpSession httpSession;
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final RedisTemplate<String, String> redisTemplate;
@@ -54,14 +57,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		User user = userRepository.findByNickname(nickname);
 
-		redirect(request, response, user.getEmail(), user.getProvider(), user.getRoles());
+		// redirect(request, response, user.getEmail(), user.getProvider(), user.getRoles());
+		getToken(request, response, user.getEmail(), user.getProvider(), user.getRoles());
 	}
 
-	private void redirect(HttpServletRequest request, HttpServletResponse response, String email, String provider,
-		List<String> authorities) throws IOException {
-
+	private void getToken(HttpServletRequest request, HttpServletResponse response, String email, String provider,
+		List<String> authorities) throws
+		IOException {
 		String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
 		String refreshToken = jwtTokenizer.delegateRefreshToken(email);
+
+		httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
 
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
 			redisTemplate.delete(email);
@@ -69,7 +75,25 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		redisTemplate.opsForValue()
 			.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
-		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+		String uri = createRedirect().toString();
+		getRedirectStrategy().sendRedirect(request, response, uri);
+	}
+
+	public void redirect(HttpServletRequest request, HttpServletResponse response, SessionUser user) throws
+		IOException {
+
+		// String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
+		// String refreshToken = jwtTokenizer.delegateRefreshToken(email);
+		//
+		// httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
+		//
+		// if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
+		// 	redisTemplate.delete(email);
+		// }
+		// redisTemplate.opsForValue()
+		// 	.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+
+		ResponseCookie cookie = ResponseCookie.from("refreshToken", user.getRft())
 			.maxAge(7 * 24 * 60 * 60)
 			.path("/")
 			.secure(true)
@@ -78,7 +102,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.build();
 
 		response.setHeader("Set-Cookie", cookie.toString());
-		response.setHeader("Authorization", "Bearer " + accessToken);
+		response.setHeader("Authorization", "Bearer " + user.getAct());
 
 		String uri = createURI().toString();
 		getRedirectStrategy().sendRedirect(request, response, uri);
@@ -89,10 +113,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		return UriComponentsBuilder
 			.newInstance()
 			// .scheme("https")
-			// .host("www.getabeer.co.kr")
+			.scheme("http")
+			.host("www.getabeer.co.kr")
+			// .host("localhost")
+			// .port(3000)
+			.build()
+			.toUri();
+	}
+
+	private URI createRedirect() {
+
+		return UriComponentsBuilder
+			.newInstance()
 			.scheme("http")
 			.host("localhost")
-			.port(3000)
+			.port(8080)
+			.path("/api/session")
 			.build()
 			.toUri();
 	}
