@@ -18,7 +18,7 @@ export default function MyComment() {
 
   const deleteRatingComment = (ratingCommentId: number) => {
     axios
-      .delete(`/ratings/comments/${ratingCommentId}`)
+      .delete(`/api/ratings/comments/${ratingCommentId}`)
       .then((res) => {
         if (ratingCommentList !== null) {
           const filtered = ratingCommentList.filter((el) => {
@@ -64,10 +64,10 @@ export default function MyComment() {
   ];
 
   useEffect(() => {
-    // axios.get(`/mypage/comment/rating`).then((res) => {
+    // axios.get(`/api/mypage/comment/rating`).then((res) => {
     //   setRatingCommentList(res.data.data);
     // });
-    // axios.get(`/mypage/comment/pairing`).then((res) => {
+    // axios.get(`/api/mypage/comment/pairing`).then((res) => {
     //   setPairingCommentList(res.data.data);
     // });
     //

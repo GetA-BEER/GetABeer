@@ -1,59 +1,88 @@
 import Tag from '../Tag';
 import Image from 'next/image';
+import { BsChatDots } from 'react-icons/bs';
 
-export default function MonthlyCard(props: { cardProps: any; idx: number }) {
+export interface MonthlyCardProps {
+  beerId: number;
+  korName: string;
+  beerDetailsTopTags: [string, string, string, string] | null;
+  totalAverageStars: number;
+  totalStarCount: number;
+  thumbnail: string;
+  bestRating: {
+    bestRatingId: number;
+    bestNickname: string;
+    profileImage: string;
+    bestStar: number;
+    bestContent: string;
+  } | null;
+}
+
+export default function MonthlyCard({
+  cardProps,
+  idx,
+}: {
+  cardProps: MonthlyCardProps;
+  idx: number;
+}) {
   return (
-    <div className="flex rounded-lg text-y-black border border-y-lightGray m-2">
-      <div className="flex-none">
-        <div className="flex justify-center items-center w-6 h-6 rounded-[5px] bg-y-lightGray z-10 m-1">
-          <span className="text-white">{props.idx + 1}</span>
+    <div className="flex flex-col rounded-lg bg-white text-y-black border border-y-lightGray m-2">
+      <div className="flex">
+        <div className="flex justify-center items-center w-6 h-6 rounded-[5px] bg-y-lightGray z-[5] m-1">
+          <span className="text-white">{idx + 1}</span>
         </div>
-        <div className="relative w-[130px] h-[160px]">
+        <div className="relative w-[120px] h-[150px]">
           <Image
-            alt={props.cardProps?.korName}
-            src={props.cardProps?.thumbnail}
+            alt={cardProps?.korName}
+            src={cardProps?.thumbnail}
             fill
-            className="object-cover rounded-lg -mt-1"
+            className="rounded-lg object-none object-top "
           />
         </div>
-      </div>
-      <div
-        className={`${
-          props.idx % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'
-        } flex-auto flex justify-center py-4 rounded-r-lg`}
-      >
-        <div className="flex flex-col justify-center items-center">
-          <h1 className="mb-2 font-bold text-2xl sm:text-3xl lg:text-4xl">
-            {props.cardProps?.korName}
+        <div className="py-4">
+          <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl">
+            {cardProps?.korName}
           </h1>
-          <div className="text-xs sm:text-sm lg:text-lg">
-            <span>{props.cardProps?.country}</span>
-            <span>
-              /
-              {props.cardProps?.category.map((el: string, idx: number) => {
-                return (
-                  <span className="mx-0.5" key={idx}>
-                    {el}
-                  </span>
-                );
-              })}
-            </span>
-            <span>/ {props.cardProps?.abv}%</span>
-            <span>/ {props.cardProps?.ibu} IBU</span>
-          </div>
-          <div className="my-4">
-            <span className="font-semibold sm:text-xl lg:text-2xl">
-              ⭐️ {props.cardProps?.totalAverageStars}
+          <div className="my-2">
+            <span className="text-xl sm:text-2xl lg:text-3xl">
+              ⭐️ {cardProps?.totalAverageStars}
             </span>
             <span className="text-y-gray ml-1 text-xs sm:text-sm lg:text-lg">
-              ({props.cardProps?.totalStarCount} ratings)
+              ({cardProps?.totalStarCount} ratings)
             </span>
           </div>
-          <div className="flex flex-wrap ml-2">
-            {props.cardProps?.beerTags.map((el: string, idx: number) => {
-              return <Tag key={idx}>{el}</Tag>;
-            })}
+          <div className="flex flex-wrap">
+            {cardProps?.beerDetailsTopTags
+              ? cardProps?.beerDetailsTopTags.map((el: string, idx: number) => {
+                  return <Tag key={idx}>{el}</Tag>;
+                })
+              : null}
           </div>
+        </div>
+      </div>
+      <div>
+        <div className="flex border-t border-y-lightGray">
+          <div className="my-4">
+            <BsChatDots className="ml-4" />
+          </div>
+          {cardProps?.bestRating ? (
+            <div className="flex flex-col text-sm my-4 mx-2">
+              <div className="text-xs sm:text-sm lg:text-lg">
+                <span>⭐️ {cardProps.bestRating?.bestStar} </span>
+                <span>{cardProps.bestRating?.bestContent}</span>
+              </div>
+              <div className="flex justify-end mt-1 mr-2 text-xs sm:text-sm lg:text-lg">
+                <div className="rounded-full w-5 h-5 mr-1">
+                  <Image
+                    alt={'user profile image'}
+                    src={cardProps?.bestRating?.profileImage}
+                    fill
+                  />
+                </div>
+                <span>{cardProps.bestRating?.bestNickname}</span>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

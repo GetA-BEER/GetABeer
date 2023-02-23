@@ -30,8 +30,7 @@ export default function PostRatingPage() {
 
   const cardProps: MiddleCardInfo = {
     beerId: beerInfo?.beerId,
-    thumbnail: '/images/krin.jpeg',
-    // thumbnail: beerInfo.beerDetailsBasic.thumbnail,
+    thumbnail: beerInfo?.beerDetailsBasic?.thumbnail,
     korName: beerInfo?.beerDetailsBasic?.korName,
     category: beerInfo?.beerCategoryTypes,
     country: beerInfo?.beerDetailsBasic?.country,
@@ -79,7 +78,7 @@ export default function PostRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.post('/ratings', reqBody).then((res) => {
+    axios.post('/api/ratings', reqBody).then((res) => {
       router.back();
       reset();
     });
