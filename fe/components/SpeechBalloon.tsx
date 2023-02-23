@@ -1,36 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { BiUser } from 'react-icons/bi';
 import { FaPen, FaTrash } from 'react-icons/fa';
-import { useRouter } from 'next/router';
-// import axios from '@/pages/api/axios';
+import axios from '@/pages/api/axios';
 import { TimeHandler } from '@/utils/TimeHandler';
+import CommentInput from './inputs/CommentInput';
+
+export interface RatingComment {
+  ratingId: number;
+  ratingCommentId: number;
+  userId: number;
+  nickname: string;
+  userImage: string;
+  content: string;
+  createdAt: string;
+  modifiedAt: string;
+}
+
+export interface PairingComment {
+  pairingId: number;
+  pairingCommentId: number;
+  userId: number;
+  nickname: string;
+  userImage: string;
+  content: string;
+  createdAt: string;
+  modifiedAt: string;
+}
 
 type CommentProps = {
-  props: {
-    ratingId: number;
-    ratingCommentId: number;
-    userId: number;
-    nickname: string;
-    content: string;
-    createdAt: string;
-    modifiedAt: string;
-    //유저 프로필이미지
-  };
+  props: RatingComment | PairingComment;
   isMine: boolean;
+  deleteFunc: Function;
 };
 
-export default function SpeechBalloon({ props, isMine }: CommentProps) {
-  const router = useRouter();
-  const editRatingComment = () => {
-    // router.replace(`/editrating/${props.cardProps.ratingId}`);
+export default function SpeechBalloon({
+  props,
+  isMine,
+  deleteFunc,
+}: CommentProps) {
+  const [date, setDate] = useState('');
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [content, setContent] = useState(props.content);
+
+  const editComment = () => {
+    setIsEditMode(true);
   };
 
-  const deleteRatingComment = () => {
-    // axios.delete(`/ratings/${props.cardProps.ratingId}`);
-    // router.back();
+  const deleteComment = () => {
+    if ('ratingCommentId' in props) {
+      deleteFunc(props.ratingCommentId);
+    }
   };
-
-  const [date, setDate] = useState<any>('');
 
   useEffect(() => {
     if (props?.modifiedAt !== undefined) {
@@ -38,7 +58,6 @@ export default function SpeechBalloon({ props, isMine }: CommentProps) {
       setDate(tmpDate);
     }
   }, [props?.modifiedAt]);
-  console.log('DateDateDate', typeof date);
 
   return (
     <div className="mx-5 mb-4">
@@ -52,22 +71,34 @@ export default function SpeechBalloon({ props, isMine }: CommentProps) {
         </div>
         {isMine ? (
           <div className="flex-1 flex justify-end items-center text-sm text-y-brown mr-2">
-            <button
-              className="flex items-center mr-2"
-              onClick={editRatingComment}
-            >
+            <button className="flex items-center mr-2" onClick={editComment}>
               <FaPen />
               <span className="text-y-black">수정</span>
             </button>
-            <button className="flex items-center" onClick={deleteRatingComment}>
+            <button className="flex items-center" onClick={deleteComment}>
               <FaTrash />
               <span className="text-y-black">삭제</span>
             </button>
           </div>
         ) : null}
-        <div className="m-3 mt-5 text-sm font-light leading-6">
-          {props.content}
-        </div>
+        {isEditMode ? (
+          <CommentInput
+            inputState={content}
+            setInputState={setContent}
+            postFunc={() => {
+              if ('ratingCommentId' in props) {
+                axios
+                  .patch(`/ratings/comments/${props.ratingCommentId}`, {
+                    content: content,
+                  })
+                  .catch((err) => console.log(err));
+              }
+              setIsEditMode(false);
+            }}
+          ></CommentInput>
+        ) : (
+          <div className="m-3 mt-5 text-sm font-light leading-6">{content}</div>
+        )}
       </div>
     </div>
   );

@@ -7,7 +7,9 @@ import CarbonatinTag from '@/components/tag/CarbonationTag';
 import BigInput from '@/components/inputs/BigInput';
 import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
-import MiddleCard, { testBeer } from '@/components/middleCards/MiddleCard';
+import MiddleCard, {
+  MiddleCardInfo,
+} from '@/components/middleCards/MiddleCard';
 import { TagMatcherToEng, TagMatcherToKor } from '@/utils/TagMatcher';
 import axios from '@/pages/api/axios';
 import StarRating from '@/components/inputs/StarRating';
@@ -22,6 +24,12 @@ export default function EditRatingPage() {
   const [flavor, setFlavor] = useState('');
   const [taste, setTaste] = useState('');
   const [carbonation, setCarbonation] = useState('');
+  const [cardProps, setCardProps] = useState<any>();
+
+  const getBeerInfo = (beerId: number) => {
+    if (beerId !== undefined) {
+    }
+  };
 
   useEffect(() => {
     if (ratingId !== undefined) {
@@ -29,16 +37,31 @@ export default function EditRatingPage() {
         setStar(res.data.star);
         setContent(res.data.content);
         setColor(res.data.ratingTag[0]);
-        setFlavor(res.data.ratingTag[2]);
-        setTaste(res.data.ratingTag[1]);
+        setFlavor(res.data.ratingTag[1]);
+        setTaste(res.data.ratingTag[2]);
         setCarbonation(res.data.ratingTag[3]);
+        axios.get(`/beers/${res.data.beerId}`).then((res) => {
+          const beerIInfo: MiddleCardInfo = {
+            beerId: res.data.beerId,
+            thumbnail: '/images/krin.jpeg',
+            // thumbnail: res.data.beerDetailsBasic.thumbnail,
+            korName: res.data.beerDetailsBasic.korName,
+            category: res.data.beerCategoryTypes,
+            country: res.data.beerDetailsBasic.country,
+            abv: res.data.beerDetailsBasic.abv,
+            ibu: res.data.beerDetailsBasic.ibu,
+            totalStarCount:
+              res.data.beerDetailsCounts.totalStarCount ||
+              res.data.beerDetailsCounts.femaleStarCount +
+                res.data.beerDetailsCounts.maleStarCount,
+            totalAverageStars: res.data.beerDetailsStars.totalAverageStars,
+            beerTags: res.data.beerDetailsTopTags || [],
+          };
+          setCardProps(beerIInfo);
+        });
       });
     }
   }, [ratingId]);
-
-  const ratingChanged = (newRating: number) => {
-    setStar(newRating);
-  };
 
   const handleSubmit = () => {
     const reqBody = {
@@ -59,7 +82,7 @@ export default function EditRatingPage() {
   return (
     <PageContainer>
       <main className="px-6">
-        <MiddleCard cardProps={testBeer} />
+        <MiddleCard cardProps={cardProps} />
         <div>
           <div className="mt-5">
             <div>별점</div>
