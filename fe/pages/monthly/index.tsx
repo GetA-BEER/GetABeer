@@ -12,7 +12,6 @@ export default function MonthlyPage() {
   );
   useEffect(() => {
     axios.get('/api/beers/monthly').then((res) => {
-      console.log(res.data);
       setMonthlyBeerList(res.data);
     });
   }, []);
