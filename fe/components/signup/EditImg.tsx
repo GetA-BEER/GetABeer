@@ -1,9 +1,5 @@
 import { UseFormRegister, RegisterOptions } from 'react-hook-form';
-import {
-  IoChevronBack,
-  IoChevronForwardOutline,
-  IoSettings,
-} from 'react-icons/io5';
+import { IoSettings } from 'react-icons/io5';
 interface IFormValues {
   userBeerTags: Array<string>;
   gender: string;

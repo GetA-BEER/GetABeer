@@ -64,7 +64,7 @@ export default function Mypage() {
         <div className="flex flex-col items-center my-6">
           <Image
             unoptimized
-            className="rounded-full"
+            className="h-20 w-20 rounded-full"
             alt="프로필사진"
             src={userImge}
             width={80}
