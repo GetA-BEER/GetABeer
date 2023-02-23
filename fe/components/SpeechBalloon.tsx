@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { BiUser } from 'react-icons/bi';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import axios from '@/pages/api/axios';
+import Image from 'next/image';
 import { TimeHandler } from '@/utils/TimeHandler';
 import CommentInput from './inputs/CommentInput';
 
@@ -63,7 +63,9 @@ export default function SpeechBalloon({
     <div className="mx-5 mb-4">
       <div className="w-full h-fit relative ml-4 p-4 rounded-r-lg rounded-b-lg bg-y-cream after:border-t-[30px] after:border-l-[33px] after:border-t-y-cream after:border-l-transparent after:absolute after:top-0 after:-left-8">
         <div className="flex">
-          <BiUser className=" bg-y-brown text-white rounded-full w-10 h-10 ml-1" />
+          <div className="rounded-full w-10 h-10 ml-1">
+            <Image alt="user profile image" src={props.userImage} fill />
+          </div>
           <div className="flex flex-col ml-2">
             <span>{props.nickname}</span>
             <span className="text-xs text-y-gray">{date}</span>

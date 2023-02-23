@@ -14,7 +14,7 @@ export interface RatingCardProps {
   isUserLikes: boolean;
 }
 import { ToDateString } from '@/utils/ToDateString';
-import { BiUser } from 'react-icons/bi';
+import Image from 'next/image';
 import { HiOutlineChat } from 'react-icons/hi';
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import { FaPen, FaTrash } from 'react-icons/fa';
@@ -57,7 +57,13 @@ export default function RatingCard(props: {
   return (
     <div>
       <div className="flex">
-        <BiUser className=" bg-y-brown text-white rounded-full w-10 h-10 ml-1" />
+        <div className="rounded-full w-10 h-10 ml-1">
+          <Image
+            alt="user profile image"
+            src={props.cardProps.userImage}
+            fill
+          />
+        </div>
         <div className="flex flex-col ml-2">
           <span>{props.cardProps.nickname}</span>
           <span className="text-xs text-y-gray">
