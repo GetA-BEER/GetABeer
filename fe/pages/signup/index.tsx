@@ -40,7 +40,7 @@ export default function Signup() {
       password: password,
     };
     axios
-      .post('/register/user', reqBody)
+      .post('/api/register/user', reqBody)
       .then((res) => {
         console.log(res);
         Router.push({

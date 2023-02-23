@@ -1,6 +1,10 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
 import Head from 'next/head';
-import { IoChevronBack, IoChevronForwardOutline } from 'react-icons/io5';
+import {
+  IoChevronBack,
+  IoChevronForwardOutline,
+  IoSettings,
+} from 'react-icons/io5';
 import GenderBtn from '@/components/signup/GenderBtn';
 import AgeBox from '@/components/signup/AgeBox';
 import InterestTag from '@/components/signup/ InterestTag';
@@ -9,12 +13,19 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import axios from '@/pages/api/axios';
 import Link from 'next/link';
+import { EditName } from '@/components/signup/EditName';
+import Image from 'next/image';
+import { BiErrorAlt } from 'react-icons/bi';
+import Router from 'next/router';
+import { EditImg } from '@/components/signup/EditImg';
 
 interface IFormValues {
-  userBeerTags: string;
+  userBeerTags: Array<string>;
   gender: string;
   age: string;
-  userBeerCategories: string;
+  userBeerCategories: Array<string>;
+  nickname: string;
+  image: string[];
 }
 export default function MyEdit() {
   const {
@@ -26,46 +37,89 @@ export default function MyEdit() {
     formState: { errors },
   } = useForm<IFormValues>({
     defaultValues: {
+      nickname: '',
       age: '',
       gender: '',
-      userBeerCategories: '',
-      userBeerTags: '',
+      userBeerCategories: [],
+      userBeerTags: [],
     },
     mode: 'onChange',
   });
-
+  console.log(watch('image'));
+  const [userImge, setUserImge] = useState('');
+  const [nameMessage, setNameMessage] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
+  const image = watch('image');
+  useEffect(() => {
+    if (image && image.length > 0) {
+      const file = image[0];
+      setImagePreview(URL.createObjectURL(file));
+    }
+  }, [image]);
   useEffect(() => {
     axios
-      .get('/user')
+      .get('api/user')
       .then((res) => {
         console.log(res.data);
+        setUserImge(res.data.imageUrl);
         reset(res.data);
       })
       .catch((err) => console.log(err));
   }, [reset]);
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
-    console.log(data);
-    const { gender, age, userBeerCategories, userBeerTags } = getValues();
-    editClick(gender, age, userBeerCategories, userBeerTags);
+    // console.log(data);
+    const { nickname, gender, age, userBeerCategories, userBeerTags, image } =
+      getValues();
+
+    editClick(nickname, gender, age, userBeerCategories, userBeerTags);
+    imgEdit(image);
   };
 
   const editClick = (
+    nickname: string,
     gender: string,
     age: string,
-    userBeerCategories: any,
-    userBeerTags: any
+    userBeerCategories: string[],
+    userBeerTags: string[]
   ) => {
     const reqBody = {
+      nickname: nickname,
       gender: gender,
       age: age,
       userBeerCategories: userBeerCategories,
       userBeerTags: userBeerTags,
     };
+
     axios
-      .patch(`/mypage/userinfo`, reqBody)
+      .patch(`/api/mypage/userinfo`, reqBody)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        // Router.push({
+        //   pathname: '/mypage',
+        // });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data.status === 409) {
+          setNameMessage('닉네임 중복입니다!');
+        }
+      });
+  };
+
+  const imgEdit = (image: string[]) => {
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      withCredentials: true,
+    };
+    const formData = new FormData();
+    formData.append('image', image[0]);
+    axios
+      .patch(`/api/mypage/userinfo/image`, formData, config)
+      .then((res) => {
+        console.log(res.data);
 
         // Router.push({
         //   pathname: '/',
@@ -75,7 +129,6 @@ export default function MyEdit() {
         console.log(err);
       });
   };
-
   return (
     <>
       <Head>
@@ -90,27 +143,82 @@ export default function MyEdit() {
             <IoChevronBack className="w-6 h-6" />
           </button>
         </Link>
-        <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
+        <div className="my-4 text-center text-xl bg-white rounded-lg font-semibold">
           회원정보 수정
         </div>
-        <div className="flex flex-col items-center my-6">
-          <div className="w-24 h-24 bg-y-cream rounded-2xl"></div>
-        </div>
         <form onSubmit={handleSubmit(onValid)}>
+          <div className="m-auto max-w-md flex flex-col items-center my-6">
+            <div className="relative">
+              <div className="max-w-md absolute p-14 ">
+                <EditImg register={register} />
+              </div>
+              {imagePreview ? (
+                <Image
+                  alt="프로필사진"
+                  src={imagePreview}
+                  width={80}
+                  height={80}
+                  className="rounded-full"
+                />
+              ) : (
+                <Image
+                  className="rounded-full"
+                  alt="프로필사진"
+                  src={userImge}
+                  width={80}
+                  height={80}
+                />
+              )}
+            </div>
+          </div>
+
           <div className="m-auto px-1 pb-5 max-w-md mb-10">
             <div className=" border divide-y divide-gray-200 rounded-xl">
-              <div className="flex w-full px-3 py-4 justify-between text-sm">
-                <div>닉네임</div>
-                <input
-                  className="text-right"
-                  type="text"
-                  placeholder="닉네임"
-                ></input>
+              <div>
+                <EditName register={register} />
+                {nameMessage ? (
+                  <div className="flex mx-3 mb-1 gap-0.5 text-red-600 text-xs">
+                    <BiErrorAlt />
+                    {nameMessage}
+                  </div>
+                ) : null}
               </div>
               <GenderBtn register={register} />
               <AgeBox register={register} />
-              <BeerCategory register={register} />
-              <InterestTag register={register} />
+              <div>
+                <BeerCategory
+                  register={register}
+                  rules={{
+                    validate: {
+                      validate: (userBeerCategories) =>
+                        userBeerCategories.length < 3 ||
+                        '최대 2개까지 선택 가능합니다!',
+                    },
+                  }}
+                />
+                {errors.userBeerCategories && (
+                  <p className="flex text-xs mx-3 mb-1 gap-0.5 text-red-500">
+                    <BiErrorAlt /> {errors.userBeerCategories.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <InterestTag
+                  register={register}
+                  rules={{
+                    validate: {
+                      validate: (userBeerTags) =>
+                        userBeerTags.length < 5 ||
+                        '최대 4개까지 선택 가능합니다!',
+                    },
+                  }}
+                />
+                {errors.userBeerTags && (
+                  <p className="flex text-xs  mx-3 mb-1 gap-0.5 text-red-500">
+                    <BiErrorAlt /> {errors.userBeerTags.message}
+                  </p>
+                )}
+              </div>
               <Link
                 href={'/pwedit'}
                 className="flex w-full px-3 py-4 justify-between"

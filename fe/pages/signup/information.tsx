@@ -10,10 +10,12 @@ import Router from 'next/router';
 import axios from '@/pages/api/axios';
 
 interface IFormValues {
-  userBeerTags: string;
+  userBeerTags: Array<string>;
   gender: string;
   age: string;
-  userBeerCategories: string;
+  userBeerCategories: Array<string>;
+  nickname: string;
+  image: string[];
 }
 
 export default function Information() {
@@ -27,8 +29,8 @@ export default function Information() {
     defaultValues: {
       gender: 'REFUSE',
       age: 'REFUSE',
-      userBeerCategories: '',
-      userBeerTags: '',
+      userBeerCategories: [],
+      userBeerTags: [],
     },
     mode: 'onChange',
   });
@@ -43,8 +45,8 @@ export default function Information() {
   const signUpClick = (
     gender: string,
     age: string,
-    userBeerCategories: any,
-    userBeerTags: any
+    userBeerCategories: Array<string>,
+    userBeerTags: Array<string>
   ) => {
     const reqBody = {
       gender: gender,
@@ -53,7 +55,7 @@ export default function Information() {
       userBeerTags: userBeerTags,
     };
     axios
-      .post(`/register/user/${Router.query.userId}`, reqBody)
+      .post(`/api/register/user/${Router.query.userId}`, reqBody)
       .then((res) => {
         console.log(res);
         Router.push({

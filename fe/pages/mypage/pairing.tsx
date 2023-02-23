@@ -4,6 +4,8 @@ import Head from 'next/head';
 import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
+import { IoChevronBack } from 'react-icons/io5';
+import Link from 'next/link';
 
 export default function Pairing() {
   const [name, setName] = useState();
@@ -43,6 +45,11 @@ export default function Pairing() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
+        <Link href={'/mypage'}>
+          <button className="m-4">
+            <IoChevronBack className="w-6 h-6" />
+          </button>
+        </Link>
         <div className="my-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
           {name}님의 페어링
         </div>

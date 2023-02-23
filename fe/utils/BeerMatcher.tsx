@@ -29,3 +29,24 @@ export const BeerCountryMatcherToKor = (str: string) => {
       return '';
   }
 };
+
+export const BeerCategoryMatcher = (str: string[]) => {
+  switch (str) {
+    case ['에일']:
+      return 'ALE';
+    case ['라거']:
+      return 'LAGER';
+    case ['밀맥주']:
+      return 'WEIZEN';
+    case ['흑맥주']:
+      return 'DUNKEL';
+    case ['필스너']:
+      return 'PILSENER';
+    case ['과일']:
+      return 'FRUIT_BEER';
+    case ['무알콜']:
+      return 'NON_ALCOHOLIC';
+    case ['기타']:
+      return 'ETC';
+  }
+};

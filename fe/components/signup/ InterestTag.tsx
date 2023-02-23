@@ -1,9 +1,11 @@
 import { UseFormRegister, RegisterOptions } from 'react-hook-form';
 interface IFormValues {
-  userBeerTags: string;
+  userBeerTags: Array<string>;
   gender: string;
   age: string;
-  userBeerCategories: string;
+  userBeerCategories: Array<string>;
+  nickname: string;
+  image: string[];
 }
 type InputProps = {
   register: UseFormRegister<IFormValues>;
@@ -93,7 +95,7 @@ export default function InterestTag({ rules, register }: InputProps) {
   //   '탄산 약',
   //   '탄산 중',
   //   '탄산강',
-  //   '탄산 無'
+  //   '탄산 無',
   // ];
   return (
     <div className="px-2 pt-2">

@@ -18,7 +18,7 @@ import {
   HiOutlineChartPie,
   HiOutlineMapPin,
 } from 'react-icons/hi2';
-import Router from 'next/router';
+
 export default function Mypage() {
   const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
   const [, setAccessToken] = useRecoilState(accessToken);
@@ -26,7 +26,7 @@ export default function Mypage() {
   const [userImge, setUserImge] = useState('');
   const fetchUser = () => {
     axios
-      .get('/user')
+      .get('/api/user')
       .then((res) => {
         setUserName(res.data.nickname);
         setUserImge(res.data.imageUrl);
@@ -38,7 +38,7 @@ export default function Mypage() {
   }, []);
   const handleClickLogout = () => {
     axios
-      .post('/user/logout')
+      .post('/api/user/logout')
       .then((res) => {
         console.log(res);
       })
@@ -58,12 +58,13 @@ export default function Mypage() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl ">
-        <div className="my-4 text-center text-lg bg-white font-semibold">
+        <div className="my-4 text-center text-xl bg-white font-semibold">
           마이 페이지
         </div>
         <div className="flex flex-col items-center my-6">
           <Image
-            className="rounded-2xl"
+            unoptimized
+            className="rounded-full"
             alt="프로필사진"
             src={userImge}
             width={80}
@@ -90,13 +91,16 @@ export default function Mypage() {
               </div>
               <IoChevronForwardOutline className="w-5 h-5 " />
             </Link>
-            <button className="flex w-full p-5 justify-between hover:bg-gray-200 ">
+            <Link
+              href={'/mypage/rating'}
+              className="flex w-full p-5 justify-between hover:bg-gray-200 "
+            >
               <div className="flex gap-2 ">
                 <HiOutlinePencil className="self-center w-5 h-5" />
-                나의 코멘트
+                나의 평가
               </div>
               <IoChevronForwardOutline className="w-5 h-5" />
-            </button>
+            </Link>
             <Link
               href={'/mypage/pairing'}
               className="flex w-full p-5 justify-between hover:bg-gray-200 "
@@ -107,13 +111,16 @@ export default function Mypage() {
               </div>
               <IoChevronForwardOutline className="w-5 h-5" />
             </Link>
-            <button className="flex w-full p-5 justify-between hover:bg-gray-200">
+            <Link
+              href={'/mypage/comment'}
+              className="flex w-full p-5 justify-between hover:bg-gray-200"
+            >
               <div className="flex gap-2 ">
                 <IoChatboxEllipsesOutline className="self-center w-5 h-5" />
                 나의 댓글
               </div>
               <IoChevronForwardOutline className="w-5 h-5" />
-            </button>
+            </Link>
             <button className="flex w-full p-5 justify-between hover:bg-gray-200">
               <div className="flex gap-2 ">
                 <HiOutlineMapPin className="self-center w-5 h-5" />

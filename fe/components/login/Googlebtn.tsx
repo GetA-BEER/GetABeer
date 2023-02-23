@@ -1,13 +1,17 @@
 import { FcGoogle } from 'react-icons/fc';
-type ButtonProps = {
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
-  //onClick이벤트 타입
-};
-export default function GoogleBtn({ onClick }: ButtonProps) {
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
+
+const API = process.env.API_URL;
+
+export default function GoogleBtn() {
+  const handleLogin = () => {
+    return window.location.assign(`${API}/oauth2/authorization/google`);
+  };
   return (
     <div>
       <button
-        onClick={onClick}
+        onClick={handleLogin}
         className="flex justify-center items-center w-11 h-11 rounded-full border border-y-gray hover:bg-gray-200 text-xs"
       >
         <FcGoogle className="w-6 h-6" />
