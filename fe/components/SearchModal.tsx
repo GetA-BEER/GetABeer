@@ -2,18 +2,37 @@ import { useState, useEffect, useRef } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { MdCancel } from 'react-icons/md';
 import SearchSwiper from './SearchSwiper';
-
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { searchHistory } from '@/atoms/searchHistory';
 type SearchProps = {
   setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+interface searchWord {
+  id: number;
+  word: string;
+}
+
 export default function SearchModal({ setIsSearching }: SearchProps) {
-  const [inputState, setInputState] = useState('');
-  const [searchHistoryList, setSearchHistoryList] = useState<string[] | []>([
-    '검색어 저장은',
-    '3개 정도만',
-    '하는건 어떨까요',
-  ]);
+  const router = useRouter();
+  const [inputState, setInputState] = useState<string>('');
+  const [searchHistoryList, setSearchHistoryList] =
+    useRecoilState(searchHistory);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const history = localStorage.getItem('searchHistoryList') || '[]';
+      setSearchHistoryList(JSON.parse(history));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      'searchHistoryList',
+      JSON.stringify(searchHistoryList)
+    );
+  }, [searchHistoryList]);
+
   const beerCategoryList = [
     '@에일',
     '@라거',
@@ -50,6 +69,32 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
   useEffect(() => {
     if (inputRef.current !== null) inputRef.current.focus();
   });
+
+  const onSearch = () => {
+    router.push({ pathname: '/search', query: { q: inputState } });
+    addSearchHistory(inputState);
+    setIsSearching(false);
+  };
+
+  const addSearchHistory = (word: string) => {
+    const newSearchWord = {
+      id: Date.now(),
+      word,
+    };
+    setSearchHistoryList([newSearchWord, ...searchHistoryList]);
+  };
+
+  const removeSearchHistory = (id: number) => {
+    const filtered = searchHistoryList.filter((el: searchWord) => {
+      return el.id !== id;
+    });
+    setSearchHistoryList(filtered);
+  };
+
+  const clearSearchHistory = () => {
+    setSearchHistoryList([]);
+  };
+
   return (
     <div
       className="fixed inset-0 w-full h-full z-50 bg-black/50"
@@ -78,9 +123,15 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
             onChange={(e) => {
               onInputChange(e);
             }}
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') {
+                onSearch();
+              }
+            }}
           ></input>
           {inputState !== '' ? (
             <button
+              type="button"
               onClick={() => {
                 setInputState('');
               }}
@@ -90,30 +141,48 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
           ) : null}
         </form>
         <div className="mx-5 pb-2">
-          <h4 className="text-y-brown">최근검색어</h4>
+          <div className="flex justify-between">
+            <h4 className="text-y-brown">최근검색어</h4>
+            {searchHistoryList.length ? (
+              <button
+                className="text-y-gray/80 font-light text-sm"
+                onClick={clearSearchHistory}
+              >
+                전체 삭제
+              </button>
+            ) : null}
+          </div>
           <ul className="font-light">
-            {searchHistoryList?.map((el, idx) => {
-              return (
-                <li
-                  key={idx}
-                  className="flex justify-between p-1 hover:bg-y-lightGray/80"
-                >
-                  {el}
-                  <button className="text-y-gray" onClick={() => {}}>
-                    <MdCancel className="mx-1 w-5 h-4" />
-                  </button>
-                </li>
-              );
-            })}
+            {searchHistoryList.length
+              ? searchHistoryList?.map((el: searchWord) => {
+                  return (
+                    <li
+                      key={el.id}
+                      className="flex justify-between p-1 hover:bg-y-lightGray/80"
+                    >
+                      {el.word}
+                      <button
+                        className="text-y-gray"
+                        onClick={() => removeSearchHistory(el.id)}
+                      >
+                        <MdCancel className="mx-1 w-5 h-4" />
+                      </button>
+                    </li>
+                  );
+                })
+              : null}
           </ul>
         </div>
         <div className="mx-5 pb-3">
           <h4 className="text-y-brown">카테고리 검색</h4>
-          <SearchSwiper list={beerCategoryList} />
+          <SearchSwiper
+            list={beerCategoryList}
+            setIsSearching={setIsSearching}
+          />
         </div>
         <div className="mx-5 pb-4">
           <h4 className="text-y-brown">태그 검색</h4>
-          <SearchSwiper list={tagList} />
+          <SearchSwiper list={tagList} setIsSearching={setIsSearching} />
         </div>
       </div>
     </div>
