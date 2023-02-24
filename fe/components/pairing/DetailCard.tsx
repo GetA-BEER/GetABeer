@@ -1,5 +1,4 @@
 import { FiThumbsUp } from 'react-icons/fi';
-// import { PairingInfo } from '@/pages/pairing/[id]';
 import { MdModeEdit } from 'react-icons/md';
 import { HiTrash } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';

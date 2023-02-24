@@ -14,31 +14,17 @@ import axios from '@/pages/api/axios';
 export default function PostPairing() {
   const router = useRouter();
   const [beerInfo] = useRecoilState(currentBeer);
-
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('카테고리');
   const [imageData, setImageData] = useState([]);
   const [finalData, setFinalData] = useState<any>('');
-
-  // userInfo 로직, userId가 필요하다.
-  const [userInfo, setUserInfo] = useState();
   const [TOKEN, setTOKEN] = useState();
+
   useEffect(() => {
     const localInfo = window.localStorage.getItem('recoil-persist');
     if (localInfo !== null) {
       const tmpData = JSON.parse(localInfo);
       setTOKEN(tmpData.accessToken);
-      // const config = {
-      //   headers: {
-      //     authorization: TOKEN,
-      //     'content-type': 'multipart/form-data',
-      //   },
-      //   withCredentials: true,
-      // };
-      // axios
-      //   .get(`/api/user`, config)
-      //   .then((response) => setUserInfo(response.data))
-      //   .catch((error) => console.log(error));
     }
   }, [TOKEN]);
 

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import SmallCardController from '@/components/smallCards/SmallCardController';
+import SmallRatingCard from '@/components/smallCards/SmallRatingCard';
 import SmallPairingCard from '@/components/smallCards/SmallPairingCard';
 import SimilarBeer from '@/components/smallCards/SimilarBeer';
 import RatingTitle from '@/components/beerPage/RatingTitle';
@@ -24,6 +24,7 @@ export default function Beer() {
   const [commentInfo, setCommentInfo] = useState<any>();
   const [pairingInfo, setPairingInfo] = useState<any>();
   const [similarBeer, setSimilarBeer] = useState<any>();
+
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
@@ -71,8 +72,6 @@ export default function Beer() {
     }
   }, [curRoute]);
 
-  // console.log('pairingInfo?.data', pairingInfo?.data);
-
   return (
     <>
       <Head>
@@ -92,7 +91,6 @@ export default function Beer() {
         />
 
         <div className="m-3">
-          {/* 맥주 등록 이미지 없다. 현재 썸네일 이미지 경로 따로 없는 상태*/}
           <BeerDetailCard cardProps={beerInfo} />
         </div>
 
@@ -100,7 +98,7 @@ export default function Beer() {
           ratingCount={commentInfo?.pageInfo?.totalElements}
           beerId={curRoute}
         />
-        <SmallCardController cardProps={commentInfo?.data} />
+        <SmallRatingCard ratingProps={commentInfo?.data} />
 
         <PairingTitle
           pairngCount={pairingInfo?.pageInfo?.totalElements}
@@ -108,6 +106,7 @@ export default function Beer() {
         />
         <SmallPairingCard pairingProps={pairingInfo?.data} />
         <SimilarBeer similarBeer={similarBeer} />
+        <div className="h-20"></div>
       </main>
     </>
   );
