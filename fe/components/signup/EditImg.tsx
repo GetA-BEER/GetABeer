@@ -1,5 +1,5 @@
 import { UseFormRegister, RegisterOptions } from 'react-hook-form';
-import { IoSettings } from 'react-icons/io5';
+import { IoCamera } from 'react-icons/io5';
 interface IFormValues {
   userBeerTags: Array<string>;
   gender: string;
@@ -24,7 +24,7 @@ export const EditImg = ({ rules, register }: InputProps) => {
         accept="image/*"
       />
       <label htmlFor="file" className="cursor-pointer">
-        <IoSettings className="w-8 h-8 bg-gray-100 rounded-full p-0.5 text-y-brown" />
+        <IoCamera className="w-8 h-8 bg-white border border-gray-300 rounded-full p-1 text-y-brown" />
       </label>
     </section>
   );

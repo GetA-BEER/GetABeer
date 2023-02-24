@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import axios from '@/pages/api/axios';
 import { useForm } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import Router from 'next/router';
 
@@ -22,7 +22,7 @@ interface IFormValues {
   editpassword: string;
 }
 export default function Login() {
-  const [, setAccessToken] = useRecoilState(accessToken);
+  const [Token, setAccessToken] = useRecoilState(accessToken);
   const [showLoginError, setShowLoginError] = useState(false);
   const {
     register,
@@ -36,6 +36,16 @@ export default function Login() {
     const { email, password } = getValues();
     handleClickLogin(email, password);
   };
+  const ACCESS_EXPIRY_TIME = 2 * 60 * 60 * 1000; // 2시간
+  const REFRESH_EXPIRY_TIME = 24 * 60 * 60 * 1000; // 24시간
+
+  const setAxiosHeader = (value: any) =>
+    (axios.defaults.headers.common['Authorization'] = value);
+  const onLoginSuccess = (res: any) => {
+    setAccessToken(res.headers.authorization);
+    setAxiosHeader(res.headers.authorization);
+    setTimeout(onRefresh, ACCESS_EXPIRY_TIME - 60000);
+  };
 
   const handleClickLogin = (email: string, password: String) => {
     const reqBody = {
@@ -45,11 +55,7 @@ export default function Login() {
     axios
       .post('/api/login', reqBody)
       .then((res) => {
-        const accessToken = res.headers.authorization;
-        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-        axios.defaults.headers.common['Authorization'] = `${accessToken}`;
-        setAccessToken(res.headers.authorization);
-
+        onLoginSuccess(res);
         Router.push({
           pathname: '/',
         });
@@ -57,6 +63,27 @@ export default function Login() {
       .catch((err) => {
         // console.log(err);
         setShowLoginError(true);
+      });
+  };
+  const onRefresh = () => {
+    axios
+      .post('/api/refresh')
+      .then((res) => {
+        onLoginSuccess(res);
+      })
+      .catch(() => {
+        onLogout();
+      });
+  };
+
+  const onLogout = () => {
+    axios
+      .post('/api/user/logout')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 

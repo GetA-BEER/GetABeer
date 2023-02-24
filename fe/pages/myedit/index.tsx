@@ -1,10 +1,6 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
 import Head from 'next/head';
-import {
-  IoChevronBack,
-  IoChevronForwardOutline,
-  IoSettings,
-} from 'react-icons/io5';
+import { IoChevronBack, IoChevronForwardOutline } from 'react-icons/io5';
 import GenderBtn from '@/components/signup/GenderBtn';
 import AgeBox from '@/components/signup/AgeBox';
 import InterestTag from '@/components/signup/ InterestTag';
@@ -25,7 +21,7 @@ interface IFormValues {
   age: string;
   userBeerCategories: Array<string>;
   nickname: string;
-  image: Array<string>;
+  image: any;
 }
 export default function MyEdit() {
   const {
@@ -50,12 +46,7 @@ export default function MyEdit() {
   const [nameMessage, setNameMessage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
   const image = watch('image');
-  // useEffect(() => {
-  //   if (image && image.length > 0) {
-  //     const file = image[0];
-  //     setImagePreview(URL.createObjectURL(file));
-  //   }
-  // }, [image]);
+
   useEffect(() => {
     axios.get('api/user').then((res) => {
       // console.log(res.data);
@@ -67,13 +58,15 @@ export default function MyEdit() {
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
     // console.log(data);
-    const { nickname, gender, age, userBeerCategories, userBeerTags, image } =
+    const { nickname, gender, age, userBeerCategories, userBeerTags } =
       getValues();
 
     editClick(nickname, gender, age, userBeerCategories, userBeerTags);
+  };
+  const onImg = () => {
+    const { image } = getValues();
     imgEdit(image);
   };
-
   const editClick = (
     nickname: string,
     gender: string,
@@ -104,8 +97,14 @@ export default function MyEdit() {
         }
       });
   };
-
-  const imgEdit = (image: string[]) => {
+  useEffect(() => {
+    if (image && image.length > 0) {
+      const file = image[0];
+      setImagePreview(URL.createObjectURL(file));
+      imgEdit(image);
+    }
+  }, [image]);
+  const imgEdit = (image: any) => {
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
@@ -114,14 +113,12 @@ export default function MyEdit() {
     };
     const formData = new FormData();
     formData.append('image', image[0]);
-    axios
-      .patch(`/api/mypage/userinfo/image`, formData, config)
-      .then((res) => {
-        // console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    axios.patch(`/api/mypage/userinfo/image`, formData, config).then((res) => {
+      // console.log(res.data);
+    });
+    // .catch((err) => {
+    //   console.log(err);
+    // });
   };
   return (
     <>
@@ -140,7 +137,7 @@ export default function MyEdit() {
         <div className="my-4 text-center text-xl bg-white rounded-lg font-semibold">
           회원정보 수정
         </div>
-        <form onSubmit={handleSubmit(onValid)}>
+        <form onSubmit={handleSubmit(onValid, onImg)}>
           <div className="m-auto max-w-md flex flex-col items-center my-6">
             <div className="relative">
               <div className="max-w-md absolute p-14 ">
