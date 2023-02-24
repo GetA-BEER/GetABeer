@@ -1,6 +1,7 @@
 package be.domain.beer.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
@@ -35,7 +36,8 @@ public class WeeklyBeer extends BaseTimeEntity implements Serializable {
 	private String korName;
 	private String country;
 	private String thumbnail;
-	private String categoryString;
+	@Embedded
+	private WeeklyBeerCategory weeklyBeerCategory;
 	private Double abv;
 	private Integer ibu;
 	private Double averageStar;
@@ -45,9 +47,14 @@ public class WeeklyBeer extends BaseTimeEntity implements Serializable {
 		this.korName = beer.getBeerDetailsBasic().getKorName();
 		this.country = beer.getBeerDetailsBasic().getCountry();
 		this.thumbnail = beer.getBeerDetailsBasic().getThumbnail();
-		this.categoryString = beer.getBeerBeerCategories().stream()
-			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory().toString())
-			.collect(Collectors.joining(", "));
+		List<String> categoryList = beer.getBeerBeerCategories().stream()
+			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory().getBeerCategoryType().toString())
+			.collect(Collectors.toList());
+		if (categoryList.size() == 2) {
+			this.weeklyBeerCategory.addCategories(categoryList);
+		} else {
+			this.weeklyBeerCategory.addCategory(categoryList.get(0));
+		}
 		this.abv = beer.getBeerDetailsBasic().getAbv();
 		this.ibu = beer.getBeerDetailsBasic().getIbu();
 		this.averageStar = beer.getBeerDetailsStars().getTotalAverageStars();

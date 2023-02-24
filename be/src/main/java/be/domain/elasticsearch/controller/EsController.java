@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.domain.beer.entity.Beer;
 import be.domain.elasticsearch.entity.BeerDocument;
 import be.domain.elasticsearch.service.ElasticsearchService;
 import lombok.RequiredArgsConstructor;
 
 @Validated
-@RestController
+// @RestController
 @RequestMapping({"/api/search/es"})
 @RequiredArgsConstructor
 public class EsController {
