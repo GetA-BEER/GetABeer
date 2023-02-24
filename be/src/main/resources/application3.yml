@@ -10,8 +10,8 @@ spring:
   cache:
     type: redis
   redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+    host: localhost # ${REDIS_ENDPOINT}
+    port: 6379
   datasource:
     url: jdbc:h2:mem:test
     properties:
@@ -35,17 +35,17 @@ spring:
       client:
         registration:
           google:
-            client-id: 1004190948378-1qj111p44ep1cp02m65gcnjkn7ueovk1.apps.googleusercontent.com
-            client-secret: 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
-            redirect-uri: https://server.getabeer.co.kr/login/oauth2/code/google
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
             authorization-grant-type: authorization_code
             scope:
               - email
               - profile
           kakao:
-            client-id: 1b2afda90af8135b2c271f2b341bcbb9
-            client-secret: giUnwvb21hnJk9h7XcRwM1bCwsTs7BPD
-            redirect-uri: https://server.getabeer.co.kr/login/oauth2/code/kakao
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope:
@@ -54,9 +54,9 @@ spring:
               - profile_image
             client_name: Kakao
           naver:
-            client-id: 16aGFVMTQ0u97Ml0KaOb
-            client-secret: qf_Sfj8A3M
-            redirect-uri: https://server.getabeer.co.kr/login/oauth2/code/naver
+            client-id: ${NAVER_CLIENT_ID}
+            client-secret: ${NAVER_CLIENT_SECRET}
+            redirect-uri: http://localhost:8080/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             scope:
@@ -78,8 +78,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: getabeer0310@gmail.com
-    password: jbnkogszqifklzkv
+    username: ${SMTP_GOOGLE_ACCOUNT}
+    password: ${SMTP_GOOGLE_PASSWORD}
     properties:
       mail:
         smtp:
@@ -102,8 +102,8 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey: AKIA4PVPT55XIQY65LGK
-      secretKey: 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
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
     s3:
       bucket: getabeer
       dir: image
@@ -117,13 +117,13 @@ mail:
   address:
     admin: admin@gmail.com
 jwt:
-  secret-key: temporary1111getabeer1111temporary1111getabeer
+  secret-key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 120
   refresh-token-expiration-minutes: 1440
 app:
   oauth2:
     authorizedRedirectUris:
-      - https://server.getabeer.co.kr/oauth/redirect
+      - http://localhost:8080/oauth/redirect
 webdriver:
   chrome:
     driverid: webdriver.chrome.driver

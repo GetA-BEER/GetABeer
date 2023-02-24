@@ -17,7 +17,7 @@ import be.domain.elasticsearch.repository.BeerSearchQueryRepository;
 import be.domain.elasticsearch.repository.BeerSearchRepository;
 import lombok.RequiredArgsConstructor;
 
-@Service
+// @Service
 @RequiredArgsConstructor
 public class ElasticsearchService {
 	private final BeerRepository beerRepository;
