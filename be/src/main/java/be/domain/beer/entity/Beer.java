@@ -42,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Beer extends BaseTimeEntity implements Serializable {
 
-	private static final long serialVersionUID = 6494678977089006639L;
+	private static final Long serialVersionUID = 6494678977089006639L;
 
 	@Id
 	@Column(name = "beer_id")
