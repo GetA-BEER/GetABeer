@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@Document(indexName = "beer")
+// @Document(indexName = "beer")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Mapping(mappingPath = "elastic/beer-mapping.json")

@@ -1,13 +1,11 @@
 package be.domain.beer.service;
 
 import static be.domain.user.entity.enums.Role.*;
-import static be.global.config.CacheConstant.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -30,7 +28,6 @@ import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.User;
-import be.domain.user.entity.enums.Role;
 import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
@@ -159,14 +156,14 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
-	@Cacheable(MONTHLY_BEER)
+	// @Cacheable(MONTHLY_BEER)
 	@Transactional(readOnly = true)
 	public List<MonthlyBeer> findMonthlyBeers() {
 		return monthlyBeerQueryRepository.findMonthlyBeer();
 	}
 
 	@Override
-	@Cacheable(MONTHLY_BEER)
+	// @Cacheable(MONTHLY_BEER)
 	@Transactional(readOnly = true)
 	public List<WeeklyBeer> findWeeklyBeers() {
 		return weeklyBeerQueryRepository.findWeeklyBeer();
