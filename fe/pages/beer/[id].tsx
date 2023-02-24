@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import SmallCardController from '@/components/smallCards/SmallCardController';
-import SmallPairingController from '@/components/smallCards/SmallpairingController';
-import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
+import SmallPairingCard from '@/components/smallCards/SmallPairingCard';
+import SimilarBeer from '@/components/smallCards/SimilarBeer';
 import RatingTitle from '@/components/beerPage/RatingTitle';
 import PairingTitle from '@/components/beerPage/PairingTitle';
 import BeerDetailCard from '@/components/beerPage/BeerDetailCard';
@@ -30,10 +30,8 @@ export default function Beer() {
       axios
         .get(`/api/beers/${curRoute}`)
         .then((response) => {
-          // console.log(response.data); 아직 빈배열 상태..
           setBeerInfo(response.data);
           setCurBeer(response.data);
-          setSimilarBeer(response.data.similarBeers);
         })
         .catch((error) => console.log(error));
     }
@@ -61,47 +59,19 @@ export default function Beer() {
     }
   }, [curRoute]);
 
-  // useEffect(() => {
-  //   // 비슷한 맥주 조회
-  //   if (curRoute !== undefined) {
-  //     // console.log('비슷한 맥주');
-  //     axios
-  //       .get(`/api/beers/${curRoute}/similar`)
-  //       .then((response) => {
-  //         console.log(response.data);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
-  // }, [curRoute]);
-  const BeerList = [
-    {
-      id: 1,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 2,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-    {
-      id: 3,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
-    },
-  ];
+  useEffect(() => {
+    // 비슷한 맥주 조회
+    if (curRoute !== undefined) {
+      axios
+        .get(`/api/beers/${curRoute}/similar`)
+        .then((response) => {
+          setSimilarBeer(response.data);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [curRoute]);
+
+  // console.log('pairingInfo?.data', pairingInfo?.data);
 
   return (
     <>
@@ -136,9 +106,8 @@ export default function Beer() {
           pairngCount={pairingInfo?.pageInfo?.totalElements}
           beerId={curRoute}
         />
-        <SmallPairingController pairProps={pairingInfo?.data} />
-
-        <SimilarBeerController beerProps={BeerList} />
+        <SmallPairingCard pairingProps={pairingInfo?.data} />
+        <SimilarBeer similarBeer={similarBeer} />
       </main>
     </>
   );
