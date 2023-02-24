@@ -1,14 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { HiShare } from 'react-icons/hi';
-
-import { useRecoilValue, useRecoilState } from 'recoil';
 
 // 참고로, JS SDK는 PC 또는 모바일에 따라 동작이 변경되는 부분들이 있어서
 // user agent가 임의로 변경된 환경 (크롬 브라우저 > 개발자모드 > 모바일 설정)을 지원하지 않음
-const KakaoShareButton = () => {
+const KakaoShareButton = (imageUrl: any) => {
+  const [imageState, setimageState] = useState();
   useEffect(() => {
-    createKakaoButton();
-  }, []);
+    setimageState(imageUrl);
+  }, [imageUrl]);
 
   const createKakaoButton = () => {
     if (window.Kakao) {
@@ -26,8 +25,7 @@ const KakaoShareButton = () => {
         content: {
           title: 'GetABeer',
           description: `#맥주가 #땡길땐 #GetA`,
-          imageUrl:
-            'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
+          imageUrl: imageState,
           link: {
             mobileWebUrl: window.location.href,
             webUrl: window.location.href,

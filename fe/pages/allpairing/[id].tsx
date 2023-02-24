@@ -5,13 +5,19 @@ import { useRouter } from 'next/router';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
+import Pagenation from '@/components/Pagenation';
+import Image from 'next/image';
 
 export default function AllPairing() {
   let router = useRouter();
   const [curRoute, setCurRoute] = useState<any>();
   const [sort, setSort] = useState<Sort>('mostlikes');
+  const [title, setTitle] = useState<string>('');
   const [category, setCategory] = useState<string>('ALL');
   const [pairingCardProps, setPairingCardProps] = useState<any>();
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
   useEffect(() => {
     setCurRoute(router.query.id);
   }, [router, curRoute]);
@@ -19,7 +25,11 @@ export default function AllPairing() {
     if (curRoute !== undefined) {
       axios
         .get(`/pairings/page/${sort}?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setPairingCardProps(response.data))
+        .then((response) => {
+          setPairingCardProps(response.data);
+          setTotalPages(response.data.pageInfo.totalPages);
+          setTitle(response.data.pageInfo.beerKorName);
+        })
         .catch((error) => {
           console.log(error);
         });
@@ -71,7 +81,7 @@ export default function AllPairing() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-4xl border">
+      <main className="m-auto h-screen max-w-4xl">
         <div className="mt-4 text-center bg-white rounded-lg max-w-4xl font-semibold">
           제주슬라이스
         </div>
@@ -79,8 +89,25 @@ export default function AllPairing() {
           <SortBox setSort={setSort} />
           <PairingBox setCategory={setCategory} />
         </div>
-        <PairingCardController pairingCardProps={pairingCardProps?.data} />
-        <div className="pb-32"></div>
+
+        {pairingCardProps?.data?.length ? (
+          <>
+            <PairingCardController pairingCardProps={pairingCardProps?.data} />
+            <div className="pb-32"></div>
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          </>
+        ) : (
+          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+            <Image
+              className="m-auto pb-3 opacity-50"
+              src="/images/logo.png"
+              alt="logo"
+              width={40}
+              height={40}
+            />
+            <span>등록된 평가가 없습니다</span>
+          </div>
+        )}
       </main>
     </>
   );

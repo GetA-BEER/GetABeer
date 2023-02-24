@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
-import { AiOutlineHeart } from 'react-icons/ai';
+import WishHeart from '@/components/WishHeart';
 import StarScore from './StarScore';
 import KakaoShareButton from './KakaoShareButton';
 
@@ -10,7 +10,6 @@ export default function BeerDetailCard({ cardProps }: any) {
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
       <div className="flex m-auto">
         <div className="w-[122px] select-none">
-          {/* 이거 나중에 제대로 썸네일 들어오면  삭제해야 한다. */}
           {cardProps?.beerDetailsBasic.thumbnail.includes('.') ? (
             <Image
               className="pt-3 w-full h-auto select-none"
@@ -21,20 +20,14 @@ export default function BeerDetailCard({ cardProps }: any) {
               priority
             />
           ) : (
-            <Image
-              className="pt-3"
-              alt="임시이미지"
-              src="https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg"
-              width={100}
-              height={200}
-            />
+            <>x</>
           )}
         </div>
         <div className="flex flex-col justify-center ml-1">
           <h1 className="font-bold text-2xl">
             {cardProps?.beerDetailsBasic.korName}
           </h1>
-          <AiOutlineHeart className="absolute top-1 right-1.5 w-8 h-8" />
+          {/* <WishHeart /> */}
           <div className="text-xs flex flex-wrap">
             <span>
               {cardProps?.beerCategoryTypes.map((el: string, idx: number) => {
@@ -51,7 +44,11 @@ export default function BeerDetailCard({ cardProps }: any) {
             <span className="mx-[1px]">
               {cardProps?.beerDetailsBasic.abv}% /
             </span>
-            <span>{cardProps?.beerDetailsBasic.ibu} IBU</span>
+            {cardProps?.beerDetailsBasic.ibu !== null ? (
+              <span>{cardProps?.beerDetailsBasic.ibu} IBU</span>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="my-1 flex items-end">
             <StarScore score={cardProps?.beerDetailsStars.totalAverageStars} />
@@ -91,7 +88,9 @@ export default function BeerDetailCard({ cardProps }: any) {
               </span>
             </Link>
 
-            <KakaoShareButton />
+            <KakaoShareButton
+              imageUrl={cardProps?.beerDetailsBasic?.thumbnail}
+            />
           </div>
         </div>
       </div>
