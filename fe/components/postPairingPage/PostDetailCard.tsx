@@ -63,7 +63,7 @@ export default function PostDetailCard(props: any) {
         </div>
         <div>
           {beerInfo?.beerDetailsTopTags === null ? (
-            <Tag>태그 없음</Tag>
+            <></>
           ) : (
             beerInfo?.beerDetailsTopTags?.map((el: string, idx: number) => {
               return <Tag key={idx}>{el}</Tag>;
