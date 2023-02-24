@@ -16,7 +16,6 @@ import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
 import be.domain.comment.repository.PairingCommentRepository;
 import be.domain.like.repository.PairingLikeRepository;
-import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingCategory;
@@ -29,7 +28,9 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PairingService {
@@ -43,7 +44,14 @@ public class PairingService {
 
 	/* 페어링 등록 */
 	@Transactional
-	public String create(Pairing pairing, List<MultipartFile> files, Long beerId) throws IOException {
+	public String create(Pairing pairing, List<MultipartFile> files,
+		Long beerId) throws IOException {
+
+		log.info("**************************************************************");
+		log.info("서비스 시작 ");
+		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getContent());
+		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getLikeCount());
+		log.info("**************************************************************");
 
 		/* 존재하는 회원인지 확인 */
 		User user = userService.findLoginUser();
@@ -73,6 +81,12 @@ public class PairingService {
 		/* 페어링 등록하기 */
 		pairing.saveDefault(beer, user, thumbnail, pairingImages);
 		pairingRepository.save(pairing);
+
+		log.info("**************************************************************");
+		log.info("페어링 등록 확인 : " + pairing.getContent());
+		log.info("페어링 등록 확인 : " + pairing.getPairingCategory());
+		log.info("페어링 등록 확인 : " + pairing.getBeer().getBeerDetailsBasic().getKorName());
+		log.info("**************************************************************");
 
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
 	}
@@ -153,7 +167,7 @@ public class PairingService {
 	}
 
 	/* 페어링 페이지 조회*/
-	public Page<PairingResponseDto.Total> getPairingPageOrderByRecent(
+	public Page<PairingResponseDto.Total> getPairingPageOrderBy(
 		Long beerId, Integer page, Integer size, String type) {
 
 		Page<PairingResponseDto.Total> responses;
@@ -174,6 +188,9 @@ public class PairingService {
 					responses = pairingRepository.findPairingTotalResponseOrder(beerId,
 						PageRequest.of(page - 1, size, Sort.by("commentCount")));
 					break;
+				// case "GRILL":
+				// 	responses = pairingRepository
+				// 	break;
 				default:
 					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
 			}

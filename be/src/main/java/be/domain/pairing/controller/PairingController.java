@@ -27,7 +27,9 @@ import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.mapper.PairingMapper;
 import be.domain.pairing.service.PairingService;
 import be.global.dto.MultiResponseDto;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping("/api/pairings")
@@ -42,8 +44,13 @@ public class PairingController {
 
 	/* 페어링 등록 */
 	@PostMapping
-	public ResponseEntity<String> post(@RequestPart(value = "post") @Valid PairingRequestDto.Post post,
+	public ResponseEntity<String> post(@RequestPart(value = "post", required = false) @Valid PairingRequestDto.Post post,
 		@RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
+		log.info("************************************************************");
+		log.info("여기는 컨트롤러");
+		log.info("내용이 잘 들어오나 : " + post.getContent());
+		log.info("post 내용 확인 : " + post.getCategory());
+		log.info("************************************************************");
 		String message = pairingService.create(mapper.pairingPostDtoToPairing(post),
 			files, post.getBeerId());
 
@@ -80,7 +87,7 @@ public class PairingController {
 	@GetMapping("/page/{type}")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByRecent(
 		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByRecent(beerId, page, size, type);
+		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderBy(beerId, page, size, type);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
 	}

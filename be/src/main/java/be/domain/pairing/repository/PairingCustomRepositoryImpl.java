@@ -59,6 +59,12 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
+	@Override
+	public Page<PairingResponseDto.Total> findPairingTotalResponseCategory(Long beerId, String type,
+		Pageable pageable) {
+		return null;
+	}
+
 	/* 로그인 유저가 있는 경우 */
 	@Override
 	public Page<PairingResponseDto.Total> findPairingTotalResponseOrder(Long beerId, Long userId,
@@ -74,6 +80,12 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 		var total = getTotalSize(beerId);
 
 		return PageableExecutionUtils.getPage(list, pageable, () -> total);
+	}
+
+	@Override
+	public Page<PairingResponseDto.Total> findPairingTotalResponseCategory(Long beerId, String type, Long userId,
+		Pageable pageable) {
+		return null;
 	}
 
 	// -------------------------------------------- 조회 관련 메서드 ---------------------------------------------------
