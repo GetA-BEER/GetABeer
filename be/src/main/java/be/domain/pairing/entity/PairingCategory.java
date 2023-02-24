@@ -28,23 +28,23 @@ public enum PairingCategory implements CategoryHelper {
 
 	@JsonCreator
 	public static PairingCategory to(String category) {
-		log.info("**************************************************************");
+		log.info("************************************");
 		log.info("등록하려는 카테고리 : " + category);
-		log.info("**************************************************************");
+		log.info("************************************");
 
 		for (PairingCategory pairingCategory : PairingCategory.values()) {
-			log.info("**************************************************************");
+			log.info("************************************");
 			log.info("반복문 안");
 			log.info("페어링 카테고리 확인 : " + pairingCategory.getCategory());
-			log.info("**************************************************************");
+			log.info("************************************");
 			if (pairingCategory.getCategory().equalsIgnoreCase(category)) {
-				log.info("**************************************************************");
+				log.info("************************************");
 				log.info("조건문 안");
-				log.info("**************************************************************");
+				log.info("************************************");
 				return pairingCategory;
 			}
 		}
-		log.info("************************예외 던질 예정**************************************");
+		log.info("***************예외 던질 예정********************");
 		throw new BusinessLogicException(ExceptionCode.NOT_FOUND_CATEGORY);
 	}
 	@Override

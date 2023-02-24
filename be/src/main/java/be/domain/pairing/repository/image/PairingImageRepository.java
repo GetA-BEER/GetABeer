@@ -1,4 +1,4 @@
-package be.domain.pairing.repository;
+package be.domain.pairing.repository.image;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,4 +1,4 @@
-package be.domain.pairing.repository;
+package be.domain.pairing.repository.image;
 
 import static be.domain.pairing.entity.QPairingImage.*;
 
@@ -10,7 +10,7 @@ import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.QPairingImageDto_Response;
 import be.domain.pairing.entity.PairingImage;
 
-public class PairingImageCustomRepositoryImpl implements PairingImageCustomRepository{
+public class PairingImageCustomRepositoryImpl implements PairingImageCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
 	public PairingImageCustomRepositoryImpl(JPAQueryFactory queryFactory) {

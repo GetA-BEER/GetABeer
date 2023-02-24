@@ -84,10 +84,12 @@ public class PairingController {
 	}
 
 	/* 페어링 페이지 조회 */
-	@GetMapping("/page/{type}")
+	@GetMapping("/page/{type}/{category}")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByRecent(
-		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderBy(beerId, page, size, type);
+		@PathVariable String type, @PathVariable String category,
+		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
+		Page<PairingResponseDto.Total> responses =
+			pairingService.getPairingPageOrderBy(beerId, type, category, page, size);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
 	}

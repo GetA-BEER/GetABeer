@@ -20,8 +20,11 @@ import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.entity.PairingImage;
-import be.domain.pairing.repository.PairingImageRepository;
+import be.domain.pairing.repository.image.PairingImageRepository;
 import be.domain.pairing.repository.PairingRepository;
+import be.domain.pairing.service.pattern.GetAll;
+import be.domain.pairing.service.pattern.GetCategory;
+import be.domain.pairing.service.pattern.UserState;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
@@ -168,52 +171,34 @@ public class PairingService {
 
 	/* 페어링 페이지 조회*/
 	public Page<PairingResponseDto.Total> getPairingPageOrderBy(
-		Long beerId, Integer page, Integer size, String type) {
+		Long beerId, String type, String category, Integer page, Integer size) {
 
 		Page<PairingResponseDto.Total> responses;
 		User user = userService.getLoginUserReturnNull();
 
+
 		/* 로그인 유저가 없는 경우 */
 		if (user == null) {
-			switch (type) {
-				case "recency":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("pairingId")));
-					break;
-				case "mostlikes":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("likeCount")));
-					break;
-				case "mostcomments":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("commentCount")));
-					break;
-				// case "GRILL":
-				// 	responses = pairingRepository
-				// 	break;
-				default:
-					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
+			if (category.equalsIgnoreCase("ALL")) {
+				UserState getAll = new GetAll();
+				responses = getAll
+					.userNull(beerId, type, PageRequest.of(page - 1, size), pairingRepository);
+			} else {
+				UserState getCategory = new GetCategory(category);
+				responses = getCategory
+					.userNull(beerId, type, PageRequest.of(page - 1, size), pairingRepository);
 			}
-
 			responses.forEach(pairing -> pairing.addUserLike(false));
 		} else { /* 로그인 유저가 있는 경우 */
-			switch (type) {
-				case "recency":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("pairingId")));
-					break;
-				case "mostlikes":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("likeCount")));
-					break;
-				case "mostcomments":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("commentCount")));
-					break;
-				default:
-					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
+			if (category.equalsIgnoreCase("ALL")) {
+				UserState getAll = new GetAll();
+				responses = getAll
+					.userNotNull(beerId, type, user.getId(), PageRequest.of(page - 1, size), pairingRepository);
+			} else {
+				UserState getCategory = new GetCategory(category);
+				responses = getCategory
+					.userNotNull(beerId, type, user.getId(), PageRequest.of(page - 1, size), pairingRepository);
 			}
-
 			responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
 		}
 		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
