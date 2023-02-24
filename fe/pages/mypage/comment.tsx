@@ -113,7 +113,7 @@ export const MyRatingComment = ({
 }) => {
   return (
     <div>
-      {ratingCommentList === null ? (
+      {ratingCommentList.length === 0 ? (
         <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
           <Image
             className="m-auto pb-3 opacity-50"
@@ -150,7 +150,7 @@ export const MyPairingComment = ({
 }) => {
   return (
     <div>
-      {pairingCommentList === null ? (
+      {pairingCommentList.length === 0 ? (
         <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
           <Image
             className="m-auto pb-3 opacity-50"
