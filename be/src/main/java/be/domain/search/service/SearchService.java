@@ -1,6 +1,9 @@
 package be.domain.search.service;
 
+import java.util.ArrayList;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +28,11 @@ public class SearchService {
 
 		Page<Beer> beerPage;
 
-		if (queryParam.charAt(0) == '@') {
+		queryParam = queryParam.strip();
+
+		if (queryParam.isEmpty()) {
+			beerPage = new PageImpl<>(new ArrayList<>());
+		} else if (queryParam.charAt(0) == '@') {
 			beerPage = searchQueryRepository.findBeersPageByBeerCategoryQueryParam(queryParam, pageRequest);
 		} else if (queryParam.charAt(0) == '#') {
 			beerPage = searchQueryRepository.findBeersPageByBeerTagQueryParam(queryParam, pageRequest);
