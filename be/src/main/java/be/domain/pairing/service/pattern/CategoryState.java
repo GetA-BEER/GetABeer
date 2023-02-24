@@ -1,6 +1,10 @@
 package be.domain.pairing.service.pattern;
 
-public interface CategoryState {
-	public void getAll();
-	public void getCategory();
+public class CategoryState {
+	public static class GetAll{
+
+	}
+	public static class GetCategory{
+
+	}
 }

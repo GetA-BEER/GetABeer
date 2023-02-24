@@ -24,6 +24,8 @@ import be.domain.pairing.repository.image.PairingImageRepository;
 import be.domain.pairing.repository.PairingRepository;
 import be.domain.pairing.service.pattern.GetAll;
 import be.domain.pairing.service.pattern.GetCategory;
+import be.domain.pairing.service.pattern.SortingState;
+import be.domain.pairing.service.pattern.SortingStateImpl;
 import be.domain.pairing.service.pattern.UserState;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
@@ -154,7 +156,7 @@ public class PairingService {
 		} else {
 			response.addUserLike(false);
 		}
-		response.addCategory(findCategory(pairing.getId()));
+		response.addCategory(findVerifiedPairing(pairing.getId()).getPairingCategory());
 		response.addCommentList(pairingCommentRepository.findPairingCommentList(pairingId));
 		response.addImageList(pairingImageRepository.findPairingImageList(pairingId));
 
@@ -173,47 +175,14 @@ public class PairingService {
 	public Page<PairingResponseDto.Total> getPairingPageOrderBy(
 		Long beerId, String type, String category, Integer page, Integer size) {
 
-		Page<PairingResponseDto.Total> responses;
 		User user = userService.getLoginUserReturnNull();
+		SortingState sortingState = new SortingStateImpl(pairingLikeRepository);
 
-
-		/* 로그인 유저가 없는 경우 */
-		if (user == null) {
-			if (category.equalsIgnoreCase("ALL")) {
-				UserState getAll = new GetAll();
-				responses = getAll
-					.userNull(beerId, type, PageRequest.of(page - 1, size), pairingRepository);
-			} else {
-				UserState getCategory = new GetCategory(category);
-				responses = getCategory
-					.userNull(beerId, type, PageRequest.of(page - 1, size), pairingRepository);
-			}
-			responses.forEach(pairing -> pairing.addUserLike(false));
-		} else { /* 로그인 유저가 있는 경우 */
-			if (category.equalsIgnoreCase("ALL")) {
-				UserState getAll = new GetAll();
-				responses = getAll
-					.userNotNull(beerId, type, user.getId(), PageRequest.of(page - 1, size), pairingRepository);
-			} else {
-				UserState getCategory = new GetCategory(category);
-				responses = getCategory
-					.userNotNull(beerId, type, user.getId(), PageRequest.of(page - 1, size), pairingRepository);
-			}
-			responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
-		}
-		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
-
-		return responses;
+		return sortingState
+			.sorting(user, category, type, beerId, PageRequest.of(page - 1, size), pairingRepository);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
-
-	/* 카테고리 정보 가져오기 */
-	public PairingCategory findCategory(Long pairingId) {
-		Pairing pairing = findVerifiedPairing(pairingId);
-
-		return pairing.getPairingCategory();
-	}
 
 	private Boolean getIsUserLikes(Long pairingId, Long userId) {
 		int userLikes = pairingLikeRepository.findPairingLikeUser(pairingId, userId);
