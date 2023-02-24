@@ -34,6 +34,9 @@ public class BeerWishlist extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column
+	private Boolean wished;
+
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "beer_id")

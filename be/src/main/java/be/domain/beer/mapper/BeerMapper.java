@@ -19,7 +19,9 @@ import be.domain.beer.entity.WeeklyBeer;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beertag.entity.BeerTag;
-import be.domain.rating.entity.Rating;
+import be.domain.beerwishlist.entity.BeerWishlist;
+import be.domain.beerwishlist.repository.BeerWishlistRepository;
+import be.domain.user.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface BeerMapper {
@@ -82,7 +84,8 @@ public interface BeerMapper {
 		return detailsResponse.build();
 	}
 
-	default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer, List<BeerTag> beerTags, Boolean isWishlist) {
+	default BeerDto.DetailsResponse beerToDetailsResponse(Beer beer, List<BeerTag> beerTags,
+		BeerWishlist beerWishlist) {
 
 		BeerDto.DetailsResponse.DetailsResponseBuilder detailsResponse = BeerDto.DetailsResponse.builder();
 
@@ -91,7 +94,7 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
 		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
-		detailsResponse.isWishlist(isWishlist);
+		detailsResponse.isWishlist(beerWishlist.getWished());
 		// detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
@@ -199,37 +202,6 @@ public interface BeerMapper {
 				return searchResponseBuilder.build();
 			})
 			.collect(Collectors.toList());
-	}
-
-	default PageImpl<BeerDto.WishlistResponse> beersToWishlistResponse(Page<Beer> beerPage, List<Rating> ratingList) {
-
-		if (beerPage == null) {
-			return null;
-		}
-
-		return new PageImpl<>(
-			beerPage.stream()
-				.map(beer -> {
-
-					BeerDto.WishlistResponse.WishlistResponseBuilder wishlistResponseBuilder = BeerDto.WishlistResponse.builder();
-					wishlistResponseBuilder.beerId(beer.getId());
-					wishlistResponseBuilder.korName(beer.getBeerDetailsBasic().getKorName());
-
-					Double myStar = ratingList.stream()
-						.filter(rating -> rating.getBeer().getId().equals(beer.getId()))
-						.map(Rating::getStar)
-						.mapToDouble(Double::doubleValue)
-						.findFirst()
-						.orElse(0.0);
-
-					wishlistResponseBuilder.myStar(myStar);
-					wishlistResponseBuilder.thumbnail(beer.getBeerDetailsBasic().getThumbnail());
-
-					return wishlistResponseBuilder.build();
-
-				}).collect(Collectors.toList())
-		);
-
 	}
 
 	private static List<BeerBeerCategory> getBeerBeerCategoriesFromResponseDto(

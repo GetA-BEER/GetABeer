@@ -181,6 +181,13 @@ public class UserService {
 			.orElse(null);
 	}
 
+	public User findLoginUser() {
+		Authentication authentication = verifiedAuthentication();
+
+		return userRepository.findByEmail(authentication.getName())
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_LOGIN));
+	}
+
 	private Authentication verifiedAuthentication() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
@@ -223,7 +230,10 @@ public class UserService {
 	/* 닉네임 확인 */
 	public void verifyNickname(String nickname) {
 		if (userRepository.existsByNickname(nickname)) {
-			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+			User user = getLoginUser();
+			if (!nickname.equals(user.getNickname())) {
+				throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+			}
 		}
 	}
 
@@ -231,7 +241,7 @@ public class UserService {
 	public void verifyExistEmail(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.USER_ID_EXISTS);
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
 		}
 	}
 
@@ -258,4 +268,9 @@ public class UserService {
 		}
 	}
 
+	public void checkUser(Long userId, Long loginUserId) {
+		if (!userId.equals(loginUserId)) {
+			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
+		}
+	}
 }

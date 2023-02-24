@@ -2,6 +2,8 @@ package be.global.security.config;
 
 import static org.springframework.security.config.Customizer.*;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+	private final HttpSession httpSession;
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final MailController mailController;
@@ -66,9 +69,9 @@ public class SecurityConfig {
 			.oauth2Login(oauth2 -> {
 				oauth2.authorizationEndpoint().baseUri("/oauth2/authorization");
 				oauth2.successHandler(
-					new OAuth2SuccessHandler(jwtTokenizer, userRepository, redisTemplate));
+					new OAuth2SuccessHandler(httpSession, jwtTokenizer, userRepository, redisTemplate));
 				oauth2.userInfoEndpoint().userService(
-					new CustomOAuth2UserService(userRepository, mailController, passwordEncoder(),
+					new CustomOAuth2UserService(httpSession, userRepository, mailController, passwordEncoder(),
 						customAuthorityUtils));
 			});
 

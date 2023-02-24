@@ -46,14 +46,10 @@ public class RatingService {
 
 	/* 맥주 평가 등록 */
 	@Transactional
-	public String create(Rating rating, Long beerId, RatingTag ratingTag, Long userId) {
-
-		/* 접근하려는 유저가 로그인 유저와 일치하는 지 확인*/
-		// User loginUser = userService.getLoginUser();
-		// userService.checkUser(userId, loginUser.getId());
+	public String create(Rating rating, Long beerId, RatingTag ratingTag) {
 
 		/* 회원 정보 가져오기 */
-		User user = userService.getUser(userId);
+		User user = userService.findLoginUser();
 
 		/* 이미 평가를 입력했던 유저라면 입력할 수 없음 */
 		verifyExistUser(user.getId(), beerId);
@@ -85,9 +81,9 @@ public class RatingService {
 		Rating findRating = findVerifiedRating(ratingId);
 
 		/* 로그인 한 유저가 평가를 단 유저와 일치하는지 판별 */
-		// User user = findRating.getUser();
-		// User loginUser = userService.getLoginUser();
-		// userService.checkUser(user.getId(), loginUser.getId());
+		User user = findRating.getUser();
+		User loginUser = userService.getLoginUser();
+		userService.checkUser(user.getId(), loginUser.getId());
 
 		if (rating.getStar() != null) {
 			cannotZeroStar(rating.getStar());

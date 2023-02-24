@@ -47,10 +47,11 @@ public class UserPageController {
 
 	/* 나의 평가 */
 	@GetMapping("/mypage/ratings")
-	public ResponseEntity<MultiResponseDto<RatingResponseDto.Total>> getMyRatings(
+	public ResponseEntity<MultiResponseDto<RatingResponseDto.MyPageResponse>> getMyRatings(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<Rating> ratings = userPageService.getUserRating(page);
-		Page<RatingResponseDto.Total> userRatingList = ratingMapper.ratingToRatingResponse(ratings.getContent(),
+		Page<RatingResponseDto.MyPageResponse> userRatingList = ratingMapper.ratingToRatingResponse(
+			ratings.getContent(),
 			ratingLikeRepository);
 
 		return ResponseEntity.ok(new MultiResponseDto<>(userRatingList.getContent(), userRatingList));

@@ -83,7 +83,7 @@ public class Beer extends BaseTimeEntity implements Serializable {
 	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<BeerBeerTag> beerBeerTags = new ArrayList<>();
 	@JsonManagedReference
-	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
+	@OneToMany(mappedBy = "beer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<BeerWishlist> beerWishlists = new ArrayList<>();
 	@JsonManagedReference
 	@OneToMany(mappedBy = "beer", cascade = CascadeType.PERSIST, orphanRemoval = true)
