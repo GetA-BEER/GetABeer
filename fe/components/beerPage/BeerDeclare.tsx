@@ -68,7 +68,7 @@ export interface PairingInfo {
   };
 }
 
-export interface SimilarBeer {
+export interface SimilarBeerProps {
   beerId: number;
   korName: string;
   country: string;

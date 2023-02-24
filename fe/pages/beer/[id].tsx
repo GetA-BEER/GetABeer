@@ -14,7 +14,7 @@ import {
   BeerInfo,
   RatingInfo,
   PairingInfo,
-  SimilarBeer,
+  SimilarBeerProps,
 } from '@/components/beerPage/BeerDeclare';
 import axios from '@/pages/api/axios';
 
@@ -29,7 +29,7 @@ export default function Beer() {
   const [, setCurBeer] = useRecoilState(currentBeer);
   const [ratingInfo, setRatingInfo] = useState<RatingInfo>();
   const [pairingInfo, setPairingInfo] = useState<PairingInfo>();
-  const [similarBeer, setSimilarBeer] = useState<SimilarBeer[]>();
+  const [similarBeer, setSimilarBeer] = useState<SimilarBeerProps[]>();
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
