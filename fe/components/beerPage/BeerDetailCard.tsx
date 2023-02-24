@@ -4,8 +4,10 @@ import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
 import WishHeart from '@/components/WishHeart';
 import StarScore from './StarScore';
 import KakaoShareButton from './KakaoShareButton';
+import { useState } from 'react';
 
 export default function BeerDetailCard({ cardProps }: any) {
+  const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
       <div className="flex m-auto">
@@ -24,10 +26,16 @@ export default function BeerDetailCard({ cardProps }: any) {
           )}
         </div>
         <div className="flex flex-col justify-center ml-1">
-          <h1 className="font-bold text-2xl">
-            {cardProps?.beerDetailsBasic.korName}
-          </h1>
-          {/* <WishHeart /> */}
+          <div className="flex justify-between items-center">
+            <h1 className="font-bold text-2xl">
+              {cardProps?.beerDetailsBasic.korName}
+            </h1>
+            <WishHeart
+              beerId={cardProps?.beerId}
+              isWish={isWish}
+              setIsWish={setIsWish}
+            />
+          </div>
           <div className="text-xs flex flex-wrap">
             <span>
               {cardProps?.beerCategoryTypes.map((el: string, idx: number) => {
