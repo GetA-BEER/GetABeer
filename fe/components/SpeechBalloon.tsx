@@ -46,9 +46,30 @@ export default function SpeechBalloon({
     setIsEditMode(true);
   };
 
+  const patchComment = () => {
+    if ('ratingCommentId' in props) {
+      axios
+        .patch(`/api/ratings/comments/${props.ratingCommentId}`, {
+          content: content,
+        })
+        .catch((err) => console.log(err));
+    }
+    if ('pairingCommentId' in props) {
+      axios
+        .patch(`/api/pairings/comments/${props.pairingCommentId}`, {
+          content: content,
+        })
+        .catch((err) => console.log(err));
+    }
+    setIsEditMode(false);
+  };
+
   const deleteComment = () => {
     if ('ratingCommentId' in props) {
       deleteFunc(props.ratingCommentId);
+    }
+    if ('pairingCommentId' in props) {
+      deleteFunc(props.pairingCommentId);
     }
   };
 
@@ -92,16 +113,7 @@ export default function SpeechBalloon({
           <CommentInput
             inputState={content}
             setInputState={setContent}
-            postFunc={() => {
-              if ('ratingCommentId' in props) {
-                axios
-                  .patch(`/api/ratings/comments/${props.ratingCommentId}`, {
-                    content: content,
-                  })
-                  .catch((err) => console.log(err));
-              }
-              setIsEditMode(false);
-            }}
+            postFunc={patchComment}
           ></CommentInput>
         ) : (
           <div className="m-3 mt-5 text-sm font-light leading-6">{content}</div>
