@@ -25,7 +25,7 @@ interface IFormValues {
   age: string;
   userBeerCategories: Array<string>;
   nickname: string;
-  image: string[];
+  image: Array<string>;
 }
 export default function MyEdit() {
   const {
@@ -45,7 +45,7 @@ export default function MyEdit() {
     },
     mode: 'onChange',
   });
-  console.log(watch('image'));
+  // console.log(watch('image'));
   const [userImge, setUserImge] = useState('');
   const [nameMessage, setNameMessage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
@@ -60,7 +60,7 @@ export default function MyEdit() {
     axios
       .get('api/user')
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setUserImge(res.data.imageUrl);
         reset(res.data);
       })
@@ -94,13 +94,13 @@ export default function MyEdit() {
     axios
       .patch(`/api/mypage/userinfo`, reqBody)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         Router.push({
           pathname: '/mypage',
         });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         if (err.response.data.status === 409) {
           setNameMessage('닉네임 중복입니다!');
         }
@@ -119,11 +119,7 @@ export default function MyEdit() {
     axios
       .patch(`/api/mypage/userinfo/image`, formData, config)
       .then((res) => {
-        console.log(res.data);
-
-        // Router.push({
-        //   pathname: '/',
-        // });
+        // console.log(res.data);
       })
       .catch((err) => {
         console.log(err);

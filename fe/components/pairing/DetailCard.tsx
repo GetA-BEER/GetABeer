@@ -54,10 +54,12 @@ export default function DetailCard(props: { pairingProps: any }) {
           },
           withCredentials: true,
         };
-        axios.delete(`/api/pairings/${curRoute}`, config).then(() => {
-          router.back();
-        });
-        // .catch((error) => console.log(error));
+        axios
+          .delete(`/api/pairings/${curRoute}`, config)
+          .then(() => {
+            router.back();
+          })
+          .catch((error) => console.log(error));
       } else {
       }
     });

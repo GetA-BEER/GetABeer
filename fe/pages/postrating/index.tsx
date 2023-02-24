@@ -70,7 +70,6 @@ export default function PostRatingPage() {
   const handleSubmit = () => {
     const reqBody = {
       beerId: beerInfo.beerId,
-      userId: 4,
       star,
       content,
       color: TagMatcherToEng(color),

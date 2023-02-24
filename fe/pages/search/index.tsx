@@ -1,5 +1,5 @@
 import PageContainer from '@/components/PageContainer';
-import { FaArrowLeft } from 'react-icons/fa';
+import { IoChevronBack } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import SearchCard, {
@@ -30,12 +30,12 @@ export default function Search() {
   return (
     <PageContainer>
       <main className="px-2">
-        <FaArrowLeft
+        <IoChevronBack
           onClick={() => router.back()}
           className="text-xl text-y-gray mt-2"
         />
         <div className="flex justify-center m-4">
-          <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl">
+          <h1 className="font-bold text-xl lg:text-2xl">
             <span className="text-y-brown">&apos;{router.query.q}&apos;</span>{' '}
             검색 결과
           </h1>

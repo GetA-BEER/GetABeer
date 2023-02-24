@@ -19,10 +19,10 @@ export default function AllPairing() {
     if (curRoute !== undefined) {
       axios
         .get(`/pairings/page/${sort}?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setPairingCardProps(response.data));
-      // .catch((error) => {
-      //   console.log(error);
-      // });
+        .then((response) => setPairingCardProps(response.data))
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }, [curRoute, sort]);
 

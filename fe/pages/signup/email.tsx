@@ -31,12 +31,12 @@ export default function Email() {
   const [emailMessage, setEmailMessage] = useState('');
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
-    console.log(data);
+    // console.log(data);
     const { email } = getValues();
     emailClick(email);
   };
   const onClickCheck = (data: any) => {
-    console.log(data);
+    // console.log(data);
     const { email, text } = getValues();
     handleClickCheck(email, text);
   };
@@ -47,7 +47,7 @@ export default function Email() {
     axios
       .post('/api/mail', reqBody)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setShowModal(true);
       })
       .catch((err) => {
@@ -71,7 +71,7 @@ export default function Email() {
         });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setTimeMessage('올바른 인증코드가 아닙니다.');
       });
   };

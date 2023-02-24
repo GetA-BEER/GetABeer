@@ -12,24 +12,11 @@ export interface MiddleCardInfo {
   category: string[];
   country: string;
   abv: number;
-  ibu: number;
+  ibu: number | null;
   totalStarCount: number;
   totalAverageStars: number;
   beerTags: string[];
 }
-
-export const testBeer: MiddleCardInfo = {
-  beerId: 1,
-  thumbnail: '/images/krin.jpeg',
-  korName: '제주 슬라이스',
-  category: ['ALE', 'IPA'],
-  country: '한국',
-  abv: 4.5,
-  ibu: 28,
-  totalStarCount: 25,
-  totalAverageStars: 4.3,
-  beerTags: ['금색', '단맛', '과일향', '탄산 강'],
-};
 
 export default function MiddleCard({
   cardProps,
@@ -47,9 +34,7 @@ export default function MiddleCard({
         />
       </div>
       <div className="flex flex-col justify-center">
-        <h1 className="font-bold text-xl sm:text-2xl lg:text-3xl">
-          {cardProps?.korName}
-        </h1>
+        <h1 className="font-bold text-xl lg:text-2xl">{cardProps?.korName}</h1>
         <div className="text-xs sm:text-sm lg:text-lg">
           <span>
             {cardProps?.category?.map((el: string, idx: number) => {
@@ -62,7 +47,7 @@ export default function MiddleCard({
           </span>
           <span>/ {BeerCountryMatcherToKor(cardProps?.country)}</span>
           <span>/ {cardProps?.abv}%</span>
-          <span>/ {cardProps?.ibu} IBU</span>
+          {cardProps?.ibu ? <span>/ {cardProps?.ibu} IBU</span> : null}
         </div>
         <div className="my-2">
           <span className="font-semibold sm:text-xl lg:text-2xl">
