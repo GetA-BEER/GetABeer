@@ -65,7 +65,6 @@ export default function EditRatingPage() {
   const handleSubmit = () => {
     const reqBody = {
       beerId: 1,
-      userId: 1,
       star,
       content,
       color: TagMatcherToEng(color),

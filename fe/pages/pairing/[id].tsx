@@ -64,10 +64,12 @@ export default function PairingDetail() {
   useEffect(() => {
     // 특정 페어링 조회
     if (curRoute !== undefined) {
-      axios.get(`/api/pairings/${curRoute}`).then((response) => {
-        setPairingProps(response.data);
-      });
-      // .catch((error) => console.log(error));
+      axios
+        .get(`/api/pairings/${curRoute}`)
+        .then((response) => {
+          setPairingProps(response.data);
+        })
+        .catch((error) => console.log(error));
     }
   }, [curRoute]);
 

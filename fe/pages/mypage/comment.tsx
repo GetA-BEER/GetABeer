@@ -64,57 +64,12 @@ export default function MyComment() {
   ];
 
   useEffect(() => {
-    // axios.get(`/api/mypage/comment/rating`).then((res) => {
-    //   setRatingCommentList(res.data.data);
-    // });
-    // axios.get(`/api/mypage/comment/pairing`).then((res) => {
-    //   setPairingCommentList(res.data.data);
-    // });
-    //
-    setRatingCommentList([
-      {
-        ratingId: 1,
-        ratingCommentId: 1,
-        userId: 1,
-        nickname: '닉네임1',
-        userImage: '',
-        content: '복숭아맥주 맛있었는데',
-        createdAt: '2023-02-14T17:04:03.89475',
-        modifiedAt: '2023-02-14T17:04:03.89475',
-      },
-      {
-        ratingId: 2,
-        ratingCommentId: 2,
-        userId: 1,
-        nickname: '닉네임1',
-        userImage: '',
-        content: '나의 인생맥주',
-        createdAt: '2023-02-14T17:04:03.89475',
-        modifiedAt: '2023-02-15T17:04:03.89475',
-      },
-    ]);
-    setPairingCommentList([
-      {
-        pairingId: 1,
-        pairingCommentId: 1,
-        userId: 1,
-        nickname: '닉네임1',
-        userImage: '',
-        content: '역시 맥주는 치맥이죠',
-        createdAt: '2023-02-14T17:04:03.89475',
-        modifiedAt: '2023-02-14T17:04:03.89475',
-      },
-      {
-        pairingId: 2,
-        pairingCommentId: 2,
-        userId: 1,
-        nickname: '닉네임1',
-        userImage: '',
-        content: '피맥도 진짜 맛있어요ㅎㅎ',
-        createdAt: '2023-02-14T17:04:03.89475',
-        modifiedAt: '2023-02-15T17:04:03.89475',
-      },
-    ]);
+    axios.get(`/api/mypage/comment/rating`).then((res) => {
+      setRatingCommentList(res.data.data);
+    });
+    axios.get(`/api/mypage/comment/pairing`).then((res) => {
+      setPairingCommentList(res.data.data);
+    });
   }, []);
 
   return (
@@ -126,9 +81,7 @@ export default function MyComment() {
           </button>
         </Link>
         <div className="flex justify-center my-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            나의 댓글
-          </h1>
+          <h1 className="text-xl lg:text-2xl font-bold">나의 댓글</h1>
         </div>
         <ul className="flex justify-around mb-4">
           {tabArr.map((el, idx) => {

@@ -82,8 +82,8 @@ export default function PostPairing() {
       withCredentials: true,
     };
     if (finalData !== '') {
-      console.log('form에 post 들어있는지 확인', finalData.get('post'));
-      console.log('form에 files 들어있는지 확인', finalData.get('files'));
+      // console.log('form에 post 들어있는지 확인', finalData.get('post'));
+      // console.log('form에 files 들어있는지 확인', finalData.get('files'));
       axios.post(`/api/pairings`, finalData, config).then((response) => {
         // console.log(response);
         router.back();

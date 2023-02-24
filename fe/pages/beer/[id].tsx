@@ -27,13 +27,15 @@ export default function Beer() {
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
-      axios.get(`/api/beers/${curRoute}`).then((response) => {
-        // console.log(response.data); 아직 빈배열 상태..
-        setBeerInfo(response.data);
-        setCurBeer(response.data);
-        setSimilarBeer(response.data.similarBeers);
-      });
-      // .catch((error) => console.log(error));
+      axios
+        .get(`/api/beers/${curRoute}`)
+        .then((response) => {
+          // console.log(response.data); 아직 빈배열 상태..
+          setBeerInfo(response.data);
+          setCurBeer(response.data);
+          setSimilarBeer(response.data.similarBeers);
+        })
+        .catch((error) => console.log(error));
     }
   }, [curRoute, setCurBeer]);
 
@@ -42,8 +44,8 @@ export default function Beer() {
     if (curRoute !== undefined) {
       axios
         .get(`/api/ratings/page/recency?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setCommentInfo(response.data));
-      // .catch((error) => console.log(error));
+        .then((response) => setCommentInfo(response.data))
+        .catch((error) => console.log(error));
     }
   }, [curRoute]);
 
@@ -54,8 +56,8 @@ export default function Beer() {
         .get(`/api/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
         .then((response) => {
           setPairingInfo(response.data);
-        });
-      // .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
     }
   }, [curRoute]);
 

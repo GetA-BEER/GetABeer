@@ -28,7 +28,7 @@ export default function Signup() {
   } = useForm<IFormValues>({ mode: 'onChange' });
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
-    console.log(data);
+    // console.log(data);
     const { name, password } = getValues();
     signUpClick(name, password);
   };
@@ -42,7 +42,7 @@ export default function Signup() {
     axios
       .post('/api/register/user', reqBody)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         Router.push({
           pathname: '/signup/information',
           query: { userId: res.data },
