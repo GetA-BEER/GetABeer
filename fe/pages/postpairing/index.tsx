@@ -18,12 +18,7 @@ export default function PostPairing() {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('카테고리');
   const [imageData, setImageData] = useState([]);
-  const [jsonData, setJsonData] = useState({
-    beerId: beerInfo.beerId,
-    // userId: 1,
-    content: '',
-    category: '',
-  });
+  // const [jsonData, setJsonData] = useState<any>();
   const [finalData, setFinalData] = useState<any>('');
 
   // userInfo 로직, userId가 필요하다.
@@ -60,12 +55,13 @@ export default function PostPairing() {
 
   // Post 제출 로직
   const handleSubmit = () => {
-    setJsonData({
-      beerId: beerInfo.beerId,
+    const beerId = beerInfo?.beerId;
+    let jsonData = {
+      beerId: beerId,
       // userId: 1,
       content: content,
       category: category,
-    });
+    };
 
     const formData = new FormData();
     for (const file of imageData) {
@@ -85,8 +81,9 @@ export default function PostPairing() {
       },
       withCredentials: true,
     };
-    if (finalData !== '' && !isSubmit) {
-      // console.log(jsonData);
+    if (finalData !== '') {
+      console.log('form에 post 들어있는지 확인', finalData.get('post'));
+      console.log('form에 files 들어있는지 확인', finalData.get('files'));
       axios.post(`/api/pairings`, finalData, config).then((response) => {
         // console.log(response);
         router.back();
