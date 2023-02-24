@@ -17,7 +17,7 @@ export default function RatingTitle(props: {
       {props?.ratingCount === 0 ? (
         <></>
       ) : (
-        <Link href={`/rating/${props.beerId}`}>
+        <Link href={`/allrating/${props.beerId}`}>
           <span className="text-xs flex items-end">모두보기</span>
         </Link>
       )}

@@ -61,18 +61,18 @@ export default function Beer() {
     }
   }, [curRoute]);
 
-  useEffect(() => {
-    // 비슷한 맥주 조회
-    if (curRoute !== undefined) {
-      console.log('비슷한 맥주');
-      axios
-        .get(`/api/beers/${curRoute}/similar`)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [curRoute]);
+  // useEffect(() => {
+  //   // 비슷한 맥주 조회
+  //   if (curRoute !== undefined) {
+  //     // console.log('비슷한 맥주');
+  //     axios
+  //       .get(`/api/beers/${curRoute}/similar`)
+  //       .then((response) => {
+  //         console.log(response.data);
+  //       })
+  //       .catch((error) => console.log(error));
+  //   }
+  // }, [curRoute]);
   const BeerList = [
     {
       id: 1,
