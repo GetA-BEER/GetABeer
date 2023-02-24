@@ -6,6 +6,8 @@ import StarScore from './StarScore';
 import KakaoShareButton from './KakaoShareButton';
 
 export default function BeerDetailCard({ cardProps }: any) {
+  const hadleWish = () => {};
+
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
       <div className="flex m-auto">
