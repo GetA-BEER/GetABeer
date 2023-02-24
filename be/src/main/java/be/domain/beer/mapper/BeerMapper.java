@@ -94,7 +94,7 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
 		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
-		detailsResponse.isWishlist(beerWishlist.getWished());
+		detailsResponse.isWishlist(false);
 		// detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
