@@ -1,7 +1,7 @@
 import PageContainer from '@/components/PageContainer';
-import { IoChevronBack } from 'react-icons/io5';
+import BackBtn from '@/components/button/BackPageBtn';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import axios from '@/pages/api/axios';
 import RatingCard, {
@@ -10,7 +10,7 @@ import RatingCard, {
 import Pagenation from '@/components/Pagenation';
 
 export default function MyRating() {
-  const router = useRouter();
+  const [userNickname, setUserNickname] = useState('');
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -25,13 +25,11 @@ export default function MyRating() {
   return (
     <PageContainer>
       <main className="px-2">
-        <Link href={'/mypage'}>
-          <button className="m-4">
-            <IoChevronBack className="w-6 h-6" />
-          </button>
-        </Link>
+        <BackBtn />
         <div className="flex justify-center my-4">
-          <h1 className="text-xl lg:text-2xl font-bold">나의 평가</h1>
+          <h1 className="text-xl lg:text-2xl font-bold">
+            {userNickname}님의 평가
+          </h1>
         </div>
         <div className="mt-3">
           {ratingList.map((el: RatingCardProps) => {
@@ -48,7 +46,20 @@ export default function MyRating() {
             );
           })}
         </div>
-        <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+        {ratingList.length ? (
+          <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+        ) : (
+          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+            <Image
+              className="m-auto pb-3 opacity-50"
+              src="/images/logo.png"
+              alt="logo"
+              width={40}
+              height={40}
+            />
+            <span>등록된 평가가 없습니다</span>
+          </div>
+        )}
       </main>
     </PageContainer>
   );
