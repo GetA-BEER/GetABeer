@@ -51,7 +51,7 @@ public class RatingController {
 
 		RatingTag ratingTag = tagMapper.ratingPostDtoToRatingTag(post);
 		String message = ratingService
-			.create(ratingMapper.ratingPostDtoToRating(post), post.getBeerId(), ratingTag, post.getUserId());
+			.create(ratingMapper.ratingPostDtoToRating(post), post.getBeerId(), ratingTag);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}

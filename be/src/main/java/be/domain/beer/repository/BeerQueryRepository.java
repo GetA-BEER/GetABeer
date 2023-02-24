@@ -12,10 +12,7 @@ import static be.domain.user.entity.QUser.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -187,6 +184,7 @@ public class BeerQueryRepository {
 			.fetchFirst();
 	}
 
+
 	public Page<Beer> findMyPageBeers(User loginUser, Pageable pageable) {
 
 		List<Beer> beerList = jpaQueryFactory.select(beer)
@@ -209,6 +207,7 @@ public class BeerQueryRepository {
 
 		return new PageImpl<>(beerList, pageable, total);
 	}
+
 
 	public List<Rating> findMyRatingWithWishlist(User loginUser) {
 

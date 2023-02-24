@@ -5,8 +5,10 @@ import static be.domain.user.entity.enums.Role.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ import be.domain.beer.repository.WeeklyBeerRepository;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
+import be.domain.beerwishlist.entity.BeerWishlist;
+import be.domain.beerwishlist.repository.BeerWishListQRepository;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
@@ -47,6 +51,7 @@ public class BeerServiceImpl implements BeerService {
 	private final BeerCategoryService beerCategoryService;
 	private final BeerBeerCategoryRepository beerBeerCategoryRepository;
 	private final BeerBeerCategoryQueryRepository beerBeerCategoryQueryRepository;
+	private final BeerWishListQRepository beerWishListQRepository;
 
 	@Override
 	@Transactional
@@ -58,7 +63,9 @@ public class BeerServiceImpl implements BeerService {
 		// 	throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		// }
 
-		Beer savedBeer = Beer.builder().build();
+		Beer savedBeer = Beer.builder()
+			.beerWishlists(new ArrayList<>())
+			.build();
 
 		savedBeer.create(beer);
 		saveBeerBeerCategories(savedBeer, beer);
@@ -215,17 +222,6 @@ public class BeerServiceImpl implements BeerService {
 
 		Beer findBeer = findVerifiedBeer(beerId);
 		return beerQueryRepository.findSimilarBeer(findBeer);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public Page<Beer> findWishlistBeers(Integer page) {
-
-		User loginUser = userService.getLoginUser();
-
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return beerQueryRepository.findMyPageBeers(loginUser, pageRequest);
 	}
 
 	@Override

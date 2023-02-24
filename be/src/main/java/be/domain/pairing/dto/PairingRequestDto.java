@@ -18,9 +18,6 @@ public class PairingRequestDto {
 		private Long beerId;
 
 		@NotNull
-		private Long userId;
-
-		@NotNull
 		private String content;
 
 		@NotNull

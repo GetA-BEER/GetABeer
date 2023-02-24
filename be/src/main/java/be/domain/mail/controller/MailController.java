@@ -29,13 +29,15 @@ public class MailController {
 
 	@PostMapping("/mail")
 	public ResponseEntity<String> sendEmail(@RequestBody MailDto.postEmail mailDto) {
-		String code = mailService.sendCertificationMail(mailDto.getEmail());
+		mailService.verifyEmail(mailDto.getEmail());
+		mailService.sendCertificationMail(mailDto.getEmail());
 
 		return ResponseEntity.ok("인증 코드가 전송되었습니다.");
 	}
 
 	@PostMapping("/mail/password")
 	public void sendOAuth2PasswordEmail(@RequestBody MailDto.sendPWMail post) {
+		mailService.verifyEmail(post.getEmail());
 		mailService.sendPasswordMail(post.getEmail(), post.getPassword());
 
 		ResponseEntity.ok("임시 비밀번호가 전송되었습니다.");
