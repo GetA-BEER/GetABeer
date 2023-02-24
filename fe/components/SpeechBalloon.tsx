@@ -63,8 +63,13 @@ export default function SpeechBalloon({
     <div className="mx-5 mb-4">
       <div className="w-full h-fit relative ml-4 p-4 rounded-r-lg rounded-b-lg bg-y-cream after:border-t-[30px] after:border-l-[33px] after:border-t-y-cream after:border-l-transparent after:absolute after:top-0 after:-left-8">
         <div className="flex">
-          <div className="rounded-full w-10 h-10 ml-1">
-            <Image alt="user profile image" src={props.userImage} fill />
+          <div className="relative rounded-full w-10 h-10 ml-1">
+            <Image
+              alt="user profile image"
+              src={props.userImage}
+              fill
+              className="object-cover"
+            />
           </div>
           <div className="flex flex-col ml-2">
             <span>{props.nickname}</span>

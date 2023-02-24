@@ -57,11 +57,12 @@ export default function RatingCard(props: {
   return (
     <div>
       <div className="flex">
-        <div className="rounded-full w-10 h-10 ml-1">
+        <div className="relative rounded-full w-10 h-10 ml-1">
           <Image
             alt="user profile image"
             src={props.cardProps.userImage}
             fill
+            className="object-cover"
           />
         </div>
         <div className="flex flex-col ml-2">
