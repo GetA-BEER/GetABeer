@@ -11,11 +11,12 @@ export type Category =
   | 'SOUP'
   | 'ETC';
 
-export default function PairingSelect({ setCategory }: any) {
+export default function PairingSelect({ category, setCategory }: any) {
   type Props = {
     setSort: React.Dispatch<React.SetStateAction<Category>>;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const categoryList = [
     '튀김/부침',
     '구이/오븐',
@@ -27,9 +28,12 @@ export default function PairingSelect({ setCategory }: any) {
     '기타',
   ];
   const [showModal, setShowModal] = useState(false);
-  const [pairingState, setPairingState] = useState<string | undefined>(
-    '카테고리'
-  );
+  const [pairingState, setPairingState] = useState<any>(category);
+  // useEffect(() => {
+  //   if (category !== '' && categoryList.includes(category)) {
+  //     setPairingState(category);
+  //   }
+  // }, [category, categoryList, pairingState]);
 
   const onCategoryChange = (select: string) => {
     setPairingState(select);

@@ -1,30 +1,59 @@
 import Head from 'next/head';
 import BigInput from '@/components/inputs/BigInput';
 import PairingSelect from '@/components/selectBox/PairingSelect';
-import ImageUpload from '../../components/postPairingPage/ImageUpload';
+import EditImage from '../../components/editPairingPage/EditImage';
 import PostDetailCard from '@/components/postPairingPage/PostDetailCard';
 import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { currentBeer } from '@/atoms/currentBeer';
+import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import axios from '@/pages/api/axios';
 
 export default function EditPairing() {
   const router = useRouter();
   const pairingId = router.query.id;
   const [beerInfo, setBeerInfo] = useState<any>();
-  const [content, setContent] = useState('');
-  const [category, setCategory] = useState('카테고리');
+
+  const [content, setContent] = useState<any>('');
+  const [category, setCategory] = useState<any>('');
+
+  // 이미지 관련 데이터
   const [imageData, setImageData] = useState([]);
+  const [url, setUrl] = useState<any>([]);
+  const [types, setTypes] = useState<any>([]);
+
   const [finalData, setFinalData] = useState<any>('');
   const [TOKEN, setTOKEN] = useState();
 
   useEffect(() => {
-    axios.get(`/api/pairing/${pairingId}`).then((response) => {
-      setBeerInfo(response.data);
-    });
-  }, [pairingId]);
+    if (pairingId !== undefined) {
+      axios
+        .get(`/api/pairings/${pairingId}`)
+        .then((response) => {
+          setCategory(response.data.category);
+          setContent(response.data.content);
+
+          if (url.length === 0) {
+            const tmpImageData = response.data.imageList;
+            const tmpType = [];
+            const tmpUrl = [];
+            // 이미지 데이터 넣기
+            for (const image of tmpImageData) {
+              tmpType.push(`url=${image.pairingImageId}`);
+              tmpUrl.push(image.imageUrl);
+            }
+            if (tmpType.length > 0) setTypes(tmpType);
+            if (tmpUrl.length > 0) setUrl(tmpUrl);
+          }
+          // 맥주 상세 정보
+          axios
+            .get(`/api/beers/${response.data.beerId}`)
+            .then((response) => setBeerInfo(response.data));
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [pairingId, types, url]);
 
   useEffect(() => {
     const localInfo = window.localStorage.getItem('recoil-persist');
@@ -45,18 +74,31 @@ export default function EditPairing() {
   // Post 제출 로직
   const handleSubmit = () => {
     const beerId = beerInfo?.beerId;
+    const finalTypeList = [];
+    const finalIdList = [];
+    for (const check of types) {
+      if (check[3] === '=') {
+        let tmpType = check.split('=');
+        finalTypeList.push(tmpType[0]);
+        finalIdList.push(Number(tmpType[1]));
+      } else {
+        finalTypeList.push('file');
+      }
+    }
     let jsonData = {
-      beerId: pairingId,
+      beerId: beerId,
+      type: finalTypeList,
+      url: finalIdList,
       content: content,
       category: category,
     };
-
+    console.log(jsonData);
     const formData = new FormData();
     for (const file of imageData) {
       formData.append('files', file);
     }
     formData.append(
-      'post',
+      'patch',
       new Blob([JSON.stringify(jsonData)], { type: 'application/json' })
     );
     setFinalData(formData);
@@ -70,16 +112,18 @@ export default function EditPairing() {
       },
       withCredentials: true,
     };
-    if (finalData !== '' && !isSubmit) {
+    if (finalData !== '') {
+      // && !isSubmit
       setIsSubmit(true);
+      console.log('finalData', finalData.get('patch'));
       axios
-        .post(`/api/pairings`, finalData, config)
+        .patch(`/api/pairings/${pairingId}`, finalData, config)
         .then((response) => {
           router.push(`/beer/${beerInfo.beerId}`);
         })
         .catch((error) => console.log(error));
     }
-  }, [finalData, router, isSubmit, TOKEN, beerInfo]);
+  }, [finalData, router, isSubmit, TOKEN, beerInfo, pairingId]);
 
   return (
     <>
@@ -97,7 +141,14 @@ export default function EditPairing() {
             페어링 카테고리
           </div>
           <PairingSelect category={category} setCategory={setCategory} />
-          <ImageUpload imageData={imageData} setImageData={setImageData} />
+          <EditImage
+            imageData={imageData}
+            setImageData={setImageData}
+            url={url}
+            setUrl={setUrl}
+            type={types}
+            setType={setTypes}
+          />
           <div className="mt-6 mb-2 text-base font-semibold">설명</div>
           <BigInput
             placeholder="세글자 이상 적어주세요"
