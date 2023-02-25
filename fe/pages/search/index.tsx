@@ -28,7 +28,8 @@ export default function Search() {
         .then((res) => {
           setSearchResultList(res.data.data);
           setTotalPages(res.data.pageInfo.totalPages);
-        });
+        })
+        .catch((err) => console.log(err));
     }
   }, [router.query.q, page]);
 

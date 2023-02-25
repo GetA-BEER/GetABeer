@@ -31,14 +31,17 @@ export default function MyComment() {
   };
 
   const deletePairingComment = (pairingCommentId: number) => {
-    axios.delete(`/api/pairings/comments/${pairingCommentId}`).then((res) => {
-      if (pairingCommentList !== null) {
-        const filtered = pairingCommentList.filter((el) => {
-          return el.pairingCommentId !== pairingCommentId;
-        });
-        setPairingCommentList(filtered);
-      }
-    });
+    axios
+      .delete(`/api/pairings/comments/${pairingCommentId}`)
+      .then((res) => {
+        if (pairingCommentList !== null) {
+          const filtered = pairingCommentList.filter((el) => {
+            return el.pairingCommentId !== pairingCommentId;
+          });
+          setPairingCommentList(filtered);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const [curTab, setCurTab] = useState(0);
@@ -64,12 +67,18 @@ export default function MyComment() {
   ];
 
   useEffect(() => {
-    axios.get(`/api/mypage/comment/rating`).then((res) => {
-      setRatingCommentList(res.data.data);
-    });
-    axios.get(`/api/mypage/comment/pairing`).then((res) => {
-      setPairingCommentList(res.data.data);
-    });
+    axios
+      .get(`/api/mypage/comment/rating`)
+      .then((res) => {
+        setRatingCommentList(res.data.data);
+      })
+      .catch((err) => console.log(err));
+    axios
+      .get(`/api/mypage/comment/pairing`)
+      .then((res) => {
+        setPairingCommentList(res.data.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (

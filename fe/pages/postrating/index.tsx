@@ -77,10 +77,13 @@ export default function PostRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.post('/api/ratings', reqBody).then((res) => {
-      router.back();
-      reset();
-    });
+    axios
+      .post('/api/ratings', reqBody)
+      .then((res) => {
+        router.back();
+        reset();
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
