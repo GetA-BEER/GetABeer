@@ -1,14 +1,14 @@
 import PageContainer from '@/components/PageContainer';
-import { IoChevronBack } from 'react-icons/io5';
-import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import BackBtn from '@/components/button/BackPageBtn';
 import axios from '@/pages/api/axios';
 import Link from 'next/link';
+import Image from 'next/image';
 import SpeechBalloon from '@/components/SpeechBalloon';
 import { RatingComment, PairingComment } from '@/components/SpeechBalloon';
 
 export default function MyComment() {
-  const router = useRouter();
+  const [userNickname, setUserNickname] = useState('');
   const [ratingCommentList, setRatingCommentList] = useState<RatingComment[]>(
     []
   );
@@ -75,13 +75,11 @@ export default function MyComment() {
   return (
     <PageContainer>
       <main className="px-2">
-        <Link href={'/mypage'}>
-          <button className="m-4">
-            <IoChevronBack className="w-6 h-6" />
-          </button>
-        </Link>
+        <BackBtn />
         <div className="flex justify-center my-4">
-          <h1 className="text-xl lg:text-2xl font-bold">나의 댓글</h1>
+          <h1 className="text-xl lg:text-2xl font-bold">
+            {userNickname}님의 댓글
+          </h1>
         </div>
         <ul className="flex justify-around mb-4">
           {tabArr.map((el, idx) => {
@@ -115,9 +113,16 @@ export const MyRatingComment = ({
 }) => {
   return (
     <div>
-      {ratingCommentList === null ? (
-        <div className="flex justify-center items-center text-y-gray rounded-lg py-10 m-2 bg-y-lightGray">
-          댓글이 없습니다
+      {ratingCommentList.length === 0 ? (
+        <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+          <Image
+            className="m-auto pb-3 opacity-50"
+            src="/images/logo.png"
+            alt="logo"
+            width={40}
+            height={40}
+          />
+          <span>등록된 댓글이 없습니다</span>
         </div>
       ) : (
         ratingCommentList.map((el) => {
@@ -145,9 +150,16 @@ export const MyPairingComment = ({
 }) => {
   return (
     <div>
-      {pairingCommentList === null ? (
-        <div className="flex justify-center items-center text-y-gray rounded-lg py-10 m-2 bg-y-lightGray">
-          댓글이 없습니다
+      {pairingCommentList.length === 0 ? (
+        <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+          <Image
+            className="m-auto pb-3 opacity-50"
+            src="/images/logo.png"
+            alt="logo"
+            width={40}
+            height={40}
+          />
+          <span>등록된 댓글이 없습니다</span>
         </div>
       ) : (
         pairingCommentList.map((el) => {

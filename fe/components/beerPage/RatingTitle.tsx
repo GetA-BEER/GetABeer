@@ -5,7 +5,7 @@ export interface ratingCount {
 }
 
 export default function RatingTitle(props: {
-  ratingCount: number;
+  ratingCount: number | undefined;
   beerId: number;
 }) {
   return (
