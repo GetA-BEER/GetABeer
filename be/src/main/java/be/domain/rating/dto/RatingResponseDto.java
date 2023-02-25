@@ -53,9 +53,11 @@ public class RatingResponseDto {
 		}
 
 		private Long beerId;
+		private String korName;
 		private Long ratingId;
 		private Long userId;
 		private String nickname;
+		private String userImage;
 		private String content;
 		private List<BeerTagType> ratingTag;
 		private Double star;
