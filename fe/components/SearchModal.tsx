@@ -51,6 +51,16 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
     '#탄산 無',
   ];
 
+  const pairingCategoryList = [
+    '&튀김/부침',
+    '&구이/오븐',
+    '&볶음/조림',
+    '&생식/회',
+    '&마른안주/견과',
+    '&과자/디저트',
+    '&국/찜/찌개/탕',
+  ];
+
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputState(e.target.value);
   };
@@ -181,15 +191,22 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
           </ul>
         </div>
         <div className="mx-5 pb-3">
-          <h4 className="text-y-brown">카테고리 검색</h4>
+          <h4 className="text-y-brown">카테고리로 검색</h4>
           <SearchSwiper
             list={beerCategoryList}
             setIsSearching={setIsSearching}
           />
         </div>
         <div className="mx-5 pb-4">
-          <h4 className="text-y-brown">태그 검색</h4>
+          <h4 className="text-y-brown">태그로 검색</h4>
           <SearchSwiper list={tagList} setIsSearching={setIsSearching} />
+        </div>
+        <div className="mx-5 pb-3">
+          <h4 className="text-y-brown">페어링으로 검색</h4>
+          <SearchSwiper
+            list={pairingCategoryList}
+            setIsSearching={setIsSearching}
+          />
         </div>
       </div>
     </div>
