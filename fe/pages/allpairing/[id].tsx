@@ -29,6 +29,7 @@ export default function AllPairing() {
           `/api/pairings/page/${sort}?beerId=${curRoute}&page=${page}&size=5`
         )
         .then((response) => {
+          // console.log(response);
           setPairingCardProps(response.data);
           setTotalPages(response.data.pageInfo.totalPages);
           setTitle(response.data.pageInfo.beerKorName);
