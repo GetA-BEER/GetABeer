@@ -20,21 +20,17 @@ export default function Main() {
         .get(`/api/user`)
         .then((response) => {
           setUserInfo(response.data);
-          console.log(userInfo);
         })
         .catch((error) => console.log(error));
     }
   }, [userInfo]);
-  // console.log(userInfo);
 
   // 인기 많은 맥주
   useEffect(() => {
     axios
       .get(`/api/beers/weekly`)
-      .then((response) => setPopularBeer(response.data))
-      .catch((error) => console.log(error));
+      .then((response) => setPopularBeer(response.data));
   }, []);
-  // 확인해보니까 이게 무한루프에 빠진 것 같아서 일단 디펜던시 어레이 비워뒀어요..!
 
   // 사용자 추천맥주
   useEffect(() => {
