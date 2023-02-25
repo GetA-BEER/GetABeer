@@ -37,12 +37,12 @@ export default function CameraModal() {
         };
         const formData = new FormData();
         formData.append('image', compressedFile);
-        await axios
-          .post(`/api/search/image`, compressedFile, config)
+        console.log(formData.get('image'));
+        axios
+          .post(`/api/search/image`, formData, config)
           .then((res) => {
             console.log(res);
             console.log(compressedFile);
-            setUploadImg(null);
           })
           .catch((error) => console.log(error));
       } catch (error) {

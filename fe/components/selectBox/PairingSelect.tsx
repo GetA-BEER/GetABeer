@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 import { CategoryMatcherToEng } from '@/utils/CategryMatcher';
+import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 export type Category =
   | 'FRIED'
   | 'GRILL'
@@ -27,13 +28,15 @@ export default function PairingSelect({ category, setCategory }: any) {
     '국/찜/찌개/탕',
     '기타',
   ];
+
   const [showModal, setShowModal] = useState(false);
-  const [pairingState, setPairingState] = useState<any>(category);
-  // useEffect(() => {
-  //   if (category !== '' && categoryList.includes(category)) {
-  //     setPairingState(category);
-  //   }
-  // }, [category, categoryList, pairingState]);
+  const [pairingState, setPairingState] = useState<any>();
+  useEffect(() => {
+    if (pairingState === undefined && category !== undefined) {
+      const tmpCategory = CategoryMatcherToKor(category);
+      setPairingState(tmpCategory);
+    }
+  }, [category, pairingState]);
 
   const onCategoryChange = (select: string) => {
     setPairingState(select);
