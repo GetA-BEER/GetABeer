@@ -43,8 +43,10 @@ export interface RatingInfo {
 
 export interface PairingCardProps {
   beerId: number;
+  korName: string;
   pairingId: number;
   nickname: string;
+  userImage: string;
   content: string;
   thumbnail: string;
   category: string;
