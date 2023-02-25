@@ -11,7 +11,7 @@ export default function SimilarBeer({ similarBeer }: any) {
   useEffect(() => {
     if (similarBeer !== undefined) setBeerInfo(similarBeer);
   }, [similarBeer]);
-
+  console.log(beerInfo);
   return (
     <div className="w-full ">
       <div className="mx-3 mt-6 text-base font-semibold">
@@ -37,10 +37,18 @@ export default function SimilarBeer({ similarBeer }: any) {
                     {el?.korName}
                   </div>
                   <div className="truncate">
-                    {el?.beerCategories === null ? (
+                    {el?.beerCategories === null ||
+                    el?.beerCategories.length === 0 ? (
                       <></>
                     ) : (
-                      <span>{el?.category} / </span>
+                      <span>
+                        {el?.beerCategories.map(
+                          (category: any, idx: number) => (
+                            <span key={idx}>{category.beerCategoryType}</span>
+                          )
+                        )}
+                        /
+                      </span>
                     )}
                     <span>
                       {el?.country} / {el?.abv}%

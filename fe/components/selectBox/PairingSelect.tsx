@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 import { CategoryMatcherToEng } from '@/utils/CategryMatcher';
+import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 export type Category =
   | 'FRIED'
   | 'GRILL'
@@ -11,11 +12,12 @@ export type Category =
   | 'SOUP'
   | 'ETC';
 
-export default function PairingSelect({ setCategory }: any) {
+export default function PairingSelect({ category, setCategory }: any) {
   type Props = {
     setSort: React.Dispatch<React.SetStateAction<Category>>;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const categoryList = [
     '튀김/부침',
     '구이/오븐',
@@ -26,10 +28,15 @@ export default function PairingSelect({ setCategory }: any) {
     '국/찜/찌개/탕',
     '기타',
   ];
+
   const [showModal, setShowModal] = useState(false);
-  const [pairingState, setPairingState] = useState<string | undefined>(
-    '카테고리'
-  );
+  const [pairingState, setPairingState] = useState<any>();
+  useEffect(() => {
+    if (pairingState === undefined && category !== undefined) {
+      const tmpCategory = CategoryMatcherToKor(category);
+      setPairingState(tmpCategory);
+    }
+  }, [category, pairingState]);
 
   const onCategoryChange = (select: string) => {
     setPairingState(select);
