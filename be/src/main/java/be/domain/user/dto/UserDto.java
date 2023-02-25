@@ -133,4 +133,14 @@ public class UserDto {
 		@NotBlank
 		private String password;
 	}
+
+	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor(access = AccessLevel.PROTECTED)
+	public static class LoginResponse {
+		private Long id;
+		private String email;
+		private String nickname;
+	}
 }

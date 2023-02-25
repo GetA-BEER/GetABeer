@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final EntityManager em;
-	private final HttpSession httpSession;
+	// private final HttpSession httpSession;
 	private final ImageHandler imageHandler;
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -92,7 +91,7 @@ public class UserService {
 	public User updateUser(User edit) {
 		User user = getLoginUser();
 
-		if (edit.getNickname() != null) {
+		if (edit.getNickname() != null && !user.getNickname().equals(edit.getNickname())) {
 			verifyNickname(edit.getNickname());
 		}
 
@@ -213,7 +212,7 @@ public class UserService {
 
 	@Transactional
 	public void login() {
-		httpSession.setAttribute(SessionKey.LOGIN_USER_ID, getLoginUser().getEmail());
+		// httpSession.setAttribute(SessionKey.LOGIN_USER_ID, getLoginUser().getEmail());
 	}
 
 	/* 로그아웃 */
@@ -224,16 +223,13 @@ public class UserService {
 				30 * 60 * 1000L,
 				TimeUnit.MILLISECONDS);
 		redisTemplate.delete(email);
-		httpSession.removeAttribute(SessionKey.LOGIN_USER_ID);
+		// httpSession.removeAttribute(SessionKey.LOGIN_USER_ID);
 	}
 
 	/* 닉네임 확인 */
 	public void verifyNickname(String nickname) {
 		if (userRepository.existsByNickname(nickname)) {
-			User user = getLoginUser();
-			if (!nickname.equals(user.getNickname())) {
-				throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
-			}
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
 		}
 	}
 

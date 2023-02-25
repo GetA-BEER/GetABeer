@@ -19,12 +19,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SessionController {
 
-	private final OAuth2SuccessHandler oAuth2SuccessHandler;
-
-	@GetMapping("/session")
-	public void getHeader(HttpServletRequest request, HttpServletResponse response,
-		@LoginOAuth2User SessionUser sessionUser) throws
-		IOException {
-		oAuth2SuccessHandler.redirect(request, response, sessionUser);
-	}
+	// private final OAuth2SuccessHandler oAuth2SuccessHandler;
+	//
+	// @GetMapping("/session")
+	// public void getHeader(HttpServletRequest request, HttpServletResponse response,
+	// 	@LoginOAuth2User SessionUser sessionUser) throws IOException {
+	// 	oAuth2SuccessHandler.redirect(request, response, sessionUser);
+	// }
 }
