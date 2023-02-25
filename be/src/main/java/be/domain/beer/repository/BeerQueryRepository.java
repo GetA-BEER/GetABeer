@@ -118,6 +118,7 @@ public class BeerQueryRepository {
 				.selectFrom(beer)
 				.join(beer.beerBeerCategories, beerBeerCategory)
 				.join(beerBeerCategory.beerCategory, beerCategory)
+				.where(beer.ne(findBeer))
 				.where(beerCategory.beerCategoryType.stringValue().eq(beerCategories.get(0))
 					.and(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag1())
 						.or(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag2())))
@@ -184,7 +185,6 @@ public class BeerQueryRepository {
 			.fetchFirst();
 	}
 
-
 	public Page<Beer> findMyPageBeers(User loginUser, Pageable pageable) {
 
 		List<Beer> beerList = jpaQueryFactory.select(beer)
@@ -207,7 +207,6 @@ public class BeerQueryRepository {
 
 		return new PageImpl<>(beerList, pageable, total);
 	}
-
 
 	public List<Rating> findMyRatingWithWishlist(User loginUser) {
 
