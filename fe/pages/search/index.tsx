@@ -9,6 +9,7 @@ import axios from '@/pages/api/axios';
 import Link from 'next/link';
 import Image from 'next/image';
 import Pagenation from '@/components/Pagenation';
+import { SearchMatcherToKor } from '@/utils/SearchMatcher';
 
 export default function Search() {
   const router = useRouter();
@@ -19,12 +20,16 @@ export default function Search() {
   );
 
   useEffect(() => {
-    axios
-      .get(`/api/search?query=${router.query.q}&page=${page}`)
-      .then((res) => {
-        setSearchResultList(res.data.data);
-        setTotalPages(res.data.pageInfo.totalPages);
-      });
+    if (router.query.q && typeof router.query.q === 'string') {
+      axios
+        .get(
+          `/api/search?query=${encodeURIComponent(router.query.q)}&page=${page}`
+        )
+        .then((res) => {
+          setSearchResultList(res.data.data);
+          setTotalPages(res.data.pageInfo.totalPages);
+        });
+    }
   }, [router.query.q, page]);
 
   return (
@@ -36,7 +41,11 @@ export default function Search() {
         />
         <div className="flex justify-center m-4">
           <h1 className="font-bold text-xl lg:text-2xl">
-            <span className="text-y-brown">&apos;{router.query.q}&apos;</span>{' '}
+            <span className="text-y-brown">
+              &apos;
+              {SearchMatcherToKor(router.query.q)}
+              &apos;
+            </span>{' '}
             검색 결과
           </h1>
         </div>

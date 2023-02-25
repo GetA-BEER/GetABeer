@@ -10,20 +10,26 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { currentBeer } from '@/atoms/currentBeer';
+import {
+  BeerInfo,
+  RatingInfo,
+  PairingInfo,
+  SimilarBeerProps,
+} from '@/components/beerPage/BeerDeclare';
 import axios from '@/pages/api/axios';
 
 export default function Beer() {
-  let router = useRouter();
+  const router = useRouter();
   const [curRoute, setCurRoute] = useState<any>();
   useEffect(() => {
     setCurRoute(router.query.id);
   }, [router, curRoute]);
 
-  const [beerInfo, setBeerInfo] = useState<any>();
+  const [beerInfo, setBeerInfo] = useState<BeerInfo>();
   const [, setCurBeer] = useRecoilState(currentBeer);
-  const [commentInfo, setCommentInfo] = useState<any>();
-  const [pairingInfo, setPairingInfo] = useState<any>();
-  const [similarBeer, setSimilarBeer] = useState<any>();
+  const [ratingInfo, setRatingInfo] = useState<RatingInfo>();
+  const [pairingInfo, setPairingInfo] = useState<PairingInfo>();
+  const [similarBeer, setSimilarBeer] = useState<SimilarBeerProps[]>();
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
@@ -41,8 +47,8 @@ export default function Beer() {
     // 코멘트 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/api/ratings/page/recency?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setCommentInfo(response.data))
+        .get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
+        .then((response) => setRatingInfo(response.data))
         .catch((error) => console.log(error));
     }
   }, [curRoute]);
@@ -51,7 +57,7 @@ export default function Beer() {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/api/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
+        .get(`/api/pairings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
         .then((response) => {
           setPairingInfo(response.data);
         })
@@ -97,10 +103,10 @@ export default function Beer() {
         </div>
 
         <RatingTitle
-          ratingCount={commentInfo?.pageInfo?.totalElements}
+          ratingCount={ratingInfo?.pageInfo?.totalElements}
           beerId={curRoute}
         />
-        <SmallCardController cardProps={commentInfo?.data} />
+        <SmallCardController cardProps={ratingInfo?.data} />
 
         <PairingTitle
           pairngCount={pairingInfo?.pageInfo?.totalElements}

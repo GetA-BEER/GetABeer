@@ -5,6 +5,8 @@ import SearchSwiper from './SearchSwiper';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { searchHistory } from '@/atoms/searchHistory';
+import { SearchMatcherToEng } from '@/utils/SearchMatcher';
+
 type SearchProps = {
   setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -58,9 +60,14 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
   });
 
   const onSearch = () => {
-    router.push({ pathname: '/search', query: { q: inputState } });
-    addSearchHistory(inputState);
-    setIsSearching(false);
+    if (inputState !== '') {
+      router.push({
+        pathname: '/search',
+        query: { q: SearchMatcherToEng(inputState) },
+      });
+      addSearchHistory(inputState);
+      setIsSearching(false);
+    }
   };
 
   const addSearchHistory = (word: string) => {
@@ -147,9 +154,20 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
                       key={el.id}
                       className="flex justify-between p-1 hover:bg-y-lightGray/80"
                     >
-                      {el.word}
                       <button
-                        className="text-y-gray"
+                        className="flex-1 text-left"
+                        onClick={() => {
+                          router.push({
+                            pathname: '/search',
+                            query: { q: SearchMatcherToEng(el.word) },
+                          });
+                          setIsSearching(false);
+                        }}
+                      >
+                        {el.word}
+                      </button>
+                      <button
+                        className="text-y-gray z-1"
                         onClick={() => removeSearchHistory(el.id)}
                       >
                         <MdCancel className="mx-1 w-5 h-4" />
