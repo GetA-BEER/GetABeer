@@ -48,7 +48,7 @@ public class PairingController {
 
 	/* 페어링 등록 */
 	@PostMapping
-	public ResponseEntity<String> post(@RequestPart(value = "post", required = false) @Valid PairingRequestDto.Post post,
+	public ResponseEntity<String> post(@RequestPart(value = "post") @Valid PairingRequestDto.Post post,
 		@RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
 		log.info("************************************************************");
 		log.info("여기는 컨트롤러");
@@ -64,7 +64,7 @@ public class PairingController {
 	/* 페어링 수정 */
 	@PatchMapping("/{pairingId}")
 	public ResponseEntity<String> patch(@PathVariable @Positive Long pairingId,
-		@RequestPart(value = "newFile") List<MultipartFile> files,
+		@RequestPart(value = "newFile", required = false) List<MultipartFile> files,
 		@RequestPart(value = "patch") @Valid PairingRequestDto.Patch patch) throws IOException {
 		String message = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
 			pairingId, patch.getType(), patch.getUrl(), files);
