@@ -38,9 +38,11 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 		var response = queryFactory
 			.select(Projections.fields(RatingResponseDto.Detail.class,
 				rating.beer.id.as("beerId"),
+				rating.beer.beerDetailsBasic.korName.as("korName"),
 				rating.id.as("ratingId"),
 				rating.user.id.as("userId"),
 				rating.user.nickname.as("nickname"),
+				rating.user.imageUrl.as("userImage"),
 				rating.content,
 				rating.star,
 				rating.likeCount,
