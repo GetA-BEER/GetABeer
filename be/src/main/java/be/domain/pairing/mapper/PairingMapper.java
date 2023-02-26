@@ -116,9 +116,11 @@ public interface PairingMapper {
 			.map(pairing ->
 				new PairingResponseDto.Total(
 					pairing.getBeer().getId(),
+					pairing.getBeer().getBeerDetailsBasic().getKorName(),
 					pairing.getId(),
 					pairing.getUser().getId(),
 					pairing.getUser().getNickname(),
+					pairing.getUser().getImageUrl(),
 					pairing.getContent(),
 					pairing.getThumbnail(),
 					pairing.getPairingCategory(),

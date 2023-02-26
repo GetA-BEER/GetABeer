@@ -20,8 +20,7 @@ import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.entity.PairingImage;
 import be.domain.pairing.repository.image.PairingImageRepository;
 import be.domain.pairing.repository.PairingRepository;
-import be.domain.pairing.service.helper.SortingState;
-import be.domain.pairing.service.helper.SortingStateImpl;
+import be.domain.pairing.service.helper.StateHelper;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
@@ -42,7 +41,7 @@ public class PairingService {
 	private final PairingImageRepository pairingImageRepository;
 	private final PairingCommentRepository pairingCommentRepository;
 
-	private SortingState sortingState = new SortingStateImpl();
+	private StateHelper stateHelper = new StateHelper();
 
 	/* 페어링 등록 */
 	@Transactional
@@ -88,6 +87,7 @@ public class PairingService {
 		log.info("페어링 등록 확인 : " + pairing.getContent());
 		log.info("페어링 등록 확인 : " + pairing.getPairingCategory());
 		log.info("페어링 등록 확인 : " + pairing.getBeer().getBeerDetailsBasic().getKorName());
+		log.info("페어링 유저 확인 : " + pairing.getUser().getNickname());
 		log.info("**************************************************************");
 
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
@@ -174,8 +174,8 @@ public class PairingService {
 
 		User user = userService.getLoginUserReturnNull();
 
-		return sortingState
-			.sorting(user, category, type, beerId,
+		return stateHelper
+			.getPairingResponsePage(user, category, type, beerId,
 				PageRequest.of(page - 1, size), pairingRepository, pairingLikeRepository);
 	}
 

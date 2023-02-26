@@ -8,7 +8,7 @@ import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.repository.PairingRepository;
 import be.domain.user.entity.User;
 
-public interface SortingState {
-	Page<PairingResponseDto.Total> sorting(User user, String category, String type, Long beerId,
+public interface PairingState {
+	Page<PairingResponseDto.Total> getPairingResponse(User user, String category, String type, Long beerId,
 		Pageable pageable, PairingRepository pairingRepository, PairingLikeRepository pairingLikeRepository);
 }
