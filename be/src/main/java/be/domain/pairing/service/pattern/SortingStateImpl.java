@@ -13,15 +13,10 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 
 public class SortingStateImpl implements SortingState {
-	private final PairingLikeRepository pairingLikeRepository;
-
-	public SortingStateImpl(PairingLikeRepository pairingLikeRepository) {
-		this.pairingLikeRepository = pairingLikeRepository;
-	}
 
 	@Override
 	public Page<PairingResponseDto.Total> sorting(User user, String category, String type, Long beerId,
-		Pageable pageable, PairingRepository pairingRepository) {
+		Pageable pageable, PairingRepository pairingRepository, PairingLikeRepository pairingLikeRepository) {
 		Page<PairingResponseDto.Total> response;
 
 		if (user == null) {
@@ -41,7 +36,8 @@ public class SortingStateImpl implements SortingState {
 				UserState getCategory = new GetCategory(category);
 				response = getCategory.userNotNull(beerId, type, user.getId(), pageable, pairingRepository);
 			}
-			response.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
+			response.forEach(pairing ->
+				pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId(), pairingLikeRepository)));
 		}
 		response.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId(), pairingRepository)));
 
@@ -55,7 +51,7 @@ public class SortingStateImpl implements SortingState {
 		return pairing.getPairingCategory();
 	}
 
-	private Boolean getIsUserLikes(Long pairingId, Long userId) {
+	private Boolean getIsUserLikes(Long pairingId, Long userId, PairingLikeRepository pairingLikeRepository) {
 		int userLikes = pairingLikeRepository.findPairingLikeUser(pairingId, userId);
 
 		return userLikes != 0;

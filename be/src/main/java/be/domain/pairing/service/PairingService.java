@@ -47,6 +47,8 @@ public class PairingService {
 	private final PairingImageRepository pairingImageRepository;
 	private final PairingCommentRepository pairingCommentRepository;
 
+	private SortingState sortingState = new SortingStateImpl();
+
 	/* 페어링 등록 */
 	@Transactional
 	public String create(Pairing pairing, List<MultipartFile> files,
@@ -176,10 +178,10 @@ public class PairingService {
 		Long beerId, String type, String category, Integer page, Integer size) {
 
 		User user = userService.getLoginUserReturnNull();
-		SortingState sortingState = new SortingStateImpl(pairingLikeRepository);
 
 		return sortingState
-			.sorting(user, category, type, beerId, PageRequest.of(page - 1, size), pairingRepository);
+			.sorting(user, category, type, beerId,
+				PageRequest.of(page - 1, size), pairingRepository, pairingLikeRepository);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
