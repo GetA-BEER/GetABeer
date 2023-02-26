@@ -33,32 +33,35 @@ export default function EditRatingPage() {
 
   useEffect(() => {
     if (ratingId !== undefined) {
-      axios.get(`/api/ratings/${ratingId}`).then((res) => {
-        setStar(res.data.star);
-        setContent(res.data.content);
-        setColor(res.data.ratingTag[0]);
-        setFlavor(res.data.ratingTag[1]);
-        setTaste(res.data.ratingTag[2]);
-        setCarbonation(res.data.ratingTag[3]);
-        axios.get(`/api/beers/${res.data.beerId}`).then((res) => {
-          const beerIInfo: MiddleCardInfo = {
-            beerId: res.data.beerId,
-            thumbnail: res.data.beerDetailsBasic.thumbnail,
-            korName: res.data.beerDetailsBasic.korName,
-            category: res.data.beerCategoryTypes,
-            country: res.data.beerDetailsBasic.country,
-            abv: res.data.beerDetailsBasic.abv,
-            ibu: res.data.beerDetailsBasic.ibu,
-            totalStarCount:
-              res.data.beerDetailsCounts.totalStarCount ||
-              res.data.beerDetailsCounts.femaleStarCount +
-                res.data.beerDetailsCounts.maleStarCount,
-            totalAverageStars: res.data.beerDetailsStars.totalAverageStars,
-            beerTags: res.data.beerDetailsTopTags || [],
-          };
-          setCardProps(beerIInfo);
-        });
-      });
+      axios
+        .get(`/api/ratings/${ratingId}`)
+        .then((res) => {
+          setStar(res.data.star);
+          setContent(res.data.content);
+          setColor(res.data.ratingTag[0]);
+          setFlavor(res.data.ratingTag[1]);
+          setTaste(res.data.ratingTag[2]);
+          setCarbonation(res.data.ratingTag[3]);
+          axios.get(`/api/beers/${res.data.beerId}`).then((res) => {
+            const beerIInfo: MiddleCardInfo = {
+              beerId: res.data.beerId,
+              thumbnail: res.data.beerDetailsBasic.thumbnail,
+              korName: res.data.beerDetailsBasic.korName,
+              category: res.data.beerCategoryTypes,
+              country: res.data.beerDetailsBasic.country,
+              abv: res.data.beerDetailsBasic.abv,
+              ibu: res.data.beerDetailsBasic.ibu,
+              totalStarCount:
+                res.data.beerDetailsCounts.totalStarCount ||
+                res.data.beerDetailsCounts.femaleStarCount +
+                  res.data.beerDetailsCounts.maleStarCount,
+              totalAverageStars: res.data.beerDetailsStars.totalAverageStars,
+              beerTags: res.data.beerDetailsTopTags || [],
+            };
+            setCardProps(beerIInfo);
+          });
+        })
+        .catch((err) => console.log(err));
     }
   }, [ratingId]);
 

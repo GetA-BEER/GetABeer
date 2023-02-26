@@ -11,9 +11,12 @@ export default function MonthlyPage() {
     []
   );
   useEffect(() => {
-    axios.get('/api/beers/monthly').then((res) => {
-      setMonthlyBeerList(res.data);
-    });
+    axios
+      .get('/api/beers/monthly')
+      .then((res) => {
+        setMonthlyBeerList(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
   return (
     <PageContainer>

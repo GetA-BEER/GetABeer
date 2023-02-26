@@ -4,6 +4,10 @@ import { BsImages } from 'react-icons/bs';
 import { AiFillCamera } from 'react-icons/ai';
 import imageCompression from 'browser-image-compression';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { searchingImage } from '@/atoms/searchingImage';
+import axios from 'axios';
 
 export default function CameraModal() {
   interface FileData {
@@ -13,14 +17,15 @@ export default function CameraModal() {
     type: string;
   }
 
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [uploadImg, setUploadImg] = useState<FileData | null>(null);
   const [style, setStyle] = useState('pc');
+  const [, setSearchResultList] = useRecoilState(searchingImage);
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files !== null) {
       const imageFile = e.target.files[0];
-      // console.log(imageFile);
       const options = {
         //옵션 설정 필요
         maxSizeMB: 4,
@@ -30,11 +35,22 @@ export default function CameraModal() {
       try {
         const compressedFile = await imageCompression(imageFile, options);
         setUploadImg(compressedFile);
-        // console.log(
-        //   `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
-        // );
-        // await uploadToServer(compressedFile);
-        // await console.log(uploadImg);
+        const config = {
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+          withCredentials: true,
+        };
+        const formData = new FormData();
+        formData.append('image', compressedFile);
+        axios
+          .post(`/api/search/image`, formData, config)
+          .then((res) => {
+            setSearchResultList(res.data);
+            setShowModal(false);
+            router.push('/search/image');
+          })
+          .catch((error) => console.log(error));
       } catch (error) {
         console.log(error);
       }
