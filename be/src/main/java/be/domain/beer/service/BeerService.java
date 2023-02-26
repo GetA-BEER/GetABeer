@@ -8,7 +8,6 @@ import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.entity.WeeklyBeer;
 import be.domain.beertag.entity.BeerTag;
-import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.rating.entity.Rating;
 
 public interface BeerService {
@@ -36,11 +35,15 @@ public interface BeerService {
 
 	List<BeerTag> findTop4BeerTags(Beer beer);
 
+	String findBestPairingCategory(Beer beer);
+
 	List<Beer> findSimilarBeers(Long beerId);
 
 	List<Rating> findMyRatingWithWishlist();
 
 	Beer findBeerByRatingId(Long ratingId);
-	
+
+	Beer findBeerByPairingId(Long pairingId);
+
 	Beer findVerifiedBeer(Long beerId);
 }

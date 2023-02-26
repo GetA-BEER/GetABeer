@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,8 +27,6 @@ import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.entity.WeeklyBeer;
 import be.domain.beer.entity.WeeklyBeerCategory;
-import be.domain.beer.mapper.BeerMapper;
-import be.domain.beer.repository.BeerBeerTagRepository;
 import be.domain.beer.repository.BeerRepository;
 import be.domain.beer.repository.MonthlyBeerRepository;
 import be.domain.beer.repository.WeeklyBeerRepository;
@@ -49,8 +48,9 @@ import be.domain.user.entity.enums.Gender;
 import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.Role;
 import be.domain.user.entity.enums.UserStatus;
-import be.domain.user.repository.UserBeerTagRepository;
 import be.domain.user.repository.UserRepository;
+import be.global.statistics.entity.TotalStatistics;
+import be.global.statistics.repository.TotalStatisticsRepository;
 
 @Configuration
 public class Init {
@@ -63,12 +63,15 @@ public class Init {
 		this.passwordEncoder = passwordEncoder;
 	}
 
+	private final List<String> pairingCategoryList =
+		List.of("FRIED", "GRILL", "STIR", "FRESH", "DRY", "SNACK", "SOUP", "ETC");
+
 	@Bean
 	@Transactional
-	CommandLineRunner stubInit(BeerController beerController, BeerMapper beerMapper, BeerService beerService,
-		BeerRepository beerRepository, BeerTagService beerTagService, UserBeerTagRepository userBeerTagRepository,
+	CommandLineRunner stubInit(BeerController beerController, BeerService beerService,
+		BeerRepository beerRepository, BeerTagService beerTagService,
 		BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
-		BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository,
+		BeerTagRepository beerTagRepository, TotalStatisticsRepository totalStatisticsRepository,
 		BeerCategoryService beerCategoryService, MonthlyBeerRepository monthlyBeerRepository,
 		WeeklyBeerRepository weeklyBeerRepository) throws IOException {
 
@@ -84,6 +87,19 @@ public class Init {
 				.beerTagType(BeerTagType.values()[i])
 				.build();
 			beerTagRepository.save(beerTag);
+		}
+
+		for (int i = 0; i < 1; i++) {
+			TotalStatistics totalStatistics =
+				TotalStatistics.builder()
+					.totalBeerViewCount(0)
+					.totalPairingCount(0)
+					.totalRatingCount(0)
+					.totalVisitorCount(0)
+					.date(LocalDate.now())
+					.build();
+
+			totalStatisticsRepository.save(totalStatistics);
 		}
 
 		/*
@@ -179,6 +195,9 @@ public class Init {
 
 			findBeer.addBeerDetailsStars(beerDetailsStars);
 
+			findBeer.getBeerDetailsStatistics()
+				.updateBestPairingCategory(pairingCategoryList.get((int)((Math.random() * 7))));
+
 			beerRepository.save(findBeer);
 		}
 
@@ -209,7 +228,7 @@ public class Init {
 
 			WeeklyBeer.WeeklyBeerBuilder weeklyBeer = WeeklyBeer.builder();
 
-			weeklyBeer.id(findBeer.getId());
+			weeklyBeer.beerId(findBeer.getId());
 			weeklyBeer.korName(findBeer.getBeerDetailsBasic().getKorName());
 			weeklyBeer.country(findBeer.getBeerDetailsBasic().getCountry());
 			weeklyBeer.thumbnail(findBeer.getBeerDetailsBasic().getThumbnail());

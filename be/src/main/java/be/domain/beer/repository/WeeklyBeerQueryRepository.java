@@ -1,6 +1,5 @@
 package be.domain.beer.repository;
 
-import static be.domain.beer.entity.QMonthlyBeer.*;
 import static be.domain.beer.entity.QWeeklyBeer.*;
 
 import java.time.LocalDateTime;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.entity.WeeklyBeer;
 import lombok.RequiredArgsConstructor;
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import be.domain.beer.service.BeerService;
 import be.global.statistics.entity.TotalStatistics;
+import be.global.statistics.repository.TotalStatisticsRepository;
 import be.global.statistics.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ public class GetABeerScheduler {
 
 	private final BeerService beerService;
 	private final StatisticsService statisticsService;
+	private final TotalStatisticsRepository totalStatisticsRepository;
 
 	/*
 	 * 매달 1일 00시 5분에 이달의 맥주 갱신
@@ -42,7 +44,9 @@ public class GetABeerScheduler {
 		statisticsService.createBeerCategoryStatistics();
 		statisticsService.createBeerTagStatistics();
 		statisticsService.createPairingCategoryStatistics();
-		TotalStatistics totalStatistics = TotalStatistics.builder().build();
+		TotalStatistics totalStatistics =
+			TotalStatistics.builder().build();
+		totalStatisticsRepository.save(totalStatistics);
 	}
 
 	/*

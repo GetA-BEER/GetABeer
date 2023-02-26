@@ -1,12 +1,12 @@
 package be.domain.beercategory.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import be.domain.beercategory.entity.BeerCategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 
 public class BeerCategoryDto {
 
