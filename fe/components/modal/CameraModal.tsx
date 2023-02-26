@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { FiCamera } from 'react-icons/fi';
 import { BsImages } from 'react-icons/bs';
 import { AiFillCamera } from 'react-icons/ai';
-import axios from '@/pages/api/axios';
 import imageCompression from 'browser-image-compression';
 import Image from 'next/image';
 
@@ -21,7 +20,9 @@ export default function CameraModal() {
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files !== null) {
       const imageFile = e.target.files[0];
+      // console.log(imageFile);
       const options = {
+        //옵션 설정 필요
         maxSizeMB: 4,
         maxWidthOrHeight: 1920,
         useWebWorker: true,
@@ -29,22 +30,11 @@ export default function CameraModal() {
       try {
         const compressedFile = await imageCompression(imageFile, options);
         setUploadImg(compressedFile);
-        const config = {
-          headers: {
-            'content-type': 'multipart/form-data',
-          },
-          withCredentials: true,
-        };
-        const formData = new FormData();
-        formData.append('image', compressedFile);
-        console.log(formData.get('image'));
-        axios
-          .post(`/api/search/image`, formData, config)
-          .then((res) => {
-            console.log(res);
-            console.log(compressedFile);
-          })
-          .catch((error) => console.log(error));
+        // console.log(
+        //   `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+        // );
+        // await uploadToServer(compressedFile);
+        // await console.log(uploadImg);
       } catch (error) {
         console.log(error);
       }
@@ -64,7 +54,6 @@ export default function CameraModal() {
   }, []);
   const onCameraClick = () => {
     setShowModal(true);
-    setUploadImg(null);
   };
 
   const windowResize = () => {

@@ -11,7 +11,7 @@ export default function SimilarBeer({ similarBeer }: any) {
   useEffect(() => {
     if (similarBeer !== undefined) setBeerInfo(similarBeer);
   }, [similarBeer]);
-  console.log(beerInfo);
+
   return (
     <div className="w-full ">
       <div className="mx-3 mt-6 text-base font-semibold">

@@ -30,6 +30,7 @@ export default function Beer() {
   const [ratingInfo, setRatingInfo] = useState<RatingInfo>();
   const [pairingInfo, setPairingInfo] = useState<PairingInfo>();
   const [similarBeer, setSimilarBeer] = useState<SimilarBeerProps[]>();
+
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
@@ -60,6 +61,7 @@ export default function Beer() {
         .get(`/api/pairings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
         .then((response) => {
           setPairingInfo(response.data);
+          console.log(response);
         })
         .catch((error) => console.log(error));
     }
