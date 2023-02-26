@@ -19,7 +19,6 @@ export default function CameraModal() {
 
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const [uploadImg, setUploadImg] = useState<FileData | null>(null);
   const [style, setStyle] = useState('pc');
   const [, setSearchResultList] = useRecoilState(searchingImage);
 
@@ -34,7 +33,6 @@ export default function CameraModal() {
       };
       try {
         const compressedFile = await imageCompression(imageFile, options);
-        setUploadImg(compressedFile);
         const config = {
           headers: {
             'content-type': 'multipart/form-data',
