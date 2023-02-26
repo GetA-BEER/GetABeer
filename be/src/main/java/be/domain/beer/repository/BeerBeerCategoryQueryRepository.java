@@ -1,7 +1,6 @@
 package be.domain.beer.repository;
 
 import static be.domain.beer.entity.QBeerBeerCategory.*;
-import static be.domain.beercategory.entity.QBeerCategory.*;
 
 import java.util.List;
 
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerBeerCategory;
 import lombok.RequiredArgsConstructor;
 

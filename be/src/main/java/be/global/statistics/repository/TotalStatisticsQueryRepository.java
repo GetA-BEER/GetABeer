@@ -21,7 +21,7 @@ public class TotalStatisticsQueryRepository {
 
 	public TotalStatistics findTotalStatistics() {
 		return jpaQueryFactory.selectFrom(totalStatistics)
-			.where(totalStatistics.createdAt.week().eq(LocalDate.now().get(WeekFields.ISO.weekOfYear())))
+			.where(totalStatistics.date.eq(LocalDate.now()))
 			.fetchOne();
 	}
 }

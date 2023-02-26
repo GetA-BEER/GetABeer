@@ -114,4 +114,25 @@ public class SearchQueryRepository {
 
 		return new PageImpl<>(beerList, pageable, total);
 	}
+
+	public Page<Beer> findBeersPageByPairingCategoryQueryParam(String queryParam, Pageable pageable) {
+
+		queryParam = queryParam.substring(1);
+
+		List<Beer> beerList = jpaQueryFactory
+			.selectFrom(beer)
+			.where(beer.beerDetailsStatistics.bestPairingCategory.eq(queryParam))
+			.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		Long total = jpaQueryFactory
+			.select(beer.count())
+			.from(beer)
+			.where(beer.beerDetailsStatistics.bestPairingCategory.eq(queryParam))
+			.fetchOne();
+
+		return new PageImpl<>(beerList, pageable, total);
+	}
 }

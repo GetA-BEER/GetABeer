@@ -1,7 +1,8 @@
 package be.domain.beer.repository;
 
-import be.domain.beer.entity.MonthlyBeer;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import be.domain.beer.entity.MonthlyBeer;
 
 public interface MonthlyBeerRepository extends JpaRepository<MonthlyBeer, Long> {
 }

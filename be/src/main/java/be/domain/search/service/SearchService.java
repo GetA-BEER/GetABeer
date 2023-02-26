@@ -36,6 +36,8 @@ public class SearchService {
 			beerPage = searchQueryRepository.findBeersPageByBeerCategoryQueryParam(queryParam, pageRequest);
 		} else if (queryParam.charAt(0) == '#') {
 			beerPage = searchQueryRepository.findBeersPageByBeerTagQueryParam(queryParam, pageRequest);
+		} else if (queryParam.charAt(0) == '&') {
+			beerPage = searchQueryRepository.findBeersPageByPairingCategoryQueryParam(queryParam, pageRequest);
 		} else {
 			beerPage = searchQueryRepository.findBeersPageByQueryParam(queryParam, pageRequest);
 		}

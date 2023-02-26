@@ -33,6 +33,7 @@ public class WeeklyBeer extends BaseTimeEntity implements Serializable {
 	@Column(name = "weekly_beer_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private Long beerId;
 	private String korName;
 	private String country;
 	private String thumbnail;

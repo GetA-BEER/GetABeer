@@ -17,6 +17,7 @@ public class BeerDetailsStatistics {
 	private Integer statViewCount;
 	@ColumnDefault("0")
 	private Integer statRatingCount;
+	private String bestPairingCategory;
 
 	@Builder
 	public BeerDetailsStatistics(Integer statViewCount, Integer statRatingCount) {
@@ -30,6 +31,10 @@ public class BeerDetailsStatistics {
 
 	public void addStatRatingCount() {
 		this.statRatingCount++;
+	}
+
+	public void updateBestPairingCategory(String bestPairingCategory) {
+		this.bestPairingCategory = bestPairingCategory;
 	}
 
 	public void resetStatistic() {

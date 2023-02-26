@@ -2,19 +2,19 @@ version: '3.1'
 
 services:
 
-  h2:
-    container_name: h2
-    image: oscarfonts/h2:latest
-    ports:
-      - 1521:1521
-      - 8081:81
-    environment:
-      H2_OPTIONS: -ifNotExists
-    volumes:
-      - ./h2/:/opt/h2-data
-    restart: always
-    networks:
-      - getabeer-network
+  # h2:
+  #   container_name: h2
+  #   image: oscarfonts/h2:latest
+  #   ports:
+  #     - 1521:1521
+  #     - 8081:81
+  #   environment:
+  #     H2_OPTIONS: -ifNotExists
+  #   volumes:
+  #     - ./h2/:/opt/h2-data
+  #   restart: always
+  #   networks:
+  #     - getabeer-network
 
   redis:
     hostname: redis
@@ -28,23 +28,32 @@ services:
       - getabeer-network
 
   getabeer:
+    # platform:
     #    network_mode: host
     image: gnidinger/getabeer:0.0.1
     container_name: getabeer
     build: .
     restart: always
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2:1521/test
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/gcp-credentials
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:test
+      # SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2:1521/demo
       # SPRING_DATASOURCE_URL: jdbc:h2:tcp://localhost:1521/demo
-      SPRING_DATASOURCE_USERNAME: sa
+      # SPRING_DATASOURCE_USERNAME: sa
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      TZ: Asia/Seoul
+    secrets:
+        - gcp-credentials
     ports:
       - 8080:8080
     depends_on:
       - redis
     networks:
       - getabeer-network
+secrets:
+  gcp-credentials:
+    file: ./src/main/resources/getabeer-376509-e3dcb064cd58.json
 
 networks:
   getabeer-network:
