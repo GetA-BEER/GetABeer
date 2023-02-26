@@ -11,7 +11,7 @@ export default function WishCard({ wishProps, idx }: any) {
   useEffect(() => {
     setWishInfo(wishProps.beer);
   }, [wishProps.beer]);
-
+  console.log(wishInfo);
   return (
     <div className="rounded-2xl max-w-4xl bg-white text-y-black drop-shadow-xl text-[5px] border">
       <div
@@ -22,7 +22,7 @@ export default function WishCard({ wishProps, idx }: any) {
         <div className="flex justify-between">
           <div className="text-base font-semibold">{wishInfo?.korName}</div>
           <WishHeart
-            beerId={wishInfo?.id}
+            beerId={wishInfo?.beerId}
             isWish={isWish}
             setIsWish={setIsWish}
           />
