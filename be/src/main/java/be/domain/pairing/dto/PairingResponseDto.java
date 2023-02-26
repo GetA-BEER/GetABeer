@@ -19,6 +19,7 @@ public class PairingResponseDto {
 		}
 
 		private Long beerId;
+		private String korName;
 		private Long pairingId;
 		private Long userId;
 		private String nickname;
@@ -58,9 +59,11 @@ public class PairingResponseDto {
 		}
 
 		private Long beerId;
+		private String korName;
 		private Long pairingId;
 		private Long userId;
 		private String nickname;
+		private String userImage;
 		private String content;
 		private String thumbnail;
 		private PairingCategory category;

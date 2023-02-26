@@ -15,6 +15,7 @@ import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingRequestDto;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
+import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.entity.PairingImage;
 
 @Mapper(componentModel = "spring")
@@ -26,7 +27,7 @@ public interface PairingMapper {
 
 		return Pairing.builder()
 			.content(post.getContent())
-			.pairingCategory(post.getCategory())
+			.pairingCategory(PairingCategory.to(post.getCategory()))
 			.pairingCommentList(new ArrayList<>())
 			.likeCount(0)
 			.commentCount(0)
@@ -40,7 +41,7 @@ public interface PairingMapper {
 
 		return Pairing.builder()
 			.content(patch.getContent())
-			.pairingCategory(patch.getCategory())
+			.pairingCategory(PairingCategory.to(patch.getCategory()))
 			.build();
 	}
 
@@ -115,9 +116,11 @@ public interface PairingMapper {
 			.map(pairing ->
 				new PairingResponseDto.Total(
 					pairing.getBeer().getId(),
+					pairing.getBeer().getBeerDetailsBasic().getKorName(),
 					pairing.getId(),
 					pairing.getUser().getId(),
 					pairing.getUser().getNickname(),
+					pairing.getUser().getImageUrl(),
 					pairing.getContent(),
 					pairing.getThumbnail(),
 					pairing.getPairingCategory(),

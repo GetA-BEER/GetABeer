@@ -1,7 +1,6 @@
 package be.global.init;
 
 import static org.apache.commons.io.FileUtils.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -95,6 +94,9 @@ public class Init {
 
 		String FILE_PATH = "src/main/java/be/global/init/Get_A_Beer_Products.csv";
 
+		/* 자르 파일 용 ^_^ */
+		// String FILE_PATH = "Get_A_Beer_Products.csv";
+
 		List<List<String>> csvList = new ArrayList<List<String>>();
 
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Get_A_Beer_Products.csv");
@@ -126,7 +128,8 @@ public class Init {
 			}
 		}
 
-		for (int i = 1; i < 180; i++) {
+		/* 자르 테스트 용은 짧게 가져가기 */
+		for (int i = 1; i < 10; i++) {
 
 			BeerDetailsStars beerDetailsStars =
 				BeerDetailsStars.builder()
@@ -183,7 +186,7 @@ public class Init {
 		 * MONTHLY BEER STUB DATA
 		 */
 		for (int i = 0; i < 5; i++) {
-			Long rand = (long)(Math.random() * 179 + 1);
+			Long rand = (long)(Math.random() * 9 + 1);
 
 			Beer findBeer = beerService.findVerifiedBeer(rand);
 
