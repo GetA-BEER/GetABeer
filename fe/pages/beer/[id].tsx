@@ -1,5 +1,9 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
 import SmallRatingCard from '@/components/smallCards/SmallRatingCard';
 import SmallPairingCard from '@/components/smallCards/SmallPairingCard';
 import SimilarBeer from '@/components/smallCards/SimilarBeer';
@@ -58,10 +62,10 @@ export default function Beer() {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/api/pairings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
+        .get(`/api/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
         .then((response) => {
           setPairingInfo(response.data);
-          console.log(response);
+          // console.log('페어링 페이지 조회', response.data);
         })
         .catch((error) => console.log(error));
     }
@@ -96,24 +100,83 @@ export default function Beer() {
           width={500}
           height={500}
         />
+        {beerInfo === undefined ? (
+          <></>
+        ) : (
+          <>
+            <div className="m-3">
+              <BeerDetailCard cardProps={beerInfo} />
+            </div>
+            {/* 평가 */}
+            <RatingTitle
+              ratingCount={ratingInfo?.pageInfo?.totalElements}
+              beerId={curRoute}
+            />
 
-        <div className="m-3">
-          <BeerDetailCard cardProps={beerInfo} />
-        </div>
+            <div>
+              {ratingInfo?.data.length === 0 ? (
+                <div className="noneContent">
+                  <Image
+                    className="m-auto pb-3 opacity-50"
+                    src="/images/logo.png"
+                    alt="logo"
+                    width={40}
+                    height={40}
+                  />
+                  등록된 평가가 없습니다.
+                </div>
+              ) : (
+                <Swiper
+                  className="w-full h-fit"
+                  slidesPerView={2.2}
+                  spaceBetween={10}
+                  modules={[Pagination]}
+                >
+                  {ratingInfo?.data.map((el: any) => (
+                    <SwiperSlide key={el?.ratingId}>
+                      <SmallRatingCard ratingProps={el} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
+            </div>
+            {/* 페어링 */}
+            <PairingTitle
+              pairngCount={pairingInfo?.pageInfo?.totalElements}
+              beerId={curRoute}
+            />
+            <div>
+              {pairingInfo?.data.length === 0 ? (
+                <div className="noneContent">
+                  <Image
+                    className="m-auto pb-3 opacity-50"
+                    src="/images/logo.png"
+                    alt="logo"
+                    width={40}
+                    height={40}
+                  />
+                  등록된 페어링이 없습니다.
+                </div>
+              ) : (
+                <Swiper
+                  className="w-full h-fit"
+                  slidesPerView={2.2}
+                  spaceBetween={10}
+                  modules={[Pagination]}
+                >
+                  {pairingInfo?.data.map((el: any) => (
+                    <SwiperSlide key={el?.pairingId}>
+                      <SmallPairingCard pairingProps={el} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
+            </div>
+            <SimilarBeer similarBeer={similarBeer} />
 
-        <RatingTitle
-          ratingCount={ratingInfo?.pageInfo?.totalElements}
-          beerId={curRoute}
-        />
-        <SmallRatingCard ratingProps={ratingInfo?.data} />
-
-        <PairingTitle
-          pairngCount={pairingInfo?.pageInfo?.totalElements}
-          beerId={curRoute}
-        />
-        <SmallPairingCard pairingProps={pairingInfo?.data} />
-        <SimilarBeer similarBeer={similarBeer} />
-        <div className="h-20"></div>
+            <div className="h-20"></div>
+          </>
+        )}
       </main>
     </>
   );

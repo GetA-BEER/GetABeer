@@ -24,6 +24,8 @@ export default function AllPairing() {
 
   useEffect(() => {
     if (curRoute !== undefined) {
+      let tmpCategory = category.toLowerCase();
+      // `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
       axios
         .get(
           `/api/pairings/page/${sort}?beerId=${curRoute}&page=${page}&size=5`
@@ -38,7 +40,7 @@ export default function AllPairing() {
           console.log(error);
         });
     }
-  }, [curRoute, sort, page]);
+  }, [curRoute, sort, page, category]);
 
   return (
     <>

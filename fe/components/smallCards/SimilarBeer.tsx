@@ -1,3 +1,7 @@
+import {
+  BeerCountryMatcherToKor,
+  BeerCategoryMatcherToKor,
+} from '@/utils/BeerMatcher';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -44,14 +48,18 @@ export default function SimilarBeer({ similarBeer }: any) {
                       <span>
                         {el?.beerCategories.map(
                           (category: any, idx: number) => (
-                            <span key={idx}>{category.beerCategoryType}</span>
+                            <span key={idx}>
+                              {BeerCategoryMatcherToKor(
+                                category.beerCategoryType
+                              )}{' '}
+                              /
+                            </span>
                           )
                         )}
-                        /
                       </span>
                     )}
-                    <span>
-                      {el?.country} / {el?.abv}%
+                    <span className="ml-1">
+                      {BeerCountryMatcherToKor(el?.country)} / {el?.abv}%
                     </span>
                     {el?.ibu === null ? <></> : <span>{el?.ibu}IBU</span>}
                   </div>

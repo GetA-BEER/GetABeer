@@ -1,60 +1,20 @@
 import Head from 'next/head';
-import WishCardController from '@/components/wish/WishCardController';
+import WishCard from '@/components/wish/WishCard';
 import { IoChevronBack } from 'react-icons/io5';
 import Link from 'next/link';
+import axios from '@/pages/api/axios';
+import { useEffect, useState } from 'react';
+
 export default function Wish() {
-  const wishProps = [
-    {
-      id: 1,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      heart: 1,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 2,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      heart: 0,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-    {
-      id: 3,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      heart: 1,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
-    },
-    {
-      id: 4,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      heart: 1,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 5,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      heart: 0,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-  ];
+  const [wishList, setWishList] = useState<any>();
+  const [pageInfo, setPageInfo] = useState();
+  useEffect(() => {
+    axios.get(`/api/mypage/wishlist`).then((response) => {
+      setWishList(response.data.data);
+      setPageInfo(response.data.pageInfo);
+    });
+  }, []);
+
   return (
     <>
       <Head>
@@ -74,7 +34,11 @@ export default function Wish() {
           <div className="text-xl my-10 text-center font-semibold">
             유미님의 위시 맥주
           </div>
-          <WishCardController wishProps={wishProps} />
+          <div className="grid grid-cols-2 gap-3">
+            {wishList?.map((wishProps: any, idx: number) => (
+              <WishCard key={idx} wishProps={wishProps} idx={idx + 1} />
+            ))}
+          </div>
           <div className="pb-14"></div>
         </div>
       </main>
