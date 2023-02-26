@@ -1,4 +1,4 @@
-package be.domain.pairing.service.pattern;
+package be.domain.pairing.service.helper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,4 +1,4 @@
-package be.domain.pairing.service.pattern;
+package be.domain.pairing.service.helper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.repository.PairingRepository;
 
-public class GetAll implements UserState{
+public class GetAll implements UserState {
 
 
 	@Override

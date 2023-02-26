@@ -1,4 +1,4 @@
-package be.domain.pairing.service.pattern;
+package be.domain.pairing.service.helper;
 
 public class CategoryState {
 	public static class GetAll{

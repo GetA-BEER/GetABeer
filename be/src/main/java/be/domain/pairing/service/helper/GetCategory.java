@@ -1,4 +1,4 @@
-package be.domain.pairing.service.pattern;
+package be.domain.pairing.service.helper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +7,7 @@ import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.repository.PairingRepository;
 
-public class GetCategory implements UserState{
+public class GetCategory implements UserState {
 	private final String category;
 
 	public GetCategory(String category) {
