@@ -118,6 +118,7 @@ public class BeerQueryRepository {
 				.selectFrom(beer)
 				.join(beer.beerBeerCategories, beerBeerCategory)
 				.join(beerBeerCategory.beerCategory, beerCategory)
+				.where(beer.ne(findBeer))
 				.where(beerCategory.beerCategoryType.stringValue().eq(beerCategories.get(0))
 					.and(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag1())
 						.or(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag2())))
@@ -155,45 +156,6 @@ public class BeerQueryRepository {
 			.fetchFirst();
 	}
 
-	public Page<Beer> findBeersPageByQueryParam(String queryParam, Pageable pageable) {
-
-		List<Beer> resultList = new ArrayList<>();
-
-		String[] queryParamArr = queryParam.split(" ");
-		StringPath korName = beer.beerDetailsBasic.korName;
-		StringPath engName = beer.beerDetailsBasic.engName;
-
-		log.info("####: " + queryParam);
-
-		List<Beer> fullTextResultList = jpaQueryFactory.selectFrom(beer)
-			.where(korName.containsIgnoreCase(queryParam)
-				.or(engName.containsIgnoreCase(queryParam)))
-			.fetch();
-
-		log.info("#####: " + fullTextResultList);
-
-		for (String query : queryParamArr) {
-
-			resultList.addAll(jpaQueryFactory
-				.selectFrom(beer)
-				.where(korName.containsIgnoreCase(query).or(engName.containsIgnoreCase(query)))
-				.fetch());
-		}
-
-		resultList = resultList.stream()
-			.sorted((a, b) -> (int)((b.getBeerDetailsStars().getTotalAverageStars() * 100)
-				- (a.getBeerDetailsStars().getTotalAverageStars() * 100)))
-			.collect(Collectors.toList());
-
-		resultList.addAll(0, fullTextResultList);
-
-		int total = resultList.size();
-		int start = (int)pageable.getOffset();
-		int end = Math.min((start + pageable.getPageSize()), total);
-
-		return new PageImpl<>(resultList.subList(start, end), pageable, total);
-	}
-
 	public Page<Beer> findCategoryBeers(String queryParam, Pageable pageable) {
 
 		List<Beer> beerList = jpaQueryFactory.selectFrom(beer)
@@ -205,7 +167,15 @@ public class BeerQueryRepository {
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		return new PageImpl<>(beerList, pageable, beerList.size());
+		Long total = jpaQueryFactory
+			.select(beer.count())
+			.from(beer)
+			.join(beer.beerBeerCategories, beerBeerCategory)
+			.join(beerBeerCategory.beerCategory, beerCategory)
+			.where(beerCategory.beerCategoryType.stringValue().eq(queryParam))
+			.fetchOne();
+
+		return new PageImpl<>(beerList, pageable, total);
 	}
 
 	public Rating findBestRating(Beer findBeer) {
@@ -213,6 +183,29 @@ public class BeerQueryRepository {
 		return jpaQueryFactory.selectFrom(rating)
 			.where(rating.beer.eq(findBeer))
 			.fetchFirst();
+	}
+
+	public Page<Beer> findMyPageBeers(User loginUser, Pageable pageable) {
+
+		List<Beer> beerList = jpaQueryFactory.select(beer)
+			.join(beer.beerWishlists, beerWishlist)
+			.join(beerWishlist.user, user)
+			.from(beer)
+			.where(beerWishlist.user.eq(loginUser))
+			.orderBy(beerWishlist.createdAt.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		Long total = jpaQueryFactory
+			.select(beer.count())
+			.from(beer)
+			.join(beer.beerWishlists, beerWishlist)
+			.join(beerWishlist.user, user)
+			.where(beerWishlist.user.eq(loginUser))
+			.fetchOne();
+
+		return new PageImpl<>(beerList, pageable, total);
 	}
 
 	public List<Rating> findMyRatingWithWishlist(User loginUser) {

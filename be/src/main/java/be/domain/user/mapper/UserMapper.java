@@ -24,6 +24,14 @@ public interface UserMapper {
 			.build();
 	}
 
+	default UserDto.LoginResponse userToLoginResponse(User user) {
+		return UserDto.LoginResponse.builder()
+			.id(user.getId())
+			.email(user.getEmail())
+			.nickname(user.getNickname())
+			.build();
+	}
+
 	default UserDto.UserInfoResponse userToInfoResponse(User user) {
 		List<String> userBeerTags = user.getUserBeerTags().stream().map(
 			userBeerTag -> userBeerTag.getBeerTag().getBeerTagType().toString()

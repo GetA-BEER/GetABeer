@@ -127,9 +127,11 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 		return queryFactory
 			.select(Projections.fields(RatingResponseDto.Total.class,
 				rating.beer.id.as("beerId"),
+				rating.beer.beerDetailsBasic.korName.as("korName"),
 				rating.id.as("ratingId"),
 				rating.user.id.as("userId"),
 				rating.user.nickname.as("nickname"),
+				rating.user.imageUrl.as("imageUrl"),
 				rating.content,
 				rating.star,
 				rating.likeCount,
@@ -153,9 +155,11 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 		return queryFactory
 			.select(Projections.fields(RatingResponseDto.Total.class,
 				rating.beer.id.as("beerId"),
+				rating.beer.beerDetailsBasic.korName.as("korName"),
 				rating.id.as("ratingId"),
 				rating.user.id.as("userId"),
 				rating.user.nickname.as("nickname"),
+				rating.user.imageUrl.as("userImage"),
 				rating.content,
 				rating.star,
 				rating.likeCount,

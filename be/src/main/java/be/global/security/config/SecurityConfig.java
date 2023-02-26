@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import be.domain.mail.controller.MailController;
+import be.domain.user.mapper.UserMapper;
 import be.domain.user.repository.UserRepository;
 import be.global.security.auth.filter.JwtAuthenticationFilter;
 import be.global.security.auth.filter.JwtVerificationFilter;
@@ -34,13 +35,14 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+	private final UserMapper userMapper;
 	private final HttpSession httpSession;
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final MailController mailController;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
-	private final SecuritySessionExpiredStrategy securitySessionExpiredStrategy;
+	// private final SecuritySessionExpiredStrategy securitySessionExpiredStrategy;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -51,10 +53,10 @@ public class SecurityConfig {
 			.csrf().disable()
 			.cors(withDefaults())
 			// .and()
-			.sessionManagement(s ->
-				s.maximumSessions(1) // 동일 세션 개수 제한 (중복 로그인 방지)
-					.maxSessionsPreventsLogin(false) // 중복 로그인 시 먼저 로그인한 사용자 로그아웃
-					.expiredSessionStrategy(securitySessionExpiredStrategy)) // 세션 만료 시 전략
+			// .sessionManagement(s ->
+			// 	s.maximumSessions(1) // 동일 세션 개수 제한 (중복 로그인 방지)
+			// 		.maxSessionsPreventsLogin(false) // 중복 로그인 시 먼저 로그인한 사용자 로그아웃
+			// 		.expiredSessionStrategy(securitySessionExpiredStrategy)) // 세션 만료 시 전략
 			// .and()
 			.formLogin().disable()
 			.httpBasic().disable()
@@ -71,7 +73,7 @@ public class SecurityConfig {
 				oauth2.successHandler(
 					new OAuth2SuccessHandler(httpSession, jwtTokenizer, userRepository, redisTemplate));
 				oauth2.userInfoEndpoint().userService(
-					new CustomOAuth2UserService(httpSession, userRepository, mailController, passwordEncoder(),
+					new CustomOAuth2UserService(userRepository, mailController, passwordEncoder(),
 						customAuthorityUtils));
 			});
 
@@ -84,7 +86,7 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
 			JwtAuthenticationFilter jwtAuthenticationFilter =
-				new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, redisTemplate);
+				new JwtAuthenticationFilter(userMapper, jwtTokenizer, authenticationManager, redisTemplate);
 
 			jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());

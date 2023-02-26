@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private OAuth2UserInfo oAuth2UserInfo;
-	private final HttpSession httpSession;
 	private final UserRepository userRepository;
 	private final MailController mailController;
 	private final PasswordEncoder passwordEncoder;

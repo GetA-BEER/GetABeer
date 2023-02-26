@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
+import be.domain.user.mapper.UserMapper;
 import be.global.security.auth.jwt.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -28,8 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	private final AuthenticationManager authenticationManager;
+	private final UserMapper userMapper;
 	private final JwtTokenizer jwtTokenizer;
+	private final AuthenticationManager authenticationManager;
 	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
@@ -74,6 +76,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setHeader("Set-Cookie", cookie.toString());
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.addIntHeader("id", user.getId().intValue());
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("utf-8");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String data = mapper.writeValueAsString(userMapper.userToLoginResponse(user));
+		response.getWriter().write(data);
 
 		this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 	}

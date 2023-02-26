@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import be.domain.user.entity.User;
@@ -57,13 +59,31 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		User user = userRepository.findByNickname(nickname);
 
-		// redirect(request, response, user.getEmail(), user.getProvider(), user.getRoles());
-		getToken(request, response, user.getEmail(), user.getProvider(), user.getRoles());
+		redirect(request, response, user.getEmail(), user.getProvider(), user.getRoles());
+		// getToken(request, response, user.getEmail(), user.getProvider(), user.getRoles());
 	}
 
-	private void getToken(HttpServletRequest request, HttpServletResponse response, String email, String provider,
-		List<String> authorities) throws
-		IOException {
+	// private void getToken(HttpServletRequest request, HttpServletResponse response, String email, String provider,
+	// 	List<String> authorities) throws
+	// 	IOException {
+	// 	String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
+	// 	String refreshToken = jwtTokenizer.delegateRefreshToken(email);
+	//
+	// 	httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
+	//
+	// 	if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
+	// 		redisTemplate.delete(email);
+	// 	}
+	// 	redisTemplate.opsForValue()
+	// 		.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+	//
+	// 	String uri = createRedirect().toString();
+	// 	getRedirectStrategy().sendRedirect(request, response, uri);
+	// }
+
+	public void redirect(HttpServletRequest request, HttpServletResponse response, String email, String provider,
+		List<String> authorities) throws IOException {
+
 		String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
 		String refreshToken = jwtTokenizer.delegateRefreshToken(email);
 
@@ -75,25 +95,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		redisTemplate.opsForValue()
 			.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
-		String uri = createRedirect().toString();
-		getRedirectStrategy().sendRedirect(request, response, uri);
-	}
+		// log.info("-----------------------------------------------------------");
+		// log.info("Get SessionUser Token = " + user.getAct());
+		// log.info("-----------------------------------------------------------");
 
-	public void redirect(HttpServletRequest request, HttpServletResponse response, SessionUser user) throws
-		IOException {
-
-		// String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
-		// String refreshToken = jwtTokenizer.delegateRefreshToken(email);
-		//
-		// httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
-		//
-		// if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
-		// 	redisTemplate.delete(email);
-		// }
-		// redisTemplate.opsForValue()
-		// 	.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
-
-		ResponseCookie cookie = ResponseCookie.from("refreshToken", user.getRft())
+		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 			.maxAge(7 * 24 * 60 * 60)
 			.path("/")
 			.secure(true)
@@ -102,13 +108,16 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.build();
 
 		response.setHeader("Set-Cookie", cookie.toString());
-		response.setHeader("Authorization", "Bearer " + user.getAct());
+		response.setHeader("Authorization", "Bearer " + accessToken);
 
-		String uri = createURI().toString();
+		String uri = createURI(accessToken, refreshToken).toString();
 		getRedirectStrategy().sendRedirect(request, response, uri);
 	}
 
-	private URI createURI() {
+	private URI createURI(String act, String rft) {
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("access_token", act);
+		queryParams.add("refresh_token", rft);
 
 		return UriComponentsBuilder
 			.newInstance()
@@ -117,20 +126,24 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.host("www.getabeer.co.kr")
 			// .host("localhost")
 			// .port(3000)
+			.path("/api/token")
+			.queryParams(queryParams)
 			.build()
 			.toUri();
 	}
 
-	private URI createRedirect() {
-
-		return UriComponentsBuilder
-			.newInstance()
-			.scheme("https")
-			.host("server.getabeer.co.kr")
-			// .port(8080)
-			.path("/api/session")
-			.build()
-			.toUri();
-	}
+	// private URI createRedirect() {
+	//
+	// 	return UriComponentsBuilder
+	// 		.newInstance()
+	// 		// .scheme("https")
+	// 		// .host("server.getabeer.co.kr")
+	// 		.scheme("http")
+	// 		.host("localhost")
+	// 		.port(8080)
+	// 		.path("/api/session")
+	// 		.build()
+	// 		.toUri();
+	// }
 
 }

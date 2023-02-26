@@ -1,10 +1,12 @@
 package be.global.init;
 
+import static org.apache.commons.io.FileUtils.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,10 +24,13 @@ import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.MonthlyBeer;
+import be.domain.beer.entity.WeeklyBeer;
+import be.domain.beer.entity.WeeklyBeerCategory;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.repository.BeerBeerTagRepository;
 import be.domain.beer.repository.BeerRepository;
 import be.domain.beer.repository.MonthlyBeerRepository;
+import be.domain.beer.repository.WeeklyBeerRepository;
 import be.domain.beer.service.BeerService;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
@@ -64,7 +69,8 @@ public class Init {
 		BeerRepository beerRepository, BeerTagService beerTagService, UserBeerTagRepository userBeerTagRepository,
 		BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
 		BeerTagRepository beerTagRepository, BeerBeerTagRepository beerBeerTagRepository,
-		BeerCategoryService beerCategoryService, MonthlyBeerRepository monthlyBeerRepository) {
+		BeerCategoryService beerCategoryService, MonthlyBeerRepository monthlyBeerRepository,
+		WeeklyBeerRepository weeklyBeerRepository) throws IOException {
 
 		for (int i = 0; i < 8; i++) {
 			BeerCategory beerCategory = BeerCategory.builder()
@@ -84,6 +90,8 @@ public class Init {
 		 * BEER STUB DATA
 		 */
 
+		ClassLoader classLoader = getClass().getClassLoader();
+
 		String FILE_PATH = "src/main/java/be/global/init/Get_A_Beer_Products.csv";
 
 		/* 자르 파일 용 ^_^ */
@@ -91,7 +99,10 @@ public class Init {
 
 		List<List<String>> csvList = new ArrayList<List<String>>();
 
-		File csv = new File(FILE_PATH);
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Get_A_Beer_Products.csv");
+
+		File csv = convertInputStreamToFile(inputStream);
+		// File csv = new File(FILE_PATH);
 		BufferedReader br = null;
 		String line = "";
 
@@ -184,6 +195,30 @@ public class Init {
 			monthlyBeer.create(findBeer);
 
 			monthlyBeerRepository.save(monthlyBeer);
+		}
+
+		/*
+		 * WEEKLY BEER STUB DATA
+		 */
+		for (int i = 0; i < 5; i++) {
+			Long rand = (long)(Math.random() * 179 + 1);
+
+			Beer findBeer = beerService.findVerifiedBeer(rand);
+
+			WeeklyBeerCategory weeklyBeerCategory = new WeeklyBeerCategory("ALE", "DUNKEL");
+
+			WeeklyBeer.WeeklyBeerBuilder weeklyBeer = WeeklyBeer.builder();
+
+			weeklyBeer.id(findBeer.getId());
+			weeklyBeer.korName(findBeer.getBeerDetailsBasic().getKorName());
+			weeklyBeer.country(findBeer.getBeerDetailsBasic().getCountry());
+			weeklyBeer.thumbnail(findBeer.getBeerDetailsBasic().getThumbnail());
+			weeklyBeer.weeklyBeerCategory(weeklyBeerCategory);
+			weeklyBeer.abv(findBeer.getBeerDetailsBasic().getAbv());
+			weeklyBeer.ibu(findBeer.getBeerDetailsBasic().getIbu());
+			weeklyBeer.averageStar(findBeer.getBeerDetailsStars().getTotalAverageStars());
+
+			weeklyBeerRepository.save(weeklyBeer.build());
 		}
 
 		/*
@@ -289,6 +324,16 @@ public class Init {
 		}
 
 		return null;
+	}
+
+	public static File convertInputStreamToFile(InputStream inputStream) throws IOException {
+
+		File tempFile = File.createTempFile(String.valueOf(inputStream.hashCode()), ".csv");
+		tempFile.deleteOnExit();
+
+		copyInputStreamToFile(inputStream, tempFile);
+
+		return tempFile;
 	}
 
 }

@@ -61,12 +61,14 @@ public class UserController {
 
 	/* 자체 로그인 */
 	@PostMapping("/login")
-	public void login(@RequestBody UserDto.Login login) {
+	public ResponseEntity<UserDto.UserInfoResponse> login(@RequestBody UserDto.Login login) {
 		User user = userService.findVerifiedUser(userService.findUserEmail(login.getEmail()));
 
 		// 유저 상태 확인
 		// TODO : 상태 별 휴면해제, 재가입 불가 로직 구현
 		userService.verifyUserStatus(user.getUserStatus());
+
+		return ResponseEntity.ok(userMapper.userToInfoResponse(user));
 	}
 
 	/* 유저 정보 수정(닉네임, 성별, 나이, 카테고리, 태그) */
