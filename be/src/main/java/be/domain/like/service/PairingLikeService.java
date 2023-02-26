@@ -1,6 +1,7 @@
 package be.domain.like.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.like.dto.LikeResponseDto;
 import be.domain.like.entity.LikeStatus;
@@ -24,12 +25,10 @@ public class PairingLikeService {
 	private final PairingRepository pairingRepository;
 	private final PairingLikeRepository pairingLikeRepository;
 
+	@Transactional
 	public LikeResponseDto clickLike(Long pairingId) {
 		User user = userService.getLoginUser();
 		Pairing pairing = pairingService.findPairing(pairingId);
-
-		isWritingUser(pairing.getUser().getId(), user.getId());
-
 		int isUserLike = isUserLikePairing(pairingId, user.getId());
 
 		/* 0이면 추천한 적이 없는 것 -> 추천, 0이 아니면 추천 취소 */
@@ -69,12 +68,5 @@ public class PairingLikeService {
 	private PairingLike findPairingLike(Long pairingId, Long userId) {
 
 		return pairingLikeRepository.findPairingLike(pairingId, userId);
-	}
-
-	/* 자신이 작성한 글은 추천할 수 없음 */
-	private void isWritingUser(Long pairingUserId, Long userId) {
-		if (pairingUserId.equals(userId)) {
-			throw new BusinessLogicException(ExceptionCode.NOT_LIKE_WRITER);
-		}
 	}
 }
