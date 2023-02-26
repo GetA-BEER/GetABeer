@@ -5,6 +5,9 @@ import { AiFillCamera } from 'react-icons/ai';
 import axios from '@/pages/api/axios';
 import imageCompression from 'browser-image-compression';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { searchingImage } from '@/atoms/searchingImage';
 
 export default function CameraModal() {
   interface FileData {
@@ -14,9 +17,11 @@ export default function CameraModal() {
     type: string;
   }
 
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [uploadImg, setUploadImg] = useState<FileData | null>(null);
   const [style, setStyle] = useState('pc');
+  const [, setSearchResultList] = useRecoilState(searchingImage);
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files !== null) {
@@ -41,8 +46,9 @@ export default function CameraModal() {
         axios
           .post(`/api/search/image`, formData, config)
           .then((res) => {
-            console.log(res);
-            console.log(compressedFile);
+            setSearchResultList(res.data);
+            setShowModal(false);
+            router.push('/search/image');
           })
           .catch((error) => console.log(error));
       } catch (error) {

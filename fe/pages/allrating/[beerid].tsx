@@ -27,7 +27,8 @@ export default function AllRating() {
           setRatingList(res.data.data);
           setTotalPages(res.data.pageInfo.totalPages);
           setTitle(res.data.pageInfo.beerKorName);
-        });
+        })
+        .catch((err) => console.log(err));
     }
   }, [beerId, sort, page]);
 

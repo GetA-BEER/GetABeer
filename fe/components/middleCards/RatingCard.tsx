@@ -1,6 +1,7 @@
 export interface RatingCardProps {
   beerId: number;
   ratingId: number;
+  korName: string;
   userId: number;
   nickname: string;
   userImage: string;
