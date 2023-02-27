@@ -2008,7 +2008,7 @@
   "resolved" "https://registry.npmjs.org/react-rating-stars-component/-/react-rating-stars-component-2.2.0.tgz"
   "version" "2.2.0"
 
-"react-share@*":
+"react-share@*", "react-share@^4.4.1":
   "integrity" "sha512-AJ9m9RiJssqvYg7MoJUc9J0D7b/liWrsfQ99ndKc5vJ4oVHHd4Fy87jBlKEQPibT40oYA3AQ/a9/oQY6/yaigw=="
   "resolved" "https://registry.npmjs.org/react-share/-/react-share-4.4.1.tgz"
   "version" "4.4.1"

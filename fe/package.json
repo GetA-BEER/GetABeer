@@ -26,6 +26,7 @@
     "react-hook-form": "^7.43.1",
     "react-icons": "^4.7.1",
     "react-rating-stars-component": "^2.2.0",
+    "react-share": "^4.4.1",
     "react-textarea-autosize": "^8.4.0",
     "recoil": "^0.7.6",
     "recoil-persist": "^4.2.0",
