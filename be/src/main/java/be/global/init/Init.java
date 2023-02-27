@@ -1,6 +1,7 @@
 package be.global.init;
 
 import static org.apache.commons.io.FileUtils.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -145,7 +146,7 @@ public class Init {
 		}
 
 		/* 자르 테스트 용은 짧게 가져가기 */
-		for (int i = 1; i < 10; i++) {
+		for (int i = 1; i < 180; i++) {
 
 			BeerDetailsStars beerDetailsStars =
 				BeerDetailsStars.builder()
