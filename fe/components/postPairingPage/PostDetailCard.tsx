@@ -15,13 +15,14 @@ export default function PostDetailCard(props: any) {
   return (
     <div className="flex rounded-lg bg-white text-y-black border border-y-lightGray px-3 py-5 my-2">
       {beerInfo?.beerDetailsBasic?.thumbnail.includes('.') ? (
-        <Image
-          className="pt-3 w-[100px] h-auto"
-          alt={beerInfo?.beerDetailsBasic?.korName}
-          src={beerInfo?.beerDetailsBasic?.thumbnail}
-          width={100}
-          height={200}
-        />
+        <div className="relative w-[130px] h-[160px]">
+          <Image
+            className="object-cover"
+            alt={beerInfo?.beerDetailsBasic?.korName}
+            src={beerInfo?.beerDetailsBasic?.thumbnail}
+            fill
+          />
+        </div>
       ) : (
         <>x</>
       )}
@@ -42,14 +43,18 @@ export default function PostDetailCard(props: any) {
               beerInfo?.beerCategoryTypes?.map((el: string, idx: number) => {
                 return (
                   <span className="mx-0.5" key={idx}>
-                    {el}
+                    {BeerCategoryMatcherToKor(el)}
                   </span>
                 );
               })
             )}
           </span>
           <span>/ {beerInfo?.beerDetailsBasic?.abv}%</span>
-          <span>/ {beerInfo?.beerDetailsBasic?.ibu} IBU</span>
+          {beerInfo?.beerDetailsBasic?.ibu === null ? (
+            <></>
+          ) : (
+            <span>/ {beerInfo?.beerDetailsBasic?.ibu} IBU</span>
+          )}
         </div>
         <div className="my-2">
           <span className="font-semibold sm:text-xl lg:text-2xl">

@@ -99,8 +99,8 @@ export default function RatingCard(props: {
                 title: '게시글을 삭제하시겠습니까?',
                 text: '삭제하시면 다시 복구시킬 수 없습니다.',
                 showCancelButton: true,
-                confirmButtonColor: '#AC0000',
-                cancelButtonColor: '#008505',
+                confirmButtonColor: '#f1b31c',
+                cancelButtonColor: '#A7A7A7',
                 confirmButtonText: '삭제',
                 cancelButtonText: '취소',
               }).then((result) => {
