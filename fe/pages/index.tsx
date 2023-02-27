@@ -8,22 +8,10 @@ import { useEffect, useState } from 'react';
 import PopularBeer from '@/components/smallCards/PopularBeer';
 
 export default function Main() {
-  const [userInfo, setUserInfo] = useState<any>();
+  const [userInfo, setUserInfo] = useState<any>('');
   const [popularBeer, setPopularBeer] = useState<any>();
   const [recommendBeer, setRecommendBeer] = useState<any>('');
   const [recommendFlag, setRecommendFlag] = useState<any>(null);
-
-  // 사용자 정보
-  useEffect(() => {
-    if (userInfo === undefined) {
-      axios
-        .get(`/api/user`)
-        .then((response) => {
-          setUserInfo(response.data);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [userInfo]);
 
   // 인기 많은 맥주
   useEffect(() => {

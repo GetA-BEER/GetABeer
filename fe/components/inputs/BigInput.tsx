@@ -11,12 +11,10 @@ export default function BigInput({
   inputState,
   setInputState,
 }: InputProps) {
-  // const [inputState, setInputState] = useState<string | undefined>();
   const [inputLen, setInputLen] = useState<number | undefined>(0);
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputState(e.target.value);
     setInputLen(e.target.value.length);
-    // console.log(inputState);
   };
 
   return (

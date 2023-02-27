@@ -1,6 +1,10 @@
 import Tag from '../Tag';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import {
+  BeerCountryMatcherToKor,
+  BeerCategoryMatcherToKor,
+} from '@/utils/BeerMatcher';
 
 export default function PostDetailCard(props: any) {
   const [beerInfo, setBeerInfo] = useState(props);
@@ -10,7 +14,6 @@ export default function PostDetailCard(props: any) {
 
   return (
     <div className="flex rounded-lg bg-white text-y-black border border-y-lightGray px-3 py-5 my-2">
-      {/* 이거 나중에 제대로 썸네일 들어오면  삭제해야 한다. */}
       {beerInfo?.beerDetailsBasic?.thumbnail.includes('.') ? (
         <Image
           className="pt-3 w-[100px] h-auto"
@@ -20,14 +23,7 @@ export default function PostDetailCard(props: any) {
           height={200}
         />
       ) : (
-        <Image
-          className="pt-3 w-[100px] h-auto"
-          alt="임시이미지"
-          src="https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg"
-          width={100}
-          height={200}
-          priority
-        />
+        <>x</>
       )}
 
       <div className="flex flex-col justify-center">
@@ -35,7 +31,9 @@ export default function PostDetailCard(props: any) {
           {beerInfo?.beerDetailsBasic?.korName}
         </h1>
         <div className="text-xs sm:text-sm lg:text-lg">
-          <span>{beerInfo?.beerDetailsBasic?.country}</span>
+          <span>
+            {BeerCountryMatcherToKor(beerInfo?.beerDetailsBasic?.country)}
+          </span>
           <span>
             /
             {beerInfo?.beerCategoryTypes === undefined ? (
@@ -66,7 +64,7 @@ export default function PostDetailCard(props: any) {
             <></>
           ) : (
             beerInfo?.beerDetailsTopTags?.map((el: string, idx: number) => {
-              return <Tag key={idx}>{el}</Tag>;
+              return <Tag key={idx}>{BeerCategoryMatcherToKor(el)}</Tag>;
             })
           )}
         </div>

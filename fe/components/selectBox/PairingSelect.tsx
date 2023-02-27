@@ -33,8 +33,11 @@ export default function PairingSelect({ category, setCategory }: any) {
   const [pairingState, setPairingState] = useState<any>();
   useEffect(() => {
     if (pairingState === undefined && category !== undefined) {
-      const tmpCategory = CategoryMatcherToKor(category);
-      setPairingState(tmpCategory);
+      if (category === '카테고리') setPairingState('카테고리');
+      else {
+        const tmpCategory = CategoryMatcherToKor(category);
+        setPairingState(tmpCategory);
+      }
     }
   }, [category, pairingState]);
 

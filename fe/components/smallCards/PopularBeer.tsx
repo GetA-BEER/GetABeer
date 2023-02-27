@@ -1,3 +1,7 @@
+import {
+  BeerCountryMatcherToKor,
+  BeerCategoryMatcherToKor,
+} from '@/utils/BeerMatcher';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -36,12 +40,16 @@ export default function PopularBeer({ popularBeer }: any) {
                     {el?.beerCategories === null ? (
                       <></>
                     ) : (
-                      <span>{el?.category} / </span>
+                      <span>{BeerCategoryMatcherToKor(el?.category)} / </span>
                     )}
                     <span>
-                      {el?.country} / {el?.abv}%
+                      {BeerCountryMatcherToKor(el?.country)} / {el?.abv}%
                     </span>
-                    {el?.ibu === null ? <></> : <span>{el?.ibu}IBU</span>}
+                    {el?.ibu === null ? (
+                      <></>
+                    ) : (
+                      <span className="ml-0.5">{el?.ibu}IBU</span>
+                    )}
                   </div>
                 </div>
                 <Image

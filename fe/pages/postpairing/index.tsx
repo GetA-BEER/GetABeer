@@ -18,15 +18,6 @@ export default function PostPairing() {
   const [category, setCategory] = useState('카테고리');
   const [imageData, setImageData] = useState([]);
   const [finalData, setFinalData] = useState<any>('');
-  const [TOKEN, setTOKEN] = useState();
-
-  useEffect(() => {
-    const localInfo = window.localStorage.getItem('recoil-persist');
-    if (localInfo !== null) {
-      const tmpData = JSON.parse(localInfo);
-      setTOKEN(tmpData.accessToken);
-    }
-  }, [TOKEN]);
 
   // Vaild 로직
   const [isValid, setIsValid] = useState(false);
@@ -60,7 +51,6 @@ export default function PostPairing() {
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
-        authorization: TOKEN,
       },
       withCredentials: true,
     };
@@ -73,7 +63,7 @@ export default function PostPairing() {
         })
         .catch((error) => console.log(error));
     }
-  }, [finalData, router, isSubmit, TOKEN, beerInfo]);
+  }, [finalData, router, isSubmit, beerInfo]);
 
   return (
     <>

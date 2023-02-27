@@ -1,20 +1,25 @@
+import {
+  BeerCountryMatcherToKor,
+  BeerCategoryMatcherToKor,
+} from '@/utils/BeerMatcher';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
 import WishHeart from '@/components/WishHeart';
 import StarScore from './StarScore';
-import KakaoShareButton from './KakaoShareButton';
+import ShareBtn from '../share/ShareBtn';
 import { useState } from 'react';
 
 export default function BeerDetailCard({ cardProps }: any) {
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
+
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
       <div className="flex m-auto">
         <div className="w-[122px] select-none">
           {cardProps?.beerDetailsBasic.thumbnail.includes('.') ? (
             <Image
-              className="pt-3 w-full h-auto select-none"
+              className="pt-3 w-full h-auto select-none -ml-8"
               alt={cardProps?.beerDetailsBasic.korName}
               src={cardProps?.beerDetailsBasic.thumbnail}
               width={100}
@@ -25,7 +30,7 @@ export default function BeerDetailCard({ cardProps }: any) {
             <>x</>
           )}
         </div>
-        <div className="flex flex-col justify-center ml-1">
+        <div className="flex flex-col justify-center -ml-4">
           <div className="flex justify-between items-center">
             <h1 className="font-bold text-2xl">
               {cardProps?.beerDetailsBasic.korName}
@@ -41,19 +46,17 @@ export default function BeerDetailCard({ cardProps }: any) {
               {cardProps?.beerCategoryTypes.map((el: string, idx: number) => {
                 return (
                   <span className="mr-0.5" key={idx}>
-                    {el}
+                    {BeerCategoryMatcherToKor(el)}
                   </span>
                 );
               })}
             </span>
             <span className="mx-[1px]">
-              / {cardProps?.beerDetailsBasic.country}
+              / {BeerCountryMatcherToKor(cardProps?.beerDetailsBasic.country)}
             </span>
-            <span className="mx-[1px]">
-              {cardProps?.beerDetailsBasic.abv}% /
-            </span>
+            <span className="mx-[1px]">{cardProps?.beerDetailsBasic.abv}%</span>
             {cardProps?.beerDetailsBasic.ibu !== null ? (
-              <span>{cardProps?.beerDetailsBasic.ibu} IBU</span>
+              <span>/ {cardProps?.beerDetailsBasic.ibu} IBU</span>
             ) : (
               <></>
             )}
@@ -96,9 +99,7 @@ export default function BeerDetailCard({ cardProps }: any) {
               </span>
             </Link>
 
-            <KakaoShareButton
-              imageUrl={cardProps?.beerDetailsBasic?.thumbnail}
-            />
+            <ShareBtn />
           </div>
         </div>
       </div>
