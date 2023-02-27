@@ -84,6 +84,7 @@ public class BeerDto {
 
 		private Long beerId;
 		private String korName;
+		// private List<String> beerDetailsTopTags;
 		private BeerDetailsTopTags beerDetailsTopTags;
 		private Double totalAverageStars;
 		private Integer totalStarCount;
@@ -166,11 +167,12 @@ public class BeerDto {
 		private Long beerId;
 		private Boolean isWishlist;
 		private BeerDetailsBasic beerDetailsBasic;
-		List<BeerCategoryType> beerCategoryTypes;
-		private BeerDetailsTopTags beerDetailsTopTags;
+		private List<BeerCategoryType> beerCategoryTypes;
+		private List<String> beerDetailsTopTags;
+		// private BeerDetailsTopTags beerDetailsTopTags;
 		private BeerDetailsStars beerDetailsStars;
 		private BeerDetailsCounts beerDetailsCounts;
-		List<SimilarResponse> similarBeers;
+		private List<SimilarResponse> similarBeers;
 
 	}
 }

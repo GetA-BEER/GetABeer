@@ -1,6 +1,7 @@
 package be.global.aop;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -259,7 +260,11 @@ public class GetABeerAop {
 				findBeer.minusMaleStarCount();
 			}
 
-			List<String> presentBeerTagTypes = findBeer.createTopTagList(); // 삭제 이전 베스트 태그
+			List<String> presentBeerTagTypes = new ArrayList<>();
+
+			if (findBeer.createTopTagList() != null) {
+				presentBeerTagTypes = findBeer.createTopTagList(); // 삭제 이전 베스트 태그
+			}
 
 			log.info("[트랜잭션 시작] {}", joinPoint.getSignature());
 			Object result = joinPoint.proceed();
@@ -276,7 +281,8 @@ public class GetABeerAop {
 			}
 
 			// 삭제되는 레이팅이 베스트 레이팅일 경우
-			if (findBeer.getBeerDetailsBestRating().getBestRatingId() == ratingId) {
+			if (findBeer.getBeerDetailsBestRating().getBestRatingId() == ratingId
+				&& beerService.findBestRating(findBeer) != null) {
 				Rating bestRating = beerService.findBestRating(findBeer);
 				findBeer.updateBestRating(bestRating);
 			}
@@ -349,7 +355,13 @@ public class GetABeerAop {
 
 		Beer findBeer = beerService.findBeerByPairingId(pairingId);
 
-		String bestPairingCategory = beerService.findBestPairingCategory(findBeer);
+		String bestPairingCategory;
+
+		if (beerService.findBestPairingCategory(findBeer) != null) {
+			bestPairingCategory = beerService.findBestPairingCategory(findBeer);
+		} else {
+			bestPairingCategory = null;
+		}
 
 		if (findBeer.getBeerDetailsStatistics().getBestPairingCategory() != bestPairingCategory) {
 			findBeer.getBeerDetailsStatistics().updateBestPairingCategory(bestPairingCategory);
@@ -372,13 +384,15 @@ public class GetABeerAop {
 		Rating findRating = ratingService.findRating(ratingId);
 		Beer findBeer = beerService.findBeerByRatingId(ratingId);
 
-		Long bestRatingId = findBeer.getBeerDetailsBestRating().getBestRatingId();
-		Integer bestRatingStarCount = ratingService.findRating(bestRatingId).getLikeCount();
+		if (findBeer.getBeerDetailsBestRating() != null) {
+			Long bestRatingId = findBeer.getBeerDetailsBestRating().getBestRatingId();
+			Integer bestRatingStarCount = ratingService.findRating(bestRatingId).getLikeCount();
 
-		if (findRating.getId().equals(bestRatingId)
-			|| findRating.getLikeCount() > bestRatingStarCount) { // 좋아요 찍힌게 베스트 레이팅이거나 순위가 바뀌면 새로 계산
-			Rating bestRating = beerService.findBestRating(findBeer);
-			findBeer.updateBestRating(bestRating);
+			if (findRating.getId().equals(bestRatingId)
+				|| findRating.getLikeCount() > bestRatingStarCount) { // 좋아요 찍힌게 베스트 레이팅이거나 순위가 바뀌면 새로 계산
+				Rating bestRating = beerService.findBestRating(findBeer);
+				findBeer.updateBestRating(bestRating);
+			}
 		}
 		beerRepository.save(findBeer);
 	}
