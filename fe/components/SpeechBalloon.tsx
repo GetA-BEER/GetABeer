@@ -4,6 +4,7 @@ import axios from '@/pages/api/axios';
 import Image from 'next/image';
 import { TimeHandler } from '@/utils/TimeHandler';
 import CommentInput from './inputs/CommentInput';
+import Swal from 'sweetalert2';
 
 export interface RatingComment {
   ratingId: number;
@@ -103,7 +104,24 @@ export default function SpeechBalloon({
               <FaPen />
               <span className="text-y-black">수정</span>
             </button>
-            <button className="flex items-center" onClick={deleteComment}>
+            <button
+              className="flex items-center"
+              onClick={() => {
+                Swal.fire({
+                  title: '게시글을 삭제하시겠습니까?',
+                  text: '삭제하시면 다시 복구시킬 수 없습니다.',
+                  showCancelButton: true,
+                  confirmButtonColor: '#AC0000',
+                  cancelButtonColor: '#008505',
+                  confirmButtonText: '삭제',
+                  cancelButtonText: '취소',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    deleteComment();
+                  }
+                });
+              }}
+            >
               <FaTrash />
               <span className="text-y-black">삭제</span>
             </button>

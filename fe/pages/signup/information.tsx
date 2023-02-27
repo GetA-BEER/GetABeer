@@ -8,6 +8,7 @@ import BeerCategory from '@/components/signup/BeerCategory';
 import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import axios from '@/pages/api/axios';
+import swal from 'sweetalert2';
 
 interface IFormValues {
   userBeerTags: Array<string>;
@@ -58,12 +59,32 @@ export default function Information() {
       .post(`/api/register/user/${Router.query.userId}`, reqBody)
       .then((res) => {
         // console.log(res);
+        swal.fire({
+          title: '회원가입 완료!',
+          text: '로그인 후 이용하세요',
+          confirmButtonColor: '#F1B31C',
+          confirmButtonText: '확인',
+        });
         Router.push({
           pathname: '/login',
         });
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+  const skipClick = () => {
+    swal
+      .fire({
+        title: '회원가입 완료!',
+        text: '로그인 후 이용하세요',
+        confirmButtonColor: '#F1B31C',
+        confirmButtonText: '확인',
+      })
+      .then((result) => {
+        if (result.value) {
+          Router.push('/');
+        }
       });
   };
   return (
@@ -81,8 +102,8 @@ export default function Information() {
         <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           회원정보 입력
         </div>
-        <form onSubmit={handleSubmit(onValid)}>
-          <div className="m-auto max-w-md mb-10 p-1">
+        <div className="m-auto max-w-md mb-10 p-1">
+          <form onSubmit={handleSubmit(onValid)}>
             <div className="border divide-y divide-gray-200 rounded-xl">
               <GenderBtn register={register} />
               <AgeBox register={register} />
@@ -122,20 +143,16 @@ export default function Information() {
               </div>
               <SubmitBtn onClick={undefined}>등록하기</SubmitBtn>
             </div>
-            <div className="mt-2 pb-10 flex justify-center gap-1 text-sm">
-              <div className="text-y-gray font-light">
-                나중에 입력하고 싶다면?
-              </div>
-
-              <button
-                className="flex text-y-brown"
-                onClick={() => Router.push('/')}
-              >
-                Skip
-              </button>
+          </form>
+          <div className="mt-2 pb-10 flex justify-center gap-1 text-sm">
+            <div className="text-y-gray font-light">
+              나중에 입력하고 싶다면?
             </div>
+            <button className="flex text-y-brown" onClick={skipClick}>
+              Skip
+            </button>
           </div>
-        </form>
+        </div>
       </main>
     </>
   );

@@ -17,6 +17,7 @@ import {
   HiOutlineChartPie,
   HiOutlineMapPin,
 } from 'react-icons/hi2';
+import swal from 'sweetalert2';
 
 export default function Mypage() {
   const [, setAccessToken] = useRecoilState(accessToken);
@@ -36,17 +37,35 @@ export default function Mypage() {
     fetchUser();
   }, []);
   const handleClickLogout = () => {
-    axios
-      .post('/api/user/logout')
-      .then((res) => {
-        console.log(res);
-        setAccessToken('');
-        setUserId('');
-        delete axios.defaults.headers.Authorization;
-        window.location.href = '/login';
+    swal
+      .fire({
+        title: 'Get A Beer',
+        text: '로그아웃 하시겠습니까?',
+        showCancelButton: true,
+        confirmButtonColor: '#F1B31C',
+        cancelButtonColor: '#DDDDDD',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
       })
-      .catch((err) => {
-        console.log(err);
+      .then((result) => {
+        if (result.value) {
+          axios
+            .post('/api/user/logout')
+            .then((res) => {
+              console.log(res);
+              setAccessToken('');
+              setUserId('');
+              delete axios.defaults.headers.Authorization;
+              window.location.href = '/login';
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          setAccessToken('');
+          setUserId('');
+          delete axios.defaults.headers.Authorization;
+          window.location.href = '/login';
+        }
       });
   };
 

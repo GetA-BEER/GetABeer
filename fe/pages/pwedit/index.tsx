@@ -7,6 +7,7 @@ import { BiErrorAlt } from 'react-icons/bi';
 import axios from '@/pages/api/axios';
 import Router from 'next/router';
 import Link from 'next/link';
+import swal from 'sweetalert2';
 
 interface IFormValues {
   email: string;
@@ -40,12 +41,15 @@ export default function PwEdit() {
       newVerifyPassword: passwordConfirm,
     };
     axios
-      .patch('/user/password', reqBody)
+      .patch('api/user/password', reqBody)
       .then((res) => {
         // console.log(res);
-        Router.push({
-          pathname: '/',
+        swal.fire({
+          text: '비밀번호를 변경하였습니다',
+          confirmButtonColor: '#F1B31C',
+          confirmButtonText: '확인',
         });
+        Router.back();
       })
       .catch((err) => {
         console.log(err);
