@@ -61,6 +61,10 @@ export default function Mypage() {
             .catch((err) => {
               console.log(err);
             });
+          setAccessToken('');
+          setUserId('');
+          delete axios.defaults.headers.Authorization;
+          window.location.href = '/login';
         }
       });
   };
