@@ -9,11 +9,21 @@ import CommentInput from '@/components/inputs/CommentInput';
 import PageContainer from '@/components/PageContainer';
 import SpeechBalloon from '@/components/SpeechBalloon';
 import { RatingComment } from '@/components/SpeechBalloon';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import Swal from 'sweetalert2';
 
 export default function Rating() {
   const router = useRouter();
   const ratingId = router.query.ratingid;
-
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
   const [cardProps, setCardProps] = useState<RatingCardProps>();
   const [inputState, setInputState] = useState<string>('');
   const [ratingCommentList, setRatingCommentList] = useState<
@@ -90,7 +100,26 @@ export default function Rating() {
             <CommentInput
               inputState={inputState}
               setInputState={setInputState}
-              postFunc={postRatingComment}
+              postFunc={
+                isLogin
+                  ? postRatingComment
+                  : () => {
+                      Swal.fire({
+                        text: '로그인이 필요한 서비스 입니다.',
+                        showCancelButton: true,
+                        confirmButtonColor: '#f1b31c',
+                        cancelButtonColor: '#A7A7A7',
+                        confirmButtonText: '로그인',
+                        cancelButtonText: '취소',
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          router.push({
+                            pathname: '/login',
+                          });
+                        }
+                      });
+                    }
+              }
             />
           </div>
           <div>

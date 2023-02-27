@@ -6,9 +6,20 @@ import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PairingComment } from '@/components/SpeechBalloon';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import Swal from 'sweetalert2';
 
 export default function PairingDetail() {
   let router = useRouter();
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
   const [curRoute, setCurRoute] = useState<any>();
   const [pairingProps, setPairingProps] = useState<any>();
   const [inputState, setInputState] = useState<string>('');
@@ -82,7 +93,26 @@ export default function PairingDetail() {
             <CommentInput
               inputState={inputState}
               setInputState={setInputState}
-              postFunc={postPairingComment}
+              postFunc={
+                isLogin
+                  ? postPairingComment
+                  : () => {
+                      Swal.fire({
+                        text: '로그인이 필요한 서비스 입니다.',
+                        showCancelButton: true,
+                        confirmButtonColor: '#f1b31c',
+                        cancelButtonColor: '#A7A7A7',
+                        confirmButtonText: '로그인',
+                        cancelButtonText: '취소',
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          router.push({
+                            pathname: '/login',
+                          });
+                        }
+                      });
+                    }
+              }
             />
           </div>
           <div>
