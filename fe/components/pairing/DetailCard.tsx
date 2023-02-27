@@ -1,4 +1,3 @@
-import { FiThumbsUp } from 'react-icons/fi';
 import { MdModeEdit } from 'react-icons/md';
 import { HiTrash } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';
@@ -9,20 +8,27 @@ import PairingImageCarousel from '@/components/pairing/PairingImageCarousel';
 import { TimeHandler } from '@/utils/TimeHandler';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import { useRouter } from 'next/router';
+import PairingThumbs from '../PairingThumbs';
 import axios from '@/pages/api/axios';
 import swal from 'sweetalert';
 
-export default function DetailCard(props: { pairingProps: any }) {
+export default function DetailCard({ pairingProps }: any) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   let router = useRouter();
   const [curRoute, setCurRoute] = useState<any>();
   const [randomNum, setRandomNum] = useState(0);
   const [date, setDate] = useState<any>('');
-  const initialDate = props?.pairingProps?.createdAt;
+  const [isLike, setIsLike] = useState<any>(pairingProps?.isUserLikes);
+  const [likeCount, setLikeCount] = useState<any>(pairingProps?.likeCount);
+  const initialDate = pairingProps?.createdAt;
 
   useEffect(() => {
-    setCurRoute(router.query.id);
-  }, [router, curRoute]);
+    if (pairingProps !== undefined) {
+      setCurRoute(router.query.id);
+      setIsLike(pairingProps.isUserLikes);
+      setLikeCount(pairingProps.likeCount);
+    }
+  }, [router, curRoute, pairingProps]);
 
   useEffect(() => {
     let randomTmp: number = Math.floor(Math.random() * 3);
@@ -71,7 +77,8 @@ export default function DetailCard(props: { pairingProps: any }) {
     <>
       {/*닉네임, 날짜*/}
       <div className="flex justify-between items-center">
-        <ProfileCard nickname={props?.pairingProps?.nickname} date={date} />
+        <ProfileCard nickname={pairingProps?.nickname} date={date} />
+
         <div className="flex px-4">
           <div onClick={hadleEdit}>
             <MdModeEdit className="text-y-brown inline" /> 수정
@@ -85,21 +92,21 @@ export default function DetailCard(props: { pairingProps: any }) {
       {/* 사진,설명 */}
       <div>
         <div className="w-full px-2">
-          {props?.pairingProps?.imageList === undefined ? (
+          {pairingProps?.imageList === undefined ? (
             <></>
           ) : (
-            <PairingImageCarousel imageList={props?.pairingProps?.imageList} />
+            <PairingImageCarousel imageList={pairingProps?.imageList} />
           )}
           <div className="p-2 h-fit overflow-hidden w-full leading-6">
             <div className="w-fit px-2 py-[2px] text-xs rounded-md text-white bg-y-gold">
-              {CategoryMatcherToKor(props?.pairingProps?.category)}
+              {CategoryMatcherToKor(pairingProps?.category)}
             </div>
-            {props?.pairingProps?.content === undefined ? (
+            {pairingProps?.content === undefined ? (
               <div className="text-y-gray">
                 {noReviewState[randomNum]?.contents}
               </div>
             ) : (
-              <>{props?.pairingProps?.content}</>
+              <>{pairingProps?.content}</>
             )}
           </div>
         </div>
@@ -107,8 +114,13 @@ export default function DetailCard(props: { pairingProps: any }) {
 
       {/* 코멘트수,엄지수 */}
       <div className="py-2 px-5 flex justify-end items-center text-[8px]">
-        <FiThumbsUp className="w-3 h-3 mb-[3px]" />
-        {props?.pairingProps?.likeCount}
+        <PairingThumbs
+          pairingId={pairingProps?.pairingId}
+          isLike={isLike}
+          setIsLike={setIsLike}
+          likeCount={likeCount}
+          setLikeCount={setLikeCount}
+        />
       </div>
     </>
   );

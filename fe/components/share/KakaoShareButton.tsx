@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react';
-import { HiShare } from 'react-icons/hi';
+import { useEffect } from 'react';
+import Image from 'next/image';
+import { currentBeer } from '@/atoms/currentBeer';
+import { useRecoilState } from 'recoil';
 
 // 참고로, JS SDK는 PC 또는 모바일에 따라 동작이 변경되는 부분들이 있어서
 // user agent가 임의로 변경된 환경 (크롬 브라우저 > 개발자모드 > 모바일 설정)을 지원하지 않음
-const KakaoShareButton = (imageUrl: any) => {
-  const [imageState, setimageState] = useState();
+const KakaoShareButton = () => {
+  const [beerInfo] = useRecoilState(currentBeer);
   useEffect(() => {
-    setimageState(imageUrl);
-  }, [imageUrl]);
+    createKakaoButton(beerInfo);
+  }, [beerInfo]);
 
-  const createKakaoButton = () => {
+  const createKakaoButton = (beerInfo: any) => {
     if (window.Kakao) {
       const kakao = window.Kakao;
       // 중복 initialization 방지
       if (!kakao.isInitialized()) {
-        // 내 javascript key 를 이용하여 initialize
         kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
       }
 
       kakao.Link.createDefaultButton({
-        // Render 부분 id=kakao-link-btn 을 찾아 그부분에 렌더링을 합니다
         container: '#kakao-link-btn',
         objectType: 'feed',
         content: {
-          title: 'GetABeer',
-          description: `#맥주가 #땡길땐 #GetA`,
-          imageUrl: imageState,
+          title: `${beerInfo?.beerDetailsBasic?.korName}`,
+          description: `#맥주가 #땡길땐 #GetABeer`,
+          imageUrl: beerInfo?.beerDetailsBasic?.thumbnail,
           link: {
             mobileWebUrl: window.location.href,
             webUrl: window.location.href,
@@ -52,14 +52,14 @@ const KakaoShareButton = (imageUrl: any) => {
   };
 
   return (
-    <button
-      type="button"
-      id="kakao-link-btn"
-      className="hover:text-y-gold mr-1"
-    >
-      <span className="mr-1">
-        <HiShare className="inline" /> 공유하기
-      </span>
+    <button type="button" id="kakao-link-btn" className="rounded-full mx-[1px]">
+      <Image
+        className="w-6 h-6 rounded-full"
+        alt="kakao-share-icon"
+        src="/images/kakao.png"
+        width={100}
+        height={100}
+      />
     </button>
   );
 };
