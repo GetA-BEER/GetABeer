@@ -24,11 +24,10 @@ public class RatingLikeService {
 	private final RatingRepository ratingRepository;
 	private final RatingLikeRepository ratingLikeRepository;
 
+	@Transactional
 	public LikeResponseDto clickLike(Long ratingId) {
 		User user = userService.getLoginUser();
 		Rating rating = ratingService.findRating(ratingId);
-
-		isWriterUser(rating.getUser().getId(), user.getId());
 
 		int isUserLiked = isUserLikedRating(rating.getId(), user.getId());
 
@@ -68,10 +67,5 @@ public class RatingLikeService {
 	private RatingLike findRatingLike(Long ratingId, Long userId) {
 
 		return ratingLikeRepository.findRatingLike(ratingId, userId);
-	}
-	private void isWriterUser(Long ratingUserId, Long userId) {
-		if (ratingUserId.equals(userId)) {
-			throw new BusinessLogicException(ExceptionCode.NOT_LIKE_WRITER);
-		}
 	}
 }

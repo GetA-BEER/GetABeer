@@ -15,7 +15,6 @@ public class RatingCommentDto {
 	@Builder
 	public static class Post {
 		private Long ratingId;
-		private Long userId;
 		private String nickname;
 		private String content;
 	}

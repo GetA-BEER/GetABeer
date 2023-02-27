@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,20 +15,21 @@ import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
 import be.domain.comment.repository.PairingCommentRepository;
 import be.domain.like.repository.PairingLikeRepository;
-import be.domain.pairing.dto.PairingImageDto;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;
-import be.domain.pairing.entity.PairingCategory;
 import be.domain.pairing.entity.PairingImage;
-import be.domain.pairing.repository.PairingImageRepository;
+import be.domain.pairing.repository.image.PairingImageRepository;
 import be.domain.pairing.repository.PairingRepository;
+import be.domain.pairing.service.helper.StateHelper;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PairingService {
@@ -41,9 +41,18 @@ public class PairingService {
 	private final PairingImageRepository pairingImageRepository;
 	private final PairingCommentRepository pairingCommentRepository;
 
+	private StateHelper stateHelper = new StateHelper();
+
 	/* 페어링 등록 */
 	@Transactional
-	public String create(Pairing pairing, List<MultipartFile> files, Long beerId) throws IOException {
+	public String create(Pairing pairing, List<MultipartFile> files,
+		Long beerId) throws IOException {
+
+		log.info("**************************************************************");
+		log.info("서비스 시작 ");
+		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getContent());
+		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getLikeCount());
+		log.info("**************************************************************");
 
 		/* 존재하는 회원인지 확인 */
 		User user = userService.findLoginUser();
@@ -73,6 +82,13 @@ public class PairingService {
 		/* 페어링 등록하기 */
 		pairing.saveDefault(beer, user, thumbnail, pairingImages);
 		pairingRepository.save(pairing);
+
+		log.info("**************************************************************");
+		log.info("페어링 등록 확인 : " + pairing.getContent());
+		log.info("페어링 등록 확인 : " + pairing.getPairingCategory());
+		log.info("페어링 등록 확인 : " + pairing.getBeer().getBeerDetailsBasic().getKorName());
+		log.info("페어링 유저 확인 : " + pairing.getUser().getNickname());
+		log.info("**************************************************************");
 
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
 	}
@@ -137,7 +153,7 @@ public class PairingService {
 		} else {
 			response.addUserLike(false);
 		}
-		response.addCategory(findCategory(pairing.getId()));
+		response.addCategory(findVerifiedPairing(pairing.getId()).getPairingCategory());
 		response.addCommentList(pairingCommentRepository.findPairingCommentList(pairingId));
 		response.addImageList(pairingImageRepository.findPairingImageList(pairingId));
 
@@ -153,65 +169,17 @@ public class PairingService {
 	}
 
 	/* 페어링 페이지 조회*/
-	public Page<PairingResponseDto.Total> getPairingPageOrderByRecent(
-		Long beerId, Integer page, Integer size, String type) {
+	public Page<PairingResponseDto.Total> getPairingPageOrderBy(
+		Long beerId, String type, String category, Integer page, Integer size) {
 
-		Page<PairingResponseDto.Total> responses;
 		User user = userService.getLoginUserReturnNull();
 
-		/* 로그인 유저가 없는 경우 */
-		if (user == null) {
-			switch (type) {
-				case "recency":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("pairingId")));
-					break;
-				case "mostlikes":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("likeCount")));
-					break;
-				case "mostcomments":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("commentCount")));
-					break;
-				default:
-					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
-			}
-
-			responses.forEach(pairing -> pairing.addUserLike(false));
-		} else { /* 로그인 유저가 있는 경우 */
-			switch (type) {
-				case "recency":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("pairingId")));
-					break;
-				case "mostlikes":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("likeCount")));
-					break;
-				case "mostcomments":
-					responses = pairingRepository.findPairingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("commentCount")));
-					break;
-				default:
-					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
-			}
-
-			responses.forEach(pairing -> pairing.addUserLike(getIsUserLikes(pairing.getPairingId(), user.getId())));
-		}
-		responses.forEach(pairing -> pairing.addCategory(findCategory(pairing.getPairingId())));
-
-		return responses;
+		return stateHelper
+			.getPairingResponsePage(user, category, type, beerId,
+				PageRequest.of(page - 1, size), pairingRepository, pairingLikeRepository);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
-
-	/* 카테고리 정보 가져오기 */
-	public PairingCategory findCategory(Long pairingId) {
-		Pairing pairing = findVerifiedPairing(pairingId);
-
-		return pairing.getPairingCategory();
-	}
 
 	private Boolean getIsUserLikes(Long pairingId, Long userId) {
 		int userLikes = pairingLikeRepository.findPairingLikeUser(pairingId, userId);

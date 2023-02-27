@@ -29,7 +29,6 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.service.BeerTagService;
 import be.domain.pairing.entity.Pairing;
-import be.domain.pairing.service.PairingService;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.service.RatingService;
@@ -38,12 +37,13 @@ import be.domain.user.entity.enums.Gender;
 import be.domain.user.service.UserService;
 import be.global.statistics.entity.TotalStatistics;
 import be.global.statistics.repository.TotalStatisticsQueryRepository;
+import be.global.statistics.repository.TotalStatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-// @Aspect
-// @Component
+@Aspect
+@Component
 @RequiredArgsConstructor
 public class GetABeerAop {
 
@@ -52,6 +52,7 @@ public class GetABeerAop {
 	private final BeerTagService beerTagService;
 	private final RatingService ratingService;
 	private final BeerRepository beerRepository;
+	private final TotalStatisticsRepository totalStatisticsRepository;
 	private final TotalStatisticsQueryRepository totalStatisticsQueryRepository;
 
 	@Before(value = "Pointcuts.getWeeklyBeer()")
@@ -104,12 +105,15 @@ public class GetABeerAop {
 			totalStatistics.addTotalVisitorCount();
 		}
 
+		totalStatisticsRepository.save(totalStatistics);
+
 	}
 
 	@Before(value = "Pointcuts.getBeer() && args(beerId)")
 	public void calculateStaticticsOnGetBeer(JoinPoint joinPoint, Long beerId) {
 		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
 		totalStatistics.addTotalBeerViewCount();
+		totalStatisticsRepository.save(totalStatistics);
 	}
 
 	/*
@@ -173,8 +177,8 @@ public class GetABeerAop {
 			findBeer.addMaleStarCount();
 		}
 		// ---------------------------------------------------------------------------------------
-
-		// beerRepository.save(findBeer);
+		totalStatisticsRepository.save(totalStatistics);
+		beerRepository.save(findBeer);
 	}
 
 	/*
@@ -277,6 +281,8 @@ public class GetABeerAop {
 				findBeer.updateBestRating(bestRating);
 			}
 
+			beerRepository.save(findBeer);
+
 			log.info("[트랜잭션 커밋] {}", joinPoint.getSignature());
 
 			return result;
@@ -288,6 +294,7 @@ public class GetABeerAop {
 			// @After
 			log.info("[리소스 릴리즈] {}", joinPoint.getSignature());
 		}
+
 	}
 
 	@AfterReturning(value = "Pointcuts.createPairing() && args(pairing, image, category, beerId)")
@@ -296,33 +303,70 @@ public class GetABeerAop {
 
 		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
 		totalStatistics.addTotalPairingCount();
+
 		// ---------------------------------------------------------------------------------------
 		// TODO: 페어링 생성시 각종 계산
 		// ---------------------------------------------------------------------------------------
+
+		Beer findBeer = beerService.findVerifiedBeer(beerId);
+
+		String bestPairingCategory = beerService.findBestPairingCategory(findBeer);
+
+		if (findBeer.getBeerDetailsStatistics().getBestPairingCategory() != bestPairingCategory) {
+			findBeer.getBeerDetailsStatistics().updateBestPairingCategory(bestPairingCategory);
+		}
+
+		totalStatisticsRepository.save(totalStatistics);
+		beerRepository.save(findBeer);
+
 	}
 
 	@AfterReturning(value = "Pointcuts.updatePairing() && args(pairing, pairingId, category, image)")
 	public void calculateBeerDetailsOnPairingUpdate(JoinPoint joinPoint, Pairing pairing, Long pairingId,
 		String category, List<String> image) {
+
 		// ---------------------------------------------------------------------------------------
 		// TODO: 페어링 수정시 각종 계산
 		// ---------------------------------------------------------------------------------------
+
+		Beer findBeer = beerService.findBeerByPairingId(pairingId);
+
+		String bestPairingCategory = beerService.findBestPairingCategory(findBeer);
+
+		if (findBeer.getBeerDetailsStatistics().getBestPairingCategory() != bestPairingCategory) {
+			findBeer.getBeerDetailsStatistics().updateBestPairingCategory(bestPairingCategory);
+		}
+
+		beerRepository.save(findBeer);
 	}
 
 	@Before(value = "Pointcuts.deletePairing() && args(pairingId)")
 	public void calculateBeerDetailsOnPairingDeletion(JoinPoint joinPoint, Long pairingId) {
+
 		// ---------------------------------------------------------------------------------------
 		// TODO: 페어링 삭제시 각종 계산
 		// ---------------------------------------------------------------------------------------
+
+		Beer findBeer = beerService.findBeerByPairingId(pairingId);
+
+		String bestPairingCategory = beerService.findBestPairingCategory(findBeer);
+
+		if (findBeer.getBeerDetailsStatistics().getBestPairingCategory() != bestPairingCategory) {
+			findBeer.getBeerDetailsStatistics().updateBestPairingCategory(bestPairingCategory);
+		}
+
+		beerRepository.save(findBeer);
+
 	}
 
 	@Before(value = "Pointcuts.getBeer() && args(beerId)")
 	public void test(JoinPoint joinPoint, Long beerId) {
-		Beer beer = beerService.findVerifiedBeer(beerId);
-		beer.addStatViewCount();
+		Beer findBeer = beerService.findVerifiedBeer(beerId);
+		findBeer.addStatViewCount();
+		beerRepository.save(findBeer);
 	}
 
-	@AfterReturning(value = "Pointcuts.clickPairingLike() && args(ratingId)")
+	@AfterReturning(value = "Pointcuts.clickRatingLike() && args(ratingId)")
 	public void calculateBestPairingOnPairingLike(JoinPoint joinPoint, Long ratingId) {
 
 		Rating findRating = ratingService.findRating(ratingId);
@@ -336,6 +380,7 @@ public class GetABeerAop {
 			Rating bestRating = beerService.findBestRating(findBeer);
 			findBeer.updateBestRating(bestRating);
 		}
+		beerRepository.save(findBeer);
 	}
 
 	private void createStatCookie(HttpServletRequest request, HttpServletResponse response, Cookie cookie) {

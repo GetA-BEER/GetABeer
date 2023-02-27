@@ -79,6 +79,12 @@ public class RedisConfig extends CachingConfigurerSupport {
 			.build();
 	}
 
+	/* 서버 배포용 ^_^ */
+	// @Bean
+	// ConfigureRedisAction configureRedisAction() {
+	// 	return ConfigureRedisAction.NO_OP;
+	// }
+
 	// @Bean
 	// public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
 	// 	return new GenericJackson2JsonRedisSerializer();

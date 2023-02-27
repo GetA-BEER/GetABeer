@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import be.domain.beer.entity.Beer;
@@ -104,6 +103,17 @@ public class BeerQueryRepository {
 			.fetch();
 	}
 
+	public String findBestPairingCategory(Beer findBeer) {
+
+		return jpaQueryFactory
+			.select(pairing.pairingCategory.stringValue())
+			.from(pairing)
+			.where(pairing.beer.eq(findBeer))
+			.groupBy(pairing.pairingCategory)
+			.orderBy(pairing.pairingCategory.stringValue().count().desc())
+			.fetchFirst();
+	}
+
 	public List<Beer> findSimilarBeer(Beer findBeer) {
 
 		List<String> beerCategories = findBeer.getBeerBeerCategories().stream()
@@ -118,6 +128,7 @@ public class BeerQueryRepository {
 				.selectFrom(beer)
 				.join(beer.beerBeerCategories, beerBeerCategory)
 				.join(beerBeerCategory.beerCategory, beerCategory)
+				.where(beer.ne(findBeer))
 				.where(beerCategory.beerCategoryType.stringValue().eq(beerCategories.get(0))
 					.and(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag1())
 						.or(beer.beerDetailsTopTags.tag1.eq(findBeer.getBeerDetailsTopTags().getTag2())))
@@ -155,6 +166,15 @@ public class BeerQueryRepository {
 			.fetchFirst();
 	}
 
+	public Beer findBeerByPairingId(Long pairingId) {
+
+		return jpaQueryFactory
+			.selectFrom(beer)
+			.join(beer.pairingList, pairing)
+			.where(pairing.id.eq(pairingId))
+			.fetchFirst();
+	}
+
 	public Page<Beer> findCategoryBeers(String queryParam, Pageable pageable) {
 
 		List<Beer> beerList = jpaQueryFactory.selectFrom(beer)
@@ -184,7 +204,6 @@ public class BeerQueryRepository {
 			.fetchFirst();
 	}
 
-
 	public Page<Beer> findMyPageBeers(User loginUser, Pageable pageable) {
 
 		List<Beer> beerList = jpaQueryFactory.select(beer)
@@ -207,7 +226,6 @@ public class BeerQueryRepository {
 
 		return new PageImpl<>(beerList, pageable, total);
 	}
-
 
 	public List<Rating> findMyRatingWithWishlist(User loginUser) {
 

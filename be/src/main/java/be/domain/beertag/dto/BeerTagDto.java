@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 public class BeerTagDto {
 
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Response {
+	@Getter
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Response {
 
-        private Long beerTagId;
-        private BeerTagType beerTagType;
-    }
+		private Long beerTagId;
+		private BeerTagType beerTagType;
+	}
 }

@@ -20,8 +20,6 @@ import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beerwishlist.entity.BeerWishlist;
-import be.domain.beerwishlist.repository.BeerWishlistRepository;
-import be.domain.user.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface BeerMapper {

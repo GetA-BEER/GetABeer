@@ -15,28 +15,34 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import be.domain.beer.entity.Beer;
+import be.domain.beer.service.BeerService;
 import be.domain.pairing.dto.PairingRequestDto;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.mapper.PairingMapper;
 import be.domain.pairing.service.PairingService;
 import be.global.dto.MultiResponseDto;
+import be.global.dto.MultiResponseDtoWithBeerInfo;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping("/api/pairings")
 public class PairingController {
 	private final PairingService pairingService;
+	private final BeerService beerService;
 	private final PairingMapper mapper;
 
-	public PairingController(PairingService pairingService, PairingMapper mapper) {
+	public PairingController(PairingService pairingService, BeerService beerService, PairingMapper mapper) {
 		this.pairingService = pairingService;
+		this.beerService = beerService;
 		this.mapper = mapper;
 	}
 
@@ -44,6 +50,11 @@ public class PairingController {
 	@PostMapping
 	public ResponseEntity<String> post(@RequestPart(value = "post") @Valid PairingRequestDto.Post post,
 		@RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
+		log.info("************************************************************");
+		log.info("여기는 컨트롤러");
+		log.info("내용이 잘 들어오나 : " + post.getContent());
+		log.info("post 내용 확인 : " + post.getCategory());
+		log.info("************************************************************");
 		String message = pairingService.create(mapper.pairingPostDtoToPairing(post),
 			files, post.getBeerId());
 
@@ -53,7 +64,7 @@ public class PairingController {
 	/* 페어링 수정 */
 	@PatchMapping("/{pairingId}")
 	public ResponseEntity<String> patch(@PathVariable @Positive Long pairingId,
-		@RequestPart(value = "newFile") List<MultipartFile> files,
+		@RequestPart(value = "newFile", required = false) List<MultipartFile> files,
 		@RequestPart(value = "patch") @Valid PairingRequestDto.Patch patch) throws IOException {
 		String message = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
 			pairingId, patch.getType(), patch.getUrl(), files);
@@ -77,11 +88,16 @@ public class PairingController {
 	}
 
 	/* 페어링 페이지 조회 */
-	@GetMapping("/page/{type}")
-	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getPairingPageOrderByRecent(
-		@PathVariable String type, @RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
-		Page<PairingResponseDto.Total> responses = pairingService.getPairingPageOrderByRecent(beerId, page, size, type);
+	@GetMapping("/page/{type}/{category}")
+	public ResponseEntity<MultiResponseDtoWithBeerInfo<PairingResponseDto.Total>> getPairingPageOrderByRecent(
+		@PathVariable String type, @PathVariable String category,
+		@RequestParam Long beerId, @RequestParam Integer page, @RequestParam Integer size) {
+		Page<PairingResponseDto.Total> responses =
+			pairingService.getPairingPageOrderBy(beerId, type, category, page, size);
+		Beer beer = beerService.getBeer(beerId);
 
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), responses));
+		return ResponseEntity.ok(
+			new MultiResponseDtoWithBeerInfo<PairingResponseDto.Total>(responses.getContent(), responses, beer)
+		);
 	}
 }

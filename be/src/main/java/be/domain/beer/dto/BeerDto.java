@@ -12,8 +12,6 @@ import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.BeerDetailsTopTags;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategoryType;
-import be.domain.beertag.dto.BeerTagDto;
-import be.domain.rating.entity.Rating;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

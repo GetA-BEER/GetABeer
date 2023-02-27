@@ -6,13 +6,11 @@ import be.global.statistics.repository.BeerCategoryStatisticsQueryRepository;
 import be.global.statistics.repository.BeerStatisticsQueryRepository;
 import be.global.statistics.repository.BeerTagStatisticsQueryRepository;
 import be.global.statistics.repository.PairingCategoryStatisticsQueryRepository;
-import be.global.statistics.repository.TotalStatisticsQueryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class StatisticsService {
-	private final TotalStatisticsQueryRepository totalStatisticsQueryRepository;
 	private final BeerStatisticsQueryRepository beerStatisticsQueryRepository;
 	private final BeerCategoryStatisticsQueryRepository beerCategoryStatisticsQueryRepository;
 	private final BeerTagStatisticsQueryRepository beerTagStatisticsQueryRepository;

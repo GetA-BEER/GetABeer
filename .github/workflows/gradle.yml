@@ -4,8 +4,6 @@ on:
   push:
     paths: [ 'be/**' ]
     branches: [ "dev-be" ]
-  pull_request:
-    branches: [ "dev-be" ]
 
 permissions:
   contents: read
@@ -28,6 +26,7 @@ jobs:
 
       - name: Add permission
         run: chmod +x gradlew
+        working-directory: ./be/
 
       - name: create-json
         id: create-json
@@ -55,13 +54,12 @@ jobs:
           cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-        with:
-          arguments: build
+        run: ./gradlew clean build --exclude-task test
+        working-directory: ./be/
 
-      # build한 후 프로젝트를 압축합니다.
+      # build한 후 프로젝트를 압축
       - name: Make zip file
-        run: zip -r ./getabeer-deploy.zip
+        run: zip -r ./getabeer-deploy.zip . -i ./getabeer-deploy
         shell: bash
 
       # Access Key와 Secret Access Key를 통해 권한 확인
@@ -69,14 +67,14 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-northeast-2
 
       # 압축한 프로젝트를 S3로 전송
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./getabeer-deploy.zip s3://$S3_BUCKET_NAME/getabeer-deploy.zip
 
-        # CodeDeploy 에 배포 명령을 내림
+        # CodeDeploy 에 배포 명령
       - name: Code Deploy
         run: >
           aws deploy create-deployment --application-name getabeer

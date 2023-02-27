@@ -5,10 +5,8 @@ import static be.domain.user.entity.enums.Role.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,6 @@ import be.domain.beer.repository.WeeklyBeerRepository;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
-import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.beerwishlist.repository.BeerWishListQRepository;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.User;
@@ -51,7 +48,6 @@ public class BeerServiceImpl implements BeerService {
 	private final BeerCategoryService beerCategoryService;
 	private final BeerBeerCategoryRepository beerBeerCategoryRepository;
 	private final BeerBeerCategoryQueryRepository beerBeerCategoryQueryRepository;
-	private final BeerWishListQRepository beerWishListQRepository;
 
 	@Override
 	@Transactional
@@ -218,6 +214,12 @@ public class BeerServiceImpl implements BeerService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public String findBestPairingCategory(Beer beer) {
+		return beerQueryRepository.findBestPairingCategory(beer);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<Beer> findSimilarBeers(Long beerId) {
 
 		Beer findBeer = findVerifiedBeer(beerId);
@@ -237,6 +239,12 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional(readOnly = true)
 	public Beer findBeerByRatingId(Long ratingId) {
 		return beerQueryRepository.findBeerByRatingId(ratingId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Beer findBeerByPairingId(Long pairingId) {
+		return beerQueryRepository.findBeerByPairingId(pairingId);
 	}
 
 	@Override

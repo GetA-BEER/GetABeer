@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,7 +74,7 @@ public class VisionController {
 		return responseBuilder.toString();
 	}
 
-	@GetMapping("/image")
+	@PostMapping("/image")
 	public ResponseEntity imageSearch(@RequestParam(value = "image") MultipartFile multipartFile) throws IOException {
 		List<String> engNameList = visionService.getSimilarProductsFile(multipartFile);
 		List<Beer> beerList = visionService.findBeersListByImage(engNameList);
