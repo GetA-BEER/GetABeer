@@ -22,7 +22,9 @@ import be.domain.pairing.mapper.PairingMapper;
 import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.mapper.RatingMapper;
+import be.domain.user.dto.MyPageMultiResponseDto;
 import be.domain.user.service.UserPageService;
+import be.domain.user.service.UserService;
 import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserPageController {
+
+	private final UserService userService;
 	private final RatingMapper ratingMapper;
 	private final PairingMapper pairingMapper;
 	private final UserPageService userPageService;
@@ -47,46 +51,49 @@ public class UserPageController {
 
 	/* 나의 평가 */
 	@GetMapping("/mypage/ratings")
-	public ResponseEntity<MultiResponseDto<RatingResponseDto.MyPageResponse>> getMyRatings(
+	public ResponseEntity<MyPageMultiResponseDto<RatingResponseDto.MyPageResponse>> getMyRatings(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<Rating> ratings = userPageService.getUserRating(page);
-		Page<RatingResponseDto.MyPageResponse> userRatingList = ratingMapper.ratingToRatingResponse(
-			ratings.getContent(),
-			ratingLikeRepository);
+		Page<RatingResponseDto.MyPageResponse> response = ratingMapper.ratingToRatingResponse(
+			ratings.getContent(), ratingLikeRepository);
 
-		return ResponseEntity.ok(new MultiResponseDto<>(userRatingList.getContent(), userRatingList));
+		return ResponseEntity.ok(
+			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), response.getContent(), response));
 	}
 
 	/* 나의 페어링 코멘트 */
 	@GetMapping("/mypage/comment/pairing")
-	public ResponseEntity<MultiResponseDto<PairingCommentDto.Response>> getMyPairingComments(
+	public ResponseEntity<MyPageMultiResponseDto<PairingCommentDto.Response>> getMyPairingComments(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<PairingComment> pairingComments = userPageService.getUserPairingComment(page);
 		Page<PairingCommentDto.Response> responses = pairingCommentMapper.pairingCommentsToPageResponse(
 			pairingComments.getContent());
 
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), pairingComments));
+		return ResponseEntity.ok(
+			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), responses.getContent(), responses));
 	}
 
 	/* 나의 레이팅 코멘트 */
 	@GetMapping("/mypage/comment/rating")
-	public ResponseEntity<MultiResponseDto<RatingCommentDto.Response>> getMyRatingComments(
+	public ResponseEntity<MyPageMultiResponseDto<RatingCommentDto.Response>> getMyRatingComments(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<RatingComment> ratingComments = userPageService.getUserRatingComment(page);
 		Page<RatingCommentDto.Response> responses = ratingCommentMapper.ratingCommentsToResponsePage(
 			ratingComments.getContent());
 
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), ratingComments));
+		return ResponseEntity.ok(
+			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(),responses.getContent(), responses));
 	}
 
 	/* 나의 페어링 */
 	@GetMapping("/mypage/pairing")
-	public ResponseEntity<MultiResponseDto<PairingResponseDto.Total>> getMyPairing(
+	public ResponseEntity<MyPageMultiResponseDto<PairingResponseDto.Total>> getMyPairing(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<Pairing> pairings = userPageService.getUserPairing(page);
-		Page<PairingResponseDto.Total> userPairingList = pairingMapper.pairingToPairingResponse(pairings.getContent(),
+		Page<PairingResponseDto.Total> response = pairingMapper.pairingToPairingResponse(pairings.getContent(),
 			pairingLikeRepository);
 
-		return ResponseEntity.ok(new MultiResponseDto<>(userPairingList.getContent(), userPairingList));
+		return ResponseEntity.ok(
+			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), response.getContent(), response));
 	}
 }
