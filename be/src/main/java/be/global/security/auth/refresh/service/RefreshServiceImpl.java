@@ -28,7 +28,7 @@ public class RefreshServiceImpl implements RefreshService {
 	@Override
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response, User user) {
 
-		String[] cookies = request.getHeader("Set-Cookie").split(";");
+		String[] cookies = request.getHeader("Cookie").split(";");
 		Stream<String> stream = Arrays.stream(cookies)
 			.map(cookie -> cookie.replace(" ", ""))
 			.filter(c -> c.startsWith("refreshToken"));
