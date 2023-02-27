@@ -10,14 +10,16 @@ import PageContainer from '@/components/PageContainer';
 import SpeechBalloon from '@/components/SpeechBalloon';
 import { RatingComment } from '@/components/SpeechBalloon';
 import { useRecoilValue } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 
 export default function Rating() {
   const router = useRouter();
   const ratingId = router.query.ratingid;
   const TOKEN = useRecoilValue(accessToken);
+  const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState(false);
+  const [isMine, setIsMine] = useState(false);
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -37,10 +39,13 @@ export default function Rating() {
         .then((res) => {
           setCardProps(res.data);
           setRatingCommentList(res.data.ratingCommentList);
+          if (res.data.userId === USERID) {
+            setIsMine(true);
+          }
         })
         .catch((err) => console.log(err));
     }
-  }, [ratingId]);
+  }, [ratingId, USERID]);
 
   const postRatingComment = () => {
     if (inputState !== '') {
@@ -92,7 +97,7 @@ export default function Rating() {
           {cardProps !== undefined ? (
             <RatingCard
               cardProps={cardProps}
-              isMine={true}
+              isMine={isMine}
               count={ratingCommentList ? ratingCommentList?.length : 0}
             />
           ) : null}
@@ -130,7 +135,7 @@ export default function Rating() {
                     <SpeechBalloon
                       key={el.ratingCommentId}
                       props={el}
-                      isMine={true}
+                      isMine={isMine}
                       deleteFunc={deleteRatingComment}
                     />
                   );

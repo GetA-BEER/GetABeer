@@ -7,13 +7,16 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PairingComment } from '@/components/SpeechBalloon';
 import { useRecoilValue } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 
 export default function PairingDetail() {
   let router = useRouter();
   const TOKEN = useRecoilValue(accessToken);
+  const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState(false);
+  const [isMine, setIsMine] = useState(false);
+
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -39,10 +42,13 @@ export default function PairingDetail() {
         .then((response) => {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
+          if (response.data.userId === USERID) {
+            setIsMine(true);
+          }
         })
         .catch((error) => console.log(error));
     }
-  }, [curRoute]);
+  }, [curRoute, USERID]);
 
   const postPairingComment = () => {
     if (inputState !== '') {
@@ -123,7 +129,7 @@ export default function PairingDetail() {
                     <SpeechBalloon
                       key={el.pairingCommentId}
                       props={el}
-                      isMine={true}
+                      isMine={isMine}
                       deleteFunc={deletePairingComment}
                     />
                   );
