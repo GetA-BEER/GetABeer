@@ -36,7 +36,7 @@ public class RatingCommentController {
 	@PostMapping
 	public ResponseEntity<RatingCommentDto.Response> post(@RequestBody RatingCommentDto.Post post) {
 		RatingComment ratingComment = ratingCommentService
-			.create(mapper.ratingCommentPostDtoToRatingComment(post), post.getRatingId(), post.getUserId());
+			.create(mapper.ratingCommentPostDtoToRatingComment(post), post.getRatingId());
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(mapper.ratingCommentToRatingCommentResponse(ratingComment));

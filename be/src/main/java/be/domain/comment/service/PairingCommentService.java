@@ -29,13 +29,9 @@ public class PairingCommentService {
 
 	/* 페어링 댓글 등록 */
 	@Transactional
-	public PairingComment create(PairingComment pairingComment, Long pairingId, Long userId) {
+	public PairingComment create(PairingComment pairingComment, Long pairingId) {
 
-		/* 로그인 유저랑 댓글을 달려고 하는 유저가 같은지 확인 */
-		// User loginUser = userService.getLoginUser();
-		// userService.checkUser(userId, loginUser.getId());
-
-		User user = userService.getUser(userId);
+		User user = userService.getLoginUser();
 		Pairing pairing = pairingService.findPairing(pairingId);
 		pairingComment.saveDefault(user, pairing);
 		pairingCommentRepository.save(pairingComment);
@@ -52,9 +48,9 @@ public class PairingCommentService {
 		PairingComment findComment = findVerifiedPairingComment(commentId);
 
 		/* 로그인 유저랑 댓글 주인이랑 아이디 같은지 확인 */
-		// User loginUser = userService.getLoginUser();
-		// User user = findComment.getUser();
-		// userService.checkUser(user.getId(), loginUser.getId());
+		User loginUser = userService.getLoginUser();
+		User user = findComment.getUser();
+		userService.checkUser(user.getId(), loginUser.getId());
 
 		Optional.ofNullable(pairingComment.getContent()).ifPresent(findComment::updateContent);
 

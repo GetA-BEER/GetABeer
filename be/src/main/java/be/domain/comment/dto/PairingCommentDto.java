@@ -15,7 +15,6 @@ public class PairingCommentDto {
 	@Builder
 	public static class Post {
 		private Long pairingId;
-		private Long userId;
 		private String content;
 	}
 

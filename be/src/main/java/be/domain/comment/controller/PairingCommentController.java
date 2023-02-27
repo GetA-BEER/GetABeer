@@ -36,7 +36,7 @@ public class PairingCommentController {
 	@PostMapping
 	public ResponseEntity<PairingCommentDto.Response> post(@RequestBody PairingCommentDto.Post post) {
 		PairingComment pairingComment = pairingCommentService
-			.create(mapper.postPairingCommentDtoToPairingComment(post), post.getPairingId(), post.getUserId());
+			.create(mapper.postPairingCommentDtoToPairingComment(post), post.getPairingId());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.pairingCommentToPairingResponse(pairingComment));
 	}
