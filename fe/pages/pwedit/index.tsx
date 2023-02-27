@@ -25,7 +25,7 @@ export default function PwEdit() {
   } = useForm<IFormValues>({ mode: 'onChange' });
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
-    console.log(data);
+    // console.log(data);
     const { password, editpassword, passwordConfirm } = getValues();
     pwEditClick(password, editpassword, passwordConfirm);
   };
@@ -42,7 +42,7 @@ export default function PwEdit() {
     axios
       .patch('/user/password', reqBody)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         Router.push({
           pathname: '/',
         });

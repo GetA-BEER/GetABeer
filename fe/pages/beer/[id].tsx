@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import SmallCardController from '@/components/smallCards/SmallCardController';
-import SmallPairingController from '@/components/smallCards/SmallpairingController';
-import SimilarBeerController from '@/components/smallCards/SimilarBeerController';
+import SmallRatingCard from '@/components/smallCards/SmallRatingCard';
+import SmallPairingCard from '@/components/smallCards/SmallPairingCard';
+import SimilarBeer from '@/components/smallCards/SimilarBeer';
 import RatingTitle from '@/components/beerPage/RatingTitle';
 import PairingTitle from '@/components/beerPage/PairingTitle';
 import BeerDetailCard from '@/components/beerPage/BeerDetailCard';
@@ -10,30 +10,36 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { currentBeer } from '@/atoms/currentBeer';
+import {
+  BeerInfo,
+  RatingInfo,
+  PairingInfo,
+  SimilarBeerProps,
+} from '@/components/beerPage/BeerDeclare';
 import axios from '@/pages/api/axios';
 
 export default function Beer() {
-  let router = useRouter();
+  const router = useRouter();
   const [curRoute, setCurRoute] = useState<any>();
   useEffect(() => {
     setCurRoute(router.query.id);
   }, [router, curRoute]);
 
-  const [beerInfo, setBeerInfo] = useState<any>();
+  const [beerInfo, setBeerInfo] = useState<BeerInfo>();
   const [, setCurBeer] = useRecoilState(currentBeer);
-  const [commentInfo, setCommentInfo] = useState<any>();
-  const [pairingInfo, setPairingInfo] = useState<any>();
-  const [similarBeer, setSimilarBeer] = useState<any>();
+  const [ratingInfo, setRatingInfo] = useState<RatingInfo>();
+  const [pairingInfo, setPairingInfo] = useState<PairingInfo>();
+  const [similarBeer, setSimilarBeer] = useState<SimilarBeerProps[]>();
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
-      axios.get(`/api/beers/${curRoute}`).then((response) => {
-        // console.log(response.data); 아직 빈배열 상태..
-        setBeerInfo(response.data);
-        setCurBeer(response.data);
-        setSimilarBeer(response.data.similarBeers);
-      });
-      // .catch((error) => console.log(error));
+      axios
+        .get(`/api/beers/${curRoute}`)
+        .then((response) => {
+          setBeerInfo(response.data);
+          setCurBeer(response.data);
+        })
+        .catch((error) => console.log(error));
     }
   }, [curRoute, setCurBeer]);
 
@@ -41,9 +47,9 @@ export default function Beer() {
     // 코멘트 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/api/ratings/page/recency?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setCommentInfo(response.data));
-      // .catch((error) => console.log(error));
+        .get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
+        .then((response) => setRatingInfo(response.data))
+        .catch((error) => console.log(error));
     }
   }, [curRoute]);
 
@@ -51,55 +57,25 @@ export default function Beer() {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/api/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
+        .get(`/api/pairings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
         .then((response) => {
           setPairingInfo(response.data);
-        });
-      // .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
     }
   }, [curRoute]);
 
-  // useEffect(() => {
-  //   // 비슷한 맥주 조회
-  //   if (curRoute !== undefined) {
-  //     // console.log('비슷한 맥주');
-  //     axios
-  //       .get(`/api/beers/${curRoute}/similar`)
-  //       .then((response) => {
-  //         console.log(response.data);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
-  // }, [curRoute]);
-  const BeerList = [
-    {
-      id: 1,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2101060009_M.jpg',
-    },
-    {
-      id: 2,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2211160004_R.jpg',
-    },
-    {
-      id: 3,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: 'https://worldbeermarket.kr/userfiles/prdimg/2011190018_M.jpg',
-    },
-  ];
+  useEffect(() => {
+    // 비슷한 맥주 조회
+    if (curRoute !== undefined) {
+      axios
+        .get(`/api/beers/${curRoute}/similar`)
+        .then((response) => {
+          setSimilarBeer(response.data);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [curRoute]);
 
   return (
     <>
@@ -120,23 +96,22 @@ export default function Beer() {
         />
 
         <div className="m-3">
-          {/* 맥주 등록 이미지 없다. 현재 썸네일 이미지 경로 따로 없는 상태*/}
           <BeerDetailCard cardProps={beerInfo} />
         </div>
 
         <RatingTitle
-          ratingCount={commentInfo?.pageInfo?.totalElements}
+          ratingCount={ratingInfo?.pageInfo?.totalElements}
           beerId={curRoute}
         />
-        <SmallCardController cardProps={commentInfo?.data} />
+        <SmallRatingCard ratingProps={ratingInfo?.data} />
 
         <PairingTitle
           pairngCount={pairingInfo?.pageInfo?.totalElements}
           beerId={curRoute}
         />
-        <SmallPairingController pairProps={pairingInfo?.data} />
-
-        <SimilarBeerController beerProps={BeerList} />
+        <SmallPairingCard pairingProps={pairingInfo?.data} />
+        <SimilarBeer similarBeer={similarBeer} />
+        <div className="h-20"></div>
       </main>
     </>
   );

@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { useRouter } from 'next/router';
+import { SearchMatcherToEng } from '@/utils/SearchMatcher';
 
 type SearchSwiperProps = {
   list: string[];
@@ -21,7 +22,10 @@ export default function SearchSwiper({
               <li
                 className="bg-y-cream rounded-lg p-0.5"
                 onClick={() => {
-                  router.push({ pathname: '/search', query: { q: el } });
+                  router.push({
+                    pathname: '/search',
+                    query: { q: SearchMatcherToEng(el) },
+                  });
                   setIsSearching(false);
                 }}
               >

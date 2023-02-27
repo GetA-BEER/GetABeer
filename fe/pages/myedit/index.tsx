@@ -48,12 +48,14 @@ export default function MyEdit() {
   const image = watch('image');
 
   useEffect(() => {
-    axios.get('api/user').then((res) => {
-      // console.log(res.data);
-      setUserImge(res.data.imageUrl);
-      reset(res.data);
-    });
-    // .catch((err) => console.log(err));
+    axios
+      .get('api/user')
+      .then((res) => {
+        // console.log(res.data);
+        setUserImge(res.data.imageUrl);
+        reset(res.data);
+      })
+      .catch((err) => console.log(err));
   }, [reset]);
   const onValid = (data: any) => {
     // 기본으로 data 가져오기

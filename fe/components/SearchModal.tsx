@@ -5,6 +5,8 @@ import SearchSwiper from './SearchSwiper';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { searchHistory } from '@/atoms/searchHistory';
+import { SearchMatcherToEng } from '@/utils/SearchMatcher';
+
 type SearchProps = {
   setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -49,6 +51,16 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
     '#탄산 無',
   ];
 
+  const pairingCategoryList = [
+    '&튀김/부침',
+    '&구이/오븐',
+    '&볶음/조림',
+    '&생식/회',
+    '&마른안주/견과',
+    '&과자/디저트',
+    '&국/찜/찌개/탕',
+  ];
+
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputState(e.target.value);
   };
@@ -58,9 +70,14 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
   });
 
   const onSearch = () => {
-    router.push({ pathname: '/search', query: { q: inputState } });
-    addSearchHistory(inputState);
-    setIsSearching(false);
+    if (inputState !== '') {
+      router.push({
+        pathname: '/search',
+        query: { q: SearchMatcherToEng(inputState) },
+      });
+      addSearchHistory(inputState);
+      setIsSearching(false);
+    }
   };
 
   const addSearchHistory = (word: string) => {
@@ -147,9 +164,20 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
                       key={el.id}
                       className="flex justify-between p-1 hover:bg-y-lightGray/80"
                     >
-                      {el.word}
                       <button
-                        className="text-y-gray"
+                        className="flex-1 text-left"
+                        onClick={() => {
+                          router.push({
+                            pathname: '/search',
+                            query: { q: SearchMatcherToEng(el.word) },
+                          });
+                          setIsSearching(false);
+                        }}
+                      >
+                        {el.word}
+                      </button>
+                      <button
+                        className="text-y-gray z-1"
                         onClick={() => removeSearchHistory(el.id)}
                       >
                         <MdCancel className="mx-1 w-5 h-4" />
@@ -163,15 +191,22 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
           </ul>
         </div>
         <div className="mx-5 pb-3">
-          <h4 className="text-y-brown">카테고리 검색</h4>
+          <h4 className="text-y-brown">카테고리로 검색</h4>
           <SearchSwiper
             list={beerCategoryList}
             setIsSearching={setIsSearching}
           />
         </div>
         <div className="mx-5 pb-4">
-          <h4 className="text-y-brown">태그 검색</h4>
+          <h4 className="text-y-brown">태그로 검색</h4>
           <SearchSwiper list={tagList} setIsSearching={setIsSearching} />
+        </div>
+        <div className="mx-5 pb-3">
+          <h4 className="text-y-brown">페어링으로 검색</h4>
+          <SearchSwiper
+            list={pairingCategoryList}
+            setIsSearching={setIsSearching}
+          />
         </div>
       </div>
     </div>

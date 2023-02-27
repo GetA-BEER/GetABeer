@@ -5,58 +5,17 @@ import CommentInput from '@/components/inputs/CommentInput';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { PairingComment } from '@/components/SpeechBalloon';
 
 export default function PairingDetail() {
-  // const pairingProps: any = {
-  //   beerId: 1,
-  //   pairingId: 1,
-  //   userId: 1,
-  //   nickname: '닉네임1',
-  //   content: '페어링 안내',
-  //   imageList: [
-  //     {
-  //       pairingImageId: 1,
-  //       imageUrl:
-  //         'https://getabeer.s3.ap-northeast-2.amazonaws.com/image/2023-02-09-13-57-53-233/pairing_images_1_1.png',
-  //       fileName: 'image/2023-02-09-13-57-53-233/pairing_images_1_1.png',
-  //     },
-  //     {
-  //       pairingImageId: 2,
-  //       imageUrl:
-  //         'https://getabeer.s3.ap-northeast-2.amazonaws.com/image/2023-02-09-13-57-53-713/pairing_images_1_1.png',
-  //       fileName: 'image/2023-02-09-13-57-53-713/pairing_images_1_1.png',
-  //     },
-  //   ],
-  //   commentList: [
-  //     {
-  //       pairingId: 1,
-  //       pairingCommentId: 1,
-  //       userId: 1,
-  //       nickname: '닉네임1',
-  //       content: '페어링 댓글',
-  //       createdAt: '2023-02-09T13:58:20.330872',
-  //       modifiedAt: '2023-02-09T13:58:20.330872',
-  //     },
-  //     {
-  //       pairingId: 1,
-  //       pairingCommentId: 2,
-  //       userId: 1,
-  //       nickname: '닉네임1',
-  //       content: '페어링 댓글',
-  //       createdAt: '2023-02-09T13:58:23.619436',
-  //       modifiedAt: '2023-02-09T13:58:23.619436',
-  //     },
-  //   ],
-  //   category: 'GRILL',
-  //   likeCount: 3,
-  //   commentCount: 2,
-  //   isUserLikes: true,
-  //   createdAt: '2023-02-09T13:57:53.875197',
-  //   modifiedAt: '2023-02-09T13:58:23.621731',
-  // };
   let router = useRouter();
   const [curRoute, setCurRoute] = useState<any>();
   const [pairingProps, setPairingProps] = useState<any>();
+  const [inputState, setInputState] = useState<string>('');
+  const [pairingCommentList, setPairingCommentList] = useState<
+    PairingComment[] | null
+  >(null);
+
   useEffect(() => {
     setCurRoute(router.query.id);
   }, [router, curRoute]);
@@ -64,12 +23,46 @@ export default function PairingDetail() {
   useEffect(() => {
     // 특정 페어링 조회
     if (curRoute !== undefined) {
-      axios.get(`/api/pairings/${curRoute}`).then((response) => {
-        setPairingProps(response.data);
-      });
-      // .catch((error) => console.log(error));
+      axios
+        .get(`/api/pairings/${curRoute}`)
+        .then((response) => {
+          setPairingProps(response.data);
+          setPairingCommentList(response.data.commentList);
+        })
+        .catch((error) => console.log(error));
     }
   }, [curRoute]);
+
+  const postPairingComment = () => {
+    if (inputState !== '') {
+      const reqBody = {
+        pairingId: Number(curRoute),
+        content: inputState,
+      };
+      axios
+        .post('/api/pairings/comments', reqBody)
+        .then((res) => {
+          if (pairingCommentList === null) {
+            setPairingCommentList([res.data]);
+          } else {
+            setPairingCommentList([res.data, ...pairingCommentList]);
+          }
+          setInputState('');
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const deletePairingComment = (pairingCommentId: number) => {
+    axios.delete(`/api/pairings/comments/${pairingCommentId}`).then((res) => {
+      if (pairingCommentList !== null) {
+        const filtered = pairingCommentList.filter((el) => {
+          return el.pairingCommentId !== pairingCommentId;
+        });
+        setPairingCommentList(filtered);
+      }
+    });
+  };
 
   return (
     <>
@@ -85,10 +78,27 @@ export default function PairingDetail() {
         </div>
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
           <DetailCard pairingProps={pairingProps} />
-          <div className="mx-3 mb-5">{/* <CommentInput /> */}</div>
-          {pairingProps?.commentList?.map((el: any) => {
-            // return <SpeechBalloon props={el} key={el.pairingCommentId} />;
-          })}
+          <div className="px-3 my-5">
+            <CommentInput
+              inputState={inputState}
+              setInputState={setInputState}
+              postFunc={postPairingComment}
+            />
+          </div>
+          <div>
+            {pairingCommentList === null
+              ? null
+              : pairingCommentList.map((el) => {
+                  return (
+                    <SpeechBalloon
+                      key={el.pairingCommentId}
+                      props={el}
+                      isMine={true}
+                      deleteFunc={deletePairingComment}
+                    />
+                  );
+                })}
+          </div>
         </div>
       </main>
     </>

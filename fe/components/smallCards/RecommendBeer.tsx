@@ -6,18 +6,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
-export default function SimilarBeer({ similarBeer }: any) {
+export default function RecommendBeer({ recommendBeer }: any) {
   const [beerInfo, setBeerInfo] = useState<any>();
   useEffect(() => {
-    if (similarBeer !== undefined) setBeerInfo(similarBeer);
-  }, [similarBeer]);
-  console.log(beerInfo);
+    if (recommendBeer !== undefined) setBeerInfo(recommendBeer);
+  }, [recommendBeer]);
+
   return (
     <div className="w-full ">
-      <div className="mx-3 mt-6 text-base font-semibold">
-        <span className="text-black mr-1">비슷한</span>
-        <span className="text-y-brown">맥주</span>
-      </div>
       <Swiper
         className="w-full h-fit"
         slidesPerView={2.4}
@@ -37,33 +33,33 @@ export default function SimilarBeer({ similarBeer }: any) {
                     {el?.korName}
                   </div>
                   <div className="truncate">
-                    {el?.beerCategories === null ||
-                    el?.beerCategories.length === 0 ? (
+                    {el?.beerCategories === null ? (
+                      <></>
+                    ) : (
+                      <span>{el?.category} / </span>
+                    )}
+                    {el?.country === null || el?.abv ? (
                       <></>
                     ) : (
                       <span>
-                        {el?.beerCategories.map(
-                          (category: any, idx: number) => (
-                            <span key={idx}>{category.beerCategoryType}</span>
-                          )
-                        )}
-                        /
+                        {el?.country} / {el?.abv}%
                       </span>
                     )}
-                    <span>
-                      {el?.country} / {el?.abv}%
-                    </span>
                     {el?.ibu === null ? <></> : <span>{el?.ibu}IBU</span>}
                   </div>
                 </div>
-                <Image
-                  className="pt-3 rounded-2xl m-auto select-none"
-                  alt="Beer"
-                  src={el?.thumbnail}
-                  width={300}
-                  height={300}
-                  priority
-                />
+                {el?.thumbnail === null ? (
+                  <></>
+                ) : (
+                  <Image
+                    className="pt-3 rounded-2xl m-auto select-none"
+                    alt="Beer"
+                    src={el?.thumbnail}
+                    width={300}
+                    height={300}
+                    priority
+                  />
+                )}
               </div>
             </Link>
           </SwiperSlide>

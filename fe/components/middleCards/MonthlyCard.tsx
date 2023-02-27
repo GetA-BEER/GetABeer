@@ -40,7 +40,7 @@ export default function MonthlyCard({
           />
         </div>
         <div className="py-4">
-          <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl">
+          <h1 className="font-bold text-xl lg:text-2xl">
             {cardProps?.korName}
           </h1>
           <div className="my-2">
@@ -72,11 +72,12 @@ export default function MonthlyCard({
                 <span>{cardProps.bestRating?.bestContent}</span>
               </div>
               <div className="flex justify-end mt-1 mr-2 text-xs sm:text-sm lg:text-lg">
-                <div className="rounded-full w-5 h-5 mr-1">
+                <div className="relative rounded-full w-10 h-10 ml-1">
                   <Image
-                    alt={'user profile image'}
+                    alt="user profile image"
                     src={cardProps?.bestRating?.profileImage}
                     fill
+                    className="object-cover"
                   />
                 </div>
                 <span>{cardProps.bestRating?.bestNickname}</span>

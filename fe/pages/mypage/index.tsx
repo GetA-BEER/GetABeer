@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRecoilState } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userId } from '@/atoms/login';
 import { useEffect, useState } from 'react';
 import axios from '@/pages/api/axios';
 import Link from 'next/link';
@@ -20,6 +20,7 @@ import {
 
 export default function Mypage() {
   const [, setAccessToken] = useRecoilState(accessToken);
+  const [, setUserId] = useRecoilState(userId);
   const [userName, setUserName] = useState('');
   const [userImge, setUserImge] = useState('');
   const fetchUser = () => {
@@ -40,6 +41,7 @@ export default function Mypage() {
       .then((res) => {
         console.log(res);
         setAccessToken('');
+        setUserId('');
         delete axios.defaults.headers.Authorization;
         window.location.href = '/';
       })
@@ -47,6 +49,7 @@ export default function Mypage() {
         console.log(err);
       });
     setAccessToken('');
+    setUserId('');
     window.location.href = '/';
   };
   return (

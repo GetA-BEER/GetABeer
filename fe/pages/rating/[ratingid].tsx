@@ -74,8 +74,8 @@ export default function Rating() {
           className="text-xl text-y-gray my-2"
         />
         <div className="flex justify-center mb-4 mt-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            제주 펠롱 에일
+          <h1 className="text-xl lg:text-2xl font-bold">
+            {cardProps?.korName}
           </h1>
         </div>
         <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
