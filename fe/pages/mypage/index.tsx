@@ -39,6 +39,9 @@ export default function Mypage() {
       .post('/api/user/logout')
       .then((res) => {
         console.log(res);
+        setAccessToken('');
+        delete axios.defaults.headers.Authorization;
+        window.location.href = '/';
       })
       .catch((err) => {
         console.log(err);

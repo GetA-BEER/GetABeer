@@ -6,12 +6,13 @@ import NaverBtn from '@/components/login/NaverBtn';
 import GoogleBtn from '@/components/login/Googlebtn';
 import KakaoBtn from '@/components/login/KakaoBtn';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from '@/pages/api/axios';
 import { useForm } from 'react-hook-form';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { useRecoilState } from 'recoil';
+import { accessToken, userId } from '@/atoms/login';
 import Router from 'next/router';
+import cookie from 'next-cookies';
 
 interface IFormValues {
   email: string;
@@ -22,7 +23,8 @@ interface IFormValues {
   editpassword: string;
 }
 export default function Login() {
-  const [Token, setAccessToken] = useRecoilState(accessToken);
+  const [TOKEN, setAccessToken] = useRecoilState(accessToken);
+  const [, setUserId] = useRecoilState(userId);
   const [showLoginError, setShowLoginError] = useState(false);
   const {
     register,
@@ -39,10 +41,11 @@ export default function Login() {
   const ACCESS_EXPIRY_TIME = 2 * 60 * 60 * 1000; // 2시간
   const REFRESH_EXPIRY_TIME = 24 * 60 * 60 * 1000; // 24시간
 
-  const setAxiosHeader = (value: any) =>
+  const setAxiosHeader = (value: string) =>
     (axios.defaults.headers.common['Authorization'] = value);
   const onLoginSuccess = (res: any) => {
     setAccessToken(res.headers.authorization);
+    setUserId(res.data.id);
     setAxiosHeader(res.headers.authorization);
     setTimeout(onRefresh, ACCESS_EXPIRY_TIME - 60000);
   };
