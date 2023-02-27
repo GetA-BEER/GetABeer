@@ -12,6 +12,7 @@ import { RatingComment } from '@/components/SpeechBalloon';
 import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
+import Link from 'next/link';
 
 export default function Rating() {
   const router = useRouter();
@@ -88,11 +89,13 @@ export default function Rating() {
           onClick={() => router.back()}
           className="text-xl text-y-gray my-2"
         />
-        <div className="flex justify-center mb-4 mt-8">
-          <h1 className="text-xl lg:text-2xl font-bold">
-            {cardProps?.korName}
-          </h1>
-        </div>
+        <Link href={`/beer/${cardProps?.beerId}`}>
+          <div className="flex justify-center mb-4 mt-8">
+            <h1 className="text-xl lg:text-2xl font-bold">
+              {cardProps?.korName}
+            </h1>
+          </div>
+        </Link>
         <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
           {cardProps !== undefined ? (
             <RatingCard
