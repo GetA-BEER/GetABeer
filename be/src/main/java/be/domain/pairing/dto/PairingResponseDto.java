@@ -23,6 +23,7 @@ public class PairingResponseDto {
 		private Long pairingId;
 		private Long userId;
 		private String nickname;
+		private String userImage;
 		private String content;
 		private String thumbnail;
 		private List<PairingImageDto.Response> imageList;
