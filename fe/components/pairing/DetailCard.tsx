@@ -77,11 +77,7 @@ export default function DetailCard({ pairingProps }: any) {
     <>
       {/*닉네임, 날짜*/}
       <div className="flex justify-between items-center">
-        <ProfileCard
-          nickname={pairingProps?.nickname}
-          date={date}
-          src={pairingProps?.userImage}
-        />
+        <ProfileCard nickname={pairingProps?.nickname} date={date} />
 
         <div className="flex px-4">
           <div onClick={hadleEdit}>
