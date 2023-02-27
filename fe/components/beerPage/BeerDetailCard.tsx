@@ -11,7 +11,7 @@ import ShareBtn from '../share/ShareBtn';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 
 export default function BeerDetailCard({ cardProps }: any) {
@@ -27,12 +27,19 @@ export default function BeerDetailCard({ cardProps }: any) {
   }, [TOKEN]);
 
   const goToLogin = () => {
-    swal({
-      text: '로그인이 필요한 서비스 입니다',
-    }).then(() => {
-      router.push({
-        pathname: '/login',
-      });
+    Swal.fire({
+      text: '로그인이 필요한 서비스 입니다.',
+      showCancelButton: true,
+      confirmButtonColor: '#f1b31c',
+      cancelButtonColor: '#A7A7A7',
+      confirmButtonText: '로그인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push({
+          pathname: '/login',
+        });
+      }
     });
   };
 
@@ -124,7 +131,7 @@ export default function BeerDetailCard({ cardProps }: any) {
               </span>
             )}
             {isLogin ? (
-              <Link href={'/postpairing'} className="hover:text-y-gold mr-1">
+              <Link href={'/postpairing'} className="hover:text-y-gold">
                 <span className="mr-1">
                   <HiChartPie className="inline" /> 페어링
                 </span>

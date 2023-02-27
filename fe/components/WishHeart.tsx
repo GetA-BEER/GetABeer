@@ -1,7 +1,7 @@
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 interface WishHeartProps {
   beerId: number;
   isWish: boolean;
@@ -25,7 +25,7 @@ export default function WishHeart({
         })
         .catch((error) => console.log(error));
     } else {
-      swal({
+      Swal.fire({
         text: '로그인이 필요한 서비스 입니다',
       }).then(() => {
         router.push({

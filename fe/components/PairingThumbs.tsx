@@ -1,7 +1,7 @@
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import axios from '@/pages/api/axios';
 import { useRouter } from 'next/router';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 // "isUserLikes": true,  "likeCount": 1,
 export default function PairingThumbs({
@@ -14,12 +14,19 @@ export default function PairingThumbs({
 }: any) {
   const router = useRouter();
   const goToLogin = () => {
-    swal({
-      text: '로그인이 필요한 서비스 입니다',
-    }).then(() => {
-      router.push({
-        pathname: '/login',
-      });
+    Swal.fire({
+      text: '로그인이 필요한 서비스 입니다.',
+      showCancelButton: true,
+      confirmButtonColor: '#f1b31c',
+      cancelButtonColor: '#A7A7A7',
+      confirmButtonText: '로그인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push({
+          pathname: '/login',
+        });
+      }
     });
   };
   const isUserLikeHandler = () => {
