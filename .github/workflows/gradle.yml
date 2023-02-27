@@ -63,7 +63,7 @@ jobs:
 
       # build한 후 프로젝트를 압축
       - name: Make zip file
-        run: zip -r ./getabeer-deploy.zip . -i ./getabeer-deploy
+        run: zip -r ./getabeer-deploy.zip .
         shell: bash
 
       # Access Key와 Secret Access Key를 통해 권한 확인
