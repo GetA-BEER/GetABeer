@@ -4,14 +4,37 @@ import {
 } from '@/utils/BeerMatcher';
 import Image from 'next/image';
 import Link from 'next/link';
-import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
+import { HiPencil, HiChartPie } from 'react-icons/hi';
 import WishHeart from '@/components/WishHeart';
 import StarScore from './StarScore';
 import ShareBtn from '../share/ShareBtn';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import swal from 'sweetalert';
+import { useRouter } from 'next/router';
 
 export default function BeerDetailCard({ cardProps }: any) {
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
+  const goToLogin = () => {
+    swal({
+      text: '로그인이 필요한 서비스 입니다',
+    }).then(() => {
+      router.push({
+        pathname: '/login',
+      });
+    });
+  };
 
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
@@ -39,6 +62,7 @@ export default function BeerDetailCard({ cardProps }: any) {
               beerId={cardProps?.beerId}
               isWish={isWish}
               setIsWish={setIsWish}
+              isLogin={isLogin}
             />
           </div>
           <div className="text-xs flex flex-wrap">
@@ -90,14 +114,26 @@ export default function BeerDetailCard({ cardProps }: any) {
             </div>
           </div>
           <div className="text-xs">
-            <Link href={'/postrating'} className="hover:text-y-gold mr-1">
-              <HiPencil className="inline" /> 평가하기
-            </Link>
-            <Link href={'/postpairing'} className="hover:text-y-gold mr-1">
-              <span className="mr-1">
+            {isLogin ? (
+              <Link href={'/postrating'} className="hover:text-y-gold mr-1">
+                <HiPencil className="inline" /> 평가하기
+              </Link>
+            ) : (
+              <span onClick={goToLogin} className="hover:text-y-gold mr-1">
+                <HiPencil className="inline" /> 평가하기
+              </span>
+            )}
+            {isLogin ? (
+              <Link href={'/postpairing'} className="hover:text-y-gold mr-1">
+                <span className="mr-1">
+                  <HiChartPie className="inline" /> 페어링
+                </span>
+              </Link>
+            ) : (
+              <span onClick={goToLogin} className="hover:text-y-gold mr-1">
                 <HiChartPie className="inline" /> 페어링
               </span>
-            </Link>
+            )}
 
             <ShareBtn />
           </div>

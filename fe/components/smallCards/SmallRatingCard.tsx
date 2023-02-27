@@ -9,6 +9,9 @@ import { TimeHandler } from '@/utils/TimeHandler';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from '@/pages/api/axios';
+import { useRouter } from 'next/router';
+import { accessToken } from '@/atoms/login';
+import swal from 'sweetalert';
 
 export default function SmallRatingCard({ ratingProps }: any) {
   const [RatingList, setRatingPropsList] = useState<any>();
@@ -20,6 +23,25 @@ export default function SmallRatingCard({ ratingProps }: any) {
   const initialDate = ratingProps?.createdAt;
   const [isLike, setIsLike] = useState<boolean>(ratingProps.isUserLikes);
   const [likeCount, setLikeCount] = useState<number>(ratingProps.likeCount);
+  const router = useRouter();
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
+  const goToLogin = () => {
+    swal({
+      text: '로그인이 필요한 서비스 입니다',
+    }).then(() => {
+      router.push({
+        pathname: '/login',
+      });
+    });
+  };
 
   // ratingPropsList 초기화
   useEffect(() => {
@@ -69,16 +91,20 @@ export default function SmallRatingCard({ ratingProps }: any) {
   }, [collisions, RatingList]);
 
   const isUserLikeHandler = () => {
-    axios
-      .post(`/api/ratings/likes?ratingId=${ratingProps.ratingId}`)
-      .then((res) => {
-        setIsLike(!isLike);
-        if (isLike) {
-          setLikeCount(likeCount - 1);
-        } else {
-          setLikeCount(likeCount + 1);
-        }
-      });
+    if (isLogin) {
+      axios
+        .post(`/api/ratings/likes?ratingId=${ratingProps.ratingId}`)
+        .then((res) => {
+          setIsLike(!isLike);
+          if (isLike) {
+            setLikeCount(likeCount - 1);
+          } else {
+            setLikeCount(likeCount + 1);
+          }
+        });
+    } else {
+      goToLogin();
+    }
   };
 
   return (
