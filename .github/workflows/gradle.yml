@@ -59,7 +59,7 @@ jobs:
         run: ./gradlew clean build --exclude-task test
         working-directory: ./be/
 
-      # build한 후 프로젝트를 압축합니다.
+      # build한 후 프로젝트를 압축
       - name: Make zip file
         run: zip -r ./getabeer-deploy.zip . -i ./getabeer-deploy
         shell: bash
