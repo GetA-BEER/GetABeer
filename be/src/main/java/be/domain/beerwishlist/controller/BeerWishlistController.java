@@ -16,6 +16,8 @@ import be.domain.beerwishlist.dto.BeerWishlistDto;
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.beerwishlist.mapper.BeerWishlistMapper;
 import be.domain.beerwishlist.service.BeerWishlistService;
+import be.domain.user.dto.MyPageMultiResponseDto;
+import be.domain.user.service.UserService;
 import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping({"/api/beers", "/api"})
 @RequiredArgsConstructor
 public class BeerWishlistController {
+	private final UserService userService;
 	private final BeerWishlistMapper beerWishlistMapper;
 	private final BeerWishlistService beerWishlistService;
 
@@ -35,13 +38,14 @@ public class BeerWishlistController {
 	}
 
 	@GetMapping("/mypage/wishlist")
-	public ResponseEntity<MultiResponseDto<BeerWishlistDto.UserWishlist>> getMyPageBeer(
+	public ResponseEntity<MyPageMultiResponseDto<BeerWishlistDto.UserWishlist>> getMyPageBeer(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 
 		Page<BeerWishlist> beerWishlists = beerWishlistService.getUserWishlist(page);
 		Page<BeerWishlistDto.UserWishlist> responses = beerWishlistMapper.beersAndWishlistToResponse(
 			beerWishlists.getContent());
 
-		return ResponseEntity.ok(new MultiResponseDto<>(responses.getContent(), beerWishlists));
+		return ResponseEntity.ok(
+			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), responses.getContent(), responses));
 	}
 }
