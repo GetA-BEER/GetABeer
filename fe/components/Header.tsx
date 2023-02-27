@@ -1,12 +1,34 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { BiSearch } from 'react-icons/bi';
 import SearchModal from './SearchModal';
+
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import axios from '@/pages/api/axios';
 export default function Header() {
   const [isSearching, setIsSearching] = useState(false);
+  const TOKEN = useRecoilValue(accessToken);
 
+  useEffect(() => {
+    if (TOKEN) {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios
+        .post('/api/refresh', {}, config)
+        .then((res) => {
+          axios.defaults.headers.common['Authorization'] =
+            res.headers.authorization;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [TOKEN]);
   return (
     <div className="flex justify-between items-center max-w-4xl m-auto h-16 border-b border-y-lightGray bg-white sticky top-0 z-10">
       <Link href={'/'}>

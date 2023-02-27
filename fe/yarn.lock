@@ -1661,6 +1661,13 @@
   "resolved" "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   "version" "1.4.0"
 
+"next-cookies@^2.0.3":
+  "integrity" "sha512-YVCQzwZx+sz+KqLO4y9niHH9jjz6jajlEQbAKfsYVT6DOfngb/0k5l6vFK4rmpExVug96pGag8OBsdSRL9FZhQ=="
+  "resolved" "https://registry.npmjs.org/next-cookies/-/next-cookies-2.0.3.tgz"
+  "version" "2.0.3"
+  dependencies:
+    "universal-cookie" "^4.0.2"
+
 "next@^13.1.4":
   "integrity" "sha512-g0oBUU+tcOPKbXTVdsDO2adc6wd/ggqauHHysPQJxuIKqZ+fwICGJht0C5D5V0A/77eQDF5EFwNdAHkFvBDsog=="
   "resolved" "https://registry.npmjs.org/next/-/next-13.1.4.tgz"
@@ -2001,7 +2008,7 @@
   "resolved" "https://registry.npmjs.org/react-rating-stars-component/-/react-rating-stars-component-2.2.0.tgz"
   "version" "2.2.0"
 
-"react-share@*":
+"react-share@*", "react-share@^4.4.1":
   "integrity" "sha512-AJ9m9RiJssqvYg7MoJUc9J0D7b/liWrsfQ99ndKc5vJ4oVHHd4Fy87jBlKEQPibT40oYA3AQ/a9/oQY6/yaigw=="
   "resolved" "https://registry.npmjs.org/react-share/-/react-share-4.4.1.tgz"
   "version" "4.4.1"
@@ -2397,7 +2404,7 @@
     "has-symbols" "^1.0.3"
     "which-boxed-primitive" "^1.0.2"
 
-"universal-cookie@^4.0.0":
+"universal-cookie@^4.0.0", "universal-cookie@^4.0.2":
   "integrity" "sha512-lbRVHoOMtItjWbM7TwDLdl8wug7izB0tq3/YVKhT/ahB4VDvWMyvnADfnJI8y6fSvsjh51Ix7lTGC6Tn4rMPhw=="
   "resolved" "https://registry.npmjs.org/universal-cookie/-/universal-cookie-4.0.4.tgz"
   "version" "4.0.4"
