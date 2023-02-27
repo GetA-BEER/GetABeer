@@ -1,7 +1,7 @@
 import { MdModeEdit } from 'react-icons/md';
 import { HiTrash } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
 import { useEffect, useState } from 'react';
 import PairingImageCarousel from '@/components/pairing/PairingImageCarousel';
@@ -10,9 +10,11 @@ import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import { useRouter } from 'next/router';
 import PairingThumbs from '../PairingThumbs';
 import axios from '@/pages/api/axios';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
+import { userId } from '@/atoms/login';
 
 export default function DetailCard({ pairingProps }: any) {
+  const [curUserId] = useRecoilState(userId);
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   let router = useRouter();
   const [curRoute, setCurRoute] = useState<any>();
@@ -43,29 +45,21 @@ export default function DetailCard({ pairingProps }: any) {
   }, [initialDate]);
 
   const hadleDelte = () => {
-    swal({
-      title: '삭제하시겠습니까?',
-      // text: 'Once deleted, you will not be able to recover this imaginary file!',
-      icon: 'warning',
-      buttons: ['취소', '삭제'],
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        const TOKEN = localStorage.getItem('accessToken');
-        const config = {
-          headers: {
-            authorization: TOKEN,
-            'content-type': 'multipart/form-data',
-          },
-          withCredentials: true,
-        };
+    Swal.fire({
+      text: '삭제하시겠습니까?',
+      showCancelButton: true,
+      confirmButtonColor: '#f1b31c',
+      cancelButtonColor: '#A7A7A7',
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
         axios
-          .delete(`/api/pairings/${curRoute}`, config)
+          .delete(`/api/pairings/${curRoute}`)
           .then(() => {
             router.back();
           })
           .catch((error) => console.log(error));
-      } else {
       }
     });
   };
@@ -78,16 +72,19 @@ export default function DetailCard({ pairingProps }: any) {
       {/*닉네임, 날짜*/}
       <div className="flex justify-between items-center">
         <ProfileCard nickname={pairingProps?.nickname} date={date} />
-
-        <div className="flex px-4">
-          <div onClick={hadleEdit}>
-            <MdModeEdit className="text-y-brown inline" /> 수정
+        {pairingProps?.userId === curUserId ? (
+          <div className="flex px-4">
+            <div onClick={hadleEdit}>
+              <MdModeEdit className="text-y-brown inline" /> 수정
+            </div>
+            <div onClick={hadleDelte}>
+              <HiTrash className="text-y-brown ml-1 inline" />
+              <span>삭제</span>
+            </div>
           </div>
-          <div onClick={hadleDelte}>
-            <HiTrash className="text-y-brown ml-1 inline" />
-            <span>삭제</span>
-          </div>
-        </div>
+        ) : (
+          <></>
+        )}
       </div>
       {/* 사진,설명 */}
       <div>

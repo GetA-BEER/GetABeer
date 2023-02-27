@@ -5,9 +5,21 @@ import {
   BeerCountryMatcherToKor,
   BeerCategoryMatcherToKor,
 } from '@/utils/BeerMatcher';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
+
 export default function WishCard({ wishProps, idx }: any) {
   const [isWish, setIsWish] = useState<any>(wishProps.isUserWish);
   const [wishInfo, setWishInfo] = useState<any>();
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
   useEffect(() => {
     setWishInfo(wishProps.beer);
   }, [wishProps.beer]);
@@ -22,6 +34,7 @@ export default function WishCard({ wishProps, idx }: any) {
         <div className="flex justify-between">
           <div className="text-base font-semibold">{wishInfo?.korName}</div>
           <WishHeart
+            isLogin={isLogin}
             beerId={wishInfo?.beerId}
             isWish={isWish}
             setIsWish={setIsWish}

@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react';
 import { HiOutlineChat } from 'react-icons/hi';
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import axios from '@/pages/api/axios';
+import { useRouter } from 'next/router';
+import { accessToken } from '@/atoms/login';
+import Swal from 'sweetalert2';
 
 export default function PairingCard(props: { pairingCardProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
@@ -17,6 +20,33 @@ export default function PairingCard(props: { pairingCardProps: any }) {
   const [likeCount, setLikeCount] = useState<number>(
     props.pairingCardProps.likeCount
   );
+  const router = useRouter();
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
+  const goToLogin = () => {
+    Swal.fire({
+      text: '로그인이 필요한 서비스 입니다.',
+      showCancelButton: true,
+      confirmButtonColor: '#f1b31c',
+      cancelButtonColor: '#A7A7A7',
+      confirmButtonText: '로그인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push({
+          pathname: '/login',
+        });
+      }
+    });
+  };
 
   const MAX_PARENT_HEIGHT = 96;
   useEffect(() => {
@@ -42,18 +72,22 @@ export default function PairingCard(props: { pairingCardProps: any }) {
   }, [props]);
 
   const isUserLikeHandler = () => {
-    axios
-      .post(
-        `/api/pairings/likes?pairingId=${props?.pairingCardProps?.pairingId}`
-      )
-      .then((response) => {
-        setIsLike(!isLike);
-        if (isLike) {
-          setLikeCount(likeCount - 1);
-        } else {
-          setLikeCount(likeCount + 1);
-        }
-      });
+    if (isLogin) {
+      axios
+        .post(
+          `/api/pairings/likes?pairingId=${props?.pairingCardProps?.pairingId}`
+        )
+        .then((response) => {
+          setIsLike(!isLike);
+          if (isLike) {
+            setLikeCount(likeCount - 1);
+          } else {
+            setLikeCount(likeCount + 1);
+          }
+        });
+    } else {
+      goToLogin();
+    }
   };
 
   return (

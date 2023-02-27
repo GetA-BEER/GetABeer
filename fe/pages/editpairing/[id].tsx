@@ -90,8 +90,7 @@ export default function EditPairing() {
       'patch',
       new Blob([JSON.stringify(jsonData)], { type: 'application/json' })
     );
-    console.log(jsonData);
-    console.log(formData.get('patch'));
+
     setFinalData(formData);
   };
   // Submit 과 formData 변경 감지 후 로직
@@ -102,8 +101,7 @@ export default function EditPairing() {
       },
       withCredentials: true,
     };
-    if (finalData !== '') {
-      // && !isSubmit
+    if (finalData !== '' && !isSubmit) {
       setIsSubmit(true);
       // console.log('finalData', finalData.get('patch'));
       axios
