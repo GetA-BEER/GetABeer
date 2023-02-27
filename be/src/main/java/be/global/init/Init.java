@@ -111,9 +111,6 @@ public class Init {
 
 		String FILE_PATH = "src/main/java/be/global/init/Get_A_Beer_Products.csv";
 
-		/* 자르 파일 용 ^_^ */
-		// String FILE_PATH = "Get_A_Beer_Products.csv";
-
 		List<List<String>> csvList = new ArrayList<List<String>>();
 
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Get_A_Beer_Products.csv");
@@ -145,7 +142,6 @@ public class Init {
 			}
 		}
 
-		/* 자르 테스트 용은 짧게 가져가기 */
 		for (int i = 1; i < 180; i++) {
 
 			BeerDetailsStars beerDetailsStars =

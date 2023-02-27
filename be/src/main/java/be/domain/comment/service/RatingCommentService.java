@@ -21,23 +21,22 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RatingCommentService {
-	private final RatingCommentRepository ratingCommentRepository;
-	private final RatingService ratingService;
 	private final UserService userService;
+	private final RatingService ratingService;
 	private final RatingRepository ratingRepository;
+	private final RatingCommentRepository ratingCommentRepository;
 
 	/* 맥주 댓글 등록 */
 	@Transactional
-	public RatingComment create(RatingComment ratingComment, Long ratingId, Long userId) {
+	public RatingComment create(RatingComment ratingComment, Long ratingId) {
 
 		/* 로그인 유저와 들어오는 정보의 유저가 일치하는지 */
-		// User loginUser = userService.getLoginUser();
-		// userService.checkUser(userId, loginUser.getId());
+		User user = userService.getLoginUser();
 
-		User user = userService.getUser(userId);
 		Rating rating = ratingService.findRating(ratingId);
 		ratingComment.saveDefault(rating, user);
 		ratingCommentRepository.save(ratingComment);
+
 		rating.calculateComments(rating.getRatingCommentList().size());
 		ratingRepository.save(rating);
 
@@ -48,6 +47,10 @@ public class RatingCommentService {
 	@Transactional
 	public RatingComment update(RatingComment ratingComment, Long ratingCommentId) {
 		RatingComment findComment = findVerifiedRatingComment(ratingCommentId);
+
+		User loginUser = userService.getLoginUser();
+		User user = findComment.getUser();
+		userService.checkUser(user.getId(), loginUser.getId());
 
 		Optional.ofNullable(ratingComment.getContent()).ifPresent(findComment::updateContent);
 		ratingCommentRepository.save(findComment);
