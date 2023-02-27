@@ -67,7 +67,7 @@ export default function Main() {
             </>
           )}
         </div>
-        <div className="pb-14"></div>
+        <div className="pb-8"></div>
         <Footer />
       </main>
     </>
