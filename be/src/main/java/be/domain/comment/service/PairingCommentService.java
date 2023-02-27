@@ -22,10 +22,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PairingCommentService {
-	private final PairingCommentRepository pairingCommentRepository;
-	private final PairingService pairingService;
 	private final UserService userService;
+	private final PairingService pairingService;
 	private final PairingRepository pairingRepository;
+	private final PairingCommentRepository pairingCommentRepository;
 
 	/* 페어링 댓글 등록 */
 	@Transactional
@@ -43,6 +43,7 @@ public class PairingCommentService {
 	}
 
 	/* 페어링 댓글 수정 */
+	@Transactional
 	public PairingComment update(PairingComment pairingComment, Long commentId) {
 		/* 페어링 코멘트가 존재하는지 확인 */
 		PairingComment findComment = findVerifiedPairingComment(commentId);
@@ -69,6 +70,12 @@ public class PairingCommentService {
 	@Transactional
 	public String delete(Long commentId) {
 		PairingComment pairingComment = findVerifiedPairingComment(commentId);
+
+		/* 댓글 작성자와 로그인 유저가 같은지 확인 */
+		User loginUser = userService.getLoginUser();
+		User user = pairingComment.getUser();
+		userService.checkUser(user.getId(), loginUser.getId());
+
 		Pairing pairing = pairingComment.getPairing();
 		pairingCommentRepository.delete(pairingComment);
 		pairing.calculateCount(pairing.getPairingCommentList().size());

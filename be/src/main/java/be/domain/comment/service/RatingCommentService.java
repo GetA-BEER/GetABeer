@@ -30,7 +30,6 @@ public class RatingCommentService {
 	@Transactional
 	public RatingComment create(RatingComment ratingComment, Long ratingId) {
 
-		/* 로그인 유저와 들어오는 정보의 유저가 일치하는지 */
 		User user = userService.getLoginUser();
 
 		Rating rating = ratingService.findRating(ratingId);
@@ -68,6 +67,12 @@ public class RatingCommentService {
 	/* 맥주 댓글 삭제 */
 	public String delete(Long ratingCommentId) {
 		RatingComment findComment = findVerifiedRatingComment(ratingCommentId);
+
+		/* 로그인 한 유저와 삭제하려는 유저가 같은지 확인 */
+		User loginUser = userService.getLoginUser();
+		User user = findComment.getUser();
+		userService.checkUser(user.getId(), loginUser.getId());
+
 		Rating rating = findComment.getRating();
 
 		ratingCommentRepository.delete(findComment);
