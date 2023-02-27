@@ -87,3 +87,40 @@ export const TagMatcherToEng = (str: string) => {
       return 'NO_CARBONATION';
   }
 };
+
+export const TagMatcherToEngArr = (str: string[]) => {
+  switch (str) {
+    case ['짚색']:
+      return 'STRAW';
+    case ['금색']:
+      return 'GOLD';
+    case ['갈색']:
+      return ['BROWN'];
+    case ['흑색']:
+      return ['BLACK'];
+    case ['과일향']:
+      return 'FRUITY';
+    case ['꽃향']:
+      return 'FLOWER';
+    case ['맥아향']:
+      return 'MALTY';
+    case ['無향']:
+      return 'NO_SCENT';
+    case ['단맛']:
+      return 'SWEET';
+    case ['신맛']:
+      return 'SOUR';
+    case ['쓴맛']:
+      return 'BITTER';
+    case ['떫은맛']:
+      return 'ROUGH';
+    case ['탄산 약']:
+      return 'WEAK';
+    case ['탄산 중']:
+      return 'MIDDLE';
+    case ['탄산 강']:
+      return 'STRONG';
+    case ['탄산 無']:
+      return 'NO_CARBONATION';
+  }
+};

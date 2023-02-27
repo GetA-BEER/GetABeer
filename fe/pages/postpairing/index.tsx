@@ -14,44 +14,23 @@ import axios from '@/pages/api/axios';
 export default function PostPairing() {
   const router = useRouter();
   const [beerInfo] = useRecoilState(currentBeer);
-
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('카테고리');
   const [imageData, setImageData] = useState([]);
-  const [jsonData, setJsonData] = useState({
-    beerId: beerInfo.beerId,
-    userId: 1,
-    content: '',
-    category: '',
-  });
   const [finalData, setFinalData] = useState<any>('');
-
-  // userInfo 로직, userId가 필요하다.
-  const [userInfo, setUserInfo] = useState();
   const [TOKEN, setTOKEN] = useState();
-  // useEffect(() => {
-  //   const localInfo = window.localStorage.getItem('recoil-persist');
-  //   if (localInfo !== null) {
-  //     const tmpData = JSON.parse(localInfo);
-  //     setTOKEN(tmpData.accessToken);
 
-  //     const config = {
-  //       headers: {
-  //         authorization: TOKEN,
-  //         'content-type': 'multipart/form-data',
-  //       },
-  //       withCredentials: true,
-  //     };
-  //     axios
-  //       .get(`/api/user`, config)
-  //       .then((response) => setUserInfo(response.data))
-  //       .catch((error) => console.log(error));
-  //   }
-  // }, [TOKEN]);
-  // console.log('userInfo', userInfo);
+  useEffect(() => {
+    const localInfo = window.localStorage.getItem('recoil-persist');
+    if (localInfo !== null) {
+      const tmpData = JSON.parse(localInfo);
+      setTOKEN(tmpData.accessToken);
+    }
+  }, [TOKEN]);
 
   // Vaild 로직
   const [isValid, setIsValid] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   useEffect(() => {
     if (content.length >= 3 && category !== '카테고리') setIsValid(true);
     else setIsValid(false);
@@ -59,12 +38,12 @@ export default function PostPairing() {
 
   // Post 제출 로직
   const handleSubmit = () => {
-    setJsonData({
-      beerId: beerInfo.beerId,
-      userId: 1,
+    const beerId = beerInfo?.beerId;
+    let jsonData = {
+      beerId: beerId,
       content: content,
       category: category,
-    });
+    };
 
     const formData = new FormData();
     for (const file of imageData) {
@@ -81,20 +60,20 @@ export default function PostPairing() {
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
+        authorization: TOKEN,
       },
       withCredentials: true,
     };
-    if (finalData !== '') {
-      // console.log(jsonData);
+    if (finalData !== '' && !isSubmit) {
+      setIsSubmit(true);
       axios
-        .post(`/pairings`, finalData, config)
+        .post(`/api/pairings`, finalData, config)
         .then((response) => {
-          console.log(response);
-          router.back();
+          router.push(`/beer/${beerInfo.beerId}`);
         })
         .catch((error) => console.log(error));
     }
-  }, [finalData, router]);
+  }, [finalData, router, isSubmit, TOKEN, beerInfo]);
 
   return (
     <>

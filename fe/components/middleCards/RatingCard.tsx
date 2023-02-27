@@ -1,9 +1,10 @@
 export interface RatingCardProps {
   beerId: number;
   ratingId: number;
+  korName: string;
   userId: number;
   nickname: string;
-  //여기 유저 이미지 url도 들어와야함!
+  userImage: string;
   star: number;
   ratingTag: [string, string, string, string];
   content: string;
@@ -14,7 +15,7 @@ export interface RatingCardProps {
   isUserLikes: boolean;
 }
 import { ToDateString } from '@/utils/ToDateString';
-import { BiUser } from 'react-icons/bi';
+import Image from 'next/image';
 import { HiOutlineChat } from 'react-icons/hi';
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import { FaPen, FaTrash } from 'react-icons/fa';
@@ -37,22 +38,13 @@ export default function RatingCard(props: {
   };
 
   const deleteRating = () => {
-    axios.delete(`/ratings/${props.cardProps.ratingId}`);
+    axios.delete(`/api/ratings/${props.cardProps.ratingId}`);
     router.back();
   };
 
   const isUserLikeHandler = () => {
     axios
-      .post(
-        `/ratings/likes?ratingId=${props.cardProps.ratingId}`,
-        {},
-        {
-          headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJlM0BtYWlsLmNvbSIsInN1YiI6ImUzQG1haWwuY29tIiwiaWF0IjoxNjc2OTg2OTc1LCJleHAiOjE2NzY5OTQxNzV9.g7tfklHn9chf2M4hRSh2hNIzhYHgbwMK4fXpklXrXAjulM10FKb_9wWfRoHYTiL9KMw2vYJoaBngKK36OtgwBA',
-          },
-        }
-      )
+      .post(`/api/ratings/likes?ratingId=${props.cardProps.ratingId}`)
       .then((res) => {
         setIsLike(!isLike);
         if (isLike) {
@@ -66,7 +58,14 @@ export default function RatingCard(props: {
   return (
     <div>
       <div className="flex">
-        <BiUser className=" bg-y-brown text-white rounded-full w-10 h-10 ml-1" />
+        <div className="relative rounded-full w-10 h-10 ml-1">
+          <Image
+            alt="user profile image"
+            src={props.cardProps.userImage}
+            fill
+            className="object-cover"
+          />
+        </div>
         <div className="flex flex-col ml-2">
           <span>{props.cardProps.nickname}</span>
           <span className="text-xs text-y-gray">

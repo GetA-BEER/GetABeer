@@ -1,7 +1,7 @@
 import PageContainer from '@/components/PageContainer';
-import { FaArrowLeft } from 'react-icons/fa';
+import BackBtn from '@/components/button/BackPageBtn';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import axios from '@/pages/api/axios';
 import RatingCard, {
@@ -10,60 +10,28 @@ import RatingCard, {
 import Pagenation from '@/components/Pagenation';
 
 export default function MyRating() {
-  const router = useRouter();
+  const [userNickname, setUserNickname] = useState('');
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    // axios.get('/mypage/ratings').then((res) => {
-    //   setRatingList(res.data.data);
-    //   setTotalPages(res.data.pageInfo.totalPages);
-    // });
-    setRatingList([
-      {
-        beerId: 1,
-        ratingId: 1,
-        userId: 1,
-        nickname: '최대열글자까지됩니다',
-        //여기 유저 이미지 url도 들어와야함!
-        star: 4.5,
-        ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
-        content: '맥주 향이 좋습니다.',
-        likeCount: 2,
-        commentCount: 0,
-        createdAt: '2023-02-13T14:17:15.091737',
-        modifiedAt: '2023-02-13T14:17:15.091737',
-        isUserLikes: true,
-      },
-      {
-        beerId: 2,
-        ratingId: 2,
-        userId: 1,
-        nickname: '최대열글자까지됩니다',
-        //여기 유저 이미지 url도 들어와야함!
-        star: 3.5,
-        ratingTag: ['GOLD', 'SWEET', 'FLOWER', 'MIDDLE'],
-        content: '이것도 좋습니다!',
-        likeCount: 0,
-        commentCount: 0,
-        createdAt: '2023-02-13T14:17:15.091737',
-        modifiedAt: '2023-02-13T14:17:15.091737',
-        isUserLikes: false,
-      },
-    ]);
+    axios
+      .get('/api/mypage/ratings')
+      .then((res) => {
+        setRatingList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
     <PageContainer>
       <main className="px-2">
-        <FaArrowLeft
-          onClick={() => router.back()}
-          className="text-xl text-y-gray mt-2"
-        />
+        <BackBtn />
         <div className="flex justify-center my-4">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            나의 평가
+          <h1 className="text-xl lg:text-2xl font-bold">
+            {userNickname}님의 평가
           </h1>
         </div>
         <div className="mt-3">
@@ -81,7 +49,20 @@ export default function MyRating() {
             );
           })}
         </div>
-        <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+        {ratingList.length ? (
+          <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+        ) : (
+          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+            <Image
+              className="m-auto pb-3 opacity-50"
+              src="/images/logo.png"
+              alt="logo"
+              width={40}
+              height={40}
+            />
+            <span>등록된 평가가 없습니다</span>
+          </div>
+        )}
       </main>
     </PageContainer>
   );

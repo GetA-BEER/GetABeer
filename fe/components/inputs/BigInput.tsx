@@ -16,7 +16,7 @@ export default function BigInput({
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputState(e.target.value);
     setInputLen(e.target.value.length);
-    console.log(inputState);
+    // console.log(inputState);
   };
 
   return (

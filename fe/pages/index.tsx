@@ -1,58 +1,47 @@
 import Head from 'next/head';
 import Advertise from '@/components/mainPage/Advertise';
-import PopularBeerController from '@/components/smallCards/PopularBeerController';
+import RecommendBeer from '@/components/smallCards/RecommendBeer';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
 import Footer from '@/components/Footer';
+import axios from '@/pages/api/axios';
+import { useEffect, useState } from 'react';
+import PopularBeer from '@/components/smallCards/PopularBeer';
 
 export default function Main() {
-  const beerProps = [
-    {
-      id: 1,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: '/images/121.jpeg',
-    },
-    {
-      id: 3,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: '/images/123.jpeg',
-    },
-    {
-      id: 4,
-      title: '가든 바이젠',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: '/images/124.jpeg',
-    },
-    {
-      id: 6,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: '/images/146.jpeg',
-    },
-    {
-      id: 7,
-      title: '필라이트',
-      category: '에일',
-      country: '한국',
-      level: 4.1,
-      ibu: 17.5,
-      image: '/images/150.jpeg',
-    },
-  ];
+  const [userInfo, setUserInfo] = useState<any>();
+  const [popularBeer, setPopularBeer] = useState<any>();
+  const [recommendBeer, setRecommendBeer] = useState<any>('');
+  const [recommendFlag, setRecommendFlag] = useState<any>(null);
 
+  // 사용자 정보
+  useEffect(() => {
+    if (userInfo === undefined) {
+      axios
+        .get(`/api/user`)
+        .then((response) => {
+          setUserInfo(response.data);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [userInfo]);
+
+  // 인기 많은 맥주
+  useEffect(() => {
+    axios
+      .get(`/api/beers/weekly`)
+      .then((response) => setPopularBeer(response.data));
+  }, []);
+
+  // 사용자 추천맥주
+  useEffect(() => {
+    axios
+      .get(`/api/beers/recommend`)
+      .then((response) => {
+        setRecommendBeer(response.data);
+        setRecommendFlag(response.data[0].beerId);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
     <>
       <Head>
@@ -65,16 +54,30 @@ export default function Main() {
         <Advertise />
         <div className="m-auto">
           <BeerCategoryBtn />
-          <div className="mx-3 mt-6 text-base font-semibold">
-            <span className="text-y-brown mr-1">인기 많은</span>
-            <span className="text-black">맥주</span>
-          </div>
-          <PopularBeerController beerProps={beerProps} />
-          <div className="mx-3 mt-6 text-base font-semibold">
-            <span className="text-y-brown mr-1">유미님의</span>
-            <span className="text-black">추천 맥주</span>
-          </div>
-          <PopularBeerController beerProps={beerProps} />
+          {popularBeer === '' ? (
+            <></>
+          ) : (
+            <>
+              <div className="mx-3 mt-6 text-base font-semibold">
+                <span className="text-y-brown mr-1">인기 많은</span>
+                <span className="text-black">맥주</span>
+              </div>
+              <PopularBeer popularBeer={popularBeer} />
+            </>
+          )}
+          {recommendBeer === '' ? (
+            <></>
+          ) : recommendFlag === null ? (
+            <></>
+          ) : (
+            <>
+              <div className="mx-3 mt-6 text-base font-semibold">
+                <span className="text-y-brown mr-1">{userInfo?.nickname}</span>
+                <span className="text-black">추천 맥주</span>
+              </div>
+              <RecommendBeer recommendBeer={recommendBeer} />
+            </>
+          )}
         </div>
         <div className="pb-14"></div>
         <Footer />

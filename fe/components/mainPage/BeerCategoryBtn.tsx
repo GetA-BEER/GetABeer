@@ -1,5 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
+import { useRouter } from 'next/router';
+import { SearchMatcherToEng } from '@/utils/SearchMatcher';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -12,15 +14,8 @@ export default function BeerCategoryBtn() {
     '필스너',
     '과일',
     '무알콜',
-    '기타',
   ];
-  //   ALE(),
-  // LAGER(),
-  // WEIZEN(),
-  // DUNKEL(),
-  // PILSENER(),
-  // FRUIT_BEER(),
-  // NON_ALCOHOLIC()
+  const router = useRouter();
   return (
     <div className="my-4">
       <div className="mx-3 mt-6 mb-2 font-bold">
@@ -34,7 +29,15 @@ export default function BeerCategoryBtn() {
       >
         <div className="select-none">
           {beerCategoryList.map((el: string, idx: number) => (
-            <SwiperSlide key={idx}>
+            <SwiperSlide
+              key={idx}
+              onClick={() => {
+                router.push({
+                  pathname: '/search',
+                  query: { q: SearchMatcherToEng(`@${el}`) },
+                });
+              }}
+            >
               <div className="ml-2 font-bold flex justify-center items-center h-[58px] lg:h-32 md:h-28 sm:h-24  bg-y-gold text-[10px] lg:text-base rounded-xl hover:text-y-cream">
                 {el}
               </div>

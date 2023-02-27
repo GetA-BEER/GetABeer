@@ -1,4 +1,4 @@
-import { FaArrowLeft } from 'react-icons/fa';
+import { IoChevronBack } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
@@ -23,7 +23,7 @@ export default function Rating() {
   useEffect(() => {
     if (ratingId !== undefined) {
       axios
-        .get(`/ratings/${ratingId}`)
+        .get(`/api/ratings/${ratingId}`)
         .then((res) => {
           setCardProps(res.data);
           setRatingCommentList(res.data.ratingCommentList);
@@ -35,12 +35,11 @@ export default function Rating() {
   const postRatingComment = () => {
     if (inputState !== '') {
       const reqBody = {
-        userId: 1,
         ratingId: Number(ratingId),
         content: inputState,
       };
       axios
-        .post('/ratings/comments', reqBody)
+        .post('/api/ratings/comments', reqBody)
         .then((res) => {
           if (ratingCommentList === null) {
             setRatingCommentList([res.data]);
@@ -55,7 +54,7 @@ export default function Rating() {
 
   const deleteRatingComment = (ratingCommentId: number) => {
     axios
-      .delete(`/ratings/comments/${ratingCommentId}`)
+      .delete(`/api/ratings/comments/${ratingCommentId}`)
       .then((res) => {
         if (ratingCommentList !== null) {
           const filtered = ratingCommentList.filter((el) => {
@@ -70,13 +69,13 @@ export default function Rating() {
   return (
     <PageContainer>
       <div className="px-2">
-        <FaArrowLeft
+        <IoChevronBack
           onClick={() => router.back()}
           className="text-xl text-y-gray my-2"
         />
         <div className="flex justify-center mb-4 mt-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-            제주 펠롱 에일
+          <h1 className="text-xl lg:text-2xl font-bold">
+            {cardProps?.korName}
           </h1>
         </div>
         <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">

@@ -1,5 +1,4 @@
 import { FiThumbsUp } from 'react-icons/fi';
-// import { PairingInfo } from '@/pages/pairing/[id]';
 import { MdModeEdit } from 'react-icons/md';
 import { HiTrash } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';
@@ -55,7 +54,7 @@ export default function DetailCard(props: { pairingProps: any }) {
           withCredentials: true,
         };
         axios
-          .delete(`/pairings/${curRoute}`, config)
+          .delete(`/api/pairings/${curRoute}`, config)
           .then(() => {
             router.back();
           })
@@ -64,13 +63,19 @@ export default function DetailCard(props: { pairingProps: any }) {
       }
     });
   };
+  const hadleEdit = () => {
+    router.replace(`/editpairing/${curRoute}`);
+  };
+
   return (
     <>
       {/*닉네임, 날짜*/}
       <div className="flex justify-between items-center">
         <ProfileCard nickname={props?.pairingProps?.nickname} date={date} />
         <div className="flex px-4">
-          <MdModeEdit className="text-y-brown" /> 수정
+          <div onClick={hadleEdit}>
+            <MdModeEdit className="text-y-brown inline" /> 수정
+          </div>
           <div onClick={hadleDelte}>
             <HiTrash className="text-y-brown ml-1 inline" />
             <span>삭제</span>

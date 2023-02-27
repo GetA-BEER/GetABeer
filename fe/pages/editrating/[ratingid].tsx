@@ -33,40 +33,41 @@ export default function EditRatingPage() {
 
   useEffect(() => {
     if (ratingId !== undefined) {
-      axios.get(`/ratings/${ratingId}`).then((res) => {
-        setStar(res.data.star);
-        setContent(res.data.content);
-        setColor(res.data.ratingTag[0]);
-        setFlavor(res.data.ratingTag[1]);
-        setTaste(res.data.ratingTag[2]);
-        setCarbonation(res.data.ratingTag[3]);
-        axios.get(`/beers/${res.data.beerId}`).then((res) => {
-          const beerIInfo: MiddleCardInfo = {
-            beerId: res.data.beerId,
-            thumbnail: '/images/krin.jpeg',
-            // thumbnail: res.data.beerDetailsBasic.thumbnail,
-            korName: res.data.beerDetailsBasic.korName,
-            category: res.data.beerCategoryTypes,
-            country: res.data.beerDetailsBasic.country,
-            abv: res.data.beerDetailsBasic.abv,
-            ibu: res.data.beerDetailsBasic.ibu,
-            totalStarCount:
-              res.data.beerDetailsCounts.totalStarCount ||
-              res.data.beerDetailsCounts.femaleStarCount +
-                res.data.beerDetailsCounts.maleStarCount,
-            totalAverageStars: res.data.beerDetailsStars.totalAverageStars,
-            beerTags: res.data.beerDetailsTopTags || [],
-          };
-          setCardProps(beerIInfo);
-        });
-      });
+      axios
+        .get(`/api/ratings/${ratingId}`)
+        .then((res) => {
+          setStar(res.data.star);
+          setContent(res.data.content);
+          setColor(res.data.ratingTag[0]);
+          setFlavor(res.data.ratingTag[1]);
+          setTaste(res.data.ratingTag[2]);
+          setCarbonation(res.data.ratingTag[3]);
+          axios.get(`/api/beers/${res.data.beerId}`).then((res) => {
+            const beerIInfo: MiddleCardInfo = {
+              beerId: res.data.beerId,
+              thumbnail: res.data.beerDetailsBasic.thumbnail,
+              korName: res.data.beerDetailsBasic.korName,
+              category: res.data.beerCategoryTypes,
+              country: res.data.beerDetailsBasic.country,
+              abv: res.data.beerDetailsBasic.abv,
+              ibu: res.data.beerDetailsBasic.ibu,
+              totalStarCount:
+                res.data.beerDetailsCounts.totalStarCount ||
+                res.data.beerDetailsCounts.femaleStarCount +
+                  res.data.beerDetailsCounts.maleStarCount,
+              totalAverageStars: res.data.beerDetailsStars.totalAverageStars,
+              beerTags: res.data.beerDetailsTopTags || [],
+            };
+            setCardProps(beerIInfo);
+          });
+        })
+        .catch((err) => console.log(err));
     }
   }, [ratingId]);
 
   const handleSubmit = () => {
     const reqBody = {
       beerId: 1,
-      userId: 1,
       star,
       content,
       color: TagMatcherToEng(color),
@@ -74,7 +75,7 @@ export default function EditRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.patch(`/ratings/${ratingId}`, reqBody).then((res) => {
+    axios.patch(`/api/ratings/${ratingId}`, reqBody).then((res) => {
       router.replace(`/rating/${ratingId}`);
     });
   };

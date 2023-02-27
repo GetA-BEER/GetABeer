@@ -1,7 +1,7 @@
 import Footer from '@/components/Footer';
 import MiddleCard, { testBeer } from '@/components/middleCards/MiddleCard';
+import SearchCard from '@/components/middleCards/SearchCard';
 import MonthlyCard from '@/components/middleCards/MonthlyCard';
-import BigCard from '@/components/middleCards/BigCard';
 import Pagenation from '@/components/Pagenation';
 import { useState } from 'react';
 import CommentInput from '@/components/inputs/CommentInput';
@@ -13,7 +13,7 @@ export default function Test() {
   const [input, setInput] = useState('');
 
   const post = () => {
-    console.log(input);
+    // console.log(input);
   };
 
   return (
@@ -60,8 +60,8 @@ export default function Test() {
       </button>
       <Pagenation page={page} setPage={setPage} totalPages={10} />
       <MiddleCard cardProps={testBeer} />
-      <MonthlyCard cardProps={testBeer} idx={1} />
-      <BigCard cardProps={testBeer} />
+      {/* <SearchCard cardProps={testBeer} idx={1} />
+      <MonthlyCard cardProps={testBeer} idx={1} /> */}
       <CommentInput
         inputState={input}
         setInputState={setInput}

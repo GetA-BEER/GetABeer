@@ -1,10 +1,9 @@
 import Link from 'next/link';
 
 export default function PairingTitle(props: {
-  pairngCount: number;
+  pairngCount: number | undefined;
   beerId: number;
 }) {
-  // console.log(props.pairngCount);
   return (
     <div className="max-w-4xl flex justify-between mx-5 mt-4 mb-1">
       <div className="flex items-center">

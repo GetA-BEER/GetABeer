@@ -5,64 +5,41 @@ import { useRouter } from 'next/router';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
+import Pagenation from '@/components/Pagenation';
+import Image from 'next/image';
 
 export default function AllPairing() {
   let router = useRouter();
   const [curRoute, setCurRoute] = useState<any>();
   const [sort, setSort] = useState<Sort>('mostlikes');
+  const [title, setTitle] = useState<string>('');
   const [category, setCategory] = useState<string>('ALL');
   const [pairingCardProps, setPairingCardProps] = useState<any>();
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
   useEffect(() => {
     setCurRoute(router.query.id);
   }, [router, curRoute]);
+
   useEffect(() => {
     if (curRoute !== undefined) {
       axios
-        .get(`/pairings/page/recency?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setPairingCardProps(response.data))
+        .get(
+          `/api/pairings/page/${sort}?beerId=${curRoute}&page=${page}&size=5`
+        )
+        .then((response) => {
+          // console.log(response);
+          setPairingCardProps(response.data);
+          setTotalPages(response.data.pageInfo.totalPages);
+          setTitle(response.data.pageInfo.beerKorName);
+        })
         .catch((error) => {
           console.log(error);
         });
     }
-  }, [curRoute]);
+  }, [curRoute, sort, page]);
 
-  //   data: [
-  //     {
-  //       beerId: 1,
-  //       pairingId: 1,
-  //       nickname: '김맥주',
-  //       content: '수정된 페어링',
-  //       thumbnail:
-  //         'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
-  //       category: 'SNACK',
-  //       likeCount: 3,
-  //       commentCount: 0,
-  //       isUserLikes: true,
-  //       createdAt: '2023-02-06T00:29:14.59836',
-  //       modifiedAt: '2023-02-06T00:31:11.1951',
-  //     },
-  //     {
-  //       beerId: 1,
-  //       pairingId: 2,
-  //       nickname: '김맥주',
-  //       content: '페어링 안내',
-  //       thumbnail:
-  //         'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
-  //       category: 'GRILL',
-  //       likeCount: 2,
-  //       commentCount: 0,
-  //       isUserLikes: false,
-  //       createdAt: '2023-02-06T00:35:58.259552',
-  //       modifiedAt: '2023-02-06T00:35:58.259552',
-  //     },
-  //   ],
-  //   pageInfo: {
-  //     page: 1,
-  //     size: 5,
-  //     totalElements: 2,
-  //     totalPages: 1,
-  //   },
-  // };
   return (
     <>
       <Head>
@@ -71,16 +48,32 @@ export default function AllPairing() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-4xl border">
+      <main className="m-auto h-screen max-w-4xl">
         <div className="mt-4 text-center bg-white rounded-lg max-w-4xl font-semibold">
-          제주슬라이스
+          {title}
         </div>
         <div className="m-auto flex">
           <SortBox setSort={setSort} />
           <PairingBox setCategory={setCategory} />
         </div>
-        <PairingCardController pairingCardProps={pairingCardProps?.data} />
-        <div className="pb-32"></div>
+        {pairingCardProps?.data?.length > 0 ? (
+          <>
+            <PairingCardController pairingCardProps={pairingCardProps?.data} />
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+            <div className="pb-32"></div>
+          </>
+        ) : (
+          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+            <Image
+              className="m-auto pb-3 opacity-50"
+              src="/images/logo.png"
+              alt="logo"
+              width={100}
+              height={100}
+            />
+            <span>등록된 평가가 없습니다</span>
+          </div>
+        )}
       </main>
     </>
   );
