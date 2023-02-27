@@ -21,6 +21,7 @@ export default function Pairing() {
       })
       .catch((error) => console.log(error));
   }, []);
+
   return (
     <PageContainer>
       <main className="m-auto h-screen max-w-4xl">

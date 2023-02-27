@@ -94,7 +94,10 @@ export default function PairingDetail() {
           {pairingProps?.korName}
         </div>
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
-          <DetailCard pairingProps={pairingProps} />
+          <DetailCard
+            pairingProps={pairingProps}
+            count={pairingCommentList ? pairingCommentList?.length : 0}
+          />
           <div className="px-3 my-5">
             <CommentInput
               inputState={inputState}

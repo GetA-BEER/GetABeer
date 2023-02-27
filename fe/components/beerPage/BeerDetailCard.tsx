@@ -97,19 +97,14 @@ export default function BeerDetailCard({
               <></>
             )}
           </div>
-          {cardProps?.ratingTag === undefined ? (
-            <></>
-          ) : (
-            <SmallTag tags={cardProps?.ratingTag} />
-          )}
 
-          <div className="my-1 flex items-end">
+          <div className="flex items-end">
             <StarScore score={cardProps?.beerDetailsStars.totalAverageStars} />
             <span className="text-xs text-y-gray">
               ({cardProps?.beerDetailsStars.totalAverageStars})
             </span>
           </div>
-          <div className="mb-2 text-xs flex">
+          <div className="mb-0.5 text-xs flex">
             <div className="mr-4">
               <Image
                 src="/images/star.png"
@@ -131,6 +126,11 @@ export default function BeerDetailCard({
               {cardProps?.beerDetailsStars.maleAverageStars} 남성
             </div>
           </div>
+          {cardProps?.beerDetailsTopTags === null ? (
+            <></>
+          ) : (
+            <SmallTag tags={cardProps?.beerDetailsTopTags} />
+          )}
           <div className="text-xs">
             {isLogin ? (
               hasRating ? (
