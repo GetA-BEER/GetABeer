@@ -115,12 +115,14 @@ export default function MyEdit() {
     };
     const formData = new FormData();
     formData.append('image', image[0]);
-    axios.patch(`/api/mypage/userinfo/image`, formData, config).then((res) => {
-      // console.log(res.data);
-    });
-    // .catch((err) => {
-    //   console.log(err);
-    // });
+    axios
+      .patch(`/api/mypage/userinfo/image`, formData, config)
+      .then((res) => {
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <>

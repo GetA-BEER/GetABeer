@@ -43,15 +43,13 @@ export default function Mypage() {
         setAccessToken('');
         setUserId('');
         delete axios.defaults.headers.Authorization;
-        window.location.href = '/';
+        window.location.href = '/login';
       })
       .catch((err) => {
         console.log(err);
       });
-    setAccessToken('');
-    setUserId('');
-    window.location.href = '/';
   };
+
   return (
     <>
       <Head>

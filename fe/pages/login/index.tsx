@@ -12,7 +12,6 @@ import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Router from 'next/router';
-import cookie from 'next-cookies';
 
 interface IFormValues {
   email: string;
@@ -23,7 +22,7 @@ interface IFormValues {
   editpassword: string;
 }
 export default function Login() {
-  const [TOKEN, setAccessToken] = useRecoilState(accessToken);
+  const [, setAccessToken] = useRecoilState(accessToken);
   const [, setUserId] = useRecoilState(userId);
   const [showLoginError, setShowLoginError] = useState(false);
   const {
