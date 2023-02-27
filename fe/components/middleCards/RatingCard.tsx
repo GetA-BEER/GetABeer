@@ -24,6 +24,7 @@ import { TagMatcherToKor } from '@/utils/TagMatcher';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 
 export default function RatingCard(props: {
   cardProps: RatingCardProps;
@@ -80,7 +81,24 @@ export default function RatingCard(props: {
             <FaPen />
             <span className="text-y-black">수정</span>
           </button>
-          <button className="flex items-center" onClick={deleteRating}>
+          <button
+            className="flex items-center"
+            onClick={() => {
+              Swal.fire({
+                title: '게시글을 삭제하시겠습니까?',
+                text: '삭제하시면 다시 복구시킬 수 없습니다.',
+                showCancelButton: true,
+                confirmButtonColor: '#AC0000',
+                cancelButtonColor: '#008505',
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  deleteRating();
+                }
+              });
+            }}
+          >
             <FaTrash />
             <span className="text-y-black">삭제</span>
           </button>
