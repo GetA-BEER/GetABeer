@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Router from 'next/router';
+import swal from 'sweetalert2';
 
 interface IFormValues {
   email: string;
@@ -57,6 +58,11 @@ export default function Login() {
     axios
       .post('/api/login', reqBody)
       .then((res) => {
+        swal.fire({
+          text: '로그인이 완료되었습니다.',
+          confirmButtonColor: '#F1B31C',
+          confirmButtonText: '확인',
+        });
         onLoginSuccess(res);
         Router.push({
           pathname: '/',
