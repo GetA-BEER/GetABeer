@@ -27,16 +27,12 @@ jobs:
       - name: Add permission
         run: chmod +x gradlew
         working-directory: ./be/
-        
-#       - name : Add appspec permission
-#         run: chmod 755 appspec.yml
-#         working-directory: ./be/
 
       - name: create-json
         id: create-json
         uses: jsdaniell/create-json@1.1.2
         with:
-          name: "getabeer-376509-6310d68578f1.json"
+          name: "be/src/main/resources/getabeer-376509-6310d68578f1.json"
           json: ${{ secrets.GOOGLE_JSON}}
 
       - name: Set Yml
