@@ -1,7 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
-import { BiUser } from 'react-icons/bi';
 import { FaRegCommentDots } from 'react-icons/fa';
 import { useRecoilValue } from 'recoil';
 import { noReview, NoReviewTypes } from '@/atoms/noReview';
@@ -9,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { TimeHandler } from '@/utils/TimeHandler';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import PairingThumbs from '../PairingThumbs';
+import { accessToken } from '@/atoms/login';
 
 export default function SmallPairingCard({ pairingProps }: any) {
   const [pairingList, setpairingList] = useState<any>([]);
@@ -19,6 +18,14 @@ export default function SmallPairingCard({ pairingProps }: any) {
   const initialDate = pairingProps?.createdAt;
   const [isLike, setIsLike] = useState<any>(pairingProps.isUserLikes);
   const [likeCount, setLikeCount] = useState<any>(pairingProps.likeCount);
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
 
   // 페어링 리스트 초기화
   useEffect(() => {
@@ -77,8 +84,8 @@ export default function SmallPairingCard({ pairingProps }: any) {
             </span>
 
             <Image
-              src={pairingList?.userImage}
               alt="userImg"
+              src={pairingList?.userImage}
               width={100}
               height={100}
               className="w-4 h-4"
@@ -142,6 +149,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
               {pairingList?.commentCount}
             </span>
             <PairingThumbs
+              isLogin={isLogin}
               pairingId={pairingList.pairingId}
               isLike={isLike}
               setIsLike={setIsLike}
