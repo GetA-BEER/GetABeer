@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Timer from '@/components/signup/Timer';
 import axios from '@/pages/api/axios';
+import swal from 'sweetalert2';
 interface IFormValues {
   email: string;
   password: string;
@@ -48,6 +49,11 @@ export default function Email() {
       .post('/api/mail', reqBody)
       .then((res) => {
         // console.log(res);
+        swal.fire({
+          text: '인증코드가 전송되었습니다.',
+          confirmButtonColor: '#F1B31C',
+          confirmButtonText: '확인',
+        });
         setShowModal(true);
       })
       .catch((err) => {

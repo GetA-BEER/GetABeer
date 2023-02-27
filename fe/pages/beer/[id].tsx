@@ -65,10 +65,7 @@ export default function Beer() {
         .get(
           `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`
         )
-        .then((response) => {
-          setPairingInfo(response.data);
-          console.log(response.data);
-        })
+        .then((response) => setPairingInfo(response.data))
         .catch((error) => console.log(error));
     }
   }, [curRoute]);

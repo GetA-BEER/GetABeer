@@ -34,9 +34,7 @@ export default function AllPairing() {
           setTotalPages(response.data.pageInfo.totalPages);
           setTitle(response.data.pageInfo.beerKorName);
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => console.log(error));
     }
   }, [curRoute, sort, page, category]);
 

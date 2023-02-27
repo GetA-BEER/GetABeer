@@ -4,14 +4,44 @@ import {
 } from '@/utils/BeerMatcher';
 import Image from 'next/image';
 import Link from 'next/link';
-import { HiPencil, HiChartPie, HiShare } from 'react-icons/hi';
+import { HiPencil, HiChartPie } from 'react-icons/hi';
 import WishHeart from '@/components/WishHeart';
 import StarScore from './StarScore';
 import ShareBtn from '../share/ShareBtn';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
 
 export default function BeerDetailCard({ cardProps }: any) {
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
+  const goToLogin = () => {
+    Swal.fire({
+      text: '로그인이 필요한 서비스 입니다.',
+      showCancelButton: true,
+      confirmButtonColor: '#f1b31c',
+      cancelButtonColor: '#A7A7A7',
+      confirmButtonText: '로그인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push({
+          pathname: '/login',
+        });
+      }
+    });
+  };
 
   return (
     <div className="flex rounded-xl bg-white text-y-black border border-y-lightGray py-2 my-2 relative">
@@ -19,7 +49,7 @@ export default function BeerDetailCard({ cardProps }: any) {
         <div className="w-[122px] select-none">
           {cardProps?.beerDetailsBasic.thumbnail.includes('.') ? (
             <Image
-              className="pt-3 w-full h-auto select-none -ml-8"
+              className="pt-3 w-full h-auto select-none"
               alt={cardProps?.beerDetailsBasic.korName}
               src={cardProps?.beerDetailsBasic.thumbnail}
               width={100}
@@ -30,15 +60,16 @@ export default function BeerDetailCard({ cardProps }: any) {
             <>x</>
           )}
         </div>
-        <div className="flex flex-col justify-center -ml-4">
-          <div className="flex justify-between items-center">
-            <h1 className="font-bold text-2xl">
+        <div className="flex flex-col justify-center">
+          <div className="flex items-start">
+            <h1 className="font-bold text-2xl break-keep">
               {cardProps?.beerDetailsBasic.korName}
             </h1>
             <WishHeart
               beerId={cardProps?.beerId}
               isWish={isWish}
               setIsWish={setIsWish}
+              isLogin={isLogin}
             />
           </div>
           <div className="text-xs flex flex-wrap">
@@ -90,14 +121,26 @@ export default function BeerDetailCard({ cardProps }: any) {
             </div>
           </div>
           <div className="text-xs">
-            <Link href={'/postrating'} className="hover:text-y-gold mr-1">
-              <HiPencil className="inline" /> 평가하기
-            </Link>
-            <Link href={'/postpairing'} className="hover:text-y-gold mr-1">
-              <span className="mr-1">
+            {isLogin ? (
+              <Link href={'/postrating'} className="hover:text-y-gold mr-1">
+                <HiPencil className="inline" /> 평가하기
+              </Link>
+            ) : (
+              <span onClick={goToLogin} className="hover:text-y-gold mr-1">
+                <HiPencil className="inline" /> 평가하기
+              </span>
+            )}
+            {isLogin ? (
+              <Link href={'/postpairing'} className="hover:text-y-gold">
+                <span className="mr-1">
+                  <HiChartPie className="inline" /> 페어링
+                </span>
+              </Link>
+            ) : (
+              <span onClick={goToLogin} className="hover:text-y-gold mr-1">
                 <HiChartPie className="inline" /> 페어링
               </span>
-            </Link>
+            )}
 
             <ShareBtn />
           </div>
