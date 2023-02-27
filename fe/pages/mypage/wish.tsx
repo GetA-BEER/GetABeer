@@ -4,9 +4,10 @@ import { IoChevronBack } from 'react-icons/io5';
 import Link from 'next/link';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function Wish() {
-  const [wishList, setWishList] = useState<any>();
+  const [wishList, setWishList] = useState<any>([]);
   const [pageInfo, setPageInfo] = useState();
   useEffect(() => {
     axios.get(`/api/mypage/wishlist`).then((response) => {
@@ -26,19 +27,34 @@ export default function Wish() {
 
       <main className="m-auto h-screen mx-4">
         <Link href={'/mypage'}>
-          <button className="m-4">
+          <button className="ml-4">
             <IoChevronBack className="w-6 h-6" />
           </button>
         </Link>
         <div className=" max-w-4xl m-auto">
-          <div className="text-xl my-10 text-center font-semibold">
-            유미님의 위시 맥주
+          <div className="text-xl mb-10 text-center font-semibold">
+            나의 위시 맥주
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {wishList?.map((wishProps: any, idx: number) => (
-              <WishCard key={idx} wishProps={wishProps} idx={idx + 1} />
-            ))}
-          </div>
+
+          {wishList.length === 0 ? (
+            <div className="noneContent py-32">
+              <Image
+                className="m-auto pb-3 opacity-50"
+                src="/images/logo.png"
+                alt="logo"
+                width={40}
+                height={40}
+              />
+              등록된 위시 맥주가 없습니다.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {wishList?.map((wishProps: any, idx: number) => (
+                <WishCard key={idx} wishProps={wishProps} idx={idx + 1} />
+              ))}
+            </div>
+          )}
+
           <div className="pb-14"></div>
         </div>
       </main>
