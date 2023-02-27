@@ -44,7 +44,7 @@ services:
       REDIS_PORT: 6379
       TZ: Asia/Seoul
     secrets:
-        - gcp-credentials
+      - gcp-credentials
     ports:
       - 8080:8080
     depends_on:

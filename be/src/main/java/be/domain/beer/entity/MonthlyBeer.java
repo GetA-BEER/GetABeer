@@ -58,6 +58,11 @@ public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 		this.beerDetailsBestRating = beer.getBeerDetailsBestRating();
 	}
 
+	public List<String> createTagList() {
+		return List.of(this.beerDetailsTopTags.getTag1(), this.beerDetailsTopTags.getTag2(),
+			this.beerDetailsTopTags.getTag3(), this.beerDetailsTopTags.getTag4());
+	}
+
 	// public void create(Beer beer) {
 	// 	this.id = beer.getId();
 	// 	this.korName = beer.getBeerDetailsBasic().getKorName();

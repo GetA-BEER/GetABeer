@@ -1,5 +1,6 @@
 package be.domain.beer.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -71,7 +72,7 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
-		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags().createList());
 		// detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
 			.map(beerBeerCategory -> beerBeerCategory.getBeerCategory()
@@ -91,7 +92,14 @@ public interface BeerMapper {
 		detailsResponse.beerDetailsBasic(beer.getBeerDetailsBasic());
 		detailsResponse.beerDetailsStars(beer.getBeerDetailsStars());
 		detailsResponse.beerDetailsCounts(beer.getBeerDetailsCounts());
-		detailsResponse.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+
+		if (beerTags != null && beerTags.size() > 3) {
+			List<String> tempList = new ArrayList<>();
+			for (int i = 0; i < beerTags.size(); i++) {
+				tempList.add(beerTags.get(i).getBeerTagType().toString());
+				detailsResponse.beerDetailsTopTags(tempList);
+			}
+		}
 		detailsResponse.isWishlist(beerWishlist != null && beerWishlist.getWished());
 		// detailsResponse.similarBeers(beersToSimilarBeerResponse(beer.getSimilarBeers()));
 		detailsResponse.beerCategoryTypes(beer.getBeerBeerCategories().stream()
