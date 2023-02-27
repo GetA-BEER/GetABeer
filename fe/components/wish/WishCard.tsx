@@ -7,6 +7,7 @@ import {
 } from '@/utils/BeerMatcher';
 import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
+import Link from 'next/link';
 
 export default function WishCard({ wishProps, idx }: any) {
   const [isWish, setIsWish] = useState<any>(wishProps.isUserWish);
@@ -32,7 +33,9 @@ export default function WishCard({ wishProps, idx }: any) {
         } p-4 rounded-t-2xl`}
       >
         <div className="flex justify-between">
-          <div className="text-base font-semibold">{wishInfo?.korName}</div>
+          <div className="text-base font-semibold truncate">
+            {wishInfo?.korName}
+          </div>
           <WishHeart
             isLogin={isLogin}
             beerId={wishInfo?.beerId}
@@ -56,13 +59,15 @@ export default function WishCard({ wishProps, idx }: any) {
       {wishInfo?.thumbnail === undefined ? (
         <></>
       ) : (
-        <Image
-          className="pt-3 rounded-2xl m-auto"
-          alt="Beer"
-          src={`${wishInfo?.thumbnail}`}
-          width={300}
-          height={200}
-        />
+        <Link href={`/beer/${wishInfo?.beerId} `}>
+          <Image
+            className="pt-3 rounded-2xl m-auto"
+            alt="Beer"
+            src={`${wishInfo?.thumbnail}`}
+            width={300}
+            height={200}
+          />
+        </Link>
       )}
     </div>
   );
