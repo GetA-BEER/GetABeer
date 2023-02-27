@@ -42,7 +42,7 @@ export default function BeerDetailCard({ cardProps }: any) {
         <div className="w-[122px] select-none">
           {cardProps?.beerDetailsBasic.thumbnail.includes('.') ? (
             <Image
-              className="pt-3 w-full h-auto select-none -ml-8"
+              className="pt-3 w-full h-auto select-none"
               alt={cardProps?.beerDetailsBasic.korName}
               src={cardProps?.beerDetailsBasic.thumbnail}
               width={100}
@@ -53,9 +53,9 @@ export default function BeerDetailCard({ cardProps }: any) {
             <>x</>
           )}
         </div>
-        <div className="flex flex-col justify-center -ml-4">
-          <div className="flex justify-between items-center">
-            <h1 className="font-bold text-2xl">
+        <div className="flex flex-col justify-center">
+          <div className="flex items-start">
+            <h1 className="font-bold text-2xl break-keep">
               {cardProps?.beerDetailsBasic.korName}
             </h1>
             <WishHeart

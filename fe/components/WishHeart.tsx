@@ -35,7 +35,7 @@ export default function WishHeart({
     }
   };
   return (
-    <button className="text-3xl mb-1" onClick={handleWish}>
+    <button className="text-3xl mb-1 px-1" onClick={handleWish}>
       {isWish ? (
         <AiFillHeart className="text-y-brown" />
       ) : (
