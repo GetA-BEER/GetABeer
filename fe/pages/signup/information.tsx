@@ -59,7 +59,7 @@ export default function Information() {
       .then((res) => {
         // console.log(res);
         Router.push({
-          pathname: '/',
+          pathname: '/login',
         });
       })
       .catch((err) => {
@@ -126,7 +126,13 @@ export default function Information() {
               <div className="text-y-gray font-light">
                 나중에 입력하고 싶다면?
               </div>
-              <button className="flex text-y-brown">Skip</button>
+
+              <button
+                className="flex text-y-brown"
+                onClick={() => Router.push('/')}
+              >
+                Skip
+              </button>
             </div>
           </div>
         </form>

@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRecoilState } from 'recoil';
-import { accessToken } from '@/atoms/login';
-import { useCookies } from 'react-cookie';
+import { accessToken, userId } from '@/atoms/login';
 import { useEffect, useState } from 'react';
 import axios from '@/pages/api/axios';
 import Link from 'next/link';
@@ -20,8 +19,8 @@ import {
 } from 'react-icons/hi2';
 
 export default function Mypage() {
-  const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
   const [, setAccessToken] = useRecoilState(accessToken);
+  const [, setUserId] = useRecoilState(userId);
   const [userName, setUserName] = useState('');
   const [userImge, setUserImge] = useState('');
   const fetchUser = () => {
@@ -40,15 +39,17 @@ export default function Mypage() {
     axios
       .post('/api/user/logout')
       .then((res) => {
-        // console.log(res);
+        console.log(res);
+        setAccessToken('');
+        setUserId('');
+        delete axios.defaults.headers.Authorization;
+        window.location.href = '/login';
       })
       .catch((err) => {
         console.log(err);
       });
-    setAccessToken('');
-    removeCookie('refreshToken');
-    window.location.href = '/';
   };
+
   return (
     <>
       <Head>
