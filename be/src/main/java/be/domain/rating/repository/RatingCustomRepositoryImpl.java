@@ -131,7 +131,7 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 				rating.id.as("ratingId"),
 				rating.user.id.as("userId"),
 				rating.user.nickname.as("nickname"),
-				rating.user.imageUrl.as("imageUrl"),
+				rating.user.imageUrl.as("userImage"),
 				rating.content,
 				rating.star,
 				rating.likeCount,
