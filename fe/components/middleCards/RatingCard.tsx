@@ -23,7 +23,9 @@ import Tag from '../Tag';
 import { TagMatcherToKor } from '@/utils/TagMatcher';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from '@/atoms/login';
 import Swal from 'sweetalert2';
 
 export default function RatingCard(props: {
@@ -32,6 +34,15 @@ export default function RatingCard(props: {
   count: number;
 }) {
   const router = useRouter();
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
   const [isLike, setIsLike] = useState<boolean>(props.cardProps.isUserLikes);
   const [likeCount, setLikeCount] = useState<number>(props.cardProps.likeCount);
   const editRating = () => {
@@ -119,7 +130,26 @@ export default function RatingCard(props: {
         </div>
         <button
           className="flex justify-center items-center"
-          onClick={isUserLikeHandler}
+          onClick={
+            isLogin
+              ? isUserLikeHandler
+              : () => {
+                  Swal.fire({
+                    text: '로그인이 필요한 서비스 입니다.',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f1b31c',
+                    cancelButtonColor: '#A7A7A7',
+                    confirmButtonText: '로그인',
+                    cancelButtonText: '취소',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      router.push({
+                        pathname: '/login',
+                      });
+                    }
+                  });
+                }
+          }
         >
           {isLike ? <FaThumbsUp /> : <FaRegThumbsUp />}
           <span className="text-sm ml-0.5 mr-1 mt-0.5">{likeCount}</span>
