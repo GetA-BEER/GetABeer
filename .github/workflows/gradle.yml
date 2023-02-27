@@ -76,7 +76,7 @@ jobs:
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./getabeer-deploy.zip s3://$S3_BUCKET_NAME/getabeer-deploy.zip
 
-        # CodeDeploy 에 배포 명령을 내림
+        # CodeDeploy 에 배포 명령
       - name: Code Deploy
         run: >
           aws deploy create-deployment --application-name getabeer
