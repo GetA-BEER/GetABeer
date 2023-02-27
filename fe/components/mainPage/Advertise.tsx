@@ -11,46 +11,37 @@ export default function Advertise() {
       // navigation={true}
       loop={true}
       modules={[Pagination, Navigation]}
-      className="mySwiper"
+      className="mySwiper -mt-6"
     >
       <SwiperSlide className="w-full">
         <Image
-          className="w-full"
-          src="https://t1.daumcdn.net/cfile/tistory/99D743505B5482502A"
+          className="w-full bg-y-gold"
+          src={`/images/adv4.png`}
           alt="adv1"
           width={500}
           height={500}
           priority
         />
-        <div className="absolute text-white left-20 bottom-10 text-2xl">
-          여기에 Get A Beer 첫번째 광고가 들어갑니다
-        </div>
       </SwiperSlide>
       <SwiperSlide>
         <Image
           className="w-full"
-          src="https://t1.daumcdn.net/cfile/tistory/9921B8475B54825706"
+          src={`/images/adv2.png`}
           alt="adv3"
           width={500}
           height={500}
           priority
         />
-        <div className="absolute text-white left-20 bottom-10 text-2xl">
-          여기에 Get A Beer 두번째 광고가 들어갑니다
-        </div>
       </SwiperSlide>
       <SwiperSlide>
         <Image
           className="w-full"
-          src="https://t1.daumcdn.net/cfile/tistory/9959DC505B5482521B"
+          src={`/images/adv3.png`}
           alt="adv2"
           width={500}
           height={500}
           priority
         />
-        <div className="absolute text-white left-20 bottom-10 text-2xl">
-          여기에 Get A Beer 세번째 광고가 들어갑니다
-        </div>
       </SwiperSlide>
     </Swiper>
   );

@@ -1,18 +1,24 @@
 import Image from 'next/image';
 
-export default function ProfileCard(props: { nickname: string; date: string }) {
+export default function ProfileCard(props: {
+  nickname: string;
+  date: string;
+  userImage: string;
+}) {
   return (
     <div className="px-4 pt-4 pb-2 flex items-center">
-      {/* {props.src === undefined ? (
+      {props.userImage === undefined ? (
         <></>
       ) : (
         <Image
-          alt="user profile image"
-          src={props.src}
-          fill
-          className="object-cover"
+          alt="userImg"
+          src={props?.userImage}
+          width={100}
+          height={100}
+          className="w-7 h-7 mr-1"
+          priority
         />
-      )} */}
+      )}
       <div>
         <div className="text-xs">{props.nickname}</div>
         <div className="text-y-gray text-[5px] -my-1 font-light">

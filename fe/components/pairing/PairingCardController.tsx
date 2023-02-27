@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PairingCard from './PairingCard';
 import ProfileCard from './ProfileCard';
-import Image from 'next/image';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import { TimeHandler } from '@/utils/TimeHandler';
 
@@ -28,16 +27,7 @@ export default function PairingCardController(props: {
   return (
     <>
       {cardPropsList?.length === 0 ? (
-        <div className="noneContent py-44 border-none shadow-none">
-          <Image
-            className="m-auto pb-3 opacity-50"
-            src="/images/logo.png"
-            alt="logo"
-            width={40}
-            height={40}
-          />
-          등록된 페어링이 없습니다.
-        </div>
+        <></>
       ) : (
         <>
           {cardPropsList?.map((el: any, idx: number) => (
@@ -46,7 +36,11 @@ export default function PairingCardController(props: {
               className="rounded-lg bg-white text-y-black text-xs border-2 mx-2 mt-3 relative"
             >
               {/*닉네임, 날짜*/}
-              <ProfileCard nickname={el?.nickname} date={date} />
+              <ProfileCard
+                nickname={el?.nickname}
+                date={date}
+                userImage={el?.userImage}
+              />
               <span className="top-3 right-3 px-2 py-[2px] text-[8px] rounded-md bg-y-gold text-white absolute">
                 {CategoryMatcherToKor(el?.category)}
               </span>

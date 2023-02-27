@@ -12,6 +12,7 @@ import PairingThumbs from '../PairingThumbs';
 import axios from '@/pages/api/axios';
 import Swal from 'sweetalert2';
 import { userId } from '@/atoms/login';
+import { accessToken } from '@/atoms/login';
 
 export default function DetailCard({ pairingProps }: any) {
   const [curUserId] = useRecoilState(userId);
@@ -36,6 +37,15 @@ export default function DetailCard({ pairingProps }: any) {
     let randomTmp: number = Math.floor(Math.random() * 3);
     setRandomNum(randomTmp);
   }, []);
+
+  const TOKEN = useRecoilValue(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
 
   useEffect(() => {
     if (initialDate !== undefined) {
@@ -71,7 +81,11 @@ export default function DetailCard({ pairingProps }: any) {
     <>
       {/*닉네임, 날짜*/}
       <div className="flex justify-between items-center">
-        <ProfileCard nickname={pairingProps?.nickname} date={date} />
+        <ProfileCard
+          nickname={pairingProps?.nickname}
+          date={date}
+          userImage={pairingProps?.userImage}
+        />
         {pairingProps?.userId === curUserId ? (
           <div className="flex px-4">
             <div onClick={hadleEdit}>
@@ -112,6 +126,7 @@ export default function DetailCard({ pairingProps }: any) {
       {/* 코멘트수,엄지수 */}
       <div className="py-2 px-5 flex justify-end items-center text-[8px]">
         <PairingThumbs
+          isLogin={isLogin}
           pairingId={pairingProps?.pairingId}
           isLike={isLike}
           setIsLike={setIsLike}
