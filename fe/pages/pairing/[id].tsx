@@ -74,7 +74,7 @@ export default function PairingDetail() {
       </Head>
       <main className="m-auto h-screen max-w-4xl">
         <div className="text-xl mt-4 mb-3 text-center font-semibold">
-          페어링
+          {pairingProps?.korName}
         </div>
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
           <DetailCard pairingProps={pairingProps} />

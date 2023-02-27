@@ -16,6 +16,7 @@ export default function BeerCategoryBtn() {
     '무알콜',
   ];
   const router = useRouter();
+
   return (
     <div className="my-4">
       <div className="mx-3 mt-6 mb-2 font-bold">

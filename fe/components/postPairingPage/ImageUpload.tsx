@@ -16,7 +16,6 @@ export default function ImageUpload({ imageData, setImageData }: any) {
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files !== null) {
       const imageFile = e.target.files[0];
-      // console.log('imageFile', imageFile);
       const options = {
         //옵션 설정 필요
         maxSizeMB: 4,
@@ -29,12 +28,8 @@ export default function ImageUpload({ imageData, setImageData }: any) {
         setImageData([...imageData, compressedFile]);
         let tmpUrl = URL.createObjectURL(compressedFile);
         setPreImg([...preImg, tmpUrl]);
-        // console.log(
-        //   `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
-        // );
-        // await console.log('compressedFile', imageData);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     }
   }

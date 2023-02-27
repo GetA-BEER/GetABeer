@@ -90,14 +90,19 @@ export default function PairingCard(props: { pairingCardProps: any }) {
           ) : (
             <>
               <div className="h-24 flex bg-auto overflow-hidden border rounded-lg">
-                <Image
-                  src={props?.pairingCardProps?.thumbnail}
-                  className="m-auto w-full select-none"
-                  alt="star"
-                  width={180}
-                  height={200}
-                  priority
-                />
+                {props?.pairingCardProps?.thumbnail === '' ||
+                props?.pairingCardProps?.thumbnail === null ? (
+                  <div>사진 준비중</div>
+                ) : (
+                  <Image
+                    src={props?.pairingCardProps?.thumbnail}
+                    className="m-auto w-full select-none"
+                    alt="star"
+                    width={180}
+                    height={200}
+                    priority
+                  />
+                )}
               </div>
               <div className="col-span-2 h-24 overflow-hidden w-full leading-6 relative">
                 {props?.pairingCardProps?.content === undefined ? (

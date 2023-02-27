@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { FiCamera } from 'react-icons/fi';
 import { BsImages } from 'react-icons/bs';
 import { AiFillCamera } from 'react-icons/ai';
-import axios from '@/pages/api/axios';
 import imageCompression from 'browser-image-compression';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { searchingImage } from '@/atoms/searchingImage';
+import axios from 'axios';
 
 export default function CameraModal() {
   interface FileData {
@@ -19,7 +19,6 @@ export default function CameraModal() {
 
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const [uploadImg, setUploadImg] = useState<FileData | null>(null);
   const [style, setStyle] = useState('pc');
   const [, setSearchResultList] = useRecoilState(searchingImage);
 
@@ -27,13 +26,13 @@ export default function CameraModal() {
     if (e.target.files !== null) {
       const imageFile = e.target.files[0];
       const options = {
+        //옵션 설정 필요
         maxSizeMB: 4,
         maxWidthOrHeight: 1920,
         useWebWorker: true,
       };
       try {
         const compressedFile = await imageCompression(imageFile, options);
-        setUploadImg(compressedFile);
         const config = {
           headers: {
             'content-type': 'multipart/form-data',
@@ -42,7 +41,6 @@ export default function CameraModal() {
         };
         const formData = new FormData();
         formData.append('image', compressedFile);
-        console.log(formData.get('image'));
         axios
           .post(`/api/search/image`, formData, config)
           .then((res) => {
@@ -70,7 +68,6 @@ export default function CameraModal() {
   }, []);
   const onCameraClick = () => {
     setShowModal(true);
-    setUploadImg(null);
   };
 
   const windowResize = () => {

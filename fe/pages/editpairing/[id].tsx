@@ -22,9 +22,7 @@ export default function EditPairing() {
   const [imageData, setImageData] = useState([]);
   const [url, setUrl] = useState<any>([]);
   const [types, setTypes] = useState<any>([]);
-
   const [finalData, setFinalData] = useState<any>('');
-  const [TOKEN, setTOKEN] = useState();
 
   useEffect(() => {
     if (pairingId !== undefined) {
@@ -55,14 +53,6 @@ export default function EditPairing() {
     }
   }, [pairingId, types, url]);
 
-  useEffect(() => {
-    const localInfo = window.localStorage.getItem('recoil-persist');
-    if (localInfo !== null) {
-      const tmpData = JSON.parse(localInfo);
-      setTOKEN(tmpData.accessToken);
-    }
-  }, [TOKEN]);
-
   // Vaild 로직
   const [isValid, setIsValid] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
@@ -92,7 +82,6 @@ export default function EditPairing() {
       content: content,
       category: category,
     };
-    console.log(jsonData);
     const formData = new FormData();
     for (const file of imageData) {
       formData.append('files', file);
@@ -101,6 +90,8 @@ export default function EditPairing() {
       'patch',
       new Blob([JSON.stringify(jsonData)], { type: 'application/json' })
     );
+    console.log(jsonData);
+    console.log(formData.get('patch'));
     setFinalData(formData);
   };
   // Submit 과 formData 변경 감지 후 로직
@@ -108,14 +99,13 @@ export default function EditPairing() {
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
-        authorization: TOKEN,
       },
       withCredentials: true,
     };
     if (finalData !== '') {
       // && !isSubmit
       setIsSubmit(true);
-      console.log('finalData', finalData.get('patch'));
+      // console.log('finalData', finalData.get('patch'));
       axios
         .patch(`/api/pairings/${pairingId}`, finalData, config)
         .then((response) => {
@@ -123,7 +113,7 @@ export default function EditPairing() {
         })
         .catch((error) => console.log(error));
     }
-  }, [finalData, router, isSubmit, TOKEN, beerInfo, pairingId]);
+  }, [finalData, router, isSubmit, beerInfo, pairingId]);
 
   return (
     <>
