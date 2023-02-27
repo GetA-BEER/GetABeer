@@ -27,6 +27,10 @@ jobs:
       - name: Add permission
         run: chmod +x gradlew
         working-directory: ./be/
+        
+      - name : Add appspec permission
+        run: chmod 755 appspec.yml
+        working-directory: ./be/
 
       - name: create-json
         id: create-json
