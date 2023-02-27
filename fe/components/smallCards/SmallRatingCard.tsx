@@ -102,8 +102,14 @@ export default function SmallRatingCard({ ratingProps }: any) {
             <span className="w-[70%] text-end truncate pr-[2px]">
               {RatingList?.nickname}
             </span>
-
-            <BiUser className="bg-y-brown text-white rounded-full w-4 h-4" />
+            <Image
+              src={RatingList?.userImage}
+              alt="userImg"
+              width={100}
+              height={100}
+              className="w-4 h-4"
+              priority
+            />
           </span>
         </div>
         {/* 태그, 설명 */}

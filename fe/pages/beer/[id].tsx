@@ -39,7 +39,7 @@ export default function Beer() {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/43/beers/${curRoute}`)
+        .get(`/api/beers/${curRoute}`)
         .then((response) => {
           setBeerInfo(response.data);
           setCurBeer(response.data);
@@ -52,7 +52,7 @@ export default function Beer() {
     // 코멘트 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/43/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
+        .get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
         .then((response) => setRatingInfo(response.data))
         .catch((error) => console.log(error));
     }
@@ -62,10 +62,12 @@ export default function Beer() {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/43/pairings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
+        .get(
+          `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`
+        )
         .then((response) => {
           setPairingInfo(response.data);
-          // console.log('페어링 페이지 조회', response.data);
+          console.log(response.data);
         })
         .catch((error) => console.log(error));
     }
@@ -75,7 +77,7 @@ export default function Beer() {
     // 비슷한 맥주 조회
     if (curRoute !== undefined) {
       axios
-        .get(`/43/beers/${curRoute}/similar`)
+        .get(`/api/beers/${curRoute}/similar`)
         .then((response) => {
           setSimilarBeer(response.data);
         })

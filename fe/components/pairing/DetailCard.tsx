@@ -1,4 +1,3 @@
-import { FiThumbsUp } from 'react-icons/fi';
 import { MdModeEdit } from 'react-icons/md';
 import { HiTrash } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';
@@ -78,7 +77,12 @@ export default function DetailCard({ pairingProps }: any) {
     <>
       {/*닉네임, 날짜*/}
       <div className="flex justify-between items-center">
-        <ProfileCard nickname={pairingProps?.nickname} date={date} />
+        <ProfileCard
+          nickname={pairingProps?.nickname}
+          date={date}
+          src={pairingProps?.userImage}
+        />
+
         <div className="flex px-4">
           <div onClick={hadleEdit}>
             <MdModeEdit className="text-y-brown inline" /> 수정

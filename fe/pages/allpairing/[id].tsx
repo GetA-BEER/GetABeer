@@ -25,13 +25,11 @@ export default function AllPairing() {
   useEffect(() => {
     if (curRoute !== undefined) {
       let tmpCategory = category.toLowerCase();
-      // `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
       axios
         .get(
-          `/api/pairings/page/${sort}?beerId=${curRoute}&page=${page}&size=5`
+          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
         )
         .then((response) => {
-          // console.log(response);
           setPairingCardProps(response.data);
           setTotalPages(response.data.pageInfo.totalPages);
           setTitle(response.data.pageInfo.beerKorName);

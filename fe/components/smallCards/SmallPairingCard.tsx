@@ -44,13 +44,13 @@ export default function SmallPairingCard({ pairingProps }: any) {
 
   // 더보기 길이 계산
   useEffect(() => {
-    if (pairingProps !== undefined) {
+    if (pairingList !== undefined) {
       let parent = document.getElementById('pairingParents');
       let imageChild = document.getElementById(
-        `pairingImage${pairingProps.pairingId}`
+        `pairingImage${pairingList.pairingId}`
       );
       let deschild = document.getElementById(
-        `pairingDescribe${pairingProps.pairingId}`
+        `pairingDescribe${pairingList.pairingId}`
       );
 
       if (parent !== null && deschild !== null && imageChild !== null) {
@@ -61,7 +61,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
           setCollisions(true);
       }
     }
-  }, [collisions, pairingProps]);
+  }, [collisions, pairingList]);
 
   return (
     <>
@@ -76,7 +76,14 @@ export default function SmallPairingCard({ pairingProps }: any) {
               {pairingList?.nickname}
             </span>
 
-            <BiUser className="bg-y-brown text-white rounded-full w-4 h-4" />
+            <Image
+              src={pairingList?.userImage}
+              alt="userImg"
+              width={100}
+              height={100}
+              className="w-4 h-4"
+              priority
+            />
           </span>
         </div>
         {/* 사진,설명 */}
