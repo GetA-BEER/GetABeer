@@ -4,7 +4,6 @@ import { IoChevronBack } from 'react-icons/io5';
 import { useRecoilState } from 'recoil';
 import { accessToken, userNickname } from '@/atoms/login';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -40,12 +39,16 @@ export default function Wish() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
 
-      <main className="m-auto h-screen mx-4">
-        <Link href={'/mypage'}>
-          <button className="ml-4">
-            <IoChevronBack className="w-6 h-6" />
-          </button>
-        </Link>
+      <main className="m-auto h-screen max-w-4xl">
+        <button
+          type="button"
+          onClick={() => {
+            router.back();
+          }}
+          className="ml-4 absolute"
+        >
+          <IoChevronBack className="w-6 h-6" />
+        </button>
         <div className=" max-w-4xl m-auto">
           <div className="text-xl mb-10 text-center font-semibold break-keep">
             <span className="text-y-brown">{username}님</span>의 위시 맥주

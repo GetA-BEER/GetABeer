@@ -3,6 +3,7 @@ import DetailCard from '@/components/pairing/DetailCard';
 import SpeechBalloon from '@/components/SpeechBalloon';
 import CommentInput from '@/components/inputs/CommentInput';
 import axios from '@/pages/api/axios';
+import { IoChevronBack } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PairingComment } from '@/components/SpeechBalloon';
@@ -90,10 +91,20 @@ export default function PairingDetail() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-4xl">
+      <main className="m-auto h-screen max-w-4xl relative">
+        <button
+          type="button"
+          onClick={() => {
+            router.back();
+          }}
+          className="ml-4 absolute"
+        >
+          <IoChevronBack className="w-6 h-6" />
+        </button>
         <div className="text-xl mt-4 mb-3 text-center font-semibold">
           {pairingProps?.korName}
         </div>
+
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
           <DetailCard
             pairingProps={pairingProps}

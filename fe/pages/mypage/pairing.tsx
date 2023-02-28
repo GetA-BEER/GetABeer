@@ -4,7 +4,6 @@ import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
-import Link from 'next/link';
 import Pagenation from '@/components/Pagenation';
 import { useRouter } from 'next/router';
 import { accessToken, userNickname } from '@/atoms/login';
@@ -36,12 +35,16 @@ export default function Pairing() {
 
   return (
     <PageContainer>
-      <main className="m-auto h-screen max-w-4xl">
-        <Link href={'/mypage'}>
-          <button className="ml-4">
-            <IoChevronBack className="w-6 h-6" />
-          </button>
-        </Link>
+      <main className="m-auto h-screen max-w-4xl relative">
+        <button
+          type="button"
+          onClick={() => {
+            router.back();
+          }}
+          className="ml-4 absolute"
+        >
+          <IoChevronBack className="w-6 h-6" />
+        </button>
         <div className="mb-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
           <span className="text-y-brown">{username}님</span>의 페어링
         </div>
