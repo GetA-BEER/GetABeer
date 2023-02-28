@@ -13,7 +13,7 @@ public interface BeerWishlistService {
 
 	BeerWishlist getIsWishlist(Beer beer);
 
-	Page<BeerWishlist> getUserWishlist(Integer page);
+	Page<BeerWishlist> getUserWishlist(Integer page, Integer size);
 
 	void wishStatePattern(Beer beer, User user);
 

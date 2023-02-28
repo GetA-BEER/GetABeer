@@ -1,6 +1,5 @@
 package be.domain.beerwishlist.mapper;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
@@ -15,7 +14,7 @@ import be.domain.beerwishlist.entity.BeerWishlist;
 @Mapper(componentModel = "spring")
 public interface BeerWishlistMapper {
 
-	default Page<BeerWishlistDto.UserWishlist> beersAndWishlistToResponse(List<BeerWishlist> beerWishlists) {
+	default Page<BeerWishlistDto.UserWishlist> beersAndWishlistToResponse(Page<BeerWishlist> beerWishlists) {
 
 		return new PageImpl<>(beerWishlists.stream()
 			.map(beerWishlist -> BeerWishlistDto.UserWishlist.builder()
@@ -33,6 +32,6 @@ public interface BeerWishlistMapper {
 					.ibu(beerWishlist.getBeer().getBeerDetailsBasic().getIbu())
 					.build())
 				.isUserWish(beerWishlist.getWished())
-				.build()).collect(Collectors.toList()));
+				.build()).collect(Collectors.toList()), beerWishlists.getPageable(), beerWishlists.getTotalElements());
 	}
 }

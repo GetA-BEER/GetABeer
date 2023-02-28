@@ -18,7 +18,7 @@ public interface RatingMapper {
 
 	Rating ratingPatchDtoToRating(RatingRequestDto.Patch patch);
 
-	default Page<RatingResponseDto.MyPageResponse> ratingToRatingResponse(List<Rating> ratings,
+	default Page<RatingResponseDto.MyPageResponse> ratingToRatingResponse(Page<Rating> ratings,
 		RatingLikeRepository ratingLikeRepository) {
 		return new PageImpl<>(ratings.stream()
 			.map(rating ->
@@ -36,6 +36,6 @@ public interface RatingMapper {
 					ratingLikeRepository.findRatingLikeUser(rating.getId(), rating.getUser().getId()) != 0,
 					rating.getCreatedAt(),
 					rating.getModifiedAt())
-			).collect(Collectors.toList()));
+			).collect(Collectors.toList()), ratings.getPageable(), ratings.getTotalElements());
 	}
 }

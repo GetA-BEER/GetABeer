@@ -33,7 +33,7 @@ public interface PairingCommentMapper {
 			.build();
 	}
 
-	default Page<PairingCommentDto.Response> pairingCommentsToPageResponse(List<PairingComment> pairingComments) {
+	default Page<PairingCommentDto.Response> pairingCommentsToPageResponse(Page<PairingComment> pairingComments) {
 		return new PageImpl<>(pairingComments.stream()
 			.map(pairingComment ->
 				new PairingCommentDto.Response(
@@ -45,6 +45,6 @@ public interface PairingCommentMapper {
 					pairingComment.getContent(),
 					pairingComment.getCreatedAt(),
 					pairingComment.getModifiedAt()
-				)).collect(Collectors.toList()));
+				)).collect(Collectors.toList()), pairingComments.getPageable(), pairingComments.getTotalElements());
 	}
 }

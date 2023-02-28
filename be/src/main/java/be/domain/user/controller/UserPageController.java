@@ -55,7 +55,7 @@ public class UserPageController {
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<Rating> ratings = userPageService.getUserRating(page);
 		Page<RatingResponseDto.MyPageResponse> response = ratingMapper.ratingToRatingResponse(
-			ratings.getContent(), ratingLikeRepository);
+			ratings, ratingLikeRepository);
 
 		return ResponseEntity.ok(
 			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), response.getContent(), response));
@@ -67,7 +67,7 @@ public class UserPageController {
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<PairingComment> pairingComments = userPageService.getUserPairingComment(page);
 		Page<PairingCommentDto.Response> responses = pairingCommentMapper.pairingCommentsToPageResponse(
-			pairingComments.getContent());
+			pairingComments);
 
 		return ResponseEntity.ok(
 			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), responses.getContent(), responses));
@@ -79,7 +79,7 @@ public class UserPageController {
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<RatingComment> ratingComments = userPageService.getUserRatingComment(page);
 		Page<RatingCommentDto.Response> responses = ratingCommentMapper.ratingCommentsToResponsePage(
-			ratingComments.getContent());
+			ratingComments);
 
 		return ResponseEntity.ok(
 			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(),responses.getContent(), responses));
@@ -90,7 +90,7 @@ public class UserPageController {
 	public ResponseEntity<MyPageMultiResponseDto<PairingResponseDto.Total>> getMyPairing(
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		Page<Pairing> pairings = userPageService.getUserPairing(page);
-		Page<PairingResponseDto.Total> response = pairingMapper.pairingToPairingResponse(pairings.getContent(),
+		Page<PairingResponseDto.Total> response = pairingMapper.pairingToPairingResponse(pairings,
 			pairingLikeRepository);
 
 		return ResponseEntity.ok(
