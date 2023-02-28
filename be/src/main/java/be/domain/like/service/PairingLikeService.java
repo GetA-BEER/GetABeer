@@ -12,8 +12,6 @@ import be.domain.pairing.repository.PairingRepository;
 import be.domain.pairing.service.PairingService;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
-import be.global.exception.BusinessLogicException;
-import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
