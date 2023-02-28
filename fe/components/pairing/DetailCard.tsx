@@ -37,7 +37,7 @@ export default function DetailCard({ pairingProps, count }: any) {
     let randomTmp: number = Math.floor(Math.random() * 3);
     setRandomNum(randomTmp);
   }, []);
-  console.log(pairingProps);
+
   const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {

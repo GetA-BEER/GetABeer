@@ -9,6 +9,10 @@ import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import axios from '@/pages/api/axios';
 import swal from 'sweetalert2';
+import { useRecoilState } from 'recoil';
+import { accessToken, userId } from '@/atoms/login';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 interface IFormValues {
   userBeerTags: Array<string>;
@@ -35,10 +39,13 @@ export default function Information() {
     },
     mode: 'onChange',
   });
-
-  const onValid = (data: any) => {
-    // 기본으로 data 가져오기
-    // console.log(data);
+  const [, setAccessToken] = useRecoilState(accessToken);
+  const [, setUserId] = useRecoilState(userId);
+  const router = useRouter();
+  const accesstoken = router.query.access_token;
+  const refreshtoken = router.query.refreshtoken;
+  const userid = Number(router.query.user_id);
+  const onValid = () => {
     const { gender, age, userBeerCategories, userBeerTags } = getValues();
     signUpClick(gender, age, userBeerCategories, userBeerTags);
   };
@@ -55,37 +62,77 @@ export default function Information() {
       userBeerCategories: userBeerCategories,
       userBeerTags: userBeerTags,
     };
+
     axios
-      .post(`/api/register/user/${Router.query.userId}`, reqBody)
+      .post(`/api/register/user/${Router.query.user_id}`, reqBody)
       .then((res) => {
-        // console.log(res);
-        swal.fire({
-          title: '회원가입 완료!',
-          text: '로그인 후 이용하세요',
-          confirmButtonColor: '#F1B31C',
-          confirmButtonText: '확인',
-        });
-        Router.push({
-          pathname: '/login',
-        });
+        console.log(res);
+        if (router.query.access_token) {
+          axios.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${accesstoken}`;
+          axios.defaults.headers.common.Cookies = refreshtoken;
+          setAccessToken(accesstoken);
+          setUserId(userid);
+          swal.fire({
+            title: 'Get A Beer',
+            text: '로그인이 완료되었습니다',
+            confirmButtonColor: '#F1B31C',
+            confirmButtonText: '확인',
+          });
+          Router.push({
+            pathname: '/',
+          });
+        } else {
+          swal.fire({
+            title: '회원가입 완료!',
+            text: '로그인 후 이용하세요',
+            confirmButtonColor: '#F1B31C',
+            confirmButtonText: '확인',
+          });
+          Router.push({
+            pathname: '/login',
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
   const skipClick = () => {
-    swal
-      .fire({
-        title: '회원가입 완료!',
-        text: '로그인 후 이용하세요',
-        confirmButtonColor: '#F1B31C',
-        confirmButtonText: '확인',
-      })
-      .then((result) => {
-        if (result.value) {
-          Router.push('/');
-        }
-      });
+    if (router.query.access_token) {
+      swal
+        .fire({
+          title: 'Get A Beer',
+          text: '로그인이 완료되었습니다',
+          confirmButtonColor: '#F1B31C',
+          confirmButtonText: '확인',
+        })
+        .then((result) => {
+          axios.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${accesstoken}`;
+          axios.defaults.headers.common.Cookies = refreshtoken;
+          setAccessToken(accesstoken);
+          setUserId(userid);
+          if (result.value) {
+            Router.push('/');
+          }
+        });
+    } else {
+      swal
+        .fire({
+          title: '회원가입 완료!',
+          text: '로그인 후 이용하세요',
+          confirmButtonColor: '#F1B31C',
+          confirmButtonText: '확인',
+        })
+        .then((result) => {
+          if (result.value) {
+            Router.push('/login');
+          }
+        });
+    }
   };
   return (
     <>
@@ -96,13 +143,13 @@ export default function Information() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
-        <button className="m-4">
+        <button className="m-4" onClick={() => router.back()}>
           <IoChevronBack className="w-6 h-6" />
         </button>
         <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           회원정보 입력
         </div>
-        <div className="m-auto max-w-md mb-10 p-1">
+        <div className="m-auto max-w-md mb-10 pb-20">
           <form onSubmit={handleSubmit(onValid)}>
             <div className="border divide-y divide-gray-200 rounded-xl">
               <GenderBtn register={register} />

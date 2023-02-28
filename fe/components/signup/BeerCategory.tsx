@@ -30,11 +30,11 @@ export default function BeerCategory({ rules, register }: InputProps) {
       text: '흑맥주',
     },
     {
-      type: 'PILSENER',
+      type: 'PILSNER',
       text: '필스너',
     },
     {
-      type: 'FRUIT_BEER',
+      type: 'FRUIT',
       text: '과일',
     },
     {

@@ -2,6 +2,9 @@
 const nextConfig = {
   images: {
     domains: [
+      'phinf.pstatic.net',
+      'lh3.googleusercontent.com',
+      'k.kakaocdn.net',
       'worldbeermarket.kr',
       't1.daumcdn.net',
       'assabeer.com',
