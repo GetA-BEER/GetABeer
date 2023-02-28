@@ -10,11 +10,7 @@ import { PairingComment } from '@/components/SpeechBalloon';
 import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
-<<<<<<< HEAD
 import { PairingCardProps } from '@/components/beerPage/BeerDeclare';
-=======
-import Link from 'next/link';
->>>>>>> 41a2cffc815b784473983e7a8d0473b81865b9ef
 
 export default function PairingDetail() {
   let router = useRouter();
@@ -95,7 +91,6 @@ export default function PairingDetail() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-<<<<<<< HEAD
       <main className="m-auto h-screen max-w-4xl relative">
         <button
           type="button"
@@ -110,14 +105,6 @@ export default function PairingDetail() {
           {pairingProps?.korName}
         </div>
 
-=======
-      <main className="m-auto h-screen max-w-4xl">
-        <Link href={`/beer/${pairingProps?.beerId}`}>
-          <div className="text-xl lg:text-2xl mt-4 mb-3 text-center font-semibold">
-            {pairingProps?.korName}
-          </div>
-        </Link>
->>>>>>> 41a2cffc815b784473983e7a8d0473b81865b9ef
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
           <DetailCard
             pairingProps={pairingProps}
