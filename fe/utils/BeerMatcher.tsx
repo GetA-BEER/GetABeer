@@ -8,9 +8,9 @@ export const BeerCategoryMatcherToKor = (str: string) => {
       return '밀맥주';
     case 'DUNKEL':
       return '흑맥주';
-    case 'PILSENER':
+    case 'PILSNER':
       return '필스너';
-    case 'FRUIT_BEER':
+    case 'FRUITzzzzzzzzzz':
       return '과일';
     case 'NON_ALCOHOLIC':
       return '무알콜';
@@ -91,7 +91,7 @@ export const BeerCategoryMatcher = (str: string[]) => {
     case ['필스너']:
       return 'PILSENER';
     case ['과일']:
-      return 'FRUIT_BEER';
+      return 'FRUIT';
     case ['무알콜']:
       return 'NON_ALCOHOLIC';
     case ['기타']:

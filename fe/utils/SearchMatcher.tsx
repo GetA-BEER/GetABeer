@@ -9,9 +9,9 @@ export const SearchMatcherToEng = (str: string) => {
     case '@흑맥주':
       return '@DUNKEL';
     case '@필스너':
-      return '@PILSENER';
+      return '@PILSNER';
     case '@과일':
-      return '@FRUIT_BEER';
+      return '@FRUIT';
     case '@무알콜':
       return '@NON_ALCOHOLIC';
     case '@기타':
@@ -79,7 +79,7 @@ export const SearchMatcherToKor = (str: string | string[] | undefined) => {
       return '@흑맥주';
     case '@PILSENER':
       return '@필스너';
-    case '@FRUIT_BEER':
+    case '@FRUIT':
       return '@과일';
     case '@NON_ALCOHOLIC':
       return '@무알콜';
