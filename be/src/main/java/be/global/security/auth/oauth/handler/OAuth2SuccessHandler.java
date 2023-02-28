@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
 import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.oauth.RedirectController;
 import be.global.security.auth.session.user.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,24 +63,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		redirect(request, response, user.getId(), user.getEmail(), user.getProvider(), user.getRoles());
 		// getToken(request, response, user.getEmail(), user.getProvider(), user.getRoles());
 	}
-
-	// private void getToken(HttpServletRequest request, HttpServletResponse response, String email, String provider,
-	// 	List<String> authorities) throws
-	// 	IOException {
-	// 	String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
-	// 	String refreshToken = jwtTokenizer.delegateRefreshToken(email);
-	//
-	// 	httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
-	//
-	// 	if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
-	// 		redisTemplate.delete(email);
-	// 	}
-	// 	redisTemplate.opsForValue()
-	// 		.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
-	//
-	// 	String uri = createRedirect().toString();
-	// 	getRedirectStrategy().sendRedirect(request, response, uri);
-	// }
 
 	public void redirect(HttpServletRequest request, HttpServletResponse response, Long userId, String email, String provider,
 		List<String> authorities) throws IOException {
@@ -122,30 +105,16 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		return UriComponentsBuilder
 			.newInstance()
-			.scheme("https")
-			// .scheme("http")
-			.host("www.getabeer.co.kr")
-			// .host("localhost")
-			// .port(3000)
-			.path("/signup/information")
-			// .path("/api/token")
+			// .scheme("https")
+			.scheme("http")
+			// .host("www.getabeer.co.kr")
+			.host("localhost")
+			.port(8080)
+			// .path("/signup/information")
+			.path("/api/token")
 			.queryParams(queryParams)
 			.build()
 			.toUri();
 	}
-
-	// private URI createRedirect() {
-	//
-	// 	return UriComponentsBuilder
-	// 		.newInstance()
-	// 		// .scheme("https")
-	// 		// .host("server.getabeer.co.kr")
-	// 		.scheme("http")
-	// 		.host("localhost")
-	// 		.port(8080)
-	// 		.path("/api/session")
-	// 		.build()
-	// 		.toUri();
-	// }
 
 }

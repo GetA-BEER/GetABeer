@@ -27,7 +27,6 @@ import be.global.security.auth.handler.UserAuthenticationSuccessHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
 import be.global.security.auth.oauth.handler.OAuth2SuccessHandler;
 import be.global.security.auth.oauth.service.CustomOAuth2UserService;
-import be.global.security.auth.session.SecuritySessionExpiredStrategy;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 
