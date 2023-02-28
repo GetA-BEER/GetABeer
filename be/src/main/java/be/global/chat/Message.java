@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message implements Serializable {
-	private String author;
+	private String sender;
 	private String content;
 	private String timestamp;
 }

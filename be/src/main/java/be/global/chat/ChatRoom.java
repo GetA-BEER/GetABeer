@@ -1,4 +1,4 @@
-package be.domain.chatting.entity;
+package be.global.chat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ import lombok.Getter;
 public class ChatRoom {
 
 	@Id
-	@Column(name = "chat_room_id")
+	@Column(name = "room_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

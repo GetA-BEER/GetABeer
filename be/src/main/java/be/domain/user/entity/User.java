@@ -22,7 +22,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
-import be.domain.chatting.entity.ChatRoom;
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.like.entity.PairingLike;
@@ -31,7 +30,6 @@ import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
-import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.UserStatus;
 import lombok.AccessLevel;
