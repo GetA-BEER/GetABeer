@@ -9,6 +9,7 @@ import { PairingComment } from '@/components/SpeechBalloon';
 import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
+import Link from 'next/link';
 
 export default function PairingDetail() {
   let router = useRouter();
@@ -90,9 +91,11 @@ export default function PairingDetail() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
-        <div className="text-xl mt-4 mb-3 text-center font-semibold">
-          {pairingProps?.korName}
-        </div>
+        <Link href={`/beer/${pairingProps?.beerId}`}>
+          <div className="text-xl lg:text-2xl mt-4 mb-3 text-center font-semibold">
+            {pairingProps?.korName}
+          </div>
+        </Link>
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
           <DetailCard
             pairingProps={pairingProps}
