@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.chatting.entity.ChatRoom;
 import be.domain.comment.entity.PairingComment;
@@ -39,6 +42,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@DynamicInsert
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,6 +58,12 @@ public class User implements Serializable {
 
 	@Column(nullable = false)
 	private String nickname;
+
+	@ColumnDefault("0")
+	private Long followerCount;
+
+	@ColumnDefault("0")
+	private Long followingCount;
 
 	@Column(nullable = false)
 	private String password;
@@ -261,5 +271,25 @@ public class User implements Serializable {
 
 	public void putImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public void addFollower() {
+		this.followerCount++;
+	}
+
+	public void removeFollower() {
+		if (this.followerCount > 0) {
+			this.followerCount--;
+		}
+	}
+
+	public void addFollowing() {
+		this.followingCount++;
+	}
+
+	public void removeFollowing() {
+		if (this.followingCount > 0) {
+			this.followingCount--;
+		}
 	}
 }
