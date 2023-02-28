@@ -91,7 +91,7 @@ export default function Rating() {
         />
         <Link href={`/beer/${cardProps?.beerId}`}>
           <div className="flex justify-center mb-4 mt-8">
-            <h1 className="text-xl lg:text-2xl font-bold">
+            <h1 className="text-xl lg:text-2xl font-semibold">
               {cardProps?.korName}
             </h1>
           </div>
