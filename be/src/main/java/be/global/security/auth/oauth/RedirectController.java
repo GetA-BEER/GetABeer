@@ -19,7 +19,7 @@ public class RedirectController {
 		@RequestParam("refresh_token") String rft) throws URISyntaxException {
 
 		URI redirect = new URI(
-			"http://localhost:3000/signup/information?"
+			"https://www.getabeer.co.kr/signup/information?"
 				+ "user_id=" + userId
 				+ "&access_token=" + act
 				+ "&refresh_token=" + rft);
