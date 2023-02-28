@@ -2,6 +2,7 @@
 const nextConfig = {
   images: {
     domains: [
+      'k.kakaocdn.net',
       'worldbeermarket.kr',
       't1.daumcdn.net',
       'assabeer.com',

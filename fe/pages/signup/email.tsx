@@ -25,7 +25,7 @@ export default function Email() {
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm<IFormValues>();
+  } = useForm<IFormValues>({ mode: 'onChange' });
 
   const [showModal, setShowModal] = useState(false);
   const [timeMessage, setTimeMessage] = useState('');
@@ -54,6 +54,7 @@ export default function Email() {
           confirmButtonColor: '#F1B31C',
           confirmButtonText: '확인',
         });
+        setEmailMessage('');
         setShowModal(true);
       })
       .catch((err) => {
@@ -75,6 +76,7 @@ export default function Email() {
           pathname: '/signup',
           query: { email: res.data },
         });
+        setTimeMessage('');
       })
       .catch((err) => {
         // console.log(err);

@@ -169,7 +169,7 @@ export default function MyEdit() {
             </div>
           </div>
 
-          <div className="m-auto px-1 pb-5 max-w-md mb-10">
+          <div className="m-auto px-1 pb-20 max-w-md mb-10">
             <div className=" border divide-y divide-gray-200 rounded-xl">
               <div>
                 <EditName register={register} />
