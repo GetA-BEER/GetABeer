@@ -15,17 +15,13 @@ import { accessToken } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 
-<<<<<<< HEAD
-export default function BeerDetailCard({ cardProps }: any) {
-  const router = useRouter();
-  const curRouter = router.query.id;
-=======
 export default function BeerDetailCard({
   cardProps,
   hasRating,
   myRatingId,
 }: any) {
->>>>>>> 41a2cffc815b784473983e7a8d0473b81865b9ef
+  const router = useRouter();
+  const curRouter = router.query.id;
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
   useEffect(() => {
     setIsWish(cardProps.isWishlist);
