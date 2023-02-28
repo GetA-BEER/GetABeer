@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
+import be.domain.chatting.entity.ChatRoom;
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.like.entity.PairingLike;
@@ -184,10 +185,18 @@ public class User implements Serializable {
 		}
 	}
 
-	//    /* ChatRoom 1:1 양방향 매핑 */
-	//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-	//    private ChatRoom chatRoom;
+	/* ChatRoom 일대다 양방향 매핑 : 어드민? */
+	// @OneToOne (mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+	// private ChatRoom chatRoom;
 	//
+	// public void bndChatRoom(ChatRoom chatRoom) {
+	// 	this.chatRoom = chatRoom;
+	//
+	// 	if (chatRoom.getUser() != this) {
+	// 		chatRoom.bndUser(this);
+	// 	}
+	// }
+
 	//    /* ChatMessage 1:N 양방향 매핑 */
 	//    @OneToMany(mappedBy = "user")
 	//    private List<ChatMessage> chatMessages;
