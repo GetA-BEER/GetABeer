@@ -12,8 +12,6 @@ import be.domain.rating.repository.RatingRepository;
 import be.domain.rating.service.RatingService;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
-import be.global.exception.BusinessLogicException;
-import be.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
