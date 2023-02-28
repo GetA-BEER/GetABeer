@@ -129,11 +129,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
       goToLogin();
     }
   };
-<<<<<<< HEAD
 
-=======
-  // console.log(RatingList);
->>>>>>> 41a2cffc815b784473983e7a8d0473b81865b9ef
   return (
     <>
       <div className="w-full rounded-lg ml-2 mb-2 bg-white text-y-black drop-shadow-lg text-[8px] border">
