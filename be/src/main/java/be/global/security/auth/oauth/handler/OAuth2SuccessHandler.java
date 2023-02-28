@@ -60,23 +60,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		User user = userRepository.findByNickname(nickname);
 
-		redirect(request, response, user.getId(), user.getEmail(), user.getProvider(), user.getRoles());
+		redirect(request, response, user);
 		// getToken(request, response, user.getEmail(), user.getProvider(), user.getRoles());
 	}
 
-	public void redirect(HttpServletRequest request, HttpServletResponse response, Long userId, String email, String provider,
-		List<String> authorities) throws IOException {
+	public void redirect(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
 
-		String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
-		String refreshToken = jwtTokenizer.delegateRefreshToken(email);
+		String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(), user.getProvider());
+		String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
 
 		httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
 
-		if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
-			redisTemplate.delete(email);
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
+			redisTemplate.delete(user.getEmail());
 		}
 		redisTemplate.opsForValue()
-			.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+			.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
 		// log.info("-----------------------------------------------------------");
 		// log.info("Get SessionUser Token = " + user.getAct());
@@ -93,23 +92,40 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		response.setHeader("Set-Cookie", cookie.toString());
 		response.setHeader("Authorization", "Bearer " + accessToken);
 
-		String uri = createURI(accessToken, refreshToken, userId).toString();
+		String uri = user.getAge() == null ? createFirstURI(user.getId()).toString() : createURI(accessToken, refreshToken).toString();
 		getRedirectStrategy().sendRedirect(request, response, uri);
 	}
 
-	private URI createURI(String act, String rft, Long userId) {
+	private URI createFirstURI(Long userId) {
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 		queryParams.add("user_id", userId.toString());
+
+		return UriComponentsBuilder
+			.newInstance()
+			// .scheme("https")
+			.scheme("http")
+			// .host("server.getabeer.co.kr")
+			.host("localhost")
+			.port(3000)
+			.path("/signup/information")
+			// .path("/api/token")
+			.queryParams(queryParams)
+			.build()
+			.toUri();
+	}
+
+	private URI createURI(String act, String rft) {
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 		queryParams.add("access_token", act);
 		queryParams.add("refresh_token", rft);
 
 		return UriComponentsBuilder
 			.newInstance()
-			.scheme("https")
-			// .scheme("http")
-			.host("server.getabeer.co.kr")
-			// .host("localhost")
-			// .port(8080)
+			// .scheme("https")
+			.scheme("http")
+			// .host("www.getabeer.co.kr")
+			.host("localhost")
+			.port(8080)
 			// .path("/signup/information")
 			.path("/api/token")
 			.queryParams(queryParams)
