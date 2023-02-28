@@ -46,6 +46,8 @@ public interface UserMapper {
 			.nickname(user.getNickname())
 			.age(user.getAge())
 			.gender(user.getGender())
+			.followerCount(user.getFollowerCount())
+			.followingCount(user.getFollowingCount())
 			.userBeerTags(userBeerTags)
 			.userBeerCategories(userBeerCategories)
 			.build();

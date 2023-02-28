@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.NotFound;
 
 import be.domain.user.entity.enums.Age;
@@ -33,7 +34,7 @@ public class UserDto {
 
 		@NotBlank
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String password;
 	}
 
@@ -81,17 +82,17 @@ public class UserDto {
 	public static class EditPassword {
 
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String oldPassword;
 
 		@NotBlank
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String newPassword;
 
 		@NotBlank
 		@Pattern(regexp = "^(?=.*?\\d{1,50})(?=.*?[~`!@#$%^&()-+=]{1,50})(?=.*?[a-zA-Z]{2,50}).{8,16}$",
-				 message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
+			message = "비밀번호는 8자 이상 특수문자와 영어 대소문자, 숫자만 허용됩니다.")
 		private String newVerifyPassword;
 	}
 
@@ -108,6 +109,10 @@ public class UserDto {
 		private Gender gender;
 
 		private Age age;
+
+		private Long followerCount;
+
+		private Long followingCount;
 
 		private List<String> userBeerCategories;
 
