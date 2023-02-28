@@ -3,7 +3,7 @@ name: Java CI with Gradle
 on:
   push:
     paths: [ 'be/**' ]
-    branches: [ "dev-be" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
