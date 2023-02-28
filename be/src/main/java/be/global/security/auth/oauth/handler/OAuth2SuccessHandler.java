@@ -2,7 +2,6 @@ package be.global.security.auth.oauth.handler;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
 import be.global.security.auth.jwt.JwtTokenizer;
-import be.global.security.auth.oauth.RedirectController;
 import be.global.security.auth.session.user.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,13 +90,18 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		response.setHeader("Set-Cookie", cookie.toString());
 		response.setHeader("Authorization", "Bearer " + accessToken);
 
-		String uri = user.getAge() == null ? createFirstURI(user.getId()).toString() : createURI(accessToken, refreshToken).toString();
+		String uri = user.getAge() == null
+			? createFirstURI(user.getId(), accessToken, refreshToken).toString()
+			: createURI(accessToken, refreshToken).toString();
+
 		getRedirectStrategy().sendRedirect(request, response, uri);
 	}
 
-	private URI createFirstURI(Long userId) {
+	private URI createFirstURI(Long userId, String act, String rft) {
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 		queryParams.add("user_id", userId.toString());
+		queryParams.add("access_token", act);
+		queryParams.add("refresh_token", rft);
 
 		return UriComponentsBuilder
 			.newInstance()
