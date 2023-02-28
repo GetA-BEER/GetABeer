@@ -95,15 +95,15 @@ export default function SpeechBalloon({
           {isMine ? (
             <div className="flex-1 flex justify-end items-center  text-y-brown mr-3">
               <button className="flex items-center mr-1" onClick={editComment}>
-                <MdModeEdit />
-                <span className="text-y-black ml-0.5">수정</span>
+                <MdModeEdit className="mb-[1px]" />
+                <span className="text-y-black ml-[1px]">수정</span>
               </button>
               <button
                 className="flex items-center"
                 onClick={() => {
                   Swal.fire({
-                    title: '게시글을 삭제하시겠습니까?',
-                    text: '삭제하시면 다시 복구시킬 수 없습니다.',
+                    text: '게시글을 삭제하시겠습니까?',
+                    // text: '삭제하시면 다시 복구시킬 수 없습니다.',
                     showCancelButton: true,
                     confirmButtonColor: '#f1b31c',
                     cancelButtonColor: '#A7A7A7',
@@ -116,7 +116,7 @@ export default function SpeechBalloon({
                   });
                 }}
               >
-                <HiTrash className="text-y-brown ml-0.5 inline" />
+                <HiTrash className="text-y-brown inline mb-[1px]" />
                 <span className="text-y-black">삭제</span>
               </button>
             </div>

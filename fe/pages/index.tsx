@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import PopularBeer from '@/components/smallCards/PopularBeer';
-
+import Image from 'next/image';
 export default function Main() {
   const [userInfo, setUserInfo] = useState<any>('');
   const [popularBeer, setPopularBeer] = useState<any>();

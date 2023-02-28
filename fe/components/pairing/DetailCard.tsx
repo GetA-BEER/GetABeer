@@ -37,7 +37,7 @@ export default function DetailCard({ pairingProps, count }: any) {
     let randomTmp: number = Math.floor(Math.random() * 3);
     setRandomNum(randomTmp);
   }, []);
-  console.log(pairingProps);
+
   const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function DetailCard({ pairingProps, count }: any) {
         {pairingProps?.userId === curUserId ? (
           <div className="flex px-4">
             <div onClick={hadleEdit}>
-              <MdModeEdit className="text-y-brown inline" /> 수정
+              <MdModeEdit className="text-y-brown inline -mr-0.5" /> 수정
             </div>
             <div onClick={hadleDelte}>
               <HiTrash className="text-y-brown ml-1 inline" />
