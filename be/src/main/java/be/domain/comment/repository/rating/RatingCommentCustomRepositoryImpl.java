@@ -1,4 +1,4 @@
-package be.domain.comment.repository;
+package be.domain.comment.repository.rating;
 
 import static be.domain.comment.entity.QRatingComment.*;
 import static be.domain.pairing.entity.QPairing.*;

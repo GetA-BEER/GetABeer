@@ -1,4 +1,4 @@
-package be.domain.comment.repository;
+package be.domain.comment.repository.rating;
 
 import java.util.List;
 

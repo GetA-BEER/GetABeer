@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.entity.PairingComment;
-import be.domain.comment.repository.PairingCommentRepository;
+import be.domain.comment.repository.pairing.PairingCommentRepository;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.repository.PairingRepository;
 import be.domain.pairing.service.PairingService;
