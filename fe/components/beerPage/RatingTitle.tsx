@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
 export interface ratingCount {
-  count?: number;
+  count?: string;
 }
 
 export default function RatingTitle(props: {
   ratingCount: number | undefined;
-  beerId: number;
+  beerId: number | undefined;
 }) {
   return (
     <div className="max-w-4xl flex justify-between mx-5 mt-4 mb-1">

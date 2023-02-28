@@ -1,4 +1,3 @@
-import { BiUser } from 'react-icons/bi';
 import { FaRegCommentDots } from 'react-icons/fa';
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import Image from 'next/image';
@@ -13,19 +12,36 @@ import { useRouter } from 'next/router';
 import { accessToken } from '@/atoms/login';
 import Swal from 'sweetalert2';
 
+export interface RatingCardProps {
+  beerId: number;
+  ratingId: number;
+  korName: string;
+  userId: number;
+  nickname: string;
+  userImage: string;
+  star: number;
+  ratingTag: [string, string, string, string];
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+  modifiedAt: string;
+  isUserLikes: boolean;
+}
+
 export default function SmallRatingCard({ ratingProps }: any) {
   const [RatingList, setRatingPropsList] = useState<any>();
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [starScore, setStarScore] = useState<number>(ratingProps?.star);
   const [collisions, setCollisions] = useState<boolean>(false);
   const [randomNum, setRandomNum] = useState(0);
-  const [date, setDate] = useState<any>('');
+  const [date, setDate] = useState<string>('');
   const initialDate = ratingProps?.createdAt;
   const [isLike, setIsLike] = useState<boolean>(ratingProps.isUserLikes);
   const [likeCount, setLikeCount] = useState<number>(ratingProps.likeCount);
   const router = useRouter();
   const TOKEN = useRecoilValue(accessToken);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
   useEffect(() => {
     if (TOKEN === '') {
     } else {

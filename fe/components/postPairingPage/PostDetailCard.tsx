@@ -12,7 +12,7 @@ export default function PostDetailCard(props: any) {
   useEffect(() => {
     if (props.beerInfo !== undefined) setBeerInfo(props.beerInfo);
   }, [props]);
-  console.log(beerInfo);
+
   return (
     <div className="flex rounded-lg bg-white text-y-black border border-y-lightGray px-3 py-5 my-2">
       {beerInfo?.beerDetailsBasic?.thumbnail.includes('.') ? (
@@ -69,7 +69,7 @@ export default function PostDetailCard(props: any) {
           {beerInfo?.beerDetailsTopTags === null ? (
             <></>
           ) : (
-            <div className="flex flex-wrap">
+            <div className="flex-wrap -mt-1 h-fit">
               {beerInfo?.beerDetailsTopTags?.map((el: string, idx: number) => {
                 return <Tag key={idx}>{TagMatcherToKor(el)}</Tag>;
               })}

@@ -14,8 +14,8 @@ import axios from '@/pages/api/axios';
 export default function PostPairing() {
   const router = useRouter();
   const [beerInfo] = useRecoilState(currentBeer);
-  const [content, setContent] = useState('');
-  const [category, setCategory] = useState('카테고리');
+  const [content, setContent] = useState<string>('');
+  const [category, setCategory] = useState<string>('카테고리');
   const [imageData, setImageData] = useState([]);
   const [finalData, setFinalData] = useState<any>('');
 

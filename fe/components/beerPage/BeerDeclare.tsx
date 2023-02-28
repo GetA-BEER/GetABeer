@@ -1,5 +1,3 @@
-import { RatingCardProps } from '@/components/middleCards/RatingCard';
-
 export interface BeerInfo {
   beerId: number;
   beerDetailsBasic: {
@@ -41,6 +39,36 @@ export interface RatingInfo {
   };
 }
 
+export interface RatingCardProps {
+  beerId: number;
+  ratingId: number;
+  korName: string;
+  userId: number;
+  nickname: string;
+  userImage: string;
+  star: number;
+  ratingTag: [string, string, string, string];
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+  modifiedAt: string;
+  isUserLikes: boolean;
+}
+
+export interface PairingInfo {
+  data: PairingCardProps[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    beerId: number;
+    beerKorName: string;
+    beerEngName: string;
+  };
+}
+
 export interface PairingCardProps {
   beerId: number;
   korName: string;
@@ -57,19 +85,6 @@ export interface PairingCardProps {
   modifiedAt: string;
 }
 
-export interface PairingInfo {
-  data: PairingCardProps[];
-  pageInfo: {
-    page: number;
-    size: number;
-    totalElements: number;
-    totalPages: number;
-    beerId: number;
-    beerKorName: string;
-    beerEngName: string;
-  };
-}
-
 export interface SimilarBeerProps {
   beerId: number;
   korName: string;
@@ -84,4 +99,26 @@ export interface SimilarBeerProps {
   thumbnail: string;
   abv: number;
   ibu: number | null;
+}
+
+export interface PopularBeerType {
+  beerId: number;
+  korName: string;
+  thumbnail: string;
+  averageStar: number;
+  beerCategories: any;
+  country: string;
+  ibu: number | null;
+  abv: number;
+}
+
+export interface RecommendBeerType {
+  averageStar: number;
+  beerCategories: any;
+  beerId: number;
+  korName: string;
+  thumbnail: string;
+  country: string;
+  ibu: number | null;
+  abv: number;
 }

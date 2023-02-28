@@ -9,6 +9,7 @@ import { PairingComment } from '@/components/SpeechBalloon';
 import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
+import { PairingCardProps } from '@/components/beerPage/BeerDeclare';
 
 export default function PairingDetail() {
   let router = useRouter();
@@ -23,15 +24,15 @@ export default function PairingDetail() {
       setIsLogin(true);
     }
   }, [TOKEN]);
-  const [curRoute, setCurRoute] = useState<any>();
-  const [pairingProps, setPairingProps] = useState<any>();
+  const [curRoute, setCurRoute] = useState<number | undefined>();
+  const [pairingProps, setPairingProps] = useState<PairingCardProps>();
   const [inputState, setInputState] = useState<string>('');
   const [pairingCommentList, setPairingCommentList] = useState<
     PairingComment[] | null
   >(null);
 
   useEffect(() => {
-    setCurRoute(router.query.id);
+    setCurRoute(Number(router.query.id));
   }, [router, curRoute]);
 
   useEffect(() => {
