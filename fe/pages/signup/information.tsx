@@ -44,7 +44,7 @@ export default function Information() {
   const router = useRouter();
   const accesstoken = router.query.access_token;
   const refreshtoken = router.query.refreshtoken;
-
+  const userid = Number(router.query.user_id);
   const onValid = () => {
     const { gender, age, userBeerCategories, userBeerTags } = getValues();
     signUpClick(gender, age, userBeerCategories, userBeerTags);
@@ -66,14 +66,14 @@ export default function Information() {
     axios
       .post(`/api/register/user/${Router.query.user_id}`, reqBody)
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         if (router.query.access_token) {
           axios.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${accesstoken}`;
           axios.defaults.headers.common.Cookies = refreshtoken;
           setAccessToken(accesstoken);
-          setUserId(router.query.user_id);
+          setUserId(userid);
           swal.fire({
             title: 'Get A Beer',
             text: '로그인이 완료되었습니다',
@@ -91,7 +91,7 @@ export default function Information() {
             confirmButtonText: '확인',
           });
           Router.push({
-            pathname: '/',
+            pathname: '/login',
           });
         }
       })
@@ -114,7 +114,7 @@ export default function Information() {
           ] = `Bearer ${accesstoken}`;
           axios.defaults.headers.common.Cookies = refreshtoken;
           setAccessToken(accesstoken);
-          setUserId(router.query.user_id);
+          setUserId(userid);
           if (result.value) {
             Router.push('/');
           }
