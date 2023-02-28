@@ -43,7 +43,7 @@ export default function Mypage() {
         text: '로그아웃 하시겠습니까?',
         showCancelButton: true,
         confirmButtonColor: '#F1B31C',
-        cancelButtonColor: '#DDDDDD',
+        cancelButtonColor: '#A7A7A7',
         confirmButtonText: '확인',
         cancelButtonText: '취소',
       })
@@ -99,7 +99,7 @@ export default function Mypage() {
             </Link>
           </div>
         </div>
-        <div className="m-auto max-w-md px-3 pb-5">
+        <div className="m-auto max-w-md px-3 pb-20">
           <div className="border divide-y divide-gray-200 rounded-xl text-sm">
             <Link
               href={'/mypage/wish'}

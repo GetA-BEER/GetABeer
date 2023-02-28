@@ -23,6 +23,8 @@ import {
   PairingCardProps,
 } from '@/components/beerPage/BeerDeclare';
 import axios from '@/pages/api/axios';
+import { useRecoilValue } from 'recoil';
+import { userId } from '@/atoms/login';
 
 export default function Beer() {
   const router = useRouter();
@@ -36,6 +38,9 @@ export default function Beer() {
   const [ratingInfo, setRatingInfo] = useState<RatingInfo>();
   const [pairingInfo, setPairingInfo] = useState<PairingInfo>();
   const [similarBeer, setSimilarBeer] = useState<SimilarBeerProps[]>();
+  const [hasRating, setHasRating] = useState<boolean>();
+  const [myRatingId, setMyRatingId] = useState<number>();
+  const USERID: number = useRecoilValue(userId);
 
   useEffect(() => {
     // 특정 맥주 조회
@@ -55,10 +60,16 @@ export default function Beer() {
     if (curRoute !== undefined) {
       axios
         .get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
-        .then((response) => setRatingInfo(response.data))
+        .then((response) => {
+          setRatingInfo(response.data);
+          if (USERID === response.data.data[0].userId) {
+            setHasRating(true);
+            setMyRatingId(response.data.data[0].ratingId);
+          }
+        })
         .catch((error) => console.log(error));
     }
-  }, [curRoute]);
+  }, [curRoute, USERID]);
 
   useEffect(() => {
     // 페어링 페이지 조회
@@ -106,7 +117,11 @@ export default function Beer() {
         ) : (
           <>
             <div className="m-3">
-              <BeerDetailCard cardProps={beerInfo} />
+              <BeerDetailCard
+                cardProps={beerInfo}
+                hasRating={hasRating}
+                myRatingId={myRatingId}
+              />
             </div>
             {/* 평가 */}
             <RatingTitle

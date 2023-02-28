@@ -45,7 +45,7 @@ export default function Signup() {
         // console.log(res);
         Router.push({
           pathname: '/signup/information',
-          query: { userId: res.data },
+          query: { user_id: res.data },
         });
       })
       .catch((err) => {

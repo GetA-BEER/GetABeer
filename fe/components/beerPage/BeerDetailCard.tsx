@@ -15,9 +15,17 @@ import { accessToken } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 
+<<<<<<< HEAD
 export default function BeerDetailCard({ cardProps }: any) {
   const router = useRouter();
   const curRouter = router.query.id;
+=======
+export default function BeerDetailCard({
+  cardProps,
+  hasRating,
+  myRatingId,
+}: any) {
+>>>>>>> 41a2cffc815b784473983e7a8d0473b81865b9ef
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
   useEffect(() => {
     setIsWish(cardProps.isWishlist);
@@ -135,9 +143,32 @@ export default function BeerDetailCard({ cardProps }: any) {
           )}
           <div className="text-xs">
             {isLogin ? (
-              <Link href={'/postrating'} className="hover:text-y-gold mr-1">
-                <HiPencil className="inline" /> 평가하기
-              </Link>
+              hasRating ? (
+                <span
+                  onClick={() => {
+                    Swal.fire({
+                      text: '이미 나의 평가가 등록되어있습니다',
+                      showCancelButton: true,
+                      confirmButtonColor: '#f1b31c',
+                      cancelButtonColor: '#A7A7A7',
+                      confirmButtonText: '수정하기',
+                      cancelButtonText: '취소',
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        router.push({
+                          pathname: `/editrating/${myRatingId}`,
+                        });
+                      }
+                    });
+                  }}
+                >
+                  <HiPencil className="inline" /> 평가하기
+                </span>
+              ) : (
+                <Link href={'/postrating'} className="hover:text-y-gold mr-1">
+                  <HiPencil className="inline" /> 평가하기
+                </Link>
+              )
             ) : (
               <span onClick={goToLogin} className="hover:text-y-gold mr-1">
                 <HiPencil className="inline" /> 평가하기

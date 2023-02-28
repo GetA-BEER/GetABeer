@@ -1,12 +1,11 @@
 import SubmitBtn from '@/components/button/SubmitBtn';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
-import { IoClose } from 'react-icons/io5';
+import BackBtn from '@/components/button/BackPageBtn';
 import { useForm } from 'react-hook-form';
 import { BiErrorAlt } from 'react-icons/bi';
 import axios from '@/pages/api/axios';
 import Router from 'next/router';
-import Link from 'next/link';
 import swal from 'sweetalert2';
 
 interface IFormValues {
@@ -64,11 +63,7 @@ export default function PwEdit() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
-        <Link href={'/myedit'}>
-          <button className="m-4">
-            <IoClose className="w-6 h-6" />
-          </button>
-        </Link>
+        <BackBtn />
         <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
           비밀번호 변경
         </div>

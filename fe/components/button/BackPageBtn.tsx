@@ -6,7 +6,7 @@ export default function BackBtn() {
   return (
     <IoChevronBack
       onClick={() => router.back()}
-      className="text-xl text-y-gray mt-2"
+      className="text-xl m-4 w-6 h-6 cursor-pointer"
     />
   );
 }
