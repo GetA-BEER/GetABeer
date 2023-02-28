@@ -25,13 +25,9 @@ import be.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 public class RedirectController {
-	private final UserMapper userMapper;
-	private final UserService userService;
 
 	@GetMapping("/api/token")
-	@CrossOrigin(origins = "http://localhost:3000", exposedHeaders = "Authorization")
 	public ResponseEntity redirect(@RequestParam("access_token") String act,
 		@RequestParam("refresh_token") String rft) throws URISyntaxException {
 
