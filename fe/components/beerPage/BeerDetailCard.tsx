@@ -64,7 +64,7 @@ export default function BeerDetailCard({ cardProps }: any) {
               priority
             />
           ) : (
-            <>x</>
+            <></>
           )}
         </div>
         <div className="flex flex-col justify-center">

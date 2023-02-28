@@ -11,7 +11,7 @@ export default function ProfileCard(props: {
         <></>
       ) : (
         <Image
-          alt="userImg"
+          alt="userImg rounded-full"
           src={props?.userImage}
           width={100}
           height={100}

@@ -103,7 +103,6 @@ export default function EditPairing() {
     };
     if (finalData !== '' && !isSubmit) {
       setIsSubmit(true);
-      // console.log('finalData', finalData.get('patch'));
       axios
         .patch(`/api/pairings/${pairingId}`, finalData, config)
         .then((response) => {

@@ -9,7 +9,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { currentBeer } from '@/atoms/currentBeer';
-import MiddleCard from '@/components/middleCards/MiddleCard';
 import axios from '@/pages/api/axios';
 
 export default function PostPairing() {
@@ -76,7 +75,7 @@ export default function PostPairing() {
       </Head>
 
       <main className="m-auto h-screen max-w-4xl">
-        <div className="p-5">
+        <div className="px-5">
           <PostDetailCard beerInfo={beerInfo} />
           <div className="mt-6 mb-2 text-base font-semibold">
             페어링 카테고리

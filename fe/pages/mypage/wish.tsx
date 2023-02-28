@@ -22,13 +22,12 @@ export default function Wish() {
       router.push('/');
     }
   }, [TOKEN, router]);
-
+  //.get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`) 페이지네이션이 잘 되어 있는건가요?
   useEffect(() => {
     // 그럼 페이지 부분 입력이 있으면 어떻게 넣어야 하는건지,..? /api/mypage/wishlist/page/?page=1&size=10
-    axios.get(`/api/mypage/wishlist`).then((response) => {
+    axios.get(`/api/mypage/wishlist?&page=1&size=10`).then((response) => {
       setWishList(response.data.data);
       setTotalPages(response.data.pageInfo.totalPages);
-      console.log(totalPages);
     });
   }, []);
 
@@ -70,9 +69,8 @@ export default function Wish() {
               ))}
             </div>
           )}
-
-          <div className="pb-14"></div>
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          <div className="pb-14"></div>
         </div>
       </main>
     </>
