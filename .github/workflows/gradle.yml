@@ -50,8 +50,8 @@ jobs:
           spring.mail.username : ${{ secrets.SMTP_GOOGLE_ACCOUNT}}
           spring.mail.password : ${{ secrets.SMTP_GOOGLE_PASSWORD}}
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY}}
-          cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
-          cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
+          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
+          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Build with Gradle
         run: ./gradlew clean build --exclude-task test
