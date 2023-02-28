@@ -16,10 +16,16 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 
 export default function BeerDetailCard({ cardProps }: any) {
+  const router = useRouter();
+  const curRouter = router.query.id;
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
+  useEffect(() => {
+    setIsWish(cardProps.isWishlist);
+  }, [cardProps.isWishlist, curRouter]);
+
   const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
-  const router = useRouter();
+
   useEffect(() => {
     if (TOKEN === '') {
     } else {

@@ -2,17 +2,20 @@ import Head from 'next/head';
 import WishCard from '@/components/wish/WishCard';
 import { IoChevronBack } from 'react-icons/io5';
 import { useRecoilState } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userNickname } from '@/atoms/login';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Pagenation from '@/components/Pagenation';
 
 export default function Wish() {
   const [wishList, setWishList] = useState<any>([]);
-  const [pageInfo, setPageInfo] = useState();
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const [TOKEN] = useRecoilState(accessToken);
+  const [username] = useRecoilState(userNickname);
   const router = useRouter();
   useEffect(() => {
     if (TOKEN === '') {
@@ -21,9 +24,11 @@ export default function Wish() {
   }, [TOKEN, router]);
 
   useEffect(() => {
+    // 그럼 페이지 부분 입력이 있으면 어떻게 넣어야 하는건지,..? /api/mypage/wishlist/page/?page=1&size=10
     axios.get(`/api/mypage/wishlist`).then((response) => {
       setWishList(response.data.data);
-      setPageInfo(response.data.pageInfo);
+      setTotalPages(response.data.pageInfo.totalPages);
+      console.log(totalPages);
     });
   }, []);
 
@@ -43,8 +48,8 @@ export default function Wish() {
           </button>
         </Link>
         <div className=" max-w-4xl m-auto">
-          <div className="text-xl mb-10 text-center font-semibold">
-            나의 위시 맥주
+          <div className="text-xl mb-10 text-center font-semibold break-keep">
+            <span className="text-y-brown">{username}님</span>의 위시 맥주
           </div>
 
           {wishList.length === 0 ? (
@@ -67,6 +72,7 @@ export default function Wish() {
           )}
 
           <div className="pb-14"></div>
+          <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         </div>
       </main>
     </>
