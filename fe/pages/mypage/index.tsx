@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRecoilState } from 'recoil';
-import { accessToken, userId } from '@/atoms/login';
+import { accessToken, userId, userNickname } from '@/atoms/login';
 import { useEffect, useState } from 'react';
 import axios from '@/pages/api/axios';
 import Link from 'next/link';
@@ -22,7 +23,7 @@ import swal from 'sweetalert2';
 export default function Mypage() {
   const [, setAccessToken] = useRecoilState(accessToken);
   const [, setUserId] = useRecoilState(userId);
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useRecoilState(userNickname);
   const [userImge, setUserImge] = useState('');
   const fetchUser = () => {
     axios

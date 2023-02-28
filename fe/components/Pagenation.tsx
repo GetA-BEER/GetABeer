@@ -14,7 +14,7 @@ export default function Pagenation({
 }: pageInfoProps) {
   const pagenation = new Array(totalPages).fill(1);
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center mt-2">
       <button
         onClick={() => {
           setPage(1);
@@ -42,7 +42,7 @@ export default function Pagenation({
             }}
             className={`w-8 h-8 rounded-[6px] text-sm mx-0.5 ${
               page === el + idx ? 'bg-y-gold' : 'bg-y-lightGray'
-            } 
+            }
             ${
               page < 3
                 ? el + idx < 6

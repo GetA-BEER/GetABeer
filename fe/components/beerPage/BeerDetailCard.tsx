@@ -20,10 +20,16 @@ export default function BeerDetailCard({
   hasRating,
   myRatingId,
 }: any) {
+  const router = useRouter();
+  const curRouter = router.query.id;
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
+  useEffect(() => {
+    setIsWish(cardProps.isWishlist);
+  }, [cardProps.isWishlist, curRouter]);
+
   const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
-  const router = useRouter();
+
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -62,7 +68,7 @@ export default function BeerDetailCard({
               priority
             />
           ) : (
-            <>x</>
+            <></>
           )}
         </div>
         <div className="flex flex-col justify-center">

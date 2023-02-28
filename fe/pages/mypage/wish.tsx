@@ -1,18 +1,32 @@
 import Head from 'next/head';
 import WishCard from '@/components/wish/WishCard';
 import { IoChevronBack } from 'react-icons/io5';
-import Link from 'next/link';
+import { useRecoilState } from 'recoil';
+import { accessToken, userNickname } from '@/atoms/login';
+import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Pagenation from '@/components/Pagenation';
 
 export default function Wish() {
   const [wishList, setWishList] = useState<any>([]);
-  const [pageInfo, setPageInfo] = useState();
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [TOKEN] = useRecoilState(accessToken);
+  const [username] = useRecoilState(userNickname);
+  const router = useRouter();
   useEffect(() => {
-    axios.get(`/api/mypage/wishlist`).then((response) => {
+    if (TOKEN === '') {
+      router.push('/');
+    }
+  }, [TOKEN, router]);
+  //.get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`) 페이지네이션이 잘 되어 있는건가요?
+  useEffect(() => {
+    // 그럼 페이지 부분 입력이 있으면 어떻게 넣어야 하는건지,..? /api/mypage/wishlist/page/?page=1&size=10
+    axios.get(`/api/mypage/wishlist?&page=1&size=10`).then((response) => {
       setWishList(response.data.data);
-      setPageInfo(response.data.pageInfo);
+      setTotalPages(response.data.pageInfo.totalPages);
     });
   }, []);
 
@@ -25,15 +39,19 @@ export default function Wish() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
 
-      <main className="m-auto h-screen mx-4">
-        <Link href={'/mypage'}>
-          <button className="ml-4">
-            <IoChevronBack className="w-6 h-6" />
-          </button>
-        </Link>
+      <main className="m-auto h-screen max-w-4xl">
+        <button
+          type="button"
+          onClick={() => {
+            router.back();
+          }}
+          className="ml-4 absolute"
+        >
+          <IoChevronBack className="w-6 h-6" />
+        </button>
         <div className=" max-w-4xl m-auto">
-          <div className="text-xl mb-10 text-center font-semibold">
-            나의 위시 맥주
+          <div className="text-xl mb-10 text-center font-semibold break-keep">
+            <span className="text-y-brown">{username}님</span>의 위시 맥주
           </div>
 
           {wishList.length === 0 ? (
@@ -54,7 +72,7 @@ export default function Wish() {
               ))}
             </div>
           )}
-
+          <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
           <div className="pb-14"></div>
         </div>
       </main>

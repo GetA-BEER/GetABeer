@@ -19,6 +19,8 @@ import {
   RatingInfo,
   PairingInfo,
   SimilarBeerProps,
+  RatingCardProps,
+  PairingCardProps,
 } from '@/components/beerPage/BeerDeclare';
 import axios from '@/pages/api/axios';
 import { useRecoilValue } from 'recoil';
@@ -26,9 +28,9 @@ import { userId } from '@/atoms/login';
 
 export default function Beer() {
   const router = useRouter();
-  const [curRoute, setCurRoute] = useState<any>();
+  const [curRoute, setCurRoute] = useState<number | undefined>();
   useEffect(() => {
-    setCurRoute(router.query.id);
+    setCurRoute(Number(router.query.id));
   }, [router, curRoute]);
 
   const [beerInfo, setBeerInfo] = useState<BeerInfo>();
@@ -104,7 +106,7 @@ export default function Beer() {
 
       <main className="m-auto h-screen max-w-4xl relative">
         <Image
-          className="w-full h-screen left-0 top-0 fixed -z-10 select-none"
+          className=" w-full h-screen left-0 top-0 fixed -z-10 select-none"
           src="/images/background.png"
           alt="bg"
           width={500}
@@ -146,7 +148,7 @@ export default function Beer() {
                   spaceBetween={10}
                   modules={[Pagination]}
                 >
-                  {ratingInfo?.data.map((el: any) => (
+                  {ratingInfo?.data.map((el: RatingCardProps) => (
                     <SwiperSlide key={el?.ratingId}>
                       <SmallRatingCard ratingProps={el} />
                     </SwiperSlide>
@@ -178,7 +180,7 @@ export default function Beer() {
                   spaceBetween={10}
                   modules={[Pagination]}
                 >
-                  {pairingInfo?.data.map((el: any) => (
+                  {pairingInfo?.data.map((el: PairingCardProps) => (
                     <SwiperSlide key={el?.pairingId}>
                       <SmallPairingCard pairingProps={el} />
                     </SwiperSlide>

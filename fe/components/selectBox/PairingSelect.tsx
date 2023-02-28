@@ -13,11 +13,6 @@ export type Category =
   | 'ETC';
 
 export default function PairingSelect({ category, setCategory }: any) {
-  type Props = {
-    setSort: React.Dispatch<React.SetStateAction<Category>>;
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const categoryList = [
     '튀김/부침',
     '구이/오븐',

@@ -6,12 +6,22 @@ import Footer from '@/components/Footer';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import PopularBeer from '@/components/smallCards/PopularBeer';
+import { useRecoilState } from 'recoil';
+import { userNickname } from '@/atoms/login';
+import {
+  PopularBeerType,
+  RecommendBeerType,
+} from '@/components/beerPage/BeerDeclare';
 
 export default function Main() {
-  const [userInfo, setUserInfo] = useState<any>('');
-  const [popularBeer, setPopularBeer] = useState<any>();
-  const [recommendBeer, setRecommendBeer] = useState<any>('');
-  const [recommendFlag, setRecommendFlag] = useState<any>(null);
+  const [username] = useRecoilState<string>(userNickname);
+  const [popularBeer, setPopularBeer] = useState<PopularBeerType[] | string>();
+  const [recommendBeer, setRecommendBeer] = useState<
+    RecommendBeerType[] | string
+  >('');
+  const [recommendFlag, setRecommendFlag] = useState<RecommendBeerType | null>(
+    null
+  );
 
   // 인기 많은 맥주
   useEffect(() => {
@@ -60,7 +70,7 @@ export default function Main() {
           ) : (
             <>
               <div className="mx-3 mt-6 text-base font-semibold">
-                <span className="text-y-brown mr-1">{userInfo?.nickname}</span>
+                <span className="text-y-brown mr-1">{username} 님의</span>
                 <span className="text-black">추천 맥주</span>
               </div>
               <RecommendBeer recommendBeer={recommendBeer} />

@@ -5,6 +5,7 @@ import {
   BeerCountryMatcherToKor,
   BeerCategoryMatcherToKor,
 } from '@/utils/BeerMatcher';
+import { TagMatcherToKor } from '@/utils/TagMatcher';
 
 export default function PostDetailCard(props: any) {
   const [beerInfo, setBeerInfo] = useState(props);
@@ -24,7 +25,7 @@ export default function PostDetailCard(props: any) {
           />
         </div>
       ) : (
-        <>x</>
+        <></>
       )}
 
       <div className="flex flex-col justify-center">
@@ -68,9 +69,11 @@ export default function PostDetailCard(props: any) {
           {beerInfo?.beerDetailsTopTags === null ? (
             <></>
           ) : (
-            beerInfo?.beerDetailsTopTags?.map((el: string, idx: number) => {
-              return <Tag key={idx}>{BeerCategoryMatcherToKor(el)}</Tag>;
-            })
+            <div className="flex-wrap -mt-1 h-fit">
+              {beerInfo?.beerDetailsTopTags?.map((el: string, idx: number) => {
+                return <Tag key={idx}>{TagMatcherToKor(el)}</Tag>;
+              })}
+            </div>
           )}
         </div>
       </div>

@@ -2,6 +2,7 @@ import Head from 'next/head';
 import SortBox, { Sort } from '@/components/selectBox/SortBox';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { IoChevronBack } from 'react-icons/io5';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
@@ -46,11 +47,20 @@ export default function AllPairing() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/logo.png" />
       </Head>
-      <main className="m-auto h-screen max-w-4xl">
+      <main className="m-auto h-screen max-w-4xl relative">
+        <button
+          type="button"
+          onClick={() => {
+            router.back();
+          }}
+          className="ml-4 absolute"
+        >
+          <IoChevronBack className="w-6 h-6" />
+        </button>
         <div className="mt-4 text-center bg-white rounded-lg max-w-4xl font-semibold">
           {title}
         </div>
-        <div className="m-auto flex">
+        <div className="my-6 flex">
           <SortBox setSort={setSort} />
           <PairingBox setCategory={setCategory} />
         </div>
