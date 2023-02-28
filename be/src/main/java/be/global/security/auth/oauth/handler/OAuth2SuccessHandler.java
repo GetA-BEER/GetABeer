@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
 import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.oauth.RedirectController;
 import be.global.security.auth.session.user.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	private final HttpSession httpSession;
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
+	private final RedirectController redirectController;
 	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
@@ -122,13 +124,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		return UriComponentsBuilder
 			.newInstance()
-			.scheme("https")
-			// .scheme("http")
-			.host("www.getabeer.co.kr")
-			// .host("localhost")
-			// .port(3000)
-			.path("/signup/information")
-			// .path("/api/token")
+			// .scheme("https")
+			.scheme("http")
+			// .host("www.getabeer.co.kr")
+			.host("localhost")
+			.port(8080)
+			// .path("/signup/information")
+			.path("/api/token")
 			.queryParams(queryParams)
 			.build()
 			.toUri();

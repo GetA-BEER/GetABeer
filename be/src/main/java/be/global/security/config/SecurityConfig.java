@@ -25,6 +25,7 @@ import be.global.security.auth.handler.UserAuthenticationEntryPoint;
 import be.global.security.auth.handler.UserAuthenticationFailureHandler;
 import be.global.security.auth.handler.UserAuthenticationSuccessHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.oauth.RedirectController;
 import be.global.security.auth.oauth.handler.OAuth2SuccessHandler;
 import be.global.security.auth.oauth.service.CustomOAuth2UserService;
 import be.global.security.auth.session.SecuritySessionExpiredStrategy;
@@ -40,6 +41,7 @@ public class SecurityConfig {
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final MailController mailController;
+	private final RedirectController redirectController;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
 	// private final SecuritySessionExpiredStrategy securitySessionExpiredStrategy;
@@ -71,7 +73,7 @@ public class SecurityConfig {
 			.oauth2Login(oauth2 -> {
 				oauth2.authorizationEndpoint().baseUri("/oauth2/authorization");
 				oauth2.successHandler(
-					new OAuth2SuccessHandler(httpSession, jwtTokenizer, userRepository, redisTemplate));
+					new OAuth2SuccessHandler(httpSession, jwtTokenizer, userRepository, redirectController, redisTemplate));
 				oauth2.userInfoEndpoint().userService(
 					new CustomOAuth2UserService(userRepository, mailController, passwordEncoder(),
 						customAuthorityUtils));
