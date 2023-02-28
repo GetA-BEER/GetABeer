@@ -1,4 +1,4 @@
-package be.domain.comment.repository;
+package be.domain.comment.repository.pairing;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

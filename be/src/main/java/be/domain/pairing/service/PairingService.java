@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.service.BeerService;
-import be.domain.comment.repository.PairingCommentRepository;
+import be.domain.comment.repository.pairing.PairingCommentRepository;
 import be.domain.like.repository.PairingLikeRepository;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.Pairing;

@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.comment.dto.RatingCommentDto;
 import be.domain.comment.entity.RatingComment;
-import be.domain.comment.repository.RatingCommentRepository;
+import be.domain.comment.repository.rating.RatingCommentRepository;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.repository.RatingRepository;
 import be.domain.rating.service.RatingService;

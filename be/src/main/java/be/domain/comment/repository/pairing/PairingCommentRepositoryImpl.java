@@ -1,4 +1,4 @@
-package be.domain.comment.repository;
+package be.domain.comment.repository.pairing;
 
 import static be.domain.comment.entity.QPairingComment.*;
 import static be.domain.pairing.entity.QPairing.*;
