@@ -65,6 +65,8 @@ export default function Beer() {
           if (USERID === response.data.data[0].userId) {
             setHasRating(true);
             setMyRatingId(response.data.data[0].ratingId);
+          } else {
+            setHasRating(false);
           }
         })
         .catch((error) => console.log(error));
