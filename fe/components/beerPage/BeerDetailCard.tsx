@@ -14,7 +14,6 @@ import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
-import axios from '@/pages/api/axios';
 
 export default function BeerDetailCard({ cardProps }: any) {
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
@@ -27,10 +26,6 @@ export default function BeerDetailCard({ cardProps }: any) {
       setIsLogin(true);
     }
   }, [TOKEN]);
-
-  useEffect(() => {
-    axios.get;
-  });
 
   const goToLogin = () => {
     Swal.fire({

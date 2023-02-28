@@ -1,6 +1,9 @@
 import Head from 'next/head';
 import WishCard from '@/components/wish/WishCard';
 import { IoChevronBack } from 'react-icons/io5';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
@@ -9,6 +12,14 @@ import Image from 'next/image';
 export default function Wish() {
   const [wishList, setWishList] = useState<any>([]);
   const [pageInfo, setPageInfo] = useState();
+  const [TOKEN] = useRecoilState(accessToken);
+  const router = useRouter();
+  useEffect(() => {
+    if (TOKEN === '') {
+      router.push('/');
+    }
+  }, [TOKEN, router]);
+
   useEffect(() => {
     axios.get(`/api/mypage/wishlist`).then((response) => {
       setWishList(response.data.data);

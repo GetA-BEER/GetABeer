@@ -14,3 +14,9 @@ export const userId = atom({
   default: '',
   effects_UNSTABLE: [persistAtom],
 });
+
+export const userNickname = atom({
+  key: `userNickname`,
+  default: '',
+  effects_UNSTABLE: [persistAtom],
+});
