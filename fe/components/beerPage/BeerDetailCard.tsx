@@ -5,6 +5,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiPencil, HiChartPie } from 'react-icons/hi';
+import SmallTag from '../smallCards/SmallTag';
 import WishHeart from '@/components/WishHeart';
 import StarScore from './StarScore';
 import ShareBtn from '../share/ShareBtn';
@@ -13,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
+import axios from '@/pages/api/axios';
 
 export default function BeerDetailCard({ cardProps }: any) {
   const [isWish, setIsWish] = useState<boolean>(cardProps?.isWishlist);
@@ -25,6 +27,10 @@ export default function BeerDetailCard({ cardProps }: any) {
       setIsLogin(true);
     }
   }, [TOKEN]);
+
+  useEffect(() => {
+    axios.get;
+  });
 
   const goToLogin = () => {
     Swal.fire({
@@ -92,13 +98,14 @@ export default function BeerDetailCard({ cardProps }: any) {
               <></>
             )}
           </div>
-          <div className="my-1 flex items-end">
+
+          <div className="flex items-end">
             <StarScore score={cardProps?.beerDetailsStars.totalAverageStars} />
             <span className="text-xs text-y-gray">
               ({cardProps?.beerDetailsStars.totalAverageStars})
             </span>
           </div>
-          <div className="mb-2 text-xs flex">
+          <div className="mb-0.5 text-xs flex">
             <div className="mr-4">
               <Image
                 src="/images/star.png"
@@ -120,6 +127,11 @@ export default function BeerDetailCard({ cardProps }: any) {
               {cardProps?.beerDetailsStars.maleAverageStars} 남성
             </div>
           </div>
+          {cardProps?.beerDetailsTopTags === null ? (
+            <></>
+          ) : (
+            <SmallTag tags={cardProps?.beerDetailsTopTags} />
+          )}
           <div className="text-xs">
             {isLogin ? (
               <Link href={'/postrating'} className="hover:text-y-gold mr-1">

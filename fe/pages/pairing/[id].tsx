@@ -6,9 +6,23 @@ import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PairingComment } from '@/components/SpeechBalloon';
+import { useRecoilValue } from 'recoil';
+import { accessToken, userId } from '@/atoms/login';
+import Swal from 'sweetalert2';
 
 export default function PairingDetail() {
   let router = useRouter();
+  const TOKEN = useRecoilValue(accessToken);
+  const USERID = useRecoilValue(userId);
+  const [isLogin, setIsLogin] = useState(false);
+  const [isMine, setIsMine] = useState(false);
+
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
   const [curRoute, setCurRoute] = useState<any>();
   const [pairingProps, setPairingProps] = useState<any>();
   const [inputState, setInputState] = useState<string>('');
@@ -28,10 +42,13 @@ export default function PairingDetail() {
         .then((response) => {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
+          if (response.data.userId === USERID) {
+            setIsMine(true);
+          }
         })
         .catch((error) => console.log(error));
     }
-  }, [curRoute]);
+  }, [curRoute, USERID]);
 
   const postPairingComment = () => {
     if (inputState !== '') {
@@ -77,12 +94,34 @@ export default function PairingDetail() {
           {pairingProps?.korName}
         </div>
         <div className="rounded-lg bg-white text-y-black text-xs border-2 mx-2">
-          <DetailCard pairingProps={pairingProps} />
+          <DetailCard
+            pairingProps={pairingProps}
+            count={pairingCommentList ? pairingCommentList?.length : 0}
+          />
           <div className="px-3 my-5">
             <CommentInput
               inputState={inputState}
               setInputState={setInputState}
-              postFunc={postPairingComment}
+              postFunc={
+                isLogin
+                  ? postPairingComment
+                  : () => {
+                      Swal.fire({
+                        text: '로그인이 필요한 서비스 입니다.',
+                        showCancelButton: true,
+                        confirmButtonColor: '#f1b31c',
+                        cancelButtonColor: '#A7A7A7',
+                        confirmButtonText: '로그인',
+                        cancelButtonText: '취소',
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          router.push({
+                            pathname: '/login',
+                          });
+                        }
+                      });
+                    }
+              }
             />
           </div>
           <div>
@@ -93,7 +132,7 @@ export default function PairingDetail() {
                     <SpeechBalloon
                       key={el.pairingCommentId}
                       props={el}
-                      isMine={true}
+                      isMine={isMine}
                       deleteFunc={deletePairingComment}
                     />
                   );

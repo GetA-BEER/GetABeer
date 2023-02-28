@@ -43,6 +43,7 @@ export default function Beer() {
         .then((response) => {
           setBeerInfo(response.data);
           setCurBeer(response.data);
+          // console.log(response.data);
         })
         .catch((error) => console.log(error));
     }

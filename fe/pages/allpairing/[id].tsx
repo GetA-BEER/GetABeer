@@ -69,7 +69,7 @@ export default function AllPairing() {
               width={100}
               height={100}
             />
-            <span>등록된 평가가 없습니다</span>
+            <span>등록된 페어링이 없습니다</span>
           </div>
         )}
       </main>

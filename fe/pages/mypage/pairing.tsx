@@ -26,12 +26,12 @@ export default function Pairing() {
     <PageContainer>
       <main className="m-auto h-screen max-w-4xl">
         <Link href={'/mypage'}>
-          <button className="m-4">
+          <button className="ml-4">
             <IoChevronBack className="w-6 h-6" />
           </button>
         </Link>
-        <div className="my-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
-          {userNickname}님의 페어링
+        <div className="mb-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
+          {userNickname}나의 페어링
         </div>
         <PairingCardController pairingCardProps={pariginCardPops} />
         {pariginCardPops?.length ? (
@@ -45,10 +45,10 @@ export default function Pairing() {
               width={40}
               height={40}
             />
-            <span>등록된 평가가 없습니다</span>
+            <span>등록된 페어링이 없습니다</span>
           </div>
         )}
-        <div className="pb-32"></div>
+        <div className="pb-24"></div>
       </main>
     </PageContainer>
   );

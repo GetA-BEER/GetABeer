@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { currentBeer } from '@/atoms/currentBeer';
+import MiddleCard from '@/components/middleCards/MiddleCard';
 import axios from '@/pages/api/axios';
 
 export default function PostPairing() {

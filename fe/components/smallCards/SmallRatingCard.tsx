@@ -113,7 +113,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
       goToLogin();
     }
   };
-
+  console.log(RatingList);
   return (
     <>
       <div className="w-full rounded-lg ml-2 mb-2 bg-white text-y-black drop-shadow-lg text-[8px] border">
@@ -135,14 +135,18 @@ export default function SmallRatingCard({ ratingProps }: any) {
             <span className="w-[70%] text-end truncate pr-[2px]">
               {RatingList?.nickname}
             </span>
-            <Image
-              src={RatingList?.userImage}
-              alt="userImg"
-              width={100}
-              height={100}
-              className="w-4 h-4"
-              priority
-            />
+            {RatingList?.userImage === null ? (
+              <></>
+            ) : (
+              <Image
+                src={RatingList?.userImage}
+                alt="userImg"
+                width={100}
+                height={100}
+                className="w-4 h-4"
+                priority
+              />
+            )}
           </span>
         </div>
         {/* 태그, 설명 */}
