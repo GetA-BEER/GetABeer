@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -27,7 +28,6 @@ import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
-import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.UserStatus;
 import lombok.AccessLevel;
@@ -38,7 +38,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "users")
+@Table(name = "users"
+	   // ,indexes = @Index(name = "i_users", columnList = "nickname")
+)
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Serializable {
