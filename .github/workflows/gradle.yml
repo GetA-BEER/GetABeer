@@ -1,9 +1,9 @@
-name: Java CI with Gradle
+name: JAVA CI v1.0.1
 
 on:
   push:
     paths: [ 'be/**' ]
-    branches: [ "main" ]
+    branches: [ "dev-be" ]
 
 permissions:
   contents: read
