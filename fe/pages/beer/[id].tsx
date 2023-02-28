@@ -38,7 +38,7 @@ export default function Beer() {
   const [ratingInfo, setRatingInfo] = useState<RatingInfo>();
   const [pairingInfo, setPairingInfo] = useState<PairingInfo>();
   const [similarBeer, setSimilarBeer] = useState<SimilarBeerProps[]>();
-  const [hasRating, setHasRating] = useState<boolean>();
+  const [hasRating, setHasRating] = useState<boolean>(false);
   const [myRatingId, setMyRatingId] = useState<number>();
   const USERID: number = useRecoilValue(userId);
 
@@ -65,6 +65,8 @@ export default function Beer() {
           if (USERID === response.data.data[0].userId) {
             setHasRating(true);
             setMyRatingId(response.data.data[0].ratingId);
+          } else {
+            setHasRating(false);
           }
         })
         .catch((error) => console.log(error));
