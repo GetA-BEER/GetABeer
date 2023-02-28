@@ -38,7 +38,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	private final HttpSession httpSession;
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
-	private final RedirectController redirectController;
 	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
@@ -64,24 +63,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		redirect(request, response, user.getId(), user.getEmail(), user.getProvider(), user.getRoles());
 		// getToken(request, response, user.getEmail(), user.getProvider(), user.getRoles());
 	}
-
-	// private void getToken(HttpServletRequest request, HttpServletResponse response, String email, String provider,
-	// 	List<String> authorities) throws
-	// 	IOException {
-	// 	String accessToken = jwtTokenizer.delegateAccessToken(email, authorities, provider);
-	// 	String refreshToken = jwtTokenizer.delegateRefreshToken(email);
-	//
-	// 	httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
-	//
-	// 	if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
-	// 		redisTemplate.delete(email);
-	// 	}
-	// 	redisTemplate.opsForValue()
-	// 		.set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
-	//
-	// 	String uri = createRedirect().toString();
-	// 	getRedirectStrategy().sendRedirect(request, response, uri);
-	// }
 
 	public void redirect(HttpServletRequest request, HttpServletResponse response, Long userId, String email, String provider,
 		List<String> authorities) throws IOException {
@@ -135,19 +116,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.build()
 			.toUri();
 	}
-
-	// private URI createRedirect() {
-	//
-	// 	return UriComponentsBuilder
-	// 		.newInstance()
-	// 		// .scheme("https")
-	// 		// .host("server.getabeer.co.kr")
-	// 		.scheme("http")
-	// 		.host("localhost")
-	// 		.port(8080)
-	// 		.path("/api/session")
-	// 		.build()
-	// 		.toUri();
-	// }
 
 }
