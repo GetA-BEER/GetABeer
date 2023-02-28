@@ -9,12 +9,9 @@ import { Pagination } from 'swiper';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { RecommendBeerType } from '@/utils/TypeInfo';
 
-export default function RecommendBeer({
-  recommendBeer,
-}: RecommendBeerType[] | any) {
-  const [beerInfo, setBeerInfo] = useState<RecommendBeerType[] | undefined>();
+export default function RecommendBeer({ recommendBeer }: any) {
+  const [beerInfo, setBeerInfo] = useState<any>();
   useEffect(() => {
     if (recommendBeer !== undefined) setBeerInfo(recommendBeer);
   }, [recommendBeer]);

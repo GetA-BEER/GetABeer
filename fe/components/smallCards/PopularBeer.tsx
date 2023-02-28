@@ -9,10 +9,9 @@ import { Pagination } from 'swiper';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { PopularBeerType } from '@/utils/TypeInfo';
 
-export default function PopularBeer({ popularBeer }: PopularBeerType[] | any) {
-  const [beerInfo, setBeerInfo] = useState<PopularBeerType[] | undefined>();
+export default function PopularBeer({ popularBeer }: any) {
+  const [beerInfo, setBeerInfo] = useState<any>();
   useEffect(() => {
     if (popularBeer !== undefined) setBeerInfo(popularBeer);
   }, [popularBeer]);
