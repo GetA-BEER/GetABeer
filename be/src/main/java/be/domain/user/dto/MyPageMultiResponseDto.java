@@ -21,7 +21,8 @@ public class MyPageMultiResponseDto<T> {
 	public MyPageMultiResponseDto(String nickname, List<T> data, Page page) {
 		this.nickname = nickname;
 		this.data = data;
-		this.pageInfo = new PageInfo(page.getNumber() + 1,
-			page.getSize(), page.getTotalElements(), page.getTotalPages());
+		this.pageInfo = new PageInfo(
+			page.getNumber() + 1, page.getSize(),
+			page.getTotalElements(), page.getTotalPages());
 	}
 }

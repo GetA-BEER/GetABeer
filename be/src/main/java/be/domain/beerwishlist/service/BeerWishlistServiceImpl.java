@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,13 +60,11 @@ public class BeerWishlistServiceImpl implements BeerWishlistService {
 	}
 
 	@Override
-	public Page<BeerWishlist> getUserWishlist(Integer page) {
+	public Page<BeerWishlist> getUserWishlist(Integer page, Integer size) {
 
 		User loginUser = userService.getLoginUser();
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-		List<BeerWishlist> beerWishlists = beerWishListQRepository.findByUserAndTrue(loginUser.getId());
-
-		return new PageImpl<>(beerWishlists, pageRequest, beerWishlists.size());
+		PageRequest pageRequest = PageRequest.of(page - 1, size);
+		return beerWishListQRepository.findByUserAndTrue(loginUser.getId(), pageRequest);
 	}
 
 	@Override

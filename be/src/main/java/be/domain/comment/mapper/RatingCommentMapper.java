@@ -35,7 +35,7 @@ public interface RatingCommentMapper {
 		return response;
 	}
 
-	default Page<RatingCommentDto.Response> ratingCommentsToResponsePage(List<RatingComment> ratingComments) {
+	default Page<RatingCommentDto.Response> ratingCommentsToResponsePage(Page<RatingComment> ratingComments) {
 		return new PageImpl<>(ratingComments.stream()
 			.map(ratingComment ->
 				new RatingCommentDto.Response(
@@ -47,6 +47,6 @@ public interface RatingCommentMapper {
 					ratingComment.getContent(),
 					ratingComment.getCreatedAt(),
 					ratingComment.getModifiedAt()
-				)).collect(Collectors.toList()));
+				)).collect(Collectors.toList()), ratingComments.getPageable(), ratingComments.getTotalElements());
 	}
 }

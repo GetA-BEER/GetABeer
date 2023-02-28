@@ -18,7 +18,6 @@ import be.domain.beerwishlist.mapper.BeerWishlistMapper;
 import be.domain.beerwishlist.service.BeerWishlistService;
 import be.domain.user.dto.MyPageMultiResponseDto;
 import be.domain.user.service.UserService;
-import be.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @Validated
@@ -39,11 +38,11 @@ public class BeerWishlistController {
 
 	@GetMapping("/mypage/wishlist")
 	public ResponseEntity<MyPageMultiResponseDto<BeerWishlistDto.UserWishlist>> getMyPageBeer(
-		@RequestParam(name = "page", defaultValue = "1") Integer page) {
+		@RequestParam(name = "page", defaultValue = "1") Integer page,
+		@RequestParam(name = "size", defaultValue = "10") Integer size) {
 
-		Page<BeerWishlist> beerWishlists = beerWishlistService.getUserWishlist(page);
-		Page<BeerWishlistDto.UserWishlist> responses = beerWishlistMapper.beersAndWishlistToResponse(
-			beerWishlists.getContent());
+		Page<BeerWishlist> beerWishlists = beerWishlistService.getUserWishlist(page, size);
+		Page<BeerWishlistDto.UserWishlist> responses = beerWishlistMapper.beersAndWishlistToResponse(beerWishlists);
 
 		return ResponseEntity.ok(
 			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), responses.getContent(), responses));

@@ -113,7 +113,7 @@ public interface PairingMapper {
 		return result;
 	}
 
-	default Page<PairingResponseDto.Total> pairingToPairingResponse(List<Pairing> pairings,
+	default Page<PairingResponseDto.Total> pairingToPairingResponse(Page<Pairing> pairings,
 		PairingLikeRepository pairingLikeRepository) {
 		return new PageImpl<>(pairings.stream()
 			.map(pairing ->
@@ -132,6 +132,6 @@ public interface PairingMapper {
 					pairingLikeRepository.findPairingLikeUser(pairing.getId(), pairing.getUser().getId()) != 0,
 					pairing.getCreatedAt(),
 					pairing.getModifiedAt())
-			).collect(Collectors.toList()));
+			).collect(Collectors.toList()), pairings.getPageable(), pairings.getTotalElements());
 	}
 }

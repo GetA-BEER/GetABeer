@@ -1,5 +1,7 @@
 package be.domain.beerwishlist.service.pattern;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import be.domain.beer.entity.Beer;
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.beerwishlist.repository.BeerWishlistRepository;
@@ -12,6 +14,7 @@ public interface WishState {
 class WishStateFalse implements WishState {
 
 	@Override
+	@Transactional
 	public void clickWish(WishButton wishButton, BeerWishlistRepository beerWishlistRepository, User user, Beer beer) {
 		BeerWishlist beerWishlist = beerWishlistRepository.findByBeerAndUser(beer, user);
 		BeerWishlist saved = BeerWishlist.builder()
@@ -28,6 +31,7 @@ class WishStateFalse implements WishState {
 class WishStateTrue implements WishState {
 
 	@Override
+	@Transactional
 	public void clickWish(WishButton wishButton, BeerWishlistRepository beerWishlistRepository, User user, Beer beer) {
 		BeerWishlist beerWishlist = beerWishlistRepository.findByBeerAndUser(beer, user);
 		BeerWishlist saved = BeerWishlist.builder()

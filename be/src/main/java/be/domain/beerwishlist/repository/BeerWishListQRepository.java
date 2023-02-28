@@ -6,6 +6,9 @@ import static be.domain.user.entity.QUser.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,15 +21,27 @@ import lombok.RequiredArgsConstructor;
 public class BeerWishListQRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public List<BeerWishlist> findByUserAndTrue(Long userId) {
+	public Page<BeerWishlist> findByUserAndTrue(Long userId, Pageable pageable) {
 
-		return jpaQueryFactory.selectFrom(beerWishlist)
+		List<BeerWishlist> beerWishlists = jpaQueryFactory.selectFrom(beerWishlist)
 			.join(beerWishlist.beer, beer)
 			.join(beerWishlist.user, user)
 			.where(beerWishlist.user.id.eq(userId))
 			.where(beerWishlist.wished.eq(true))
 			.orderBy(beerWishlist.modifiedAt.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
 			.fetch();
+
+		int total = jpaQueryFactory
+			.selectFrom(beerWishlist)
+			.join(beerWishlist.beer, beer)
+			.join(beerWishlist.user, user)
+			.where(beerWishlist.user.id.eq(userId))
+			.where(beerWishlist.wished.eq(true))
+			.fetch().size();
+
+		return new PageImpl<>(beerWishlists, pageable, total);
 	}
 
 	public void deleteByBeer(Long beerId) {
