@@ -8,11 +8,14 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.stereotype.Repository;
+
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.chat.ChatRoom;
 import lombok.RequiredArgsConstructor;
 
+@Repository
 @RequiredArgsConstructor
 public class ChatRoomRepository {
 	private Map<Long, ChatRoom> chatRooms;
@@ -34,11 +37,15 @@ public class ChatRoomRepository {
 	/* 채팅방 번호로 조회 */
 	public ChatRoom findById(Long chatRoomId) {
 
+		if (chatRooms.get(chatRoomId) == null) {
+			return createChatRoom();
+		}
+
 		return chatRooms.get(chatRoomId);
 	}
 
 	/* 채팅방 생성 */
-	public ChatRoom createChatRoom() {
+	private ChatRoom createChatRoom() {
 		User user = userService.findLoginUser();
 		ChatRoom chatRoom = ChatRoom.create(user);
 		chatRooms.put(chatRoom.getId(), chatRoom);

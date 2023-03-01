@@ -21,7 +21,8 @@ public class ListenerConfiguration {
 
 	@Bean
 	ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, Message> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		ConcurrentKafkaListenerContainerFactory<String, Message> factory =
+			new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
 
 		return factory;
@@ -30,7 +31,8 @@ public class ListenerConfiguration {
 	@Bean
 	public ConsumerFactory<String, Message> consumerFactory() {
 
-		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), new StringDeserializer(), new JsonDeserializer<>(Message.class));
+		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(),
+			new StringDeserializer(), new JsonDeserializer<>(Message.class));
 	}
 
 	@Bean
