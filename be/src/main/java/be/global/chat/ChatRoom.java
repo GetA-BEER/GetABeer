@@ -11,13 +11,14 @@ import javax.persistence.OneToOne;
 import be.domain.user.entity.User;
 import lombok.Getter;
 
-@Entity
+/* 채팅방은 WEB Socket? */
 @Getter
+@Entity
 public class ChatRoom {
 
 	@Id
 	@Column(name = "room_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	/* 회원이랑 일대알 매핑 -> 어드민은 Get으로 등록? */
@@ -32,4 +33,10 @@ public class ChatRoom {
 	// 		user.bndChatRoom(this);
 	// 	}
 	// }
+
+	public static ChatRoom create(User user) {
+		ChatRoom room = new ChatRoom();
+		room.id = user.getId();
+		return room;
+	}
 }

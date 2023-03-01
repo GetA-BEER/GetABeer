@@ -12,8 +12,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor /* 메세지 : 신고용, 건의용 */
 public class Message implements Serializable {
+	private Long roomId; /* 채팅방 아이디 */
 	private String sender;
 	private String content;
 	private String timestamp;
