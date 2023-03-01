@@ -48,7 +48,7 @@ public class Notification {
 	private String content;
 
 	@Column
-	private Long idForNotifyType; // 알림 클릭 시 해당 위치로 이동되게
+	private Long idForNotifyType;
 
 	@ColumnDefault("false")
 	private Boolean isRead; // 읽었는지 안읽었는지
