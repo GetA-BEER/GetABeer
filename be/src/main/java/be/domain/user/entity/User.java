@@ -26,6 +26,7 @@ import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.like.entity.PairingLike;
 import be.domain.like.entity.RatingLike;
+import be.domain.notice.entity.Notification;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.enums.Age;
@@ -190,6 +191,17 @@ public class User implements Serializable {
 
 		if (pairingLike.getUser() != this) {
 			pairingLike.belongToUser(this);
+		}
+	}
+
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<Notification> notifications;
+
+	public void addNotifications(Notification notification) {
+		notifications.add(notification);
+
+		if (notification.getUser() != this) {
+			notification.setUser(this);
 		}
 	}
 
