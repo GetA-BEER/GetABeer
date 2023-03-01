@@ -1,22 +1,15 @@
 package be.global.chat;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import be.domain.user.entity.User;
 import lombok.Getter;
+import lombok.Setter;
 
-/* 채팅방은 WEB Socket? */
 @Getter
+@Setter
 @Entity
 public class ChatRoom {
 
@@ -38,16 +31,16 @@ public class ChatRoom {
 	// 	}
 	// }
 
-	@OneToMany(mappedBy = "chatRoom", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	private List<Message> messageList;
-
-	public void addMessageList(Message message) {
-		messageList.add(message);
-
-		if (message.getChatRoom() != this) {
-			message.belongToChatRoom(this);
-		}
-	}
+	// @OneToMany(mappedBy = "chatRoom", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	// private List<Message> messageList = new ArrayList<>();
+	//
+	// public void addMessageList(Message message) {
+	// 	messageList.add(message);
+	//
+	// 	if (message.getChatRoom() != this) {
+	// 		message.belongToChatRoom(this);
+	// 	}
+	// }
 	public static ChatRoom create(User user) {
 		ChatRoom room = new ChatRoom();
 		room.id = user.getId();

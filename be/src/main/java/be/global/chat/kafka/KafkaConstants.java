@@ -1,4 +1,4 @@
-package be.global.chat.config;
+package be.global.chat.kafka;
 
 public class KafkaConstants {
 	public static final String KAFKA_TOPIC = "getabeer";

@@ -1,4 +1,4 @@
-package be.global.chat.repository;
+package be.global.chat.kafka.repository;
 
 import java.util.ArrayList;
 import java.util.Collections;

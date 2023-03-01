@@ -1,4 +1,4 @@
-package be.global.chat.controller;
+package be.global.chat.kafka.controller;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import be.global.chat.ChatRoom;
 import be.global.chat.Message;
-import be.global.chat.dto.MessageRequest;
-import be.global.chat.service.ChatService;
-import be.global.dto.MultiResponseDto;
+import be.global.chat.kafka.dto.MessageRequest;
+import be.global.chat.kafka.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/kafka")
+@RequestMapping("/api/kafka")
 @RequiredArgsConstructor
 public class ChatController {
 
@@ -30,12 +30,12 @@ public class ChatController {
 
 	/* producer */
 	@PostMapping
-	public ResponseEntity<Message> sendMessage(@RequestBody MessageRequest request) {
+	public ResponseEntity<String> sendMessage(@RequestBody MessageRequest request) {
 
 		return ResponseEntity.ok(chatService.send(request));
 	}
 
-	/* 프론트엔드로 메시지를 전송 */
+	/* 프론트엔드로 메시지를 전송? */
 	@MessageMapping("/sendMessage")
 	@SendTo("/topic/group") /* 해당 토픽을 구독하고 있는 클라이언트에게 전송? */
 	public Message broadcastGroupMessage(@Payload Message message) {
@@ -50,5 +50,11 @@ public class ChatController {
 	public ResponseEntity<List<ChatRoom>> getAllRoom() {
 
 		return ResponseEntity.ok(chatService.findAll());
+	}
+
+	@GetMapping("/{roomId}")
+	public ResponseEntity<ChatRoom> getAllMessageAtChatRoom(@PathVariable Long roomId) {
+
+		return ResponseEntity.ok(chatService.findAllMessage(roomId));
 	}
 }

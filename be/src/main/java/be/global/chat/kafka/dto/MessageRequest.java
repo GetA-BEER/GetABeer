@@ -1,4 +1,4 @@
-package be.global.chat.dto;
+package be.global.chat.kafka.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

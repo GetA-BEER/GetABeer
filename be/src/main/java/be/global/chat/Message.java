@@ -19,29 +19,26 @@ import lombok.ToString;
 
 @Getter
 @Builder
-@Entity
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor /* 메세지 : 신고용, 건의용 */
 public class Message implements Serializable {
 
-	@Id
-	@Column(name = "message_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id; /* 메세지 아이디 */
+	// private Long id; /* 메세지 아이디 */
+	private Long roomId;
 	private String sender;
 	private String content;
-	private LocalDateTime timestamp;
+	private String timestamp;
 
-	@ManyToOne
-	@JoinColumn(name = "room_id")
-	private ChatRoom chatRoom;
-
-	public void belongToChatRoom(ChatRoom chatRoom) {
-		this.chatRoom = chatRoom;
-
-		if (!chatRoom.getMessageList().contains(this)) {
-			chatRoom.addMessageList(this);
-		}
-	}
+	// @ManyToOne
+	// @JoinColumn(name = "room_id")
+	// private ChatRoom chatRoom;
+	//
+	// public void belongToChatRoom(ChatRoom chatRoom) {
+	// 	this.chatRoom = chatRoom;
+	//
+	// 	if (!chatRoom.getMessageList().contains(this)) {
+	// 		chatRoom.addMessageList(this);
+	// 	}
+	// }
 }
