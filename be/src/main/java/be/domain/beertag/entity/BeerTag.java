@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import be.domain.beer.entity.BeerBeerTag;
 import be.domain.user.entity.UserBeerTag;
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
+@DynamicInsert
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BeerTag implements Serializable {

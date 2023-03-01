@@ -45,7 +45,11 @@ public enum ExceptionCode {
 	EMBEDDED_REDIS_EXCEPTION(500, "redis server error"),
 	CAN_NOT_EXECUTE_GREP(500, "can not execute grep process command"),
 	CAN_NOT_EXECUTE_REDIS_SERVER(500, "can not execute redis server"),
-	NOT_FOUND_AVAILABLE_PORT(500, "not found available port");
+	NOT_FOUND_AVAILABLE_PORT(500, "not found available port"),
+
+	/* Notification 관련 예외 */
+	NOTIFICATION_NOT_FOUND(404, "존재하지 않는 알림입니다.")
+	;
 
 	@Getter
 	private int status;

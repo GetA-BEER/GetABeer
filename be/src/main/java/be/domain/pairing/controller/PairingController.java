@@ -64,7 +64,7 @@ public class PairingController {
 	/* 페어링 수정 */
 	@PatchMapping("/{pairingId}")
 	public ResponseEntity<String> patch(@PathVariable @Positive Long pairingId,
-		@RequestPart(value = "newFile", required = false) List<MultipartFile> files,
+		@RequestPart(value = "files", required = false) List<MultipartFile> files,
 		@RequestPart(value = "patch") @Valid PairingRequestDto.Patch patch) throws IOException {
 		String message = pairingService.update(mapper.pairingPatchDtoToPairing(patch),
 			pairingId, patch.getType(), patch.getUrl(), files);

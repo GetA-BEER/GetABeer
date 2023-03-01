@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: JAVA CI v1.0.1
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
         id: create-json
         uses: jsdaniell/create-json@1.1.2
         with:
-          name: "getabeer-376509-6310d68578f1.json"
+          name: "be/src/main/resources/getabeer-376509-6310d68578f1.json"
           json: ${{ secrets.GOOGLE_JSON}}
 
       - name: Set Yml
@@ -50,8 +50,8 @@ jobs:
           spring.mail.username : ${{ secrets.SMTP_GOOGLE_ACCOUNT}}
           spring.mail.password : ${{ secrets.SMTP_GOOGLE_PASSWORD}}
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY}}
-          cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
-          cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
+          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
+          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Build with Gradle
         run: ./gradlew clean build --exclude-task test
@@ -59,7 +59,7 @@ jobs:
 
       # build한 후 프로젝트를 압축
       - name: Make zip file
-        run: zip -r ./getabeer-deploy.zip . -i ./getabeer-deploy
+        run: zip -r ./getabeer-deploy.zip .
         shell: bash
 
       # Access Key와 Secret Access Key를 통해 권한 확인

@@ -149,9 +149,9 @@ public class RatingService {
 		Beer findBeer = beerService.findBeerByRatingId(ratingId);
 
 		/* 삭제하려는 평가의 유저와 로그인한 유저가 일치하는지 확인 */
-		// User user = rating.getUser();
-		// User loginUser = userService.getLoginUser();
-		// userService.checkUser(user.getId(), loginUser.getId());
+		User user = rating.getUser();
+		User loginUser = userService.getLoginUser();
+		userService.checkUser(user.getId(), loginUser.getId());
 
 		deleteBeerBeerTags(findBeer, rating.getRatingTag().createBeerTagTypeList());
 

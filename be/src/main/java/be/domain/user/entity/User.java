@@ -19,11 +19,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.like.entity.PairingLike;
 import be.domain.like.entity.RatingLike;
+import be.domain.notice.entity.Notification;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.enums.Age;
@@ -41,6 +45,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users"
 	   // ,indexes = @Index(name = "i_users", columnList = "nickname")
 )
+@DynamicInsert
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Serializable {
@@ -55,6 +60,12 @@ public class User implements Serializable {
 
 	@Column(nullable = false)
 	private String nickname;
+
+	@ColumnDefault("0")
+	private Long followerCount;
+
+	@ColumnDefault("0")
+	private Long followingCount;
 
 	@Column(nullable = false)
 	private String password;
@@ -186,10 +197,29 @@ public class User implements Serializable {
 		}
 	}
 
-	//    /* ChatRoom 1:1 양방향 매핑 */
-	//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-	//    private ChatRoom chatRoom;
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<Notification> notifications;
+
+	public void addNotifications(Notification notification) {
+		notifications.add(notification);
+
+		if (notification.getUser() != this) {
+			notification.setUser(this);
+		}
+	}
+
+	/* ChatRoom 일대다 양방향 매핑 : 어드민? */
+	// @OneToOne (mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+	// private ChatRoom chatRoom;
 	//
+	// public void bndChatRoom(ChatRoom chatRoom) {
+	// 	this.chatRoom = chatRoom;
+	//
+	// 	if (chatRoom.getUser() != this) {
+	// 		chatRoom.bndUser(this);
+	// 	}
+	// }
+
 	//    /* ChatMessage 1:N 양방향 매핑 */
 	//    @OneToMany(mappedBy = "user")
 	//    private List<ChatMessage> chatMessages;
@@ -254,5 +284,25 @@ public class User implements Serializable {
 
 	public void putImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public void addFollower() {
+		this.followerCount++;
+	}
+
+	public void removeFollower() {
+		if (this.followerCount > 0) {
+			this.followerCount--;
+		}
+	}
+
+	public void addFollowing() {
+		this.followingCount++;
+	}
+
+	public void removeFollowing() {
+		if (this.followingCount > 0) {
+			this.followingCount--;
+		}
 	}
 }

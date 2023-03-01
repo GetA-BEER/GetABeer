@@ -54,18 +54,18 @@ public class BeerStatisticsJdbcRepository {
 					preparedStatement.setTimestamp(1, Timestamp.valueOf(beerStatistics.getCreatedAt()));
 					preparedStatement.setInt(2, beerStatistics.getWeek());
 					preparedStatement.setLong(3, beerStatistics.getBeerId());
-					preparedStatement.setString(3, beerStatistics.getKorName());
-					preparedStatement.setString(3, beerStatistics.getCategory1());
-					preparedStatement.setString(3, beerStatistics.getCategory2());
-					preparedStatement.setDouble(3, beerStatistics.getBeerDetailsStars().getTotalAverageStars());
-					preparedStatement.setDouble(3, beerStatistics.getBeerDetailsStars().getFemaleAverageStars());
-					preparedStatement.setDouble(3, beerStatistics.getBeerDetailsStars().getMaleAverageStars());
-					preparedStatement.setString(3, beerStatistics.getBeerDetailsTopTags().getTag1());
-					preparedStatement.setString(3, beerStatistics.getBeerDetailsTopTags().getTag2());
-					preparedStatement.setString(3, beerStatistics.getBeerDetailsTopTags().getTag3());
-					preparedStatement.setString(3, beerStatistics.getBeerDetailsTopTags().getTag4());
-					preparedStatement.setLong(3, beerStatistics.getViewCount());
-					preparedStatement.setLong(3, beerStatistics.getRatingCount());
+					preparedStatement.setString(4, beerStatistics.getKorName());
+					preparedStatement.setString(5, beerStatistics.getCategory1());
+					preparedStatement.setString(6, beerStatistics.getCategory2());
+					preparedStatement.setDouble(7, beerStatistics.getBeerDetailsStars().getTotalAverageStars());
+					preparedStatement.setDouble(8, beerStatistics.getBeerDetailsStars().getFemaleAverageStars());
+					preparedStatement.setDouble(9, beerStatistics.getBeerDetailsStars().getMaleAverageStars());
+					preparedStatement.setString(10, beerStatistics.getBeerDetailsTopTags().getTag1());
+					preparedStatement.setString(11, beerStatistics.getBeerDetailsTopTags().getTag2());
+					preparedStatement.setString(12, beerStatistics.getBeerDetailsTopTags().getTag3());
+					preparedStatement.setString(13, beerStatistics.getBeerDetailsTopTags().getTag4());
+					preparedStatement.setLong(14, beerStatistics.getViewCount());
+					preparedStatement.setLong(15, beerStatistics.getRatingCount());
 				}
 
 				@Override

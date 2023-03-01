@@ -108,17 +108,17 @@ public class UserController {
 	/* 유저 로그아웃 */
 	@PostMapping("/user/logout")
 	public void logoutUser(HttpServletRequest request) {
-		String email = userService.getLoginUser().getEmail();
-		userService.logout(request, email);
+		User user = userService.getLoginUser();
+		userService.logout(request, user);
 	}
 
 	/* 유저 탈퇴 */
 	@PatchMapping("/user/withdraw")
 	public ResponseEntity<String> withDrawUser(HttpServletRequest request) {
-		String email = userService.getLoginUser().getEmail();
+		User user = userService.getLoginUser();
 
 		userService.withdraw();
-		userService.logout(request, email);
+		userService.logout(request, user);
 
 		return ResponseEntity.ok("정상적으로 탈퇴되셨습니다.");
 	}

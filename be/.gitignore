@@ -38,6 +38,12 @@ out/
 
 ### Google Secret Key ###
 getabeer-376509-6310d68578f1.json
+getabeer-376509-e3dcb064cd58.json
 
 **/TestController.java
 **/TestController.class
+
+#application.yml
+application3.yml
+application4.yml
+application-dev.yml

@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: dev
   application:
     name: Get_A_Beer
   h2:

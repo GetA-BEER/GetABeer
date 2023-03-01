@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageImpl;
 
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.entity.PairingComment;
-import be.domain.pairing.dto.PairingResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface PairingCommentMapper {

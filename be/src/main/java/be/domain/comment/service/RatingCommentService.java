@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.comment.dto.RatingCommentDto;
 import be.domain.comment.entity.RatingComment;
-import be.domain.comment.repository.RatingCommentRepository;
+import be.domain.comment.repository.rating.RatingCommentRepository;
+import be.domain.notice.entity.NotificationType;
+import be.domain.notice.service.NotificationService;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.repository.RatingRepository;
 import be.domain.rating.service.RatingService;
@@ -24,13 +26,13 @@ public class RatingCommentService {
 	private final UserService userService;
 	private final RatingService ratingService;
 	private final RatingRepository ratingRepository;
+	private final NotificationService notificationService;
 	private final RatingCommentRepository ratingCommentRepository;
 
 	/* 맥주 댓글 등록 */
 	@Transactional
 	public RatingComment create(RatingComment ratingComment, Long ratingId) {
 
-		/* 로그인 유저와 들어오는 정보의 유저가 일치하는지 */
 		User user = userService.getLoginUser();
 
 		Rating rating = ratingService.findRating(ratingId);
@@ -39,6 +41,13 @@ public class RatingCommentService {
 
 		rating.calculateComments(rating.getRatingCommentList().size());
 		ratingRepository.save(rating);
+
+		if (!user.getId().equals(rating.getUser().getId())) {
+			String title = user.getNickname() + "님이 회원님의 게시글에 댓글을 남겼습니다.";
+			String content = "\"" + ratingComment.getContent() + "\"";
+			notificationService.send(rating.getUser(), rating.getId(), title, content, user.getImageUrl(),
+				NotificationType.RATING);
+		}
 
 		return ratingComment;
 	}
@@ -68,6 +77,12 @@ public class RatingCommentService {
 	/* 맥주 댓글 삭제 */
 	public String delete(Long ratingCommentId) {
 		RatingComment findComment = findVerifiedRatingComment(ratingCommentId);
+
+		/* 로그인 한 유저와 삭제하려는 유저가 같은지 확인 */
+		User loginUser = userService.getLoginUser();
+		User user = findComment.getUser();
+		userService.checkUser(user.getId(), loginUser.getId());
+
 		Rating rating = findComment.getRating();
 
 		ratingCommentRepository.delete(findComment);

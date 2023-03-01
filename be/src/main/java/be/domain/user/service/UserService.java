@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
 
+import be.domain.notice.repository.EmitterRepository;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.ProfileImage;
 import be.domain.user.entity.User;
@@ -46,6 +47,7 @@ public class UserService {
 	private final ImageHandler imageHandler;
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final EmitterRepository emitterRepository;
 	private final CustomAuthorityUtils authorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final UserPreferenceService userPreferenceService;
@@ -218,13 +220,14 @@ public class UserService {
 	}
 
 	/* 로그아웃 */
-	public void logout(HttpServletRequest request, String email) {
+	public void logout(HttpServletRequest request, User user) {
 		redisTemplate.opsForValue()
 			.set(request.getHeader("Authorization"),
 				"logout",
 				30 * 60 * 1000L,
 				TimeUnit.MILLISECONDS);
-		redisTemplate.delete(email);
+		redisTemplate.delete(user.getEmail());
+		emitterRepository.deleteAllStartByWithId(String.valueOf(user.getId()));
 		// httpSession.removeAttribute(SessionKey.LOGIN_USER_ID);
 	}
 
