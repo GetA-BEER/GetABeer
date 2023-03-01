@@ -1,31 +1,25 @@
 package be.global.security.auth.oauth.service;
 
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpSession;
-
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.mail.controller.MailController;
-import be.domain.mail.dto.MailDto;
 import be.domain.user.entity.User;
-import be.domain.user.entity.enums.UserStatus;
+import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.repository.UserRepository;
-import be.global.exception.BusinessLogicException;
-import be.global.exception.ExceptionCode;
-import be.global.security.auth.oauth.strategy.userinfo.GoogleUserInfo;
-import be.global.security.auth.oauth.strategy.userinfo.KakaoUserInfo;
-import be.global.security.auth.oauth.strategy.userinfo.NaverUserInfo;
-import be.global.security.auth.oauth.strategy.userinfo.OAuth2UserInfo;
-import be.global.security.auth.session.user.SessionUser;
-import be.global.security.auth.userdetails.AuthUser;
+import be.global.security.auth.oauth.CustomOAuth2User;
+import be.global.security.auth.oauth.attributes.OAuth2Attribute;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-
-	private OAuth2UserInfo oAuth2UserInfo;
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 	private final UserRepository userRepository;
 	private final MailController mailController;
 	private final PasswordEncoder passwordEncoder;
@@ -44,72 +36,66 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-		OAuth2User oauth2User = super.loadUser(userRequest);
-		OAuth2UserInfo oauth2UserInfo = getOAuth2UserInfo(userRequest, oauth2User);
+		log.info("# 소셜로그인 요청 드가자~");
 
-		return getPrincipalDetails(oauth2UserInfo);
+		/**
+		 * DefaultOAuth2UserService 객체 생성 -> loadUser(userRequest) -> DefaultOAuth2User 객체를 생성 후 반환
+		 * loadUser() : 소셜 로그인 사용자 정보 제공 URI로 요청 -> 사용자 정보 get -> DefaultOAuth2User 생성 후 반환
+		 */
+		OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+		OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
+		/**
+		 * userRequest 추출한 registrationId 로 provider type 저장
+		 */
+		String registrationId = userRequest.getClientRegistration().getRegistrationId();
+		ProviderType providerType = getProviderType(registrationId);
+		String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint()
+			.getUserNameAttributeName();
+		Map<String, Object> attributes = oAuth2User.getAttributes(); // 소셜 로그인 API 제공 userInfo
+
+		OAuth2Attribute extractAttribute = OAuth2Attribute.of(providerType, userNameAttributeName, attributes);
+
+		User createdUser = getUser(extractAttribute, providerType);
+
+		// DefaultOAuth2User 구현한 CustomOAuth2User 객체 생성 후 반환
+		return new CustomOAuth2User(
+			Collections.singleton(new SimpleGrantedAuthority(createdUser.getRoles().get(0))),
+			attributes,
+			extractAttribute.getUsernameAttributeName(),
+			createdUser.getEmail(),
+			createdUser.getRoles().get(0)
+		);
 	}
 
-	private OAuth2UserInfo getOAuth2UserInfo(OAuth2UserRequest userRequest, OAuth2User oauth2User) {
-		if (userRequest.getClientRegistration().getRegistrationId().equals("google"))
-			oAuth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
-
-		if (userRequest.getClientRegistration().getRegistrationId().equals("naver"))
-			oAuth2UserInfo = new NaverUserInfo(oauth2User.getAttributes());
-
-		if (userRequest.getClientRegistration().getRegistrationId().equals("kakao"))
-			oAuth2UserInfo = new KakaoUserInfo(oauth2User.getAttributes());
-
-		return oAuth2UserInfo;
-	}
-
-	private AuthUser getPrincipalDetails(OAuth2UserInfo oauth2UserInfo) {
-
-		Optional<User> user = userRepository.findByEmail(oauth2UserInfo.getEmail());
-
-		String providerId = oauth2UserInfo.getProviderId();
-		String nickname = oauth2UserInfo.getName();
-		String email = oauth2UserInfo.getEmail();
-		String uuid = UUID.randomUUID().toString().substring(0, 15);
-		String password = passwordEncoder.encode(uuid);
-		String imageUrl = oauth2UserInfo.getImageUrl();
-
-		if (user.isEmpty()) {
-			log.info("OAuth2 Login");
-
-			User saved = User.builder()
-				.email(email)
-				.nickname(nickname)
-				.status(UserStatus.ACTIVE_USER.getStatus())
-				.provider(oauth2UserInfo.getProvider().toUpperCase())
-				.imageUrl(imageUrl)
-				.roles(authorityUtils.createRoles(email))
-				.password(password)
-				.build();
-
-			saved.randomProfileImage(saved.getImageUrl());
-
-			MailDto.sendPWMail post = MailDto.sendPWMail.builder()
-				.email(email)
-				.password(uuid)
-				.build();
-			mailController.sendOAuth2PasswordEmail(post);
-
-			userRepository.save(saved);
-
-			return new AuthUser(saved.getId(), saved.getAge(), saved.getRoles(), saved.getEmail(), saved.getGender(),
-				saved.getNickname(), saved.getPassword(), saved.getProvider(), oauth2UserInfo);
+	private ProviderType getProviderType(String registrationId) {
+		if ("naver".equals(registrationId)) {
+			return ProviderType.NAVER;
 		}
-
-		rejectWithdrawal(user);
-
-		return new AuthUser(user.get().getId(), user.get().getAge(), user.get().getRoles(), user.get().getEmail(),
-			user.get().getGender(), user.get().getNickname(), user.get().getPassword(), user.get().getProvider(),
-			oauth2UserInfo);
+		if ("kakao".equals(registrationId)) {
+			return ProviderType.KAKAO;
+		}
+		return ProviderType.GOOGLE;
 	}
 
-	private void rejectWithdrawal(Optional<User> user) {
-		if (user.get().getUserStatus() == UserStatus.QUIT_USER.getStatus())
-			throw new BusinessLogicException(ExceptionCode.WITHDRAWN_USER);
+	private User getUser(OAuth2Attribute attributes, ProviderType providerType) {
+		User findUser = userRepository.findByEmailAndProvider(attributes.getOAuth2UserInfo().getEmail(),
+			providerType.toString()).orElse(null);
+
+		if (findUser == null) {
+			return saveUser(attributes, providerType);
+		}
+		return findUser;
+	}
+
+	private User saveUser(OAuth2Attribute attribute, ProviderType providerType) {
+
+		String password = UUID.randomUUID().toString().substring(0, 15);
+		mailController.sendOAuth2PasswordEmail(attribute.getOAuth2UserInfo().getEmail(), password);
+
+		User createdUser = attribute.toEntity(providerType, attribute.getOAuth2UserInfo(),
+			passwordEncoder.encode(password), authorityUtils.createRoles(attribute.getOAuth2UserInfo().getEmail()));
+
+		return userRepository.save(createdUser);
 	}
 }

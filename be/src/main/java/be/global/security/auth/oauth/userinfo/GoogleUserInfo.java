@@ -1,9 +1,9 @@
-package be.global.security.auth.oauth.strategy.userinfo;
+package be.global.security.auth.oauth.userinfo;
 
-import java.io.Serializable;
 import java.util.Map;
+import java.util.UUID;
 
-public class GoogleUserInfo implements OAuth2UserInfo, Serializable {
+public class GoogleUserInfo implements OAuth2UserInfo {
 	private Map<String, Object> attributes;
 
 	public GoogleUserInfo(Map<String, Object> attributes) {
@@ -26,17 +26,17 @@ public class GoogleUserInfo implements OAuth2UserInfo, Serializable {
 	}
 
 	@Override
-	public String getImageUrl() {
-		return attributes.get("picture").toString();
-	}
-
-	@Override
 	public String getEmail() {
 		return attributes.get("email").toString();
 	}
 
 	@Override
-	public String getName() {
-		return attributes.get("name").toString();
+	public String getNickname() {
+		return attributes.get("name").toString() + UUID.randomUUID().toString().substring(0, 5);
+	}
+
+	@Override
+	public String getImageUrl() {
+		return attributes.get("picture").toString();
 	}
 }

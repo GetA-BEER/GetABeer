@@ -11,7 +11,8 @@ import be.domain.user.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByEmail(String email);
 	Boolean existsByNickname(String nickname);
-	User findByNickname(String nickname);
+	Boolean findByNickname(String nickname);
+	Optional<User> findByEmailAndProvider(String email, String provider);
 
 	@Query(value = "SELECT u.nickname FROM User u")
 	List<Object[]> indexTest();

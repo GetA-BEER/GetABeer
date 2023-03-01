@@ -3,6 +3,7 @@ package be.domain.user.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -284,6 +285,10 @@ public class User implements Serializable {
 
 	public void putImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public void changeNickname(String nickname) {
+		this.nickname = nickname + UUID.randomUUID().toString().substring(0, 5);
 	}
 
 	public void addFollower() {

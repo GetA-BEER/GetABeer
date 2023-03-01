@@ -2,29 +2,23 @@ package be.global.security.auth.oauth.handler;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import be.domain.user.entity.User;
 import be.domain.user.repository.UserRepository;
 import be.global.security.auth.jwt.JwtTokenizer;
-import be.global.security.auth.session.user.SessionUser;
+import be.global.security.auth.oauth.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,51 +27,69 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private final HttpSession httpSession;
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
-
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
-		String authorizedClientRegistrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
-		OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
 
-		String nickname;
-		if (oAuth2User.getAttributes().get("properties") == null) {
-			if (authorizedClientRegistrationId.equals("google")) {
-				nickname = oAuth2User.getAttributes().get("name").toString();
+		log.info("소셜 로그인 성공이어야함 제발");
+
+		try {
+			CustomOAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
+
+			// 첫 소셜 로그인 시 회원정보입력으로 기기
+			User user = userRepository.findByEmail(oAuth2User.getEmail()).orElseThrow();
+			if (user.getAge() == null) {
+
+				String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(),
+					user.getProvider());
+
+				String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
+				if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
+					redisTemplate.delete(user.getEmail());
+				}
+				redisTemplate.opsForValue()
+					.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+
+				ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+					.maxAge(7 * 24 * 60 * 60)
+					.path("/")
+					.secure(true)
+					.sameSite("None")
+					.httpOnly(true)
+					.build();
+
+				response.setHeader("Access-Control-Allow-Methods", "*");
+				response.setHeader("Access-Control-Allow-Credentials", "true");
+				response.setHeader("Access-Control-Allow-Origin", request.getHeader("*"));
+				response.setHeader("Access-Control-Allow-Headers", "*");
+				response.addHeader("Set-Cookie", cookie.toString());
+				response.addHeader("Authorization", "Bearer " + accessToken);
+				response.addIntHeader("id", user.getId().intValue());
+				// response.sendRedirect("http://localhost:3000/signup/information"); // 회원정보입력으로 가버려..
+
+				getRedirectStrategy().sendRedirect(request, response, "https://getabeer.co.kr/signup/information");
+
 			} else {
-				nickname = oAuth2User.getAttributes().get("nickname").toString();
+				loginSuccess(request, response, user);
 			}
-		} else {
-			nickname = ((Map)oAuth2User.getAttributes().get("properties")).get("nickname").toString();
+		} catch (Exception e) {
+			log.error(e.getMessage());
 		}
-
-		User user = userRepository.findByNickname(nickname);
-
-		redirect(request, response, user);
-		// getToken(request, response, user.getEmail(), user.getProvider(), user.getRoles());
 	}
 
-	public void redirect(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
-
+	private void loginSuccess(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
 		String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(), user.getProvider());
 		String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
-
-		httpSession.setAttribute("user", new SessionUser(accessToken, refreshToken));
 
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
 			redisTemplate.delete(user.getEmail());
 		}
 		redisTemplate.opsForValue()
 			.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
-
-		// log.info("-----------------------------------------------------------");
-		// log.info("Get SessionUser Token = " + user.getAct());
-		// log.info("-----------------------------------------------------------");
 
 		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 			.maxAge(7 * 24 * 60 * 60)
@@ -87,53 +99,28 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			.httpOnly(true)
 			.build();
 
-		response.setHeader("Set-Cookie", cookie.toString());
+		response.setHeader("Access-Control-Allow-Methods", "*");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Headers", "*");
 		response.setHeader("Authorization", "Bearer " + accessToken);
+		response.setHeader("Set-Cookie", cookie.toString());
+		response.addIntHeader("id", user.getId().intValue());
 
-		String uri = user.getAge() == null
-			? createFirstURI(user.getId(), accessToken, refreshToken).toString()
-			: createURI(accessToken, refreshToken).toString();
-
+		String uri = createURI().toString();
 		getRedirectStrategy().sendRedirect(request, response, uri);
 	}
 
-	private URI createFirstURI(Long userId, String act, String rft) {
-		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-		queryParams.add("user_id", userId.toString());
-		queryParams.add("access_token", act);
-		queryParams.add("refresh_token", rft);
-
+	private URI createURI() {
 		return UriComponentsBuilder
 			.newInstance()
-			// .scheme("https")
-			.scheme("http")
-			// .host("server.getabeer.co.kr")
-			.host("localhost")
-			.port(3000)
-			.path("/signup/information")
-			// .path("/api/token")
-			.queryParams(queryParams)
-			.build()
-			.toUri();
-	}
-
-	private URI createURI(String act, String rft) {
-		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-		queryParams.add("access_token", act);
-		queryParams.add("refresh_token", rft);
-
-		return UriComponentsBuilder
-			.newInstance()
-			// .scheme("https")
-			.scheme("http")
-			// .host("www.getabeer.co.kr")
-			.host("localhost")
-			.port(8080)
+			.scheme("https")
+			// .scheme("http")
+			.host("www.getabeer.co.kr")
 			// .path("/signup/information")
-			.path("/api/token")
-			.queryParams(queryParams)
+			// .host("localhost")
+			// .port(3000)
 			.build()
 			.toUri();
 	}
-
 }

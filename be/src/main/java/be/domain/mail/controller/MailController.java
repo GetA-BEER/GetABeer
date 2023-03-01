@@ -36,9 +36,9 @@ public class MailController {
 	}
 
 	@PostMapping("/mail/password")
-	public void sendOAuth2PasswordEmail(@RequestBody MailDto.sendPWMail post) {
-		mailService.verifyEmail(post.getEmail());
-		mailService.sendPasswordMail(post.getEmail(), post.getPassword());
+	public void sendOAuth2PasswordEmail(@RequestBody String email, @RequestBody String password) {
+		// mailService.verifyEmail(email);
+		mailService.sendPasswordMail(email, password);
 
 		ResponseEntity.ok("임시 비밀번호가 전송되었습니다.");
 	}
