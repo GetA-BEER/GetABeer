@@ -10,8 +10,8 @@ export default function Advertise() {
     `/images/advertise/search.png`,
     `/images/advertise/rating.png`,
     `/images/advertise/pairing.png`,
-    `/images/advertise/map.png`,
   ];
+  //     `/images/advertise/map.png`,
   return (
     <Swiper
       pagination={true}
