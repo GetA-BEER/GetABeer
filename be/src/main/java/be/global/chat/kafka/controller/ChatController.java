@@ -55,6 +55,7 @@ public class ChatController {
 	@GetMapping("/{roomId}")
 	public ResponseEntity<ChatRoom> getAllMessageAtChatRoom(@PathVariable Long roomId) {
 
+		/* 메세지 리스트는 가지 않음...*/
 		return ResponseEntity.ok(chatService.findAllMessage(roomId));
 	}
 }
