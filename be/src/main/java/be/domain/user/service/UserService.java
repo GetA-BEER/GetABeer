@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -19,19 +18,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import be.domain.follow.FollowQueryRepository;
+
 import be.domain.notice.repository.EmitterRepository;
+
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.ProfileImage;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.ProfileImageRepository;
+import be.domain.user.repository.UserQueryRepository;
 import be.domain.user.repository.UserRepository;
 import be.domain.user.service.pattern.StateButton;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
-import be.global.security.auth.constant.SessionKey;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

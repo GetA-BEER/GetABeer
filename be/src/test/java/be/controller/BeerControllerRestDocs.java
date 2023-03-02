@@ -1,27 +1,41 @@
 
 package be.controller;
 
+import static be.utils.ApiDocumentUtils.*;
+import static be.utils.BeerTestConstants.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 
+import be.domain.beer.dto.BeerDto;
+import be.domain.beer.entity.Beer;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.beer.service.BeerService;
+import be.domain.beerwishlist.entity.BeerWishlist;
+import be.domain.beerwishlist.service.BeerWishlistService;
 
 @Transactional
 @SpringBootTest
@@ -37,203 +51,201 @@ public class BeerControllerRestDocs {
 	private BeerMapper beerMapper;
 	@MockBean
 	private BeerService beerService;
+	@MockBean
+	BeerWishlistService beerWishlistService;
 
 	@BeforeEach
 	private void init() {
 	}
 
-	// @Test
-	// void postBeerTest() throws Exception {
-	//
-	// 	String content = gson.toJson(BEER_POST_DTO);
-	//
-	// 	BeerDto.DetailsResponse response =
-	// 		BeerDto.DetailsResponse.builder()
-	// 			.beerId(1L)
-	// 			.beerDetailsBasic(BEER_DETAILS_BASIC)
-	// 			.beerDetailsCounts(BEER_DETAILS_COUNTS_EMPTY)
-	// 			.beerDetailsStars(BEER_DETAILS_STARS_EMPTY)
-	// 			.isWishListed(false)
-	// 			.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
-	// 			.beerTags(new ArrayList<>())
-	// 			.similarBeers(new ArrayList<>())
-	// 			.build();
-	//
-	// 	given(beerMapper.beerPostToBeer(Mockito.any(BeerDto.Post.class))).willReturn(Beer.builder().build());
-	// 	given(beerService.createBeer(Mockito.any(Beer.class))).willReturn(Beer.builder().build());
-	// 	given(beerMapper.beerToPostDetailsResponse(Mockito.any(Beer.class))).willReturn(response);
-	//
-	// 	ResultActions actions =
-	// 		mockMvc.perform(
-	// 			RestDocumentationRequestBuilders.post("/beers/add")
-	// 				.accept(MediaType.APPLICATION_JSON)
-	// 				.contentType(MediaType.APPLICATION_JSON)
-	// 				.content(content)
-	// 		);
-	//
-	// 	actions
-	// 		.andExpect(status().isCreated())
-	// 		.andExpect(jsonPath(".korName").value(response.getBeerDetailsBasic().getKorName()))
-	// 		.andExpect(jsonPath(".engName").value(response.getBeerDetailsBasic().getEngName()))
-	// 		.andDo(document(
-	// 			"Post_Beer",
-	// 			getDocumentRequest(),
-	// 			getDocumentResponse(),
-	// 			requestFields(
-	// 				List.of(
-	// 					fieldWithPath("korName").type(JsonFieldType.STRING).description("한글 이름"),
-	// 					fieldWithPath("engName").type(JsonFieldType.STRING).description("영문 이름"),
-	// 					fieldWithPath("country").type(JsonFieldType.STRING).description("생산 국가"),
-	// 					fieldWithPath("beerCategories[]").type(JsonFieldType.ARRAY).description("맥주 카테고리"),
-	// 					fieldWithPath("beerCategories[].beerCategoryId").type(JsonFieldType.NUMBER)
-	// 						.description("맥주 카테고리 아이디"),
-	// 					fieldWithPath("beerCategories[].beerCategoryType").type(JsonFieldType.STRING)
-	// 						.description("맥주 카테고리 타입"),
-	// 					fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("썸네일 이미지 주소"),
-	// 					fieldWithPath("abv").type(JsonFieldType.NUMBER).description("알코올 도수"),
-	// 					fieldWithPath("ibu").type(JsonFieldType.NUMBER).description("IBU")
-	// 				)
-	// 			),
-	// 			responseFields(
-	// 				List.of(
-	// 					fieldWithPath(".beerId").type(JsonFieldType.NUMBER).description("맥주 번호"),
-	//
-	// 					fieldWithPath(".beerDetailsBasic").type(JsonFieldType.OBJECT).description("맥주 기본 정보"),
-	// 					fieldWithPath(".beerDetailsBasic.korName").type(JsonFieldType.STRING).description("한글 이름"),
-	// 					fieldWithPath(".beerDetailsBasic.engName").type(JsonFieldType.STRING).description("영문 이름"),
-	// 					fieldWithPath(".beerDetailsBasic.country").type(JsonFieldType.STRING).description("생산 국가"),
-	// 					fieldWithPath(".beerDetailsBasic.thumbnail").type(JsonFieldType.STRING)
-	// 						.description("썸네일 이미지 주소"),
-	// 					fieldWithPath(".beerDetailsBasic.abv").type(JsonFieldType.NUMBER).description("알코올 도수"),
-	// 					fieldWithPath(".beerDetailsBasic.ibu").type(JsonFieldType.NUMBER).description("IBU"),
-	//
-	// 					fieldWithPath(".beerDetailsCounts").type(JsonFieldType.OBJECT).description("맥주 관련 카운팅"),
-	// 					fieldWithPath(".beerDetailsCounts.totalStarCount").type(JsonFieldType.NUMBER)
-	// 						.description("전체 별점 수"),
-	// 					fieldWithPath(".beerDetailsCounts.femaleStarCount").type(JsonFieldType.NUMBER)
-	// 						.description("여성 별점 수"),
-	// 					fieldWithPath(".beerDetailsCounts.maleStarCount").type(JsonFieldType.NUMBER)
-	// 						.description("남성 별점 수"),
-	// 					fieldWithPath(".beerDetailsCounts.commentCount").type(JsonFieldType.NUMBER)
-	// 						.description("코멘트 수"),
-	// 					fieldWithPath(".beerDetailsCounts.pairingCount").type(JsonFieldType.NUMBER)
-	// 						.description("페어링 수"),
-	//
-	// 					fieldWithPath(".beerDetailsStars").type(JsonFieldType.OBJECT).description("맥주 관련 별점"),
-	// 					fieldWithPath(".beerDetailsStars.totalAverageStars").type(JsonFieldType.NUMBER)
-	// 						.description("맥주 총 별점 평균"),
-	// 					fieldWithPath(".beerDetailsStars.femaleAverageStars").type(JsonFieldType.NUMBER)
-	// 						.description("맥주 여성 별점 평균"),
-	// 					fieldWithPath(".beerDetailsStars.maleAverageStars").type(JsonFieldType.NUMBER)
-	// 						.description("맥주 남성 별점 평균"),
-	//
-	// 					fieldWithPath(".isWishListed").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
-	// 					fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
-	// 					fieldWithPath(".beerTags").type(JsonFieldType.ARRAY).description("맥주 태그 리스트"),
-	// 					fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
-	// 				)
-	// 			)));
-	// }
-	//
-	// @Test
-	// void patchBeerTest() throws Exception {
-	//
-	// 	Long beerId = 1L;
-	//
-	// 	String content = gson.toJson(BEER_PATCH_DTO);
-	//
-	// 	BeerDto.DetailsResponse response =
-	// 		BeerDto.DetailsResponse.builder()
-	// 			.beerId(1L)
-	// 			.beerDetailsBasic(BEER_DETAILS_UPDATED)
-	// 			.beerDetailsCounts(BEER_DETAILS_COUNTS_WITH_VALUES)
-	// 			.beerDetailsStars(BEER_DETAILS_STARS_WITH_VALUES)
-	// 			.isWishListed(false)
-	// 			.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
-	// 			.beerTags(new ArrayList<>())
-	// 			.similarBeers(new ArrayList<>())
-	// 			.build();
-	//
-	// 	given(beerMapper.beerPatchToBeer(Mockito.any(BeerDto.Patch.class))).willReturn(Beer.builder().build());
-	// 	given(beerService.findTop4BeerTags(Mockito.any(Beer.class))).willReturn(new ArrayList<>());
-	// 	given(beerService.updateBeer(Mockito.any(Beer.class), anyLong())).willReturn(Beer.builder().build());
-	// 	given(beerMapper.beerToDetailsResponse(Mockito.any(Beer.class), anyList())).willReturn(response);
-	//
-	// 	ResultActions actions =
-	// 		mockMvc.perform(
-	// 			RestDocumentationRequestBuilders.patch("/beers/{beer_id}/edit", beerId)
-	// 				.accept(MediaType.APPLICATION_JSON)
-	// 				.contentType(MediaType.APPLICATION_JSON)
-	// 				.content(content)
-	// 		);
-	//
-	// 	actions
-	// 		.andExpect(status().isOk())
-	// 		.andExpect(jsonPath(".korName").value(response.getBeerDetailsBasic().getKorName()))
-	// 		.andExpect(jsonPath(".engName").value(response.getBeerDetailsBasic().getEngName()))
-	// 		.andDo(document(
-	// 			"Patch_Beer",
-	// 			getDocumentRequest(),
-	// 			getDocumentResponse(),
-	// 			pathParameters(
-	// 				parameterWithName("beer_id").description("맥주 번호")
-	// 			),
-	// 			requestFields(
-	// 				List.of(
-	// 					fieldWithPath("korName").type(JsonFieldType.STRING).description("수정된 한글 이름"),
-	// 					fieldWithPath("engName").type(JsonFieldType.STRING).description("수정된 영문 이름"),
-	// 					fieldWithPath("country").type(JsonFieldType.STRING).description("수정된 생산 국가"),
-	// 					fieldWithPath("beerCategories[]").type(JsonFieldType.ARRAY).description("수정된 맥주 카테고리"),
-	// 					fieldWithPath("beerCategories[].beerCategoryId").type(JsonFieldType.NUMBER)
-	// 						.description("수정된 맥주 카테고리 아이디"),
-	// 					fieldWithPath("beerCategories[].beerCategoryType").type(JsonFieldType.STRING)
-	// 						.description("수정된 맥주 카테고리 타입"),
-	// 					fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("수정된 썸네일 이미지 주소"),
-	// 					fieldWithPath("abv").type(JsonFieldType.NUMBER).description("수정된 알코올 도수"),
-	// 					fieldWithPath("ibu").type(JsonFieldType.NUMBER).description("수정된 IBU")
-	// 				)
-	// 			),
-	// 			responseFields(
-	// 				List.of(
-	// 					fieldWithPath(".beerId").type(JsonFieldType.NUMBER).description("맥주 번호"),
-	//
-	// 					fieldWithPath(".beerDetailsBasic").type(JsonFieldType.OBJECT).description("맥주 기본 정보"),
-	// 					fieldWithPath(".beerDetailsBasic.korName").type(JsonFieldType.STRING).description("수정된 한글 이름"),
-	// 					fieldWithPath(".beerDetailsBasic.engName").type(JsonFieldType.STRING).description("수정된 영문 이름"),
-	// 					fieldWithPath(".beerDetailsBasic.country").type(JsonFieldType.STRING).description("수정된 생산 국가"),
-	// 					fieldWithPath(".beerDetailsBasic.thumbnail").type(JsonFieldType.STRING)
-	// 						.description("수정된 썸네일 이미지 주소"),
-	// 					fieldWithPath(".beerDetailsBasic.abv").type(JsonFieldType.NUMBER).description("수정된 알코올 도수"),
-	// 					fieldWithPath(".beerDetailsBasic.ibu").type(JsonFieldType.NUMBER).description("수정된 IBU"),
-	//
-	// 					fieldWithPath(".beerDetailsCounts").type(JsonFieldType.OBJECT).description("맥주 관련 카운팅"),
-	// 					fieldWithPath(".beerDetailsCounts.totalStarCount").type(JsonFieldType.NUMBER)
-	// 						.description("전체 별점 수"),
-	// 					fieldWithPath(".beerDetailsCounts.femaleStarCount").type(JsonFieldType.NUMBER)
-	// 						.description("여성 별점 수"),
-	// 					fieldWithPath(".beerDetailsCounts.maleStarCount").type(JsonFieldType.NUMBER)
-	// 						.description("남성 별점 수"),
-	// 					fieldWithPath(".beerDetailsCounts.commentCount").type(JsonFieldType.NUMBER)
-	// 						.description("코멘트 수"),
-	// 					fieldWithPath(".beerDetailsCounts.pairingCount").type(JsonFieldType.NUMBER)
-	// 						.description("페어링 수"),
-	//
-	// 					fieldWithPath(".beerDetailsStars").type(JsonFieldType.OBJECT).description("맥주 관련 별점"),
-	// 					fieldWithPath(".beerDetailsStars.totalAverageStars").type(JsonFieldType.NUMBER)
-	// 						.description("맥주 총 별점 평균"),
-	// 					fieldWithPath(".beerDetailsStars.femaleAverageStars").type(JsonFieldType.NUMBER)
-	// 						.description("맥주 여성 별점 평균"),
-	// 					fieldWithPath(".beerDetailsStars.maleAverageStars").type(JsonFieldType.NUMBER)
-	// 						.description("맥주 남성 별점 평균"),
-	//
-	// 					fieldWithPath(".isWishListed").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
-	// 					fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
-	// 					fieldWithPath(".beerTags").type(JsonFieldType.ARRAY).description("맥주 태그 리스트"),
-	// 					fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
-	// 				)
-	// 			)));
-	// }
-	//
+	@Test
+	void postBeerTest() throws Exception {
+
+		String content = gson.toJson(BEER_POST_DTO);
+
+		BeerDto.DetailsResponse response =
+			BeerDto.DetailsResponse.builder()
+				.beerId(1L)
+				.beerDetailsBasic(BEER_DETAILS_BASIC)
+				.beerDetailsCounts(BEER_DETAILS_COUNTS_EMPTY)
+				.beerDetailsStars(BEER_DETAILS_STARS_EMPTY)
+				.isWishlist(false)
+				.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
+				.beerDetailsTopTags(new ArrayList<>())
+				.similarBeers(new ArrayList<>())
+				.build();
+
+		given(beerMapper.beerPostToBeer(Mockito.any(BeerDto.Post.class))).willReturn(Beer.builder().build());
+		given(beerService.createBeer(Mockito.any(Beer.class))).willReturn(Beer.builder().build());
+		given(beerMapper.beerToPostDetailsResponse(Mockito.any(Beer.class))).willReturn(response);
+
+		ResultActions actions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.post("/api/beers/add")
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(content)
+			);
+
+		actions
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath(".korName").value(response.getBeerDetailsBasic().getKorName()))
+			.andExpect(jsonPath(".engName").value(response.getBeerDetailsBasic().getEngName()))
+			.andDo(document(
+				"Post_Beer",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestFields(
+					List.of(
+						fieldWithPath("korName").type(JsonFieldType.STRING).description("한글 이름"),
+						fieldWithPath("engName").type(JsonFieldType.STRING).description("영문 이름"),
+						fieldWithPath("country").type(JsonFieldType.STRING).description("생산 국가"),
+						fieldWithPath("beerCategories[]").type(JsonFieldType.ARRAY).description("맥주 카테고리"),
+						fieldWithPath("beerCategories[].beerCategoryId").type(JsonFieldType.NUMBER)
+							.description("맥주 카테고리 아이디"),
+						fieldWithPath("beerCategories[].beerCategoryType").type(JsonFieldType.STRING)
+							.description("맥주 카테고리 타입"),
+						fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("썸네일 이미지 주소"),
+						fieldWithPath("abv").type(JsonFieldType.NUMBER).description("알코올 도수"),
+						fieldWithPath("ibu").type(JsonFieldType.NUMBER).description("IBU")
+					)
+				),
+				responseFields(
+					List.of(
+						fieldWithPath(".beerId").type(JsonFieldType.NUMBER).description("맥주 번호"),
+
+						fieldWithPath(".beerDetailsBasic").type(JsonFieldType.OBJECT).description("맥주 기본 정보"),
+						fieldWithPath(".beerDetailsBasic.korName").type(JsonFieldType.STRING).description("한글 이름"),
+						fieldWithPath(".beerDetailsBasic.engName").type(JsonFieldType.STRING).description("영문 이름"),
+						fieldWithPath(".beerDetailsBasic.country").type(JsonFieldType.STRING).description("생산 국가"),
+						fieldWithPath(".beerDetailsBasic.thumbnail").type(JsonFieldType.STRING)
+							.description("썸네일 이미지 주소"),
+						fieldWithPath(".beerDetailsBasic.abv").type(JsonFieldType.NUMBER).description("알코올 도수"),
+						fieldWithPath(".beerDetailsBasic.ibu").type(JsonFieldType.NUMBER).description("IBU"),
+
+						fieldWithPath(".beerDetailsCounts").type(JsonFieldType.OBJECT).description("맥주 관련 카운팅"),
+						fieldWithPath(".beerDetailsCounts.femaleStarCount").type(JsonFieldType.NUMBER)
+							.description("여성 별점 수"),
+						fieldWithPath(".beerDetailsCounts.maleStarCount").type(JsonFieldType.NUMBER)
+							.description("남성 별점 수"),
+						fieldWithPath(".beerDetailsCounts.pairingCount").type(JsonFieldType.NUMBER)
+							.description("페어링 수"),
+						fieldWithPath(".beerDetailsCounts.ratingCount").type(JsonFieldType.NUMBER)
+							.description("레이팅 수"),
+
+						fieldWithPath(".beerDetailsStars").type(JsonFieldType.OBJECT).description("맥주 관련 별점"),
+						fieldWithPath(".beerDetailsStars.totalAverageStars").type(JsonFieldType.NUMBER)
+							.description("맥주 총 별점 평균"),
+						fieldWithPath(".beerDetailsStars.femaleAverageStars").type(JsonFieldType.NUMBER)
+							.description("맥주 여성 별점 평균"),
+						fieldWithPath(".beerDetailsStars.maleAverageStars").type(JsonFieldType.NUMBER)
+							.description("맥주 남성 별점 평균"),
+
+						fieldWithPath(".isWishlist").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
+						fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
+						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트"),
+						fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
+					)
+				)));
+	}
+
+	@Test
+	void patchBeerTest() throws Exception {
+
+		Long beerId = 1L;
+
+		String content = gson.toJson(BEER_PATCH_DTO);
+
+		BeerDto.DetailsResponse response =
+			BeerDto.DetailsResponse.builder()
+				.beerId(1L)
+				.beerDetailsBasic(BEER_DETAILS_UPDATED)
+				.beerDetailsCounts(BEER_DETAILS_COUNTS_WITH_VALUES)
+				.beerDetailsStars(BEER_DETAILS_STARS_WITH_VALUES)
+				.isWishlist(false)
+				.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
+				.beerDetailsTopTags(new ArrayList<>())
+				.similarBeers(new ArrayList<>())
+				.build();
+
+		given(beerMapper.beerPatchToBeer(Mockito.any(BeerDto.Patch.class))).willReturn(Beer.builder().build());
+		given(beerService.findTop4BeerTags(Mockito.any(Beer.class))).willReturn(new ArrayList<>());
+		given(beerService.updateBeer(Mockito.any(Beer.class), anyLong())).willReturn(Beer.builder().build());
+		given(beerMapper.beerToPatchDetailsResponse(Mockito.any(Beer.class))).willReturn(response);
+
+		ResultActions actions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.patch("/api/beers/{beer_id}/edit", beerId)
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(content)
+			);
+
+		actions
+			.andExpect(status().isOk())
+			.andExpect(jsonPath(".korName").value(response.getBeerDetailsBasic().getKorName()))
+			.andExpect(jsonPath(".engName").value(response.getBeerDetailsBasic().getEngName()))
+			.andDo(document(
+				"Patch_Beer",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				pathParameters(
+					parameterWithName("beer_id").description("맥주 번호")
+				),
+				requestFields(
+					List.of(
+						fieldWithPath("korName").type(JsonFieldType.STRING).description("수정된 한글 이름"),
+						fieldWithPath("engName").type(JsonFieldType.STRING).description("수정된 영문 이름"),
+						fieldWithPath("country").type(JsonFieldType.STRING).description("수정된 생산 국가"),
+						fieldWithPath("beerCategories[]").type(JsonFieldType.ARRAY).description("수정된 맥주 카테고리"),
+						fieldWithPath("beerCategories[].beerCategoryId").type(JsonFieldType.NUMBER)
+							.description("수정된 맥주 카테고리 아이디"),
+						fieldWithPath("beerCategories[].beerCategoryType").type(JsonFieldType.STRING)
+							.description("수정된 맥주 카테고리 타입"),
+						fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("수정된 썸네일 이미지 주소"),
+						fieldWithPath("abv").type(JsonFieldType.NUMBER).description("수정된 알코올 도수"),
+						fieldWithPath("ibu").type(JsonFieldType.NUMBER).description("수정된 IBU")
+					)
+				),
+				responseFields(
+					List.of(
+						fieldWithPath(".beerId").type(JsonFieldType.NUMBER).description("맥주 번호"),
+
+						fieldWithPath(".beerDetailsBasic").type(JsonFieldType.OBJECT).description("맥주 기본 정보"),
+						fieldWithPath(".beerDetailsBasic.korName").type(JsonFieldType.STRING).description("수정된 한글 이름"),
+						fieldWithPath(".beerDetailsBasic.engName").type(JsonFieldType.STRING).description("수정된 영문 이름"),
+						fieldWithPath(".beerDetailsBasic.country").type(JsonFieldType.STRING).description("수정된 생산 국가"),
+						fieldWithPath(".beerDetailsBasic.thumbnail").type(JsonFieldType.STRING)
+							.description("수정된 썸네일 이미지 주소"),
+						fieldWithPath(".beerDetailsBasic.abv").type(JsonFieldType.NUMBER).description("수정된 알코올 도수"),
+						fieldWithPath(".beerDetailsBasic.ibu").type(JsonFieldType.NUMBER).description("수정된 IBU"),
+
+						fieldWithPath(".beerDetailsCounts").type(JsonFieldType.OBJECT).description("맥주 관련 카운팅"),
+						fieldWithPath(".beerDetailsCounts.femaleStarCount").type(JsonFieldType.NUMBER)
+							.description("여성 별점 수"),
+						fieldWithPath(".beerDetailsCounts.maleStarCount").type(JsonFieldType.NUMBER)
+							.description("남성 별점 수"),
+						fieldWithPath(".beerDetailsCounts.pairingCount").type(JsonFieldType.NUMBER)
+							.description("페어링 수"),
+						fieldWithPath(".beerDetailsCounts.ratingCount").type(JsonFieldType.NUMBER)
+							.description("레이팅 수"),
+
+						fieldWithPath(".beerDetailsStars").type(JsonFieldType.OBJECT).description("맥주 관련 별점"),
+						fieldWithPath(".beerDetailsStars.totalAverageStars").type(JsonFieldType.NUMBER)
+							.description("맥주 총 별점 평균"),
+						fieldWithPath(".beerDetailsStars.femaleAverageStars").type(JsonFieldType.NUMBER)
+							.description("맥주 여성 별점 평균"),
+						fieldWithPath(".beerDetailsStars.maleAverageStars").type(JsonFieldType.NUMBER)
+							.description("맥주 남성 별점 평균"),
+
+						fieldWithPath(".isWishlist").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
+						fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
+						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트"),
+						fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
+					)
+				)));
+	}
+
 	// @Test
 	// void getBeerTest() throws Exception {
 	//
@@ -245,19 +257,21 @@ public class BeerControllerRestDocs {
 	// 			.beerDetailsBasic(BEER_DETAILS_BASIC)
 	// 			.beerDetailsCounts(BEER_DETAILS_COUNTS_WITH_VALUES)
 	// 			.beerDetailsStars(BEER_DETAILS_STARS_WITH_VALUES)
-	// 			.isWishListed(false)
+	// 			.isWishlist(false)
 	// 			.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
-	// 			.beerTags(new ArrayList<>())
+	// 			.beerDetailsTopTags(new ArrayList<>())
 	// 			.similarBeers(new ArrayList<>())
 	// 			.build();
 	//
 	// 	given(beerService.findVerifiedBeer(anyLong())).willReturn(Beer.builder().build());
 	// 	given(beerService.findTop4BeerTags(Mockito.any(Beer.class))).willReturn(new ArrayList<>());
-	// 	given(beerMapper.beerToDetailsResponse(Mockito.any(Beer.class), anyList())).willReturn(response);
+	// 	given(beerWishlistService.getIsWishlist)
+	// 	given(beerMapper.beerToDetailsResponse(any(Beer.class), anyList(), any(BeerWishlist.class)))
+	// 		.willReturn(response);
 	//
 	// 	ResultActions actions =
 	// 		mockMvc.perform(
-	// 			RestDocumentationRequestBuilders.get("/beers/{beer_id}", beerId)
+	// 			RestDocumentationRequestBuilders.get("/api/beers/{beer_id}", beerId)
 	// 				.accept(MediaType.APPLICATION_JSON)
 	// 		);
 	//
@@ -285,16 +299,14 @@ public class BeerControllerRestDocs {
 	// 					fieldWithPath(".beerDetailsBasic.ibu").type(JsonFieldType.NUMBER).description("IBU"),
 	//
 	// 					fieldWithPath(".beerDetailsCounts").type(JsonFieldType.OBJECT).description("맥주 관련 카운팅"),
-	// 					fieldWithPath(".beerDetailsCounts.totalStarCount").type(JsonFieldType.NUMBER)
-	// 						.description("전체 별점 수"),
 	// 					fieldWithPath(".beerDetailsCounts.femaleStarCount").type(JsonFieldType.NUMBER)
 	// 						.description("여성 별점 수"),
 	// 					fieldWithPath(".beerDetailsCounts.maleStarCount").type(JsonFieldType.NUMBER)
 	// 						.description("남성 별점 수"),
-	// 					fieldWithPath(".beerDetailsCounts.commentCount").type(JsonFieldType.NUMBER)
-	// 						.description("코멘트 수"),
 	// 					fieldWithPath(".beerDetailsCounts.pairingCount").type(JsonFieldType.NUMBER)
 	// 						.description("페어링 수"),
+	// 					fieldWithPath(".beerDetailsCounts.ratingCount").type(JsonFieldType.NUMBER)
+	// 						.description("레이팅 수"),
 	//
 	// 					fieldWithPath(".beerDetailsStars").type(JsonFieldType.OBJECT).description("맥주 관련 별점"),
 	// 					fieldWithPath(".beerDetailsStars.totalAverageStars").type(JsonFieldType.NUMBER)
@@ -304,14 +316,14 @@ public class BeerControllerRestDocs {
 	// 					fieldWithPath(".beerDetailsStars.maleAverageStars").type(JsonFieldType.NUMBER)
 	// 						.description("맥주 남성 별점 평균"),
 	//
-	// 					fieldWithPath(".isWishListed").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
+	// 					fieldWithPath(".isWishlist").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
 	// 					fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
-	// 					fieldWithPath(".beerTags").type(JsonFieldType.ARRAY).description("맥주 태그 리스트"),
+	// 					fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트"),
 	// 					fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
 	// 				)
 	// 			)));
 	// }
-	//
+
 	// @Test
 	// void getMonthlyBeerTest() throws Exception {
 	//

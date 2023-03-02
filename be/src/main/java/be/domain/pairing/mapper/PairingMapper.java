@@ -134,4 +134,27 @@ public interface PairingMapper {
 					pairing.getModifiedAt())
 			).collect(Collectors.toList()), pairings.getPageable(), pairings.getTotalElements());
 	}
+
+	default PageImpl<PairingResponseDto.UserPageResponse> pairingToUserPairingResponse
+		(Page<Pairing> pairings, PairingLikeRepository pairingLikeRepository) {
+
+		return new PageImpl<>(pairings.stream()
+			.map(pairing ->
+				new PairingResponseDto.UserPageResponse(
+					pairing.getBeer().getId(),
+					pairing.getBeer().getBeerDetailsBasic().getKorName(),
+					pairing.getId(),
+					pairing.getUser().getId(),
+					pairing.getUser().getNickname(),
+					pairing.getUser().getImageUrl(),
+					pairing.getContent(),
+					pairing.getThumbnail(),
+					pairing.getPairingCategory(),
+					pairing.getLikeCount(),
+					pairing.getCommentCount(),
+					pairingLikeRepository.findPairingLikeUser(pairing.getId(), pairing.getUser().getId()) != 0,
+					pairing.getCreatedAt(),
+					pairing.getModifiedAt())
+			).collect(Collectors.toList()));
+	}
 }
