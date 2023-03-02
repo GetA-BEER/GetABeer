@@ -10,8 +10,10 @@ import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import be.global.chat.redis.dto.RedisRoomDto;
 import be.global.chat.redis.entity.RedisChatMessage;
 import be.global.chat.redis.entity.RedisChatRoom;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +40,21 @@ public class RedisChatRepository {
 
 		return Optional.ofNullable(queryFactory
 			.selectFrom(redisChatRoom)
-			.where(redisChatRoom.sender.id.eq(clientId).or(redisChatRoom.receiver.id.eq(clientId)))
+			.where(redisChatRoom.sender.id.eq(clientId))
 			.fetchFirst());
+	}
+
+	public RedisChatRoom findChatRoom(Long roomId) {
+
+		return queryFactory.selectFrom(redisChatRoom)
+			.where(redisChatRoom.id.eq(roomId)).fetchFirst();
+	}
+	public List<RedisRoomDto.Response> findByAll() {
+
+		return queryFactory
+			.select(Projections.fields(RedisRoomDto.Response.class,
+				redisChatRoom.id.as("roomId"),
+				redisChatRoom.sender.id.as("senderId")
+				)).from(redisChatRoom).fetch();
 	}
 }

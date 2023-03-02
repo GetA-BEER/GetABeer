@@ -1,22 +1,26 @@
 package be.global.chat.redis.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.chat.redis.dto.RedisMessageDto;
+import be.global.chat.redis.dto.RedisRoomDto;
 import be.global.chat.redis.entity.RedisChat;
 import be.global.chat.redis.entity.RedisChatMessage;
-import be.global.chat.redis.entity.RedisChatRoom;
 import be.global.chat.redis.service.RedisChatService;
 import be.global.chat.redis.service.RedisPublisher;
 import be.global.chat.redis.service.RedisRoomService;
@@ -32,20 +36,22 @@ public class RedisChatController {
 	private final RedisChatService chatService;
 	private final RedisRoomService roomService;
 
+	/* 관리자는 채팅방을 생성할 수 없음 -> 스택 오버 플로우 나는 이유? */
 	@GetMapping("/room")
-	public ResponseEntity<RedisChatRoom> createRoom() {
+	public ResponseEntity<Long> createRoom() {
 
-		return ResponseEntity.ok(roomService.getOrCreate());
+		return ResponseEntity.status(HttpStatus.CREATED).body(roomService.getOrCreate());
 	}
 
 	@GetMapping("/rooms")
-	public ResponseEntity<List<RedisChatRoom>> getAllRooms() {
+	public ResponseEntity<List<RedisRoomDto.Response>> getAllRooms() throws IOException {
 
 		return ResponseEntity.ok(roomService.findAllRooms());
 	}
 
 	@MessageMapping("/{roomId}")
-	public void sendMessage(@DestinationVariable Long roomId, RedisMessageDto.Request request) {
+	@PostMapping("/{roomId}") /* 테스트용 */
+	public void sendMessage(@DestinationVariable Long roomId, @RequestBody RedisMessageDto.Request request) {
 		User user = userService.findLoginUser();
 		Long userId = user.getId();
 

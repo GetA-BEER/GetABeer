@@ -9,5 +9,4 @@ import be.global.chat.redis.entity.RedisChatRoom;
 
 @Repository
 public interface RedisRoomRepository extends JpaRepository<RedisChatRoom, Long> {
-	List<RedisChatRoom> findByAll();
 }

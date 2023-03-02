@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor//(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class RedisChatRoom implements Serializable {
 	private static final long serialVersionUID = 6494678977089006639L;
@@ -47,16 +47,20 @@ public class RedisChatRoom implements Serializable {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
-	public RedisChatRoom(User sender, User receiver) {
+	public RedisChatRoom(User sender) {
 		this.sender = sender;
 		this.receiver = receiver;
 	}
 
 	public static RedisChatRoom create(User user) {
-		RedisChatRoom chatRoom = new RedisChatRoom();
-		chatRoom.sender = user;
-		chatRoom.createdAt = LocalDateTime.now();
+		if (!user.getRoles().contains("ROLE_ADMIN")) {
+			RedisChatRoom chatRoom = new RedisChatRoom();
+			chatRoom.id = user.getId();
+			chatRoom.sender = user;
+			chatRoom.createdAt = LocalDateTime.now();
+			return chatRoom;
+		}
 
-		return chatRoom;
+		return null;
 	}
 }
