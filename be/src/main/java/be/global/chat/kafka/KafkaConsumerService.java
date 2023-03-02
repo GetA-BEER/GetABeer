@@ -1,6 +1,7 @@
 package be.global.chat.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaConsumerService {
 
 	private final SimpMessagingTemplate template;
-	// private final SimpMessageSendingOperations messagingTemplate;
 
 	@KafkaListener(topics = KafkaConstants.KAFKA_TOPIC, groupId = KafkaConstants.GROUP_ID)
 	public void listen(@Payload Message message) {

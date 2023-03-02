@@ -29,7 +29,7 @@ public class ChatController {
 	private final ChatService chatService;
 
 	/* producer */
-	@PostMapping
+	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> sendMessage(@RequestBody MessageRequest request) {
 
 		return ResponseEntity.ok(chatService.send(request));
