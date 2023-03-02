@@ -3,16 +3,20 @@ package be.domain.user.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.comment.repository.pairing.PairingCommentRepository;
 import be.domain.comment.repository.rating.RatingCommentRepository;
+import be.domain.follow.FollowQueryRepository;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.repository.PairingRepository;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.repository.RatingRepository;
+import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
+import be.domain.user.repository.UserQueryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +28,8 @@ public class UserPageService {
 	private final PairingRepository pairingRepository;
 	private final RatingCommentRepository ratingCommentRepository;
 	private final PairingCommentRepository pairingCommentRepository;
+	private final UserQueryRepository userQueryRepository;
+	private final FollowQueryRepository followQueryRepository;
 
 	/**
 	 * 마이페이지
@@ -58,5 +64,41 @@ public class UserPageService {
 		PageRequest pageRequest = PageRequest.of(page - 1, 10);
 
 		return pairingRepository.findPairingByUser(user, pageRequest);
+	}
+
+	// ----------------------------------------다른 유저 페이지-----------------------------------------
+	@Transactional(readOnly = true)
+	public UserDto.UserPageResponse getUserPage(Long userId) {
+
+		UserDto.UserPageResponse userPageResponse = userQueryRepository.findUserPage(userId);
+
+		if (userService.getLoginUserReturnNull() == null) {
+			userPageResponse.addIsFollowing(null);
+		} else {
+			Long loginUserId = userService.getLoginUser().getId();
+			userPageResponse.addIsFollowing(followQueryRepository.findFollowByUserIds(loginUserId, userId) != null);
+		}
+
+		return userPageResponse;
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Rating> getUserRatingByUserId(Long userId, Integer page) {
+
+		User findUser = userService.findVerifiedUser(userId);
+
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return ratingRepository.findRatingByUser(findUser, pageRequest);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Pairing> getUserPairingByUserId(Long userId, Integer page) {
+
+		User findUser = userService.findVerifiedUser(userId);
+
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return pairingRepository.findPairingByUser(findUser, pageRequest);
 	}
 }
