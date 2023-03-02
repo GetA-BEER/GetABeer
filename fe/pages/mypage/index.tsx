@@ -56,6 +56,7 @@ export default function Mypage() {
               console.log(res);
               setAccessToken('');
               setUserId('');
+              setUserName('');
               delete axios.defaults.headers.Authorization;
               window.location.href = '/login';
             })
@@ -64,6 +65,7 @@ export default function Mypage() {
             });
           setAccessToken('');
           setUserId('');
+          setUserName('');
           delete axios.defaults.headers.Authorization;
           window.location.href = '/login';
         }

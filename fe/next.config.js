@@ -9,6 +9,7 @@ const nextConfig = {
       't1.daumcdn.net',
       'assabeer.com',
       'getabeer.s3.ap-northeast-2.amazonaws.com',
+      's3.ap-northeast-2.amazonaws.com',
     ],
   },
   reactStrictMode: true,

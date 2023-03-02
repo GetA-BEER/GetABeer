@@ -1,11 +1,23 @@
+import { useEffect } from 'react';
 import { RiKakaoTalkFill } from 'react-icons/ri';
-
+import axios from '@/pages/api/axios';
 const API = process.env.API_URL;
 
 export default function KakaoBtn() {
   const handleLogin = () => {
-    return window.location.assign(`${API}/oauth2/authorization/kakao`);
+    // axios
+    //   .post(`${API}/oauth2/authorization/kakao`)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    return window.location.assign(
+      `http://localhost:8080/oauth2/authorization/kakao`
+    );
   };
+
   return (
     <div>
       <button

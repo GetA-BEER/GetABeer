@@ -8,6 +8,7 @@ import SearchModal from './SearchModal';
 import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import axios from '@/pages/api/axios';
+
 export default function Header() {
   const [isSearching, setIsSearching] = useState(false);
   const TOKEN = useRecoilValue(accessToken);
