@@ -123,7 +123,7 @@ export default function CameraModal() {
             </div>
           </button>
           <form className="fixed bottom-16 left-1/2 -ml-16">
-            <div className="grid grid-cols-2 gap-2 text-y-brown ">
+            <div className="grid grid-cols-2 gap-2 text-y-brown upper">
               <div className="bg-white p-1 rounded-full w-14 h-14 border-2 border-y-brown">
                 <label htmlFor="file">
                   <BsImages className="w-5 h-5 block m-auto mt-[6px] -mb-1" />
@@ -154,7 +154,7 @@ export default function CameraModal() {
 
               <button
                 type="button"
-                className="inset-0 fixed cursor-default -z-10 bg-[rgba(0,0,0,0.6)]"
+                className="inset-0 fixed cursor-default -z-10 bg-[rgba(0,0,0,0.6)] "
                 onClick={() => setShowModal(false)}
               ></button>
             </div>
