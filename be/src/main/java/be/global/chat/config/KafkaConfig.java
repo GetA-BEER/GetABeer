@@ -87,9 +87,15 @@ public class KafkaConfig {
 	@Bean
 	public HashMap<String, Object> producerConfigurations() {
 		HashMap<String, Object> configurations = new HashMap<>();
-		configurations.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.KAFKA_BROKER);
-		configurations.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configurations.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+		configurations
+			.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+				KafkaConstants.KAFKA_BROKER);
+		configurations
+			.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+				StringSerializer.class);
+		configurations
+			.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+				JsonSerializer.class);
 
 		return configurations;
 	}

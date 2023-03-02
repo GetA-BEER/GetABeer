@@ -9,12 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
+import be.global.chat.ChatRoom;
 import be.global.chat.Message;
+import be.global.chat.kafka.KafkaConstants;
 import be.global.chat.kafka.dto.MessageRequest;
 import be.global.chat.kafka.repository.ChatRoomRepository;
-import be.global.chat.ChatRoom;
-import be.global.chat.kafka.KafkaConstants;
-// import be.global.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ChatService {
 
 	private final UserService userService;
-	// private final MessageRepository messageRepository;
 	private final ChatRoomRepository chatRoomRepository;
 	private final KafkaTemplate<String, Message> kafkaTemplate;
 
@@ -41,7 +39,8 @@ public class ChatService {
 			.build();
 
 		/* 비동기 처리 */
-		// ListenableFuture<SendResult<String, Message>> future = kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message);
+		// ListenableFuture<SendResult<String, Message>> future =
+		// kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message);
 		// future.addCallback(new ListenableFutureCallback<SendResult<String, Message>>() {
 		// 	@Override
 		// 	public void onFailure(Throwable ex) {
