@@ -3,13 +3,13 @@ package be.domain.follow;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.domain.notice.entity.NotificationType;
+import be.domain.notice.service.NotificationService;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class FollowService {
 	private final FollowRepository followRepository;
 	private final FollowQueryRepository followQueryRepository;
 	private final UserService userService;
+	private final NotificationService notificationService;
 
 	public String createOrDeleteFollow(Long followedUserId) {
 
@@ -41,6 +42,10 @@ public class FollowService {
 
 			followingUser.addFollowing();
 			followedUser.addFollower();
+
+			String title = followingUser.getNickname() + "님이 회원님을 팔로우하기 시작했습니다.";
+			notificationService.send(followedUser, null, title, null, followingUser.getImageUrl(),
+				NotificationType.FOLLOWING);
 
 			return "Create Follow";
 

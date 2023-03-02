@@ -1,5 +1,6 @@
 package be.global.home;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
 	@GetMapping("/")
-	public String home() {
+	public ResponseEntity<String> home() {
 
-		return "서버가 실행되었습니다.";
+		return ResponseEntity.ok("******* 서버 실행 중 *******");
 	}
 }

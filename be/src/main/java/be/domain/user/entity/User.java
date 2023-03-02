@@ -22,16 +22,15 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import be.domain.beerwishlist.entity.BeerWishlist;
-import be.domain.chatting.entity.ChatRoom;
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.like.entity.PairingLike;
 import be.domain.like.entity.RatingLike;
+import be.domain.notice.entity.Notification;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
-import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.RandomProfile;
 import be.domain.user.entity.enums.UserStatus;
 import lombok.AccessLevel;
@@ -192,6 +191,17 @@ public class User implements Serializable {
 
 		if (pairingLike.getUser() != this) {
 			pairingLike.belongToUser(this);
+		}
+	}
+
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<Notification> notifications;
+
+	public void addNotifications(Notification notification) {
+		notifications.add(notification);
+
+		if (notification.getUser() != this) {
+			notification.setUser(this);
 		}
 	}
 
