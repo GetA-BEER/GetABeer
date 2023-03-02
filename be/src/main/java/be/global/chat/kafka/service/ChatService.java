@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
-import be.global.chat.ChatRoom;
-import be.global.chat.Message;
+import be.global.chat.kafka.entity.KafkaChatMessage;
+import be.global.chat.kafka.entity.KafkaChatRoom;
 import be.global.chat.kafka.KafkaConstants;
 import be.global.chat.kafka.dto.MessageRequest;
 import be.global.chat.kafka.repository.ChatRoomRepository;
@@ -24,15 +24,15 @@ public class ChatService {
 
 	private final UserService userService;
 	private final ChatRoomRepository chatRoomRepository;
-	private final KafkaTemplate<String, Message> kafkaTemplate;
+	private final KafkaTemplate<String, KafkaChatMessage> kafkaTemplate;
 
 	@Transactional
 	public String send(MessageRequest request) {
 		User user = userService.findLoginUser();
-		ChatRoom chatRoom = chatRoomRepository.findById(user.getId());
+		KafkaChatRoom kafkaChatRoom = chatRoomRepository.findById(user.getId());
 
-		Message message = Message.builder()
-			.roomId(chatRoom.getId())
+		KafkaChatMessage message = KafkaChatMessage.builder()
+			.roomId(kafkaChatRoom.getId())
 			.sender(user.getNickname())
 			.content(request.getContent())
 			.timestamp(LocalDateTime.now().toString())
@@ -71,13 +71,13 @@ public class ChatService {
 		return "메세지가 전송되었습니다.";
 	}
 
-	public List<ChatRoom> findAll() {
+	public List<KafkaChatRoom> findAll() {
 
 		return chatRoomRepository.findAllChatRoom();
 	}
 
 	/* 로그 찍으면서 메서드 체킹 */
-	public ChatRoom findAllMessage(Long roomId) {
+	public KafkaChatRoom findAllMessage(Long roomId) {
 
 		return chatRoomRepository.findById(roomId);
 	}

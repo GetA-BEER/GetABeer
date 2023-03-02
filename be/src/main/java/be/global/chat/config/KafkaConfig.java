@@ -8,12 +8,10 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.kafka.streams.StreamsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.config.KafkaStreamsConfiguration;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -23,7 +21,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import be.global.chat.Message;
+import be.global.chat.kafka.entity.KafkaChatMessage;
 import be.global.chat.kafka.KafkaConstants;
 
 @EnableKafka
@@ -50,8 +48,8 @@ public class KafkaConfig {
 
 	/* --------------------------------------------- 카프카 컨슈머 빈 ------------------------------------------------- */
 	@Bean
-	ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, Message> factory =
+	ConcurrentKafkaListenerContainerFactory<String, KafkaChatMessage> kafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, KafkaChatMessage> factory =
 			new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
 
@@ -59,10 +57,10 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public ConsumerFactory<String, Message> consumerFactory() {
+	public ConsumerFactory<String, KafkaChatMessage> consumerFactory() {
 
 		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(),
-			new StringDeserializer(), new JsonDeserializer<>(Message.class));
+			new StringDeserializer(), new JsonDeserializer<>(KafkaChatMessage.class));
 	}
 
 	@Bean
@@ -79,7 +77,7 @@ public class KafkaConfig {
 
 	/* --------------------------------------------- 카프카 프로듀서 빈 ------------------------------------------------- */
 	@Bean
-	public ProducerFactory<String, Message> producerFactory() {
+	public ProducerFactory<String, KafkaChatMessage> producerFactory() {
 
 		return new DefaultKafkaProducerFactory<>(producerConfigurations());
 	}
@@ -101,7 +99,7 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public KafkaTemplate<String, Message> kafkaTemplate() {
+	public KafkaTemplate<String, KafkaChatMessage> kafkaTemplate() {
 		return new KafkaTemplate<>(producerFactory());
 	}
 }

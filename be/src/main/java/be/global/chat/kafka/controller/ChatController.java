@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.global.chat.ChatRoom;
-import be.global.chat.Message;
+import be.global.chat.kafka.entity.KafkaChatMessage;
+import be.global.chat.kafka.entity.KafkaChatRoom;
 import be.global.chat.kafka.dto.MessageRequest;
 import be.global.chat.kafka.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class ChatController {
 	/* 프론트엔드로 메시지를 전송? */
 	@MessageMapping("/sendMessage")
 	@SendTo("/topic/group") /* 해당 토픽을 구독하고 있는 클라이언트에게 전송? */
-	public Message broadcastGroupMessage(@Payload Message message) {
+	public KafkaChatMessage broadcastGroupMessage(@Payload KafkaChatMessage message) {
 		log.info("구독자들에게 메세지 전송");
 		log.info("메세지 내용 : " +  message.getContent());
 
@@ -47,13 +47,13 @@ public class ChatController {
 
 	/* 카프카로 보내고 나면 출력이 되지만, 바로 실행하면 출력 안됨. -> 디비에 저장 필요? */
 	@GetMapping
-	public ResponseEntity<List<ChatRoom>> getAllRoom() {
+	public ResponseEntity<List<KafkaChatRoom>> getAllRoom() {
 
 		return ResponseEntity.ok(chatService.findAll());
 	}
 
 	@GetMapping("/{roomId}")
-	public ResponseEntity<ChatRoom> getAllMessageAtChatRoom(@PathVariable Long roomId) {
+	public ResponseEntity<KafkaChatRoom> getAllMessageAtChatRoom(@PathVariable Long roomId) {
 
 		/* 메세지 리스트는 가지 않음...*/
 		return ResponseEntity.ok(chatService.findAllMessage(roomId));

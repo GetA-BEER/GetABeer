@@ -1,4 +1,6 @@
-package be.global.chat;
+package be.global.chat.kafka.entity;
+
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,12 +13,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class ChatRoom {
+public class KafkaChatRoom implements Serializable {
+
+	private static final long serialVersionUID = 6494678977089006639L;
 
 	@Id
 	@Column(name = "room_id")
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String roomName;
 
 	/* 회원이랑 일대알 매핑 -> 어드민은 Get으로 등록? */
 	// @OneToOne
@@ -31,19 +36,10 @@ public class ChatRoom {
 	// 	}
 	// }
 
-	// @OneToMany(mappedBy = "chatRoom", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-	// private List<Message> messageList = new ArrayList<>();
-	//
-	// public void addMessageList(Message message) {
-	// 	messageList.add(message);
-	//
-	// 	if (message.getChatRoom() != this) {
-	// 		message.belongToChatRoom(this);
-	// 	}
-	// }
-	public static ChatRoom create(User user) {
-		ChatRoom room = new ChatRoom();
+	public static KafkaChatRoom create(User user) {
+		KafkaChatRoom room = new KafkaChatRoom();
 		room.id = user.getId();
+		room.roomName = user.getNickname() + user.getId() + "님의 채팅방입니다.";
 		return room;
 	}
 }

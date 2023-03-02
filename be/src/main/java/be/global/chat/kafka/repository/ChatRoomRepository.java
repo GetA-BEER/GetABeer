@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
-import be.global.chat.ChatRoom;
+import be.global.chat.kafka.entity.KafkaChatRoom;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
 public class ChatRoomRepository {
-	private Map<Long, ChatRoom> chatRooms;
+	private Map<Long, KafkaChatRoom> chatRooms;
 	private final UserService userService;
 
 	@PostConstruct
@@ -27,15 +27,15 @@ public class ChatRoomRepository {
 	}
 
 	/* 채팅방 전체 조회 : Only Admin */
-	public List<ChatRoom> findAllChatRoom() {
-		List<ChatRoom> list = new ArrayList<>(chatRooms.values());
+	public List<KafkaChatRoom> findAllChatRoom() {
+		List<KafkaChatRoom> list = new ArrayList<>(chatRooms.values());
 		Collections.reverse(list);
 
 		return list;
 	}
 
 	/* 채팅방 번호로 조회 */
-	public ChatRoom findById(Long chatRoomId) {
+	public KafkaChatRoom findById(Long chatRoomId) {
 
 		if (chatRooms.get(chatRoomId) == null) {
 			return createChatRoom();
@@ -45,11 +45,11 @@ public class ChatRoomRepository {
 	}
 
 	/* 채팅방 생성 */
-	private ChatRoom createChatRoom() {
+	private KafkaChatRoom createChatRoom() {
 		User user = userService.findLoginUser();
-		ChatRoom chatRoom = ChatRoom.create(user);
-		chatRooms.put(chatRoom.getId(), chatRoom);
+		KafkaChatRoom kafkaChatRoom = KafkaChatRoom.create(user);
+		chatRooms.put(kafkaChatRoom.getId(), kafkaChatRoom);
 
-		return chatRoom;
+		return kafkaChatRoom;
 	}
 }
