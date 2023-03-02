@@ -3,11 +3,14 @@ package be.domain.pairing.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import be.domain.beertag.entity.BeerTagType;
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.pairing.entity.PairingCategory;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class PairingResponseDto {
 
@@ -59,6 +62,35 @@ public class PairingResponseDto {
 		public Total() {
 		}
 
+		private Long beerId;
+		private String korName;
+		private Long pairingId;
+		private Long userId;
+		private String nickname;
+		private String userImage;
+		private String content;
+		private String thumbnail;
+		private PairingCategory category;
+		private Integer likeCount;
+		private Integer commentCount;
+		private Boolean isUserLikes;
+		private LocalDateTime createdAt;
+		private LocalDateTime modifiedAt;
+
+		public void addCategory(PairingCategory category) {
+			this.category = category;
+		}
+
+		public void addUserLike(Boolean isUserLikes) {
+			this.isUserLikes = isUserLikes;
+		}
+	}
+
+	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor
+	public static class UserPageResponse {
 		private Long beerId;
 		private String korName;
 		private Long pairingId;

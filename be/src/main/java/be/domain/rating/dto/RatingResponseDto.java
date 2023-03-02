@@ -5,9 +5,11 @@ import java.util.List;
 
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.comment.dto.RatingCommentDto;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class RatingResponseDto {
 
@@ -82,6 +84,26 @@ public class RatingResponseDto {
 	@Builder
 	@AllArgsConstructor
 	public static class MyPageResponse {
+		private Long beerId;
+		private Long ratingId;
+		private Long userId;
+		private String nickname;
+		private String userImage;
+		private String content;
+		private List<BeerTagType> ratingTag;
+		private Double star;
+		private Integer likeCount;
+		private Integer commentCount;
+		private Boolean isUserLikes;
+		private LocalDateTime createdAt;
+		private LocalDateTime modifiedAt;
+	}
+
+	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor
+	public static class UserPageResponse {
 		private Long beerId;
 		private Long ratingId;
 		private Long userId;

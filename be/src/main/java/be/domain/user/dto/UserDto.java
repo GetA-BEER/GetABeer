@@ -148,4 +148,22 @@ public class UserDto {
 		private String email;
 		private String nickname;
 	}
+
+	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor(access = AccessLevel.PROTECTED)
+	public static class UserPageResponse {
+		private Long id;
+		private String nickname;
+		private Boolean isFollowing;
+		private Long ratingCount;
+		private Long pairingCount;
+		private Long commentCount;
+
+		public void addIsFollowing(Boolean isFollowing) {
+			this.isFollowing = isFollowing;
+		}
+	}
+
 }

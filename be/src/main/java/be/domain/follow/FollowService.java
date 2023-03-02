@@ -81,4 +81,8 @@ public class FollowService {
 
 		return followQueryRepository.findFollowingsByUserId(userId, pageRequest);
 	}
+
+	public Boolean isFollowing(Long followingUserId, Long followedUserId) {
+		return followQueryRepository.findFollowByUserIds(followingUserId, followedUserId) != null;
+	}
 }

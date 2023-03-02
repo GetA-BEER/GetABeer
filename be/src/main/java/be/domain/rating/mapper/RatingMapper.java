@@ -38,4 +38,25 @@ public interface RatingMapper {
 					rating.getModifiedAt())
 			).collect(Collectors.toList()), ratings.getPageable(), ratings.getTotalElements());
 	}
+
+	default PageImpl<RatingResponseDto.UserPageResponse> ratingToUserRatingResponse(
+		Page<Rating> ratings, RatingLikeRepository ratingLikeRepository) {
+		return new PageImpl<>(ratings.stream()
+			.map(rating ->
+				new RatingResponseDto.UserPageResponse(
+					rating.getBeer().getId(),
+					rating.getId(),
+					rating.getUser().getId(),
+					rating.getUser().getNickname(),
+					rating.getUser().getImageUrl(),
+					rating.getContent(),
+					rating.getRatingTag().createBeerTagTypeList(),
+					rating.getStar(),
+					rating.getLikeCount(),
+					rating.getCommentCount(),
+					ratingLikeRepository.findRatingLikeUser(rating.getId(), rating.getUser().getId()) != 0,
+					rating.getCreatedAt(),
+					rating.getModifiedAt())
+			).collect(Collectors.toList()));
+	}
 }

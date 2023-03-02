@@ -1,13 +1,16 @@
 package be.domain.user.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import be.domain.beer.dto.BeerDto;
 import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.dto.RatingCommentDto;
 import be.domain.comment.entity.PairingComment;
@@ -23,6 +26,7 @@ import be.domain.rating.dto.RatingResponseDto;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.mapper.RatingMapper;
 import be.domain.user.dto.MyPageMultiResponseDto;
+import be.domain.user.dto.UserDto;
 import be.domain.user.service.UserPageService;
 import be.domain.user.service.UserService;
 import be.global.dto.MultiResponseDto;
@@ -82,7 +86,7 @@ public class UserPageController {
 			ratingComments);
 
 		return ResponseEntity.ok(
-			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(),responses.getContent(), responses));
+			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), responses.getContent(), responses));
 	}
 
 	/* 나의 페어링 */
@@ -95,5 +99,36 @@ public class UserPageController {
 
 		return ResponseEntity.ok(
 			new MyPageMultiResponseDto<>(userService.getLoginUser().getNickname(), response.getContent(), response));
+	}
+
+	// ----------------------------------------다른 유저 페이지-----------------------------------------
+	@GetMapping("/user/{user_Id}")
+	public ResponseEntity<UserDto.UserPageResponse> readUserPage(@PathVariable("user_Id") Long userId) {
+		UserDto.UserPageResponse userPageResponse = userPageService.getUserPage(userId);
+		return ResponseEntity.ok().body(userPageResponse);
+	}
+
+	@GetMapping("/user/{user_Id}/ratings")
+	public ResponseEntity<MultiResponseDto<RatingResponseDto.UserPageResponse>> getUserRatings(
+		@PathVariable("user_Id") Long userId,
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
+
+		Page<Rating> ratingPage = userPageService.getUserRatingByUserId(userId, page);
+		PageImpl<RatingResponseDto.UserPageResponse> responsePage =
+			ratingMapper.ratingToUserRatingResponse(ratingPage, ratingLikeRepository);
+
+		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), ratingPage));
+	}
+
+	@GetMapping("/user/{user_Id}/pairing")
+	public ResponseEntity<MultiResponseDto<PairingResponseDto.UserPageResponse>> getUserPairing(
+		@PathVariable("user_Id") Long userId,
+		@RequestParam(name = "page", defaultValue = "1") Integer page) {
+
+		Page<Pairing> pairingPage = userPageService.getUserPairingByUserId(userId, page);
+		Page<PairingResponseDto.UserPageResponse> responsePage =
+			pairingMapper.pairingToUserPairingResponse(pairingPage, pairingLikeRepository);
+
+		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), pairingPage));
 	}
 }
