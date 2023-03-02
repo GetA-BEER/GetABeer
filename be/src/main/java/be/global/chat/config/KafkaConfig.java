@@ -48,6 +48,7 @@ public class KafkaConfig {
 		return new NewTopic("test", 1, (short) 1);
 	}
 
+	/* --------------------------------------------- 카프카 컨슈머 빈 ------------------------------------------------- */
 	@Bean
 	ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, Message> factory =
@@ -57,7 +58,6 @@ public class KafkaConfig {
 		return factory;
 	}
 
-	/* --------------------------------------------- 카프카 컨슈머 빈 ------------------------------------------------- */
 	@Bean
 	public ConsumerFactory<String, Message> consumerFactory() {
 
