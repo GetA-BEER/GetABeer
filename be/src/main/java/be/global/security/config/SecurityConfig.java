@@ -1,10 +1,6 @@
 package be.global.security.config;
 
-import static org.springframework.security.config.Customizer.*;
-
 import java.util.Arrays;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -49,6 +46,7 @@ public class SecurityConfig {
 	private final OAuth2FailureHandler oAuth2FailureHandler;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
+	private final InMemoryClientRegistrationRepository inMemoryRepository;
 	// private final SecuritySessionExpiredStrategy securitySessionExpiredStrategy;
 
 	@Bean
@@ -82,13 +80,15 @@ public class SecurityConfig {
 			.baseUri("/oauth2/authorization")
 			.and()
 			.redirectionEndpoint()
-			.baseUri("/*/oauth2/code/*")
+			.baseUri("/oauth/callback/*")
 			.and()
 			.userInfoEndpoint()
-			.userService(new CustomOAuth2UserService(userRepository, mailController, passwordEncoder(), customAuthorityUtils))
-			.and()
-			.successHandler(oAuth2SuccessHandler)
-			.failureHandler(oAuth2FailureHandler);
+			.userService(
+				new CustomOAuth2UserService(userRepository, mailController,
+					passwordEncoder(), customAuthorityUtils, inMemoryRepository));
+			// .and()
+			// .successHandler(oAuth2SuccessHandler) // loadUser 미사용으로 인해 동작안함
+			// .failureHandler(oAuth2FailureHandler); // 동일한 이유
 
 		return http.build();
 	}
