@@ -122,7 +122,7 @@ export default function CameraModal() {
               </div>
             </div>
           </button>
-          <form className="fixed bottom-16 left-1/2 -ml-16 animate-upper">
+          <form className="fixed bottom-16 left-1/2 -ml-16">
             <div className="grid grid-cols-2 gap-2 text-y-brown ">
               <div className="bg-white p-1 rounded-full w-14 h-14 border-2 border-y-brown">
                 <label htmlFor="file">

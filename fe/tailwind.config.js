@@ -33,7 +33,7 @@ module.exports = {
       },
     },
     animation: {
-      upper: 'upper 0.1s linear',
+      upper: 'upper 0.5s linear',
     },
   },
   plugins: [],
