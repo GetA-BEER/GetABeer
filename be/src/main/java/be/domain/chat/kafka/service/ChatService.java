@@ -61,7 +61,14 @@ public class ChatService {
 
 		/* 동기 처리 */
 		try {
-			kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message).get();
+			if (request.getType().equalsIgnoreCase("SUGGEST")) {
+				kafkaTemplate.send(KafkaConstants.TOPIC_SUGGEST, message).get();
+			} else if (request.getType().equalsIgnoreCase("REPORT")) {
+				kafkaTemplate.send(KafkaConstants.TOPIC_REPORT, message).get();
+			} else {
+				throw new RuntimeException("잘못된 메세지 타입입니다.");
+			}
+
 			log.info("성공적 메세지 발송 : " + message.toString());
 		} catch (Exception e) {
 			log.error("ERROR 발생 : "  + e.getMessage());
