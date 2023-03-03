@@ -21,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import be.domain.mail.controller.MailController;
 import be.domain.user.mapper.UserMapper;
 import be.domain.user.repository.UserRepository;
+import be.global.security.auth.cookieManager.CookieManager;
 import be.global.security.auth.filter.JwtAuthenticationFilter;
 import be.global.security.auth.filter.JwtVerificationFilter;
 import be.global.security.auth.handler.UserAccessDeniedHandler;
@@ -28,7 +29,6 @@ import be.global.security.auth.handler.UserAuthenticationEntryPoint;
 import be.global.security.auth.handler.UserAuthenticationFailureHandler;
 import be.global.security.auth.handler.UserAuthenticationSuccessHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
-import be.global.security.auth.oauth.service.CustomOAuth2UserService;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -36,14 +36,10 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+	private final CookieManager cookieManager;
 	private final UserMapper userMapper;
 	private final JwtTokenizer jwtTokenizer;
-	private final UserRepository userRepository;
-	private final MailController mailController;
 	private final CustomAuthorityUtils customAuthorityUtils;
-	private final RedisTemplate<String, String> redisTemplate;
-	private final InMemoryClientRegistrationRepository inMemoryRepository;
-	// private final SecuritySessionExpiredStrategy securitySessionExpiredStrategy;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -69,22 +65,15 @@ public class SecurityConfig {
 			.and()
 			.apply(new CustomFilterConfigurer())
 			.and()
+			.logout()
+			.deleteCookies("refreshToken")
+			.deleteCookies("visit_cookie")
+			.and()
 			.authorizeHttpRequests(authorize -> authorize
-				.anyRequest().permitAll())
-			.oauth2Login()
-			.authorizationEndpoint() // front -> back
-			.baseUri("/oauth2/authorization")
-			.and()
-			.redirectionEndpoint()
-			.baseUri("/oauth/callback/*")
-			.and()
-			.userInfoEndpoint()
-			.userService(
-				new CustomOAuth2UserService(jwtTokenizer, userRepository, mailController,
-					passwordEncoder(), customAuthorityUtils, redisTemplate, inMemoryRepository));
-			// .and()
-			// .successHandler(oAuth2SuccessHandler) // loadUser 미사용으로 인해 동작안함
-			// .failureHandler(oAuth2FailureHandler); // 동일한 이유
+				.anyRequest().permitAll());
+
+		// 후속 작업용 필터. 지우지 말아주세용.
+		// .addFilterBefore(oAuth2AuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
@@ -95,14 +84,14 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
 			JwtAuthenticationFilter jwtAuthenticationFilter =
-				new JwtAuthenticationFilter(userMapper, jwtTokenizer, authenticationManager, redisTemplate);
+				new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, userMapper, cookieManager);
 
 			jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
 			JwtVerificationFilter jwtVerificationFilter =
-				new JwtVerificationFilter(jwtTokenizer, customAuthorityUtils, redisTemplate);
+				new JwtVerificationFilter(jwtTokenizer, customAuthorityUtils);
 
 			builder
 				.addFilter(jwtAuthenticationFilter)

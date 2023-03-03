@@ -44,7 +44,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Table(name = "users"
-	   // ,indexes = @Index(name = "i_users", columnList = "nickname")
+	// ,indexes = @Index(name = "i_users", columnList = "nickname")
 )
 @DynamicInsert
 @NoArgsConstructor
@@ -76,6 +76,9 @@ public class User implements Serializable {
 
 	@Column
 	private String provider;
+
+	@Column
+	private String providerId;
 
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
@@ -235,7 +238,7 @@ public class User implements Serializable {
 	public User(Long id, String email, String nickname,
 		String password, List<String> roles,
 		String provider, String imageUrl,
-		String status) {
+		String status, String providerId) {
 		this.id = id;
 		this.email = email;
 		this.nickname = nickname;
@@ -244,6 +247,7 @@ public class User implements Serializable {
 		this.provider = provider;
 		this.imageUrl = imageUrl;
 		this.userStatus = status;
+		this.providerId = providerId;
 	}
 
 	public void edit(String imageUrl, String nickname, Gender gender, Age age) {
@@ -308,6 +312,29 @@ public class User implements Serializable {
 	public void removeFollowing() {
 		if (this.followingCount > 0) {
 			this.followingCount--;
+		}
+	}
+
+	public void updateOAuthInfo(String email, String picture, String nickname) {
+
+		if (!this.email.equals(email)) {
+			this.email = email;
+		}
+		if (!this.imageUrl.equals(picture)) {
+			this.imageUrl = picture;
+		}
+		if (!this.nickname.equals(nickname)) {
+			this.nickname = nickname;
+		}
+	}
+
+	public void updateOAuthInfo(String picture, String nickname) {
+
+		if (!this.imageUrl.equals(picture)) {
+			this.imageUrl = picture;
+		}
+		if (!this.nickname.equals(nickname)) {
+			this.nickname = nickname;
 		}
 	}
 }

@@ -34,6 +34,7 @@ public enum ExceptionCode {
 	WITHDRAWN_USER(400, "탈퇴한 회원입니다."),
 	SLEEP_USER(403, "휴면 계정입니다. 휴면 해제가 필요합니다."),
 	WRONG_PASSWORD(404, "비밀번호가 일치하지 않습니다."),
+	EMAIL_USED_ANOTHER_ACCOUNT(404, "Email is Being Used By Another Account."),
 
 	/* BEER 관련 예외 */
 	BEER_NOT_FOUND(404, "Beer Not Found"),
@@ -48,8 +49,7 @@ public enum ExceptionCode {
 	NOT_FOUND_AVAILABLE_PORT(500, "not found available port"),
 
 	/* Notification 관련 예외 */
-	NOTIFICATION_NOT_FOUND(404, "존재하지 않는 알림입니다.")
-	;
+	NOTIFICATION_NOT_FOUND(404, "존재하지 않는 알림입니다.");
 
 	@Getter
 	private int status;
