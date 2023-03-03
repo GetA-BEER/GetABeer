@@ -156,7 +156,10 @@ public class UserDto {
 	public static class UserPageResponse {
 		private Long id;
 		private String nickname;
+		private String imgUrl;
 		private Boolean isFollowing;
+		private Long followerCount;
+		private Long followingCount;
 		private Long ratingCount;
 		private Long pairingCount;
 		private Long commentCount;
