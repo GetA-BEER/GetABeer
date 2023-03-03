@@ -104,6 +104,7 @@ public class UserPageController {
 	// ----------------------------------------다른 유저 페이지-----------------------------------------
 	@GetMapping("/user/{user_Id}")
 	public ResponseEntity<UserDto.UserPageResponse> readUserPage(@PathVariable("user_Id") Long userId) {
+
 		UserDto.UserPageResponse userPageResponse = userPageService.getUserPage(userId);
 		return ResponseEntity.ok().body(userPageResponse);
 	}
@@ -120,7 +121,7 @@ public class UserPageController {
 		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), ratingPage));
 	}
 
-	@GetMapping("/user/{user_Id}/pairing")
+	@GetMapping("/user/{user_Id}/pairings")
 	public ResponseEntity<MultiResponseDto<PairingResponseDto.UserPageResponse>> getUserPairing(
 		@PathVariable("user_Id") Long userId,
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
