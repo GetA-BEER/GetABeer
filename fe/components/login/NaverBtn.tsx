@@ -1,5 +1,3 @@
-const API = process.env.API_URL;
-
 export default function NaverBtn() {
   const REST_API_KEY = process.env.NEXT_PUBLIC_NAVER_API_KEY;
   const REDIRECT_URI = 'http://localhost:3000/oauth/naver';
