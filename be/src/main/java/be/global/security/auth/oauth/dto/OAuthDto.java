@@ -1,10 +1,5 @@
 package be.global.security.auth.oauth.dto;
 
-import java.time.Instant;
-import java.util.Set;
-
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

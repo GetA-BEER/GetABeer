@@ -2,21 +2,14 @@ package be.global.security.auth.oauth.attributes;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import be.domain.mail.controller.MailController;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.UserStatus;
-import be.domain.user.repository.UserRepository;
-import be.domain.user.service.UserService;
 import be.global.security.auth.oauth.userinfo.GoogleUserInfo;
 import be.global.security.auth.oauth.userinfo.KakaoUserInfo;
 import be.global.security.auth.oauth.userinfo.NaverUserInfo;
 import be.global.security.auth.oauth.userinfo.OAuth2UserInfo;
-import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -74,11 +67,12 @@ public class OAuth2Attribute {
 	/**
 	 * of 메서드로 OAuth2Attributes 객체 생성 -> OAuth2UserInfo에 provider 별 유저정보 담고있음
 	 */
-	public User toEntity(ProviderType providerType, OAuth2UserInfo oAuth2UserInfo, String password, List<String> roles) {
+	public User toEntity(ProviderType providerType, OAuth2UserInfo oAuth2UserInfo, String password,
+		List<String> roles) {
 
 		String email = oAuth2UserInfo.getEmail();
 
-		 User user =User.builder()
+		User user = User.builder()
 			.email(email)
 			.nickname(oAuth2UserInfo.getNickname())
 			.password(password)
