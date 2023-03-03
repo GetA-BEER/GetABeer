@@ -2,6 +2,7 @@ package be.domain.user.repository;
 
 import static be.domain.comment.entity.QPairingComment.*;
 import static be.domain.comment.entity.QRatingComment.*;
+import static be.domain.follow.QFollow.*;
 import static be.domain.pairing.entity.QPairing.*;
 import static be.domain.rating.entity.QRating.*;
 import static be.domain.user.entity.QUser.*;
@@ -47,12 +48,25 @@ public class UserQueryRepository {
 			.where(ratingComment.user.id.eq(userId))
 			.fetchOne();
 
+		Long followerCount = jpaQueryFactory.select(follow.count())
+			.from(follow)
+			.where(follow.followedUser.id.eq(userId))
+			.fetchOne();
+
+		Long followingCount = jpaQueryFactory.select(follow.count())
+			.from(follow)
+			.where(follow.followingUser.id.eq(userId))
+			.fetchOne();
+
 		return UserDto.UserPageResponse.builder()
 			.id(findUser.getId())
+			.imgUrl(findUser.getImageUrl())
 			.nickname(findUser.getNickname())
 			.ratingCount(ratingCount)
 			.pairingCount(pairingCount)
 			.commentCount(pairingCommentCount + ratingCommentCount)
+			.followerCount(followerCount)
+			.followingCount(followingCount)
 			.build();
 	}
 }
