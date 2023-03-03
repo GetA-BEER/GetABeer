@@ -10,9 +10,5 @@ import lombok.Getter;
 @Builder
 public class MessageRequest {
 	private String content;
-
-	@JsonCreator
-	public MessageRequest(@JsonProperty("content") String content) {
-		this.content = content;
-	}
+	private String type;
 }
