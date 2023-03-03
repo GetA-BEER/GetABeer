@@ -1,11 +1,13 @@
 package be.global.security.auth.handler;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -27,7 +29,7 @@ public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
 
 		logExceptionMessage(authException, exception);
-		// sendErrorToDiscord(authException, exception);
+		sendErrorToDiscord(authException, exception);
 	}
 
 	private void logExceptionMessage(AuthenticationException authException, Exception exception) {
