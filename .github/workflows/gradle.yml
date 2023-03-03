@@ -52,7 +52,7 @@ jobs:
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY}}
           cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
           cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_KEY }}
-          discord.webhook: ${{ secrets.WEBHOOK }}
+#          discord.webhook: ${{ secrets.WEBHOOK }}
 
       - name: Build with Gradle
         run: ./gradlew clean build --exclude-task test

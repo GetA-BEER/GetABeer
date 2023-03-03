@@ -7,9 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -22,7 +19,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -49,19 +45,23 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final MailController mailController;
 	private final PasswordEncoder passwordEncoder;
 	private final CustomAuthorityUtils authorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
 	private final InMemoryClientRegistrationRepository inMemoryRepository; // application-oauth properties 정보를 담고있다
 
-	public OAuth2User login(String providerName, String code) throws OAuth2AuthenticationException {
+	public OAuthDto.TokenDto login(String providerName, String code) throws OAuth2AuthenticationException {
 
 		log.info("# 프론트에서 코드 받아가꼬 소셜로그인 요청 드가자~");
 
 		// yml 에 저장된 데이터를 가져와 소셜 서버로 데이터를 가져옴
 		ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
 		OAuthDto.TokenDto tokenDto = getAuthorization(code, provider); // 인증코드 -> 사용자 정보 교환
+
+		// log.info(tokenDto.getRefresh_token());
 
 		/**
 		 * yml 추출한 clientRsgistration 에서 registrationId 로 provider type 저장
@@ -75,14 +75,41 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 		User createdUser = getUser(extractAttribute, providerType);
 
+		try {
+			log.info("# 핸들러가 잘 작동하나??? 해야하는데ㅜ");
+
+			User user = userRepository.findByEmail(createdUser.getEmail()).orElseThrow();
+			if (user.getAge() == null) {
+				// 첫 소셜 로그인 시 회원정보입력으로 기기
+				String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
+				log.info(user.getEmail());
+				log.info(refreshToken);
+
+				if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
+					redisTemplate.delete(user.getEmail());
+				}
+				redisTemplate.opsForValue()
+					.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+
+				return OAuthDto.TokenDto.builder()
+					.access_token(tokenDto.getAccess_token())
+					.refresh_token(refreshToken)
+					.build();
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
 		// DefaultOAuth2User 구현한 CustomOAuth2User 객체 생성 후 반환
-		return new CustomOAuth2User(
+		new CustomOAuth2User(
 			Collections.singleton(new SimpleGrantedAuthority(createdUser.getRoles().get(0))),
 			attributes,
 			extractAttribute.getUsernameAttributeName(),
 			createdUser.getEmail(),
 			createdUser.getRoles().get(0)
 		);
+
+		return tokenDto;
 	}
 
 	/**

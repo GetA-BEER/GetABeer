@@ -27,7 +27,7 @@ public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
 
 		logExceptionMessage(authException, exception);
-		sendErrorToDiscord(authException, exception);
+		// sendErrorToDiscord(authException, exception);
 	}
 
 	private void logExceptionMessage(AuthenticationException authException, Exception exception) {

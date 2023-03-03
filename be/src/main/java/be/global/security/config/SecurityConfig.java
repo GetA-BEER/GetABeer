@@ -84,8 +84,8 @@ public class SecurityConfig {
 			.and()
 			.userInfoEndpoint()
 			.userService(
-				new CustomOAuth2UserService(userRepository, mailController,
-					passwordEncoder(), customAuthorityUtils, inMemoryRepository));
+				new CustomOAuth2UserService(jwtTokenizer, userRepository, mailController,
+					passwordEncoder(), customAuthorityUtils, redisTemplate, inMemoryRepository));
 			// .and()
 			// .successHandler(oAuth2SuccessHandler) // loadUser 미사용으로 인해 동작안함
 			// .failureHandler(oAuth2FailureHandler); // 동일한 이유
