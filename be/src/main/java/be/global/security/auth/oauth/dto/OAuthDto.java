@@ -20,16 +20,4 @@ public class OAuthDto {
 		private int expires_in;
 		private int refresh_token_expires_in;
 	}
-
-	@Getter
-	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class OAuthLoginDto {
-		private String email;
-		private String nickname;
-		private String imageUrl;
-		private String accessToken;
-		private String refreshToken;
-	}
 }
