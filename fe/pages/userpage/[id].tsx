@@ -1,64 +1,90 @@
 import BackBtn from '@/components/button/BackPageBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
-import RatingCard from '@/components/middleCards/RatingCard';
+import RatingCard, {
+  RatingCardProps,
+} from '@/components/middleCards/RatingCard';
 import PairingCardController from '@/components/pairing/PairingCardController';
-import Router from 'next/router';
-
+import { useRouter } from 'next/router';
+import axios from '@/pages/api/axios';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import { accessToken, userNickname } from '@/atoms/login';
+import { useRecoilState } from 'recoil';
+import Link from 'next/link';
+import Image from 'next/image';
 export default function UserPage() {
-  const pairingCardProps = {
-    data: [
-      {
-        beerId: 1,
-        pairingId: 1,
-        nickname: '김맥주',
-        content: '수정된 페어링',
-        thumbnail:
-          'https://worldbeermarket.kr/userfiles/prdimg/2102080006_M.jpg',
-        category: 'SNACK',
-        likeCount: 3,
-        commentCount: 0,
-        isUserLikes: true,
-        createdAt: '2023-02-06T00:29:14.59836',
-        modifiedAt: '2023-02-06T00:31:11.1951',
-      },
-      {
-        beerId: 1,
-        pairingId: 2,
-        nickname: '김맥주',
-        content: '페어링 안내',
-        thumbnail:
-          'https://worldbeermarket.kr/userfiles/prdimg/2301050762_R.jpg',
-        category: 'GRILL',
-        likeCount: 2,
-        commentCount: 0,
-        isUserLikes: false,
-        createdAt: '2023-02-06T00:35:58.259552',
-        modifiedAt: '2023-02-06T00:35:58.259552',
-      },
-    ],
-    pageInfo: {
-      page: 1,
-      size: 5,
-      totalElements: 2,
-      totalPages: 1,
-    },
-  };
-
+  const [pariginCardPops, setPairingCardProps] = useState<any>();
+  const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
+  const [userName, setUserName] = useState();
+  const [paringCount, setParingCount] = useState();
+  const [ratingCount, setRatingCount] = useState();
+  const [commentCount, setCommentCount] = useState();
+  const [followingCount, setFollowingCount] = useState();
+  const [followerCount, setFollowerCount] = useState();
+  const [userImg, setUserImg] = useState('');
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [TOKEN] = useRecoilState(accessToken);
+  const [username] = useRecoilState(userNickname);
+  const router = useRouter();
+  useEffect(() => {
+    axios
+      .get(`/api/user/${router.query.userId}`)
+      .then((response) => {
+        console.log(response);
+        setUserName(response.data.nickname);
+        setParingCount(response.data.pairingCount);
+        setRatingCount(response.data.ratingCount);
+        setCommentCount(response.data.commentCount);
+        setFollowerCount(response.data.followerCount);
+        setFollowingCount(response.data.followingCount);
+        setUserImg(response.data.imgUrl);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+  useEffect(() => {
+    axios
+      .get(`/api/user/${router.query.userId}/pairings`)
+      .then((response) => {
+        setPairingCardProps(response.data.data);
+        setTotalPages(response.data.pageInfo.totalPages);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+  useEffect(() => {
+    axios
+      .get('/api/user/1/ratings')
+      .then((res) => {
+        setRatingList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const [curTab, setCurTab] = useState(0);
   const tabArr = [
     {
       name: '평가',
       content: (
-        <PairingCardController pairingCardProps={pairingCardProps.data} />
+        <div className="mt-3">
+          {ratingList.map((el: RatingCardProps) => {
+            return (
+              <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
+                <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
+                  <RatingCard
+                    cardProps={el}
+                    isMine={false}
+                    count={el.commentCount}
+                  />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       ),
     },
     {
       name: '페어링',
-      content: (
-        <PairingCardController pairingCardProps={pairingCardProps.data} />
-      ),
+      content: <PairingCardController pairingCardProps={pariginCardPops} />,
     },
   ];
   return (
@@ -73,19 +99,28 @@ export default function UserPage() {
         <BackBtn></BackBtn>
         <div>
           <div className="flex gap-3 p-2 justify-center">
-            <div className="bg-y-cream h-24 w-24 rounded-full "></div>
+            <div className="relative rounded-full w-20 h-20 self-center">
+              <Image
+                alt="user profile image"
+                src={userImg}
+                fill
+                className="object-cover"
+              />
+            </div>
             <div className="p-1 self-center">
-              <div>성유미님</div>
-              <div className="text-xs mb-2">평가 1 페어링 2 댓글 2</div>
+              <div>{userName}님</div>
+              <div className="text-xs mb-2">
+                평가{ratingCount} 페어링{paringCount} 댓글{commentCount}
+              </div>
               <div className="flex gap-2">
                 <div
                   className="bg-y-cream py-2 px-3 rounded-lg text-xs cursor-pointer"
-                  onClick={() => Router.push('/follower/1')}
+                  onClick={() => router.push('/follower/1')}
                 >
-                  10 팔로워
+                  {followerCount} 팔로워
                 </div>
                 <div className="bg-y-cream py-2 px-3 rounded-lg text-xs cursor-pointer">
-                  10 팔로잉
+                  {followingCount} 팔로잉
                 </div>
               </div>
             </div>
