@@ -3,6 +3,7 @@ package be.domain.user.service;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -275,4 +277,15 @@ public class UserService {
 			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
 		}
 	}
+
+	// /* 인덱스 테스트 */
+	//
+	// public List<User> findAll() {
+	//
+	// 	return userRepository.findAll();
+	// }
+	//
+	// public List<Object[]> findAllOfIdx() {
+	// 	return userRepository.indexTest();
+	// }
 }

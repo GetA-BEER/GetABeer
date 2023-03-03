@@ -30,6 +30,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+// @Table(indexes = @Index(name = "i_pairing", columnList = ""))
 public class Pairing extends BaseTimeEntity {
 
 	@Id

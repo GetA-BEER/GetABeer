@@ -1,31 +1,41 @@
 package be.global.security.auth.oauth.service;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-import javax.servlet.http.HttpSession;
-
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import be.domain.mail.controller.MailController;
-import be.domain.mail.dto.MailDto;
 import be.domain.user.entity.User;
-import be.domain.user.entity.enums.UserStatus;
+import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.repository.UserRepository;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
-import be.global.security.auth.oauth.strategy.userinfo.GoogleUserInfo;
-import be.global.security.auth.oauth.strategy.userinfo.KakaoUserInfo;
-import be.global.security.auth.oauth.strategy.userinfo.NaverUserInfo;
-import be.global.security.auth.oauth.strategy.userinfo.OAuth2UserInfo;
-import be.global.security.auth.session.user.SessionUser;
-import be.global.security.auth.userdetails.AuthUser;
+import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.oauth.CustomOAuth2User;
+import be.global.security.auth.oauth.attributes.OAuth2Attribute;
+import be.global.security.auth.oauth.dto.OAuthDto;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,81 +45,187 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-
-	private OAuth2UserInfo oAuth2UserInfo;
+	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final MailController mailController;
 	private final PasswordEncoder passwordEncoder;
 	private final CustomAuthorityUtils authorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
+	private final InMemoryClientRegistrationRepository inMemoryRepository; // application-oauth properties 정보를 담고있다
 
-	@Override
-	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-		OAuth2User oauth2User = super.loadUser(userRequest);
-		OAuth2UserInfo oauth2UserInfo = getOAuth2UserInfo(userRequest, oauth2User);
+	public OAuthDto.TokenDto login(String providerName, String code) throws OAuth2AuthenticationException {
 
-		return getPrincipalDetails(oauth2UserInfo);
-	}
+		log.info("# 프론트에서 코드 받아가꼬 소셜로그인 요청 드가자~");
 
-	private OAuth2UserInfo getOAuth2UserInfo(OAuth2UserRequest userRequest, OAuth2User oauth2User) {
-		if (userRequest.getClientRegistration().getRegistrationId().equals("google"))
-			oAuth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
+		// yml 에 저장된 데이터를 가져와 소셜 서버로 데이터를 가져옴
+		ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
+		OAuthDto.TokenDto tokenDto = getAuthorization(code, provider); // 인증코드 -> 사용자 정보 교환
 
-		if (userRequest.getClientRegistration().getRegistrationId().equals("naver"))
-			oAuth2UserInfo = new NaverUserInfo(oauth2User.getAttributes());
+		// log.info(tokenDto.getRefresh_token());
 
-		if (userRequest.getClientRegistration().getRegistrationId().equals("kakao"))
-			oAuth2UserInfo = new KakaoUserInfo(oauth2User.getAttributes());
+		/**
+		 * yml 추출한 clientRsgistration 에서 registrationId 로 provider type 저장
+		 */
+		String registrationId = provider.getRegistrationId();
+		ProviderType providerType = getProviderType(registrationId);
+		String userNameAttributeName = provider.getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
+		Map<String, Object> attributes = getUserAttributes(provider, tokenDto);
 
-		return oAuth2UserInfo;
-	}
+		OAuth2Attribute extractAttribute = OAuth2Attribute.of(providerType, userNameAttributeName, attributes);
 
-	private AuthUser getPrincipalDetails(OAuth2UserInfo oauth2UserInfo) {
+		User createdUser = getUser(extractAttribute, providerType);
 
-		Optional<User> user = userRepository.findByEmail(oauth2UserInfo.getEmail());
+		try {
+			log.info("# 핸들러가 잘 작동하나??? 해야하는데ㅜ");
 
-		String providerId = oauth2UserInfo.getProviderId();
-		String nickname = oauth2UserInfo.getName();
-		String email = oauth2UserInfo.getEmail();
-		String uuid = UUID.randomUUID().toString().substring(0, 15);
-		String password = passwordEncoder.encode(uuid);
-		String imageUrl = oauth2UserInfo.getImageUrl();
+			User user = userRepository.findByEmail(createdUser.getEmail()).orElseThrow();
+			if (user.getAge() == null) {
+				// 첫 소셜 로그인 시 회원정보입력으로 기기
+				String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
+				log.info(user.getEmail());
+				log.info(refreshToken);
 
-		if (user.isEmpty()) {
-			log.info("OAuth2 Login");
+				if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
+					redisTemplate.delete(user.getEmail());
+				}
+				redisTemplate.opsForValue()
+					.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
-			User saved = User.builder()
-				.email(email)
-				.nickname(nickname)
-				.status(UserStatus.ACTIVE_USER.getStatus())
-				.provider(oauth2UserInfo.getProvider().toUpperCase())
-				.imageUrl(imageUrl)
-				.roles(authorityUtils.createRoles(email))
-				.password(password)
-				.build();
-
-			saved.randomProfileImage(saved.getImageUrl());
-
-			MailDto.sendPWMail post = MailDto.sendPWMail.builder()
-				.email(email)
-				.password(uuid)
-				.build();
-			mailController.sendOAuth2PasswordEmail(post);
-
-			userRepository.save(saved);
-
-			return new AuthUser(saved.getId(), saved.getAge(), saved.getRoles(), saved.getEmail(), saved.getGender(),
-				saved.getNickname(), saved.getPassword(), saved.getProvider(), oauth2UserInfo);
+				return OAuthDto.TokenDto.builder()
+					.access_token(tokenDto.getAccess_token())
+					.refresh_token(refreshToken)
+					.build();
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
 		}
 
-		rejectWithdrawal(user);
+		// DefaultOAuth2User 구현한 CustomOAuth2User 객체 생성 후 반환
+		new CustomOAuth2User(
+			Collections.singleton(new SimpleGrantedAuthority(createdUser.getRoles().get(0))),
+			attributes,
+			extractAttribute.getUsernameAttributeName(),
+			createdUser.getEmail(),
+			createdUser.getRoles().get(0)
+		);
 
-		return new AuthUser(user.get().getId(), user.get().getAge(), user.get().getRoles(), user.get().getEmail(),
-			user.get().getGender(), user.get().getNickname(), user.get().getPassword(), user.get().getProvider(),
-			oauth2UserInfo);
+		return tokenDto;
 	}
 
-	private void rejectWithdrawal(Optional<User> user) {
-		if (user.get().getUserStatus() == UserStatus.QUIT_USER.getStatus())
-			throw new BusinessLogicException(ExceptionCode.WITHDRAWN_USER);
+	/**
+	 * 서버에 토큰을 받아오는 메서드
+	 */
+	private OAuthDto.TokenDto getAuthorization(String code, ClientRegistration provider) {
+
+		// 소셜 서버 요청 파라미터
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+		parameters.add("code", code);
+		parameters.add("client_id", provider.getClientId());
+		parameters.add("client_secret", provider.getClientSecret());
+		parameters.add("redirect_uri", provider.getRedirectUri());
+		parameters.add("grant_type", "authorization_code");
+
+		// 소셜 서버 요청 헤더
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+		// log.info(provider.getRedirectUri());
+		OAuthDto.TokenDto tokenDto = restTemplate.postForObject(provider.getProviderDetails().getTokenUri(),
+			requestEntity, OAuthDto.TokenDto.class);
+
+		return tokenDto;
 	}
+
+	/**
+	 * attributes 메서드
+	 */
+	private Map<String, Object> getUserAttributes(ClientRegistration provider, OAuthDto.TokenDto tokenDto) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + tokenDto.getAccess_token());
+
+		HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		Map<String, Object> body = restTemplate.exchange(provider.getProviderDetails().getUserInfoEndpoint().getUri(),
+			HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {
+			}).getBody();
+
+		return body;
+	}
+
+	private ProviderType getProviderType(String registrationId) {
+		if ("naver".equals(registrationId)) {
+			return ProviderType.NAVER;
+		}
+		if ("kakao".equals(registrationId)) {
+			return ProviderType.KAKAO;
+		}
+		return ProviderType.GOOGLE;
+	}
+
+	private User getUser(OAuth2Attribute attributes, ProviderType providerType) {
+		User findUser = userRepository.findByEmailAndProvider(attributes.getOAuth2UserInfo().getEmail(),
+			providerType.toString()).orElse(null);
+
+		if (userRepository.findByEmail(attributes.getOAuth2UserInfo().getEmail()).isPresent()) {
+			if (findUser == null) {
+				throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+			}
+		} else {
+			if (findUser == null) {
+				return saveUser(attributes, providerType);
+			}
+		}
+		return findUser;
+	}
+
+	private User saveUser(OAuth2Attribute attribute, ProviderType providerType) {
+
+		String password = UUID.randomUUID().toString().substring(0, 15);
+		mailController.sendOAuth2PasswordEmail(attribute.getOAuth2UserInfo().getEmail(), password);
+
+		User createdUser = attribute.toEntity(providerType, attribute.getOAuth2UserInfo(),
+			passwordEncoder.encode(password), authorityUtils.createRoles(attribute.getOAuth2UserInfo().getEmail()));
+
+		return userRepository.save(createdUser);
+	}
+
+	// loadUser -> 인증코드로 사용자 정보 받아오는 과정
+	// @Override
+	// public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+	// 	log.info("# 소셜로그인 요청 드가자~");
+	//
+	// 	/**
+	// 	 * DefaultOAuth2UserService 객체 생성 -> loadUser(userRequest) -> DefaultOAuth2User 객체를 생성 후 반환
+	// 	 * loadUser() : 소셜 로그인 사용자 정보 제공 URI로 요청 -> 사용자 정보 get -> DefaultOAuth2User 생성 후 반환
+	// 	 */
+	// 	OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+	// 	OAuth2User oAuth2User = delegate.loadUser(userRequest);
+	//
+	// 	/**
+	// 	 * userRequest 추출한 registrationId 로 provider type 저장
+	// 	 */
+	// 	String registrationId = userRequest.getClientRegistration().getRegistrationId();
+	// 	ProviderType providerType = getProviderType(registrationId);
+	// 	String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint()
+	// 		.getUserNameAttributeName();
+	// 	Map<String, Object> attributes = oAuth2User.getAttributes(); // 소셜 로그인 API 제공 userInfo
+	//
+	// 	OAuth2Attribute extractAttribute = OAuth2Attribute.of(providerType, userNameAttributeName, attributes);
+	//
+	// 	User createdUser = getUser(extractAttribute, providerType);
+	//
+	// 	// DefaultOAuth2User 구현한 CustomOAuth2User 객체 생성 후 반환
+	// 	return new CustomOAuth2User(
+	// 		Collections.singleton(new SimpleGrantedAuthority(createdUser.getRoles().get(0))),
+	// 		attributes,
+	// 		extractAttribute.getUsernameAttributeName(),
+	// 		createdUser.getEmail(),
+	// 		createdUser.getRoles().get(0)
+	// 	);
+	// }
 }

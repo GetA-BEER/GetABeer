@@ -3,6 +3,7 @@ package be.domain.user.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -41,8 +43,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(name = "users"
+	   // ,indexes = @Index(name = "i_users", columnList = "nickname")
+)
 @DynamicInsert
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Serializable {
@@ -281,6 +285,10 @@ public class User implements Serializable {
 
 	public void putImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public void changeNickname(String nickname) {
+		this.nickname = nickname + UUID.randomUUID().toString().substring(0, 5);
 	}
 
 	public void addFollower() {

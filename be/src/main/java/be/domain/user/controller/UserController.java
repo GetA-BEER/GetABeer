@@ -1,12 +1,16 @@
 package be.domain.user.controller;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StopWatch;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -134,4 +138,37 @@ public class UserController {
 		User user = userService.getLoginUser();
 		return ResponseEntity.ok(new SingleResponseDto<>(userMapper.userToInfoResponse(user)));
 	}
+
+	// /**
+	//  *  인덱싱 테스트
+	//  */
+	// @GetMapping("/index")
+	// public void getAllMembers(){
+	// 	noIdx();
+	// 	useIdx();
+	// }
+	//
+	// private void noIdx() {
+	// 	StopWatch stopWatch = new StopWatch();
+	// 	stopWatch.start();
+	//
+	// 	List<String> res = userService.findAll().stream().map(User::getNickname).collect(Collectors.toList());
+	//
+	// 	stopWatch.stop();
+	// 	log.info("------------------------------------------------");
+	// 	log.info("실행 시간 = "+ stopWatch.getTotalTimeNanos() + "ns");
+	// 	log.info("------------------------------------------------");
+	// }
+	//
+	// private void useIdx() {
+	// 	StopWatch stopWatch = new StopWatch();
+	// 	stopWatch.start();
+	//
+	// 	List<Object[]> res = userService.findAllOfIdx();
+	//
+	// 	stopWatch.stop();
+	// 	log.info("------------------------------------------------");
+	// 	log.info("실행 시간 = "+ stopWatch.getTotalTimeNanos() + "ns");
+	// 	log.info("------------------------------------------------");
+	// }
 }

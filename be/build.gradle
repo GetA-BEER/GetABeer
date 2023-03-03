@@ -104,6 +104,8 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // Spring Rest Docs
 //    testImplementation 'org.springframework.kafka:spring-kafka-test'
 //    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor' // Spring Rest Docs, Asciidoctor
+    //    ------------------------------------로깅 전용----------------------------
+    implementation("ca.pjer:logback-awslogs-appender:1.4.0")
 }
 
 tasks.named('test') {

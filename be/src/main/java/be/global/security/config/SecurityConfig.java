@@ -1,8 +1,6 @@
 package be.global.security.config;
 
-import static org.springframework.security.config.Customizer.*;
-
-import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,9 +9,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import be.domain.mail.controller.MailController;
 import be.domain.user.mapper.UserMapper;
@@ -25,6 +28,7 @@ import be.global.security.auth.handler.UserAuthenticationEntryPoint;
 import be.global.security.auth.handler.UserAuthenticationFailureHandler;
 import be.global.security.auth.handler.UserAuthenticationSuccessHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.oauth.handler.OAuth2FailureHandler;
 import be.global.security.auth.oauth.handler.OAuth2SuccessHandler;
 import be.global.security.auth.oauth.service.CustomOAuth2UserService;
 import be.global.security.auth.utils.CustomAuthorityUtils;
@@ -35,12 +39,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final UserMapper userMapper;
-	private final HttpSession httpSession;
 	private final JwtTokenizer jwtTokenizer;
 	private final UserRepository userRepository;
 	private final MailController mailController;
+	private final OAuth2SuccessHandler oAuth2SuccessHandler;
+	private final OAuth2FailureHandler oAuth2FailureHandler;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final RedisTemplate<String, String> redisTemplate;
+	private final InMemoryClientRegistrationRepository inMemoryRepository;
 	// private final SecuritySessionExpiredStrategy securitySessionExpiredStrategy;
 
 	@Bean
@@ -50,13 +56,15 @@ public class SecurityConfig {
 
 			.and()
 			.csrf().disable()
-			.cors(withDefaults())
+			.cors().configurationSource(corsConfigurationSource())
+			.and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			// .and()
 			// .sessionManagement(s ->
 			// 	s.maximumSessions(1) // 동일 세션 개수 제한 (중복 로그인 방지)
 			// 		.maxSessionsPreventsLogin(false) // 중복 로그인 시 먼저 로그인한 사용자 로그아웃
 			// 		.expiredSessionStrategy(securitySessionExpiredStrategy)) // 세션 만료 시 전략
-			// .and()
+			.and()
 			.formLogin().disable()
 			.httpBasic().disable()
 			.exceptionHandling()
@@ -67,14 +75,20 @@ public class SecurityConfig {
 			.and()
 			.authorizeHttpRequests(authorize -> authorize
 				.anyRequest().permitAll())
-			.oauth2Login(oauth2 -> {
-				oauth2.authorizationEndpoint().baseUri("/oauth2/authorization");
-				oauth2.successHandler(
-					new OAuth2SuccessHandler(httpSession, jwtTokenizer, userRepository, redisTemplate));
-				oauth2.userInfoEndpoint().userService(
-					new CustomOAuth2UserService(userRepository, mailController, passwordEncoder(),
-						customAuthorityUtils));
-			});
+			.oauth2Login()
+			.authorizationEndpoint() // front -> back
+			.baseUri("/oauth2/authorization")
+			.and()
+			.redirectionEndpoint()
+			.baseUri("/oauth/callback/*")
+			.and()
+			.userInfoEndpoint()
+			.userService(
+				new CustomOAuth2UserService(jwtTokenizer, userRepository, mailController,
+					passwordEncoder(), customAuthorityUtils, redisTemplate, inMemoryRepository));
+			// .and()
+			// .successHandler(oAuth2SuccessHandler) // loadUser 미사용으로 인해 동작안함
+			// .failureHandler(oAuth2FailureHandler); // 동일한 이유
 
 		return http.build();
 	}
@@ -103,5 +117,25 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.addAllowedOrigin("https://www.getabeer.co.kr");
+		configuration.addAllowedOrigin("https://getabeer.co.kr");
+		configuration.addAllowedOrigin("https://server.getabeer.co.kr");
+		configuration.addAllowedOrigin("http://localhost:3000");
+		configuration.addAllowedOrigin("http://localhost:8080");
+		configuration.addAllowedHeader("*");
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
+		configuration.setMaxAge(3600L);
+		configuration.addExposedHeader("Authorization");
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+
+		return source;
 	}
 }

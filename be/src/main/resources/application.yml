@@ -147,6 +147,7 @@ management:
     tags:
       application: ${spring.application.name}
 logging:
+#  config: classpath:logback-spring.xml
   level:
     org:
       springframework:
@@ -154,3 +155,7 @@ logging:
           elasticsearch:
             client:
               WIRE: TRACE
+
+discord:
+  webhook: # ${WEBHOOK}
+  
