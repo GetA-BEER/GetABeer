@@ -154,5 +154,5 @@ logging:
             client:
               WIRE: TRACE
 
-#discord:
-#  webhook: ${WEBHOOK}
+discord:
+  webhook: ${WEBHOOK}
