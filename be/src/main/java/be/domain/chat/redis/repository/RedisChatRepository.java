@@ -1,7 +1,7 @@
 package be.domain.chat.redis.repository;
 
-import static be.global.chat.redis.entity.QRedisChatMessage.*;
-import static be.global.chat.redis.entity.QRedisChatRoom.*;
+import static be.domain.chat.redis.entity.QRedisChatMessage.*;
+import static be.domain.chat.redis.entity.QRedisChatRoom.*;
 
 import java.util.List;
 import java.util.Optional;
