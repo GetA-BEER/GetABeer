@@ -26,7 +26,7 @@ public class LoggingToDiscord {
 		DiscordWebhook webhook = new DiscordWebhook(url);
 
 		try {
-			String ip = InetAddress.getLocalHost().getHostName();
+			String ip = InetAddress.getLocalHost().getHostAddress();
 			String host = InetAddress.getLocalHost().getHostName();
 
 			webhook.setTts(true);
