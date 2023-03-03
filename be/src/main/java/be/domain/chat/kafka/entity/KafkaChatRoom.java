@@ -4,7 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import be.domain.user.entity.User;
 import lombok.Getter;
@@ -19,27 +24,23 @@ public class KafkaChatRoom implements Serializable {
 
 	@Id
 	@Column(name = "room_id")
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String roomName;
 
-	/* 회원이랑 일대알 매핑 -> 어드민은 Get으로 등록? */
-	// @OneToOne
-	// @JoinColumn(name = "user_id")
-	// private User user;
-	//
-	// public void bndUser(User user) {
-	// 	this.user = user;
-	//
-	// 	if (user.getChatRoom() != this) {
-	// 		user.bndChatRoom(this);
-	// 	}
-	// }
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "room_user_id"))
+	private User roomUser;
 
 	public static KafkaChatRoom create(User user) {
+
+		if (user.getRoles().contains("USER_ADMIN")) {
+			throw new RuntimeException("관리자는 채팅방을 개설할 수 없습니다.");
+		}
+
 		KafkaChatRoom room = new KafkaChatRoom();
-		room.id = user.getId();
 		room.roomName = user.getNickname() + user.getId() + "님의 채팅방입니다.";
+		room.roomUser = user;
 		return room;
 	}
 }
