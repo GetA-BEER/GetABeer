@@ -1,6 +1,8 @@
 package be.domain.chat.kafka.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ import lombok.ToString;
 public class KafkaChatMessage {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; /* 메세지 아이디 */
 	private Long roomId;
 	private String sender;

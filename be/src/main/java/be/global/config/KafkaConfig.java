@@ -37,11 +37,11 @@ public class KafkaConfig {
 
 	@Bean
 	public NewTopic topic1() {
-		return new NewTopic(KafkaConstants.KAFKA_TOPIC, 1, (short) 1);
+		return new NewTopic(KafkaConstants.TOPIC_SUGGEST, 1, (short) 1);
 	}
 
 	@Bean NewTopic topic2() {
-		return new NewTopic("test", 1, (short) 1);
+		return new NewTopic(KafkaConstants.TOPIC_REPORT, 1, (short) 1);
 	}
 
 	/* --------------------------------------------- 카프카 컨슈머 빈 ------------------------------------------------- */
