@@ -36,7 +36,7 @@ public class RedisChatController {
 	private final RedisChatService chatService;
 	private final RedisRoomService roomService;
 
-	/* 관리자는 채팅방을 생성할 수 없음 -> 스택 오버 플로우 나는 이유? */
+	/* 관리자는 채팅방을 생성할 수 없음 */
 	@GetMapping("/room")
 	public ResponseEntity<Long> createRoom() {
 
@@ -50,13 +50,14 @@ public class RedisChatController {
 	}
 
 	@MessageMapping("/{roomId}")
-	@PostMapping("/{roomId}") /* 테스트용 */
 	public void sendMessage(@DestinationVariable Long roomId, @RequestBody RedisMessageDto.Request request) {
 		User user = userService.findLoginUser();
 		Long userId = user.getId();
 
 		publisher.publish(ChannelTopic.of("room" + roomId),
 			new RedisChat(roomId, userId, request.getContent()));
+
+		chatService.save(roomId, request);
 	}
 
 	@GetMapping("/message/{roomId}")

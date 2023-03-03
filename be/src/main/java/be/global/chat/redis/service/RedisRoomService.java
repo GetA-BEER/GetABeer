@@ -56,7 +56,7 @@ public class RedisRoomService {
 	@Transactional(readOnly = true)
 	public List<RedisRoomDto.Response> findAllRooms() throws IOException {
 		List<RedisRoomDto.Response> responses = chatRepository.findByAll();
-		responses.forEach(list -> list.isAdminRead(chatRepository.findChatRoom(list.getRoomId())));
+		// responses.forEach(list -> list.isAdminRead(chatRepository.findChatRoom(list.getRoomId())));
 
 		return responses;
 	}

@@ -35,10 +35,10 @@ public class RedisChatMessage {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_chat_sender"))
 	private User sender;
 
-	/* 관리자 -> 클라이언트에게는 가능한 데, 클라이언트 -> 관리자? */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_chat_receiver"))
-	private User receiver;
+	// /* 관리자 -> 클라이언트에게는 가능한 데, 클라이언트 -> 관리자? */
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(foreignKey = @ForeignKey(name = "fk_chat_receiver"))
+	// private User receiver;
 
 	@Column(nullable = false)
 	private String content;

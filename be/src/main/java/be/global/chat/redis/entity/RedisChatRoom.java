@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.CreationTimestamp;
 
 import be.domain.user.entity.User;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,17 +38,20 @@ public class RedisChatRoom implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_room_sender"))
 	private User sender;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_room_receiver"))
-	private User receiver;
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(foreignKey = @ForeignKey(name = "fk_room_receiver"))
+	// private User receiver;
 
 	@CreationTimestamp
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
+	@Column
+	private boolean isAdminRead;
+
 	public RedisChatRoom(User sender) {
 		this.sender = sender;
-		this.receiver = receiver;
+		// this.receiver = receiver;
 	}
 
 	public static RedisChatRoom create(User user) {

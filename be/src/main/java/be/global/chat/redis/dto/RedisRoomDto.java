@@ -17,8 +17,8 @@ public class RedisRoomDto {
 		private Long senderId;
 		private boolean isAdminRead;
 
-		public boolean isAdminRead(RedisChatRoom chatRoom) {
-			return chatRoom.getReceiver() != null;
-		}
+		// public boolean isAdminRead(RedisChatRoom chatRoom) {
+		// 	return chatRoom.getReceiver() != null;
+		// }
 	}
 }

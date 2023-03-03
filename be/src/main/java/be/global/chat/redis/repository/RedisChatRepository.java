@@ -54,7 +54,8 @@ public class RedisChatRepository {
 		return queryFactory
 			.select(Projections.fields(RedisRoomDto.Response.class,
 				redisChatRoom.id.as("roomId"),
-				redisChatRoom.sender.id.as("senderId")
+				redisChatRoom.sender.id.as("senderId"),
+				redisChatRoom.isAdminRead
 				)).from(redisChatRoom).fetch();
 	}
 }
