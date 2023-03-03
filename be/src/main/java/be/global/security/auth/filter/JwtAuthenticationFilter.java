@@ -16,10 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
+import be.global.security.auth.cookieManager.CookieManager;
 import be.global.security.auth.jwt.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -29,15 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	private final UserMapper userMapper;
-	private final JwtTokenizer jwtTokenizer;
 	private final AuthenticationManager authenticationManager;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final JwtTokenizer jwtTokenizer;
+	private final UserMapper userMapper;
+	private final CookieManager cookieManager;
 
 	@Override
 	@SneakyThrows
-	public Authentication attemptAuthentication(HttpServletRequest request,
-		HttpServletResponse response) {
+	public Authentication attemptAuthentication(
+		HttpServletRequest request, HttpServletResponse response) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		UserDto.Login login = objectMapper.readValue(request.getInputStream(), UserDto.Login.class);
@@ -56,33 +58,26 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		User user = (User)authResult.getPrincipal();
 
-		String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(), user.getProvider());
-		String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
-
-		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
-			redisTemplate.delete(user.getEmail());
-		}
-		redisTemplate.opsForValue()
-			.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
-
-		ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-			.maxAge(7 * 24 * 60 * 60)
-			.path("/")
-			.secure(true)
-			.sameSite("None")
-			.httpOnly(true)
-			.build();
-
-		response.setHeader("Set-Cookie", cookie.toString());
+		String accessToken = jwtTokenizer.delegateAccessToken(user);
 		response.setHeader("Authorization", "Bearer " + accessToken);
-		response.addIntHeader("id", user.getId().intValue());
 
+		String refreshToken = jwtTokenizer.delegateRefreshToken(user);
+		jwtTokenizer.addRefreshToken(user.getEmail(), refreshToken);
+
+		// if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
+		// 	redisTemplate.delete(user.getEmail());
+		// }
+		// redisTemplate.opsForValue()
+		// 	.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+
+		ResponseCookie cookie = cookieManager.createCookie("refreshToken", refreshToken);
+		response.setHeader("Set-Cookie", cookie.toString());
+
+		UserDto.LoginResponse responseDto = userMapper.userToLoginResponse(user);
+		String json = new Gson().toJson(responseDto);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
-
-		ObjectMapper mapper = new ObjectMapper();
-		String data = mapper.writeValueAsString(userMapper.userToLoginResponse(user));
-		response.getWriter().write(data);
+		response.getWriter().write(json);
 
 		this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 	}

@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import be.domain.follow.FollowQueryRepository;
 
 import be.domain.notice.repository.EmitterRepository;
@@ -276,6 +275,11 @@ public class UserService {
 		if (!userId.equals(loginUserId)) {
 			throw new BusinessLogicException(ExceptionCode.NOT_CORRECT_USER);
 		}
+	}
+
+	public User findUserByEmail(String email) {
+		return userRepository.findByEmail(email)
+			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 	}
 
 	// /* 인덱스 테스트 */

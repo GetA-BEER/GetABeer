@@ -42,8 +42,8 @@ public class RefreshServiceImpl implements RefreshService {
 
 		redisTemplate.delete(user.getEmail());
 
-		String accessToken = jwtTokenizer.delegateAccessToken(user.getEmail(), user.getRoles(), user.getProvider());
-		String refreshToken = jwtTokenizer.delegateRefreshToken(user.getEmail());
+		String accessToken = jwtTokenizer.delegateAccessToken(user);
+		String refreshToken = jwtTokenizer.delegateRefreshToken(user);
 
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
 			redisTemplate.delete(user.getEmail());
