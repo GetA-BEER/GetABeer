@@ -27,7 +27,7 @@ export default function PopularBeer({ popularBeer }: any) {
         {beerInfo?.map((el: any, idx: number) => (
           <SwiperSlide key={idx}>
             <Link href={`/beer/${el.beerId}`}>
-              <div className="rounded-2xl w-full m-2 border bg-white text-y-black drop-shadow-lg text-[5px] overflow-hidden">
+              <div className="rounded-2xl w-full m-2 border bg-white text-y-black drop-shadow-lg text-xs overflow-hidden">
                 <div
                   className={`${
                     idx % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'

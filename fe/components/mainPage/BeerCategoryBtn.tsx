@@ -19,7 +19,7 @@ export default function BeerCategoryBtn() {
 
   return (
     <div className="my-4">
-      <div className="mx-3 mt-6 mb-2 font-bold">
+      <div className="m-3 mt-6 mb-2 font-bold text-base lg:text-xl">
         맥주<span className="text-y-brown ml-1">카테고리</span>
       </div>
       <Swiper

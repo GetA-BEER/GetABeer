@@ -62,7 +62,7 @@ export default function ImageUpload({ imageData, setImageData }: any) {
 
   return (
     <div className="m-2">
-      <div className="mt-4 mb-2 text-base font-semibold">사진</div>
+      <div className="mt-4 mb-2 text-base lg:text-lg font-semibold">사진</div>
 
       <form className="grid grid-cols-3 gap-2 h-[105px] md:h-64 sm:h-48">
         {/* first Image */}

@@ -188,7 +188,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
                 >
                   {RatingList?.content}
                 </div>
-                <div className="absolute -bottom-[0.5px] right-1 px-1 bg-white">
+                <div className="absolute bottom-0.5  right-1 px-1 bg-white">
                   ...<span className="text-y-gold">더보기</span>
                 </div>
               </>

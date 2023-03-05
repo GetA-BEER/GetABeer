@@ -133,7 +133,7 @@ export default function Beer() {
 
             <div>
               {ratingInfo?.data.length === 0 ? (
-                <div className="noneContent">
+                <div className="noneContent text-xs lg:text-sm">
                   <Image
                     className="m-auto pb-3 opacity-50"
                     src="/images/logo.png"
@@ -165,7 +165,7 @@ export default function Beer() {
             />
             <div>
               {pairingInfo?.data.length === 0 ? (
-                <div className="noneContent">
+                <div className="noneContent text-xs lg:text-sm">
                   <Image
                     className="m-auto pb-3 opacity-50"
                     src="/images/logo.png"

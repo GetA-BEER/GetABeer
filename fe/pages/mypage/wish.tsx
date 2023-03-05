@@ -67,7 +67,7 @@ export default function Wish() {
               등록된 위시 맥주가 없습니다.
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 mx-2">
               {wishList?.map((wishProps: any, idx: number) => (
                 <WishCard key={idx} wishProps={wishProps} idx={idx + 1} />
               ))}

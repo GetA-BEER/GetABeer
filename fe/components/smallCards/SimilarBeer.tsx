@@ -18,7 +18,7 @@ export default function SimilarBeer({ similarBeer }: any) {
 
   return (
     <div className="w-full ">
-      <div className="mx-3 mt-6 text-base font-semibold">
+      <div className="mx-3 mt-6 text-base font-semibold lg:text-xl">
         <span className="text-black mr-1">비슷한</span>
         <span className="text-y-brown">맥주</span>
       </div>
@@ -31,7 +31,7 @@ export default function SimilarBeer({ similarBeer }: any) {
         {beerInfo?.map((el: any, idx: number) => (
           <SwiperSlide key={idx}>
             <Link href={`/beer/${el.beerId}`}>
-              <div className="rounded-2xl w-full m-2 border bg-white text-y-black drop-shadow-lg text-[5px] overflow-hidden">
+              <div className="rounded-2xl w-full m-2 border bg-white text-y-black drop-shadow-lg text-xs overflow-hidden">
                 <div
                   className={`${
                     idx % 2 === 0 ? 'bg-y-cream' : 'bg-y-lemon'

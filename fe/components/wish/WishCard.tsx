@@ -26,7 +26,7 @@ export default function WishCard({ wishProps, idx }: any) {
   }, [wishProps.beer]);
 
   return (
-    <div className="rounded-2xl max-w-4xl bg-white text-y-black drop-shadow-xl text-[5px] border">
+    <div className="rounded-2xl max-w-4xl bg-white text-y-black drop-shadow-xl text-xs border">
       <div
         className={`${
           idx % 4 === 1 || idx % 4 === 0 ? 'bg-y-cream' : 'bg-y-lemon'
@@ -46,7 +46,7 @@ export default function WishCard({ wishProps, idx }: any) {
         <div className="-mt-2">
           <span>
             {wishInfo?.beerCategories.map((el: any, idx: number) => (
-              <span className="mr-0.5" key={idx}>
+              <span key={idx}>
                 {BeerCategoryMatcherToKor(el?.beerCategoryType)}/
               </span>
             ))}
