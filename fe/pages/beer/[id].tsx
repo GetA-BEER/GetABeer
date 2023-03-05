@@ -25,6 +25,7 @@ import {
 import axios from '@/pages/api/axios';
 import { useRecoilValue } from 'recoil';
 import { userId } from '@/atoms/login';
+import Loading from '@/components/postPairingPage/Loading';
 
 export default function Beer() {
   const router = useRouter();
@@ -115,7 +116,11 @@ export default function Beer() {
           height={500}
         />
         {beerInfo === undefined ? (
-          <></>
+          <div className="inset-0 flex justify-center items-center fixed z-10 ">
+            <div className="w-fit m-2 p-5 z-[11] text-base lg:text-lg text-y-gold rounded-lg">
+              <Loading />
+            </div>
+          </div>
         ) : (
           <>
             <div className="m-3">
