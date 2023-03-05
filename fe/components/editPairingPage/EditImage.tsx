@@ -81,7 +81,7 @@ export default function EditImage({
     copyUrl.splice(idx, 1);
     copyUploadUrl.splice(idx, 1);
     copyType.splice(idx, 1);
-    console.log(copyUrl[0], copyUploadUrl[0], copyType[0]);
+
     setUrl(copyUrl);
     setImageData(copyUploadUrl);
     setType(copyType);
