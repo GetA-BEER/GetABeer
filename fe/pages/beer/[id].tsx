@@ -137,7 +137,7 @@ export default function Beer() {
             />
 
             <div>
-              {ratingInfo?.data.length === 0 ? (
+              {ratingInfo === undefined || ratingInfo?.data.length === 0 ? (
                 <div className="noneContent text-xs lg:text-sm">
                   <Image
                     className="m-auto pb-3 opacity-50"
@@ -164,12 +164,16 @@ export default function Beer() {
               )}
             </div>
             {/* 페어링 */}
-            <PairingTitle
-              pairngCount={pairingInfo?.pageInfo?.totalElements}
-              beerId={curRoute}
-            />
+            {pairingInfo === undefined ? (
+              <PairingTitle pairngCount={0} beerId={curRoute} />
+            ) : (
+              <PairingTitle
+                pairngCount={pairingInfo?.pageInfo?.totalElements}
+                beerId={curRoute}
+              />
+            )}
             <div>
-              {pairingInfo?.data.length === 0 ? (
+              {pairingInfo === undefined || pairingInfo?.data.length === 0 ? (
                 <div className="noneContent text-xs lg:text-sm">
                   <Image
                     className="m-auto pb-3 opacity-50"
