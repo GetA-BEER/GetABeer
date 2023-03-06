@@ -82,7 +82,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
             <span className="w-[70%] text-end truncate pr-[2px]">
               {pairingList?.nickname}
             </span>
-            {pairingList?.userImage ? (
+            {pairingList.userImage ? (
               <Image
                 alt="userImg"
                 src={pairingList?.userImage}
@@ -122,22 +122,28 @@ export default function SmallPairingCard({ pairingProps }: any) {
             )}
             {pairingList?.content === undefined ? (
               <div
-                className="text-y-gray"
+                className="text-y-gray text-[8px]"
                 id={`pairingDescribe${pairingList?.pairingId}`}
               >
                 {noReviewState[randomNum]?.contents}
               </div>
             ) : collisions ? (
               <>
-                <div id={`pairingDescribe${pairingList?.pairingId}`}>
+                <div
+                  id={`pairingDescribe${pairingList?.pairingId}`}
+                  className="text-[8px]"
+                >
                   {pairingList?.content}
                 </div>
-                <div className="absolute bottom-1 right-1 px-1 bg-white">
+                <div className="absolute bottom-0.5 right-1 px-1 bg-white">
                   ...<span className="text-y-gold">더보기</span>
                 </div>
               </>
             ) : (
-              <div id={`pairingDescribe${pairingList?.pairingId}`}>
+              <div
+                id={`pairingDescribe${pairingList?.pairingId}`}
+                className="text-[8px]"
+              >
                 {pairingList?.content}
               </div>
             )}

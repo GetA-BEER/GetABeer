@@ -30,7 +30,7 @@ export interface RatingCardProps {
 }
 
 export default function SmallRatingCard({ ratingProps }: any) {
-  const [RatingList, setRatingPropsList] = useState<any>();
+  const [ratingList, setRatingPropsList] = useState<any>();
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
   const [starScore, setStarScore] = useState<number>(ratingProps?.star);
   const [collisions, setCollisions] = useState<boolean>(false);
@@ -97,11 +97,11 @@ export default function SmallRatingCard({ ratingProps }: any) {
 
   // 더보기 설정
   useEffect(() => {
-    if (RatingList !== undefined) {
+    if (ratingList !== undefined) {
       let parent = document.getElementById('overParents');
-      let tagChild = document.getElementById(`overTags${RatingList?.ratingId}`);
+      let tagChild = document.getElementById(`overTags${ratingList?.ratingId}`);
       let deschild = document.getElementById(
-        `overDescribe${RatingList?.ratingId}`
+        `overDescribe${ratingList?.ratingId}`
       );
       if (parent !== null && deschild !== null && tagChild !== null) {
         let parentHeight = parent.offsetHeight;
@@ -111,7 +111,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
           setCollisions(true);
       }
     }
-  }, [collisions, RatingList]);
+  }, [collisions, ratingList]);
 
   const isUserLikeHandler = () => {
     if (isLogin) {
@@ -149,13 +149,13 @@ export default function SmallRatingCard({ ratingProps }: any) {
           </span>
           <span className="flex justify-end items-center w-2/5 text-[8px]">
             <span className="w-[70%] text-end truncate pr-[2px]">
-              {RatingList?.nickname}
+              {ratingList?.nickname}
             </span>
-            {RatingList?.userImage === null ? (
+            {ratingList?.userImage === null ? (
               <></>
             ) : (
               <Image
-                src={RatingList?.userImage}
+                src={ratingList?.userImage}
                 alt="userImg"
                 width={100}
                 height={100}
@@ -166,27 +166,27 @@ export default function SmallRatingCard({ ratingProps }: any) {
           </span>
         </div>
         {/* 태그, 설명 */}
-        <Link href={`/rating/${RatingList?.ratingId}`}>
+        <Link href={`/rating/${ratingList?.ratingId}`}>
           <div
             className={`py-2 px-1 h-28 w-full border-y-2 relative ${
               collisions ? 'overflow-hidden' : ''
             }`}
             id="overParents"
           >
-            <div id={`overTags${RatingList?.ratingId}`}>
-              <SmallTag tags={RatingList?.ratingTag} />
+            <div id={`overTags${ratingList?.ratingId}`}>
+              <SmallTag tags={ratingList?.ratingTag} />
             </div>
-            {RatingList?.content === undefined || RatingList?.content === '' ? (
-              <div className="text-y-gray ">
+            {ratingList?.content === undefined || ratingList?.content === '' ? (
+              <div className="text-y-gray text-[8px]">
                 {noReviewState[randomNum]?.contents}
               </div>
             ) : collisions ? (
               <>
                 <div
-                  className="text-[8] leading-5 h-fit relative"
-                  id={`overDescribe${RatingList?.ratingId}`}
+                  className="text-[8px] leading-5 h-fit relative"
+                  id={`overDescribe${ratingList?.ratingId}`}
                 >
-                  {RatingList?.content}
+                  {ratingList?.content}
                 </div>
                 <div className="absolute bottom-0.5  right-1 px-1 bg-white">
                   ...<span className="text-y-gold">더보기</span>
@@ -194,10 +194,10 @@ export default function SmallRatingCard({ ratingProps }: any) {
               </>
             ) : (
               <div
-                className="text-xs leading-5 h-fit"
-                id={`overDescribe${RatingList?.ratingId}`}
+                className="text-[8px] leading-5 h-fit"
+                id={`overDescribe${ratingList?.ratingId}`}
               >
-                {RatingList?.content}
+                {ratingList?.content}
               </div>
             )}
           </div>
@@ -209,7 +209,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
           <div className="flex">
             <span className="flex justify-center">
               <FaRegCommentDots className="mr-[2px] mt-[1px] w-3 h-3" />
-              {RatingList?.commentCount}
+              {ratingList?.commentCount}
             </span>
             <button
               className="flex justify-center items-center text-[8px] ml-1"
