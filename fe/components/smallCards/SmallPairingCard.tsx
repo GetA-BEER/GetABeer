@@ -82,15 +82,18 @@ export default function SmallPairingCard({ pairingProps }: any) {
             <span className="w-[70%] text-end truncate pr-[2px]">
               {pairingList?.nickname}
             </span>
-
-            <Image
-              alt="userImg"
-              src={pairingList?.userImage}
-              width={100}
-              height={100}
-              className="w-4 h-4"
-              priority
-            />
+            {pairingList?.userImage ? (
+              <Image
+                alt="userImg"
+                src={pairingList?.userImage}
+                width={100}
+                height={100}
+                className="w-4 h-4"
+                priority
+              />
+            ) : (
+              <></>
+            )}
           </span>
         </div>
         {/* 사진,설명 */}
