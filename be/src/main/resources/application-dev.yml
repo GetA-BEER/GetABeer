@@ -145,6 +145,7 @@ management:
     tags:
       application: ${spring.application.name}
 logging:
+  config: classpath:logback.xml
   level:
     org:
       springframework:

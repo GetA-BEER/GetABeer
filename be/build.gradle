@@ -29,6 +29,7 @@ sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 //ext {
@@ -105,7 +106,8 @@ dependencies {
 //    testImplementation 'org.springframework.kafka:spring-kafka-test'
 //    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor' // Spring Rest Docs, Asciidoctor
     //    ------------------------------------로깅 전용----------------------------
-    implementation("ca.pjer:logback-awslogs-appender:1.4.0")
+//    implementation("ca.pjer:logback-awslogs-appender:1.4.0")
+    implementation("com.github.napstr:logback-discord-appender:1.0.0")
 }
 
 tasks.named('test') {
