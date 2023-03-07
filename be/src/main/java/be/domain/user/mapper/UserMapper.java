@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.entity.BeerCategoryType;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
+import be.domain.follow.FollowQueryRepository;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.UserBeerCategory;
@@ -82,6 +85,41 @@ public interface UserMapper {
 		}
 
 		return user;
+	}
+
+	default PageImpl<UserDto.UserSearchResponse> userToUserSearchResponses(
+		Page<User> userPage, FollowQueryRepository followQueryRepository, Long followingUserId) {
+
+		return new PageImpl<>(userPage.stream().map(user -> {
+
+			UserDto.UserSearchResponse.UserSearchResponseBuilder userSearchResponseBuilder = UserDto.UserSearchResponse.builder();
+
+			userSearchResponseBuilder.id(user.getId());
+			userSearchResponseBuilder.nickname(user.getNickname());
+			userSearchResponseBuilder.imgUrl(user.getImageUrl());
+			userSearchResponseBuilder
+				.isFollowing(followQueryRepository.findFollowByUserIds(followingUserId, user.getId()) != null);
+
+			return userSearchResponseBuilder.build();
+
+		}).collect(Collectors.toList()));
+	}
+
+	default PageImpl<UserDto.UserSearchResponse> userToUserSearchResponses(
+		Page<User> userPage, FollowQueryRepository followQueryRepository) {
+
+		return new PageImpl<>(userPage.stream().map(user -> {
+
+			UserDto.UserSearchResponse.UserSearchResponseBuilder userSearchResponseBuilder = UserDto.UserSearchResponse.builder();
+
+			userSearchResponseBuilder.id(user.getId());
+			userSearchResponseBuilder.nickname(user.getNickname());
+			userSearchResponseBuilder.imgUrl(user.getImageUrl());
+			userSearchResponseBuilder.isFollowing(null);
+
+			return userSearchResponseBuilder.build();
+
+		}).collect(Collectors.toList()));
 	}
 
 	private static List<UserBeerTag> getUserBeerTag(List<String> responses) {

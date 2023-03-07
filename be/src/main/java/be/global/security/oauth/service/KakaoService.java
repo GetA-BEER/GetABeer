@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +50,7 @@ public class KakaoService {
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final PasswordEncoder passwordEncoder;
 
-	public User getAccessToken(String authorizeCode) {
+	public User doFilter(String authorizeCode) {
 
 		String accessToken = "";
 		String refreshToken = "";
@@ -71,7 +70,6 @@ public class KakaoService {
 			sb.append("&grant_type=authorization_code");
 			sb.append("&client_id=").append(KAKAO_CLIENT_ID);
 			sb.append("&client_secret=").append(KAKAO_CLIENT_SECRET);
-			// sb.append("&redirect_uri=").append(KAKAO_REDIRECT_URI);
 			sb.append("&redirect_uri=").append(KAKAO_REDIRECT_URI);
 			sb.append("&client_name=Kakao");
 			sb.append("&code=").append(authorizeCode);
@@ -146,7 +144,10 @@ public class KakaoService {
 			String providerId = element.getAsJsonObject().get("id").getAsString();
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 			String picture = properties.getAsJsonObject().get("profile_image").getAsString();
-			String email = kakao_account.getAsJsonObject().get("email").getAsString();
+			String email = null;
+			if (properties.getAsJsonObject().get("nickname") != null) {
+				email = kakao_account.getAsJsonObject().get("email").getAsString();
+			}
 
 			userInfo.put("providerId", providerId);
 			userInfo.put("nickname", nickname);
@@ -165,7 +166,10 @@ public class KakaoService {
 	public User createOrReturnUser(HashMap<String, Object> userInfo) { // OAuth 인증이 끝나 유저 정보를 받은 경우
 
 		String providerId = userInfo.get("providerId").toString();
-		String email = userInfo.get("email").toString();
+		String email = null;
+		if (userInfo.get("email") != null) {
+			email = userInfo.get("email").toString();
+		}
 		String picture = userInfo.get("profile_image").toString();
 		String nickname = userInfo.get("nickname").toString();
 		String encodedPass = passwordEncoder.encode(userInfo.get("nickname").toString());

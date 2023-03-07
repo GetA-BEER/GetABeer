@@ -35,6 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	private final JwtTokenizer jwtTokenizer;
 	private final UserMapper userMapper;
 	private final CookieManager cookieManager;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
 	@SneakyThrows
@@ -64,11 +65,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String refreshToken = jwtTokenizer.delegateRefreshToken(user);
 		jwtTokenizer.addRefreshToken(user.getEmail(), refreshToken);
 
-		// if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
-		// 	redisTemplate.delete(user.getEmail());
-		// }
-		// redisTemplate.opsForValue()
-		// 	.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(user.getEmail()))) {
+			redisTemplate.delete(user.getEmail());
+		}
+		redisTemplate.opsForValue()
+			.set(user.getEmail(), refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
 		ResponseCookie cookie = cookieManager.createCookie("refreshToken", refreshToken);
 		response.setHeader("Set-Cookie", cookie.toString());

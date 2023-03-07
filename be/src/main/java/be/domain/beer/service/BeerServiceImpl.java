@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,12 +54,6 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional
 	public Beer createBeer(Beer beer) {
 
-		// User loginUser = userService.getLoginUser();
-		//
-		// if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
-		// 	throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		// }
-
 		Beer savedBeer = Beer.builder()
 			.beerWishlists(new ArrayList<>())
 			.build();
@@ -72,12 +67,6 @@ public class BeerServiceImpl implements BeerService {
 	@Override
 	@Transactional
 	public Beer updateBeer(Beer beer, Long beerId) {
-
-		User loginUser = userService.getLoginUser();
-
-		if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
 
 		Beer findBeer = findVerifiedBeer(beerId);
 
@@ -94,13 +83,7 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional
 	public void deleteBeer(Long beerId) {
 
-		// User loginUser = userService.getLoginUser();
-		//
-		// if (!loginUser.getRoles().contains(ROLE_ADMIN)) {
-		// 	throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		// } else {
 		beerRepository.deleteById(beerId);
-		// }
 	}
 
 	//    public Beer isWishListedBeer(Beer beer, User user){

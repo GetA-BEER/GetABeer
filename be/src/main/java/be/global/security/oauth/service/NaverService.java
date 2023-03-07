@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ import be.domain.mail.dto.MailDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.UserRepository;
-import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.security.auth.utils.CustomAuthorityUtils;
@@ -52,7 +50,7 @@ public class NaverService {
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final PasswordEncoder passwordEncoder;
 
-	public User getAccessToken(String authorize_code) {
+	public User doFilter(String authorize_code) {
 
 		String accessToken = "";
 		String refreshToken = "";

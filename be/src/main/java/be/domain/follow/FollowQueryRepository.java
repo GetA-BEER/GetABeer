@@ -1,6 +1,7 @@
 package be.domain.follow;
 
 import static be.domain.follow.QFollow.*;
+import static be.domain.user.entity.QUser.*;
 
 import java.util.List;
 
@@ -29,7 +30,9 @@ public class FollowQueryRepository {
 	public Page<User> findFollowersByUserId(Long userId, Pageable pageable) {
 
 		List<User> followList =
-			jpaQueryFactory.selectFrom(follow.followingUser)
+			jpaQueryFactory.select(follow.followingUser)
+				.from(follow)
+				// .join(follow.followingUser, user)
 				.where(follow.followedUser.id.eq(userId))
 				.orderBy(follow.createdAt.desc())
 				.offset(pageable.getOffset())
@@ -39,6 +42,7 @@ public class FollowQueryRepository {
 		Long total =
 			jpaQueryFactory.select(follow.followingUser.count())
 				.from(follow)
+				// .join(follow.followingUser, user)
 				.where(follow.followedUser.id.eq(userId))
 				.fetchOne();
 
@@ -48,7 +52,8 @@ public class FollowQueryRepository {
 	public Page<User> findFollowingsByUserId(Long userId, Pageable pageable) {
 
 		List<User> followList =
-			jpaQueryFactory.selectFrom(follow.followedUser)
+			jpaQueryFactory.select(follow.followedUser)
+				.from(follow)
 				.where(follow.followingUser.id.eq(userId))
 				.orderBy(follow.createdAt.desc())
 				.offset(pageable.getOffset())

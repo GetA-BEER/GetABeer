@@ -46,20 +46,18 @@ public class OAuthController {
 
 		User findUser = User.builder().build();
 
-		// findUser = kakaoService.getAccessToken(code);
-
 		switch (providerId) {
 
 			case "kakao":
-				findUser = kakaoService.getAccessToken(code);
+				findUser = kakaoService.doFilter(code);
 				break;
 
 			case "naver":
-				findUser = naverService.getAccessToken(code);
+				findUser = naverService.doFilter(code);
 				break;
 
 			case "google":
-				findUser = googleService.getAccessToken(code);
+				findUser = googleService.doFilter(code);
 				break;
 		}
 
