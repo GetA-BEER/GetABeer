@@ -12,16 +12,16 @@ export default function Follower() {
   const state = router.query.state;
   const [curTab, setCurTab] = useState(Number(state));
 
-  const tabArr = [
-    {
-      name: '팔로워',
-      content: <FollowUser />,
-    },
-    {
-      name: '팔로잉',
-      content: <FollowUser />,
-    },
-  ];
+  // const tabArr = [
+  //   {
+  //     name: '팔로워',
+  //     content: <FollowUser />,
+  //   },
+  //   {
+  //     name: '팔로잉',
+  //     content: <FollowUser />,
+  //   },
+  // ];
   // useEffect(() => {
   //   if (id !== undefined) {
   //     axios
@@ -43,7 +43,7 @@ export default function Follower() {
       <main className="m-auto h-screen max-w-md">
         <BackBtn></BackBtn>
         <div>
-          <ul className="flex justify-around mb-4">
+          {/* <ul className="flex justify-around mb-4">
             {tabArr.map((el, idx) => {
               return (
                 <li
@@ -60,7 +60,7 @@ export default function Follower() {
               );
             })}
           </ul>
-          {tabArr[curTab].content}
+          {tabArr[curTab].content} */}
         </div>
       </main>
     </>
