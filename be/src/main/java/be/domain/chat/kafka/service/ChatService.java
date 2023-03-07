@@ -7,7 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import be.domain.chat.kafka.dto.MessageRequest;
+import be.domain.chat.kafka.dto.MessageDto;
 import be.domain.chat.kafka.entity.KafkaChatMessage;
 import be.domain.chat.kafka.repository.ChatRoomRepository;
 import be.domain.user.entity.User;
@@ -27,7 +27,7 @@ public class ChatService {
 	private final KafkaTemplate<String, KafkaChatMessage> kafkaTemplate;
 
 	@Transactional
-	public String send(MessageRequest request) {
+	public String send(MessageDto.Request request) {
 		User user = userService.findLoginUser();
 		KafkaChatRoom kafkaChatRoom = chatRoomRepository.findById(user.getId());
 

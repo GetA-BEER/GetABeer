@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.domain.chat.kafka.dto.MessageRequest;
+import be.domain.chat.kafka.dto.MessageDto;
 import be.domain.chat.kafka.entity.KafkaChatMessage;
 import be.domain.chat.kafka.entity.KafkaChatRoom;
 import be.domain.chat.kafka.service.ChatService;
@@ -30,14 +30,14 @@ public class ChatController {
 
 	/* producer */
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> sendMessage(@RequestBody MessageRequest request) {
+	public ResponseEntity<String> sendMessage(@RequestBody MessageDto.Request request) {
 
 		return ResponseEntity.ok(chatService.send(request));
 	}
 
-	/* 프론트엔드로 메시지를 전송? */
+	/* 프론트엔드 메시지 전송 */
 	@MessageMapping("/sendMessage")
-	@SendTo("/topic/group") /* 해당 토픽을 구독하고 있는 클라이언트에게 전송? */
+	@SendTo("/topic/group") /* 해당 토픽을 구독하고 있는 클라이언트에게 전송 */
 	public KafkaChatMessage broadcastGroupMessage(@Payload KafkaChatMessage message) {
 		log.info("구독자들에게 메세지 전송");
 		log.info("메세지 내용 : " +  message.getContent());
