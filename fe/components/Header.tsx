@@ -20,7 +20,7 @@ export default function Header() {
         withCredentials: true,
       };
       axios
-        .post('/api/refresh', null, config)
+        .get('/api/refresh', config)
         .then((res) => {
           axios.defaults.headers.common['Authorization'] =
             res.headers.authorization;

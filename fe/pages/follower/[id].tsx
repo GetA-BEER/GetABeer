@@ -3,19 +3,35 @@ import SubmitBtn from '@/components/button/SubmitBtn';
 import FollowUser from '@/components/followPage/FollowUser';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import axios from '@/pages/api/axios';
 
 export default function Follower() {
-  const [curTab, setCurTab] = useState(1);
+  const router = useRouter();
+  const { id } = router.query;
+  const state = router.query.state;
+  const [curTab, setCurTab] = useState(Number(state));
+
   const tabArr = [
-    {
-      name: '팔로잉',
-      content: <FollowUser />,
-    },
     {
       name: '팔로워',
       content: <FollowUser />,
     },
+    {
+      name: '팔로잉',
+      content: <FollowUser />,
+    },
   ];
+  useEffect(() => {
+    if (id !== undefined) {
+      axios
+        .get(`/api/follows/${id}/followings`)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [id]);
   return (
     <>
       <Head>

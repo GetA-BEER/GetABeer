@@ -8,10 +8,11 @@ import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { accessToken, userNickname } from '@/atoms/login';
+import { accessToken } from '@/atoms/login';
 import { useRecoilState } from 'recoil';
 import Link from 'next/link';
 import Image from 'next/image';
+import CloseBtn from '@/components/button/CloseBtn';
 export default function UserPage() {
   const [pariginCardPops, setPairingCardProps] = useState<any>();
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
@@ -19,74 +20,131 @@ export default function UserPage() {
   const [paringCount, setParingCount] = useState();
   const [ratingCount, setRatingCount] = useState();
   const [commentCount, setCommentCount] = useState();
-  const [followingCount, setFollowingCount] = useState();
-  const [followerCount, setFollowerCount] = useState();
+  const [followingCount, setFollowingCount] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [follow, setFollow] = useState(false);
   const [userImg, setUserImg] = useState('');
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [TOKEN] = useRecoilState(accessToken);
-  const [username] = useRecoilState(userNickname);
   const router = useRouter();
+  const { id } = router.query;
   useEffect(() => {
-    axios
-      .get(`/api/user/${router.query.userId}`)
-      .then((response) => {
-        console.log(response);
-        setUserName(response.data.nickname);
-        setParingCount(response.data.pairingCount);
-        setRatingCount(response.data.ratingCount);
-        setCommentCount(response.data.commentCount);
-        setFollowerCount(response.data.followerCount);
-        setFollowingCount(response.data.followingCount);
-        setUserImg(response.data.imgUrl);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    if (id !== undefined) {
+      axios
+        .get(`/api/user/${id}`)
+        .then((res) => {
+          console.log(res);
+          setUserName(res.data.nickname);
+          setParingCount(res.data.pairingCount);
+          setRatingCount(res.data.ratingCount);
+          setCommentCount(res.data.commentCount);
+          setFollowerCount(res.data.followerCount);
+          setFollowingCount(res.data.followingCount);
+          setUserImg(res.data.imgUrl);
+          setFollow(res.data.isFollowing);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [id]);
   useEffect(() => {
-    axios
-      .get(`/api/user/${router.query.userId}/pairings`)
-      .then((response) => {
-        setPairingCardProps(response.data.data);
-        setTotalPages(response.data.pageInfo.totalPages);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    if (id !== undefined) {
+      axios
+        .get(`/api/user/${id}/pairings`)
+        .then((res) => {
+          setPairingCardProps(res.data.data);
+          setTotalPages(res.data.pageInfo.totalPages);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [id]);
   useEffect(() => {
-    axios
-      .get('/api/user/1/ratings')
-      .then((res) => {
-        setRatingList(res.data.data);
-        setTotalPages(res.data.pageInfo.totalPages);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    if (id !== undefined) {
+      axios
+        .get(`/api/user/${id}/ratings`)
+        .then((res) => {
+          setRatingList(res.data.data);
+          setTotalPages(res.data.pageInfo.totalPages);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [id]);
   const [curTab, setCurTab] = useState(0);
   const tabArr = [
     {
       name: '평가',
       content: (
         <div className="mt-3">
-          {ratingList.map((el: RatingCardProps) => {
-            return (
-              <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
-                <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
-                  <RatingCard
-                    cardProps={el}
-                    isMine={false}
-                    count={el.commentCount}
-                  />
-                </div>
-              </Link>
-            );
-          })}
+          {ratingList.length === 0 ? (
+            <div className="noneContent">
+              <Image
+                className="m-auto pb-3 opacity-50"
+                src="/images/logo.png"
+                alt="logo"
+                width={40}
+                height={40}
+              />
+              등록된 평가가 없습니다.
+            </div>
+          ) : (
+            <div className="mt-3">
+              {ratingList.map((el: RatingCardProps) => {
+                return (
+                  <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
+                    <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
+                      <RatingCard
+                        cardProps={el}
+                        isMine={false}
+                        count={el.commentCount}
+                      />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       ),
     },
     {
       name: '페어링',
-      content: <PairingCardController pairingCardProps={pariginCardPops} />,
+      content: (
+        <div>
+          {pariginCardPops?.length ? (
+            <PairingCardController pairingCardProps={pariginCardPops} />
+          ) : (
+            <div className="noneContent">
+              <Image
+                className="m-auto pb-3 opacity-50"
+                src="/images/logo.png"
+                alt="logo"
+                width={40}
+                height={40}
+              />
+              등록된 페어링이 없습니다.
+            </div>
+          )}
+        </div>
+      ),
     },
   ];
+  const followClick = () => {
+    axios
+      .post(`/api/follows/${id}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data === 'Create Follow') {
+          setFollow(true);
+          setFollowerCount(followerCount + 1);
+        } else {
+          setFollow(false);
+          setFollowerCount(followerCount - 1);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <Head>
@@ -114,18 +172,35 @@ export default function UserPage() {
               </div>
               <div className="flex gap-2">
                 <div
-                  className="bg-y-cream py-2 px-3 rounded-lg text-xs cursor-pointer"
-                  onClick={() => router.push('/follower/1')}
+                  className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                  onClick={() =>
+                    router.push({
+                      pathname: `/follower/${id}`,
+                      query: { state: 0 },
+                    })
+                  }
                 >
                   {followerCount} 팔로워
                 </div>
-                <div className="bg-y-cream py-2 px-3 rounded-lg text-xs cursor-pointer">
+                <div
+                  className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                  onClick={() =>
+                    router.push({
+                      pathname: `/follower/${id}`,
+                      query: { state: 1 },
+                    })
+                  }
+                >
                   {followingCount} 팔로잉
                 </div>
               </div>
             </div>
           </div>
-          <SubmitBtn onClick={undefined}>팔로우</SubmitBtn>
+          {follow === null || follow === false ? (
+            <SubmitBtn onClick={followClick}>팔로우</SubmitBtn>
+          ) : (
+            <CloseBtn onClick={followClick}>팔로잉</CloseBtn>
+          )}
         </div>
         <div className="border rounded-lg m-1 p-2">
           <ul className="flex justify-around mt-1 mb-4">

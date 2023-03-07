@@ -149,12 +149,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
           </span>
           <span
             className="flex justify-end items-center w-2/5 text-[8px]"
-            onClick={() =>
-              router.push({
-                pathname: `/userpage/${RatingList?.userId}`,
-                query: { userId: RatingList?.userId },
-              })
-            }
+            onClick={() => router.push(`/userpage/${RatingList?.userId}`)}
           >
             <span className="w-[70%] text-end truncate pr-[2px]">
               {RatingList?.nickname}
