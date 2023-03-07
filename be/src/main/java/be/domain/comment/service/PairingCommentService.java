@@ -45,7 +45,7 @@ public class PairingCommentService {
 			String title = user.getNickname() + "님이 회원님의 게시글에 댓글을 남겼습니다.";
 			String content = "\"" + pairingComment.getContent() + "\"";
 			notificationService.send(pairing.getUser(), pairing.getId(), title, content, user.getImageUrl(),
-				NotificationType.RATING);
+				NotificationType.PAIRING);
 		}
 
 		return pairingComment;
