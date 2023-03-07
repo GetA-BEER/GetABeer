@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class BeerController {
 	private final BeerWishlistService beerWishlistService;
 
 	@PostMapping("/add")
+	// @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<BeerDto.DetailsResponse> postBeer(@Valid @RequestBody BeerDto.Post postBeer) {
 
 		Beer beer = beerMapper.beerPostToBeer(postBeer);
@@ -52,6 +54,7 @@ public class BeerController {
 	}
 
 	@PatchMapping("/{beer_id}/edit")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<BeerDto.DetailsResponse> patchBeer(@PathVariable("beer_id") Long beerId,
 		@Valid @RequestBody BeerDto.Patch patchBeer) {
 
@@ -75,6 +78,7 @@ public class BeerController {
 	}
 
 	@DeleteMapping("/{beer_id}/delete")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> deleteBeer(@PathVariable("beer_id") Long beerId) {
 
 		beerService.deleteBeer(beerId);

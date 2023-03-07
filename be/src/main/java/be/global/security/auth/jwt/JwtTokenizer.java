@@ -6,10 +6,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +48,7 @@ public class JwtTokenizer {
 
 	private final RefreshTokenRepository repository;
 	private final CookieManager cookieManager;
+	private final RedisTemplate redisTemplate;
 
 	public String delegateAccessToken(User user) {
 		Map<String, Object> claims = new HashMap<>();
@@ -78,21 +81,32 @@ public class JwtTokenizer {
 		return claims;
 	}
 
-	public RefreshToken getRefreshToken(String tokenValue) {
-		return repository.findByTokenValue(tokenValue)
-			.orElse(null);
+	public Object getRefreshToken(String email) {
+		return redisTemplate.opsForValue().get(email);
 	}
 
-	public void addRefreshToken(String email, String jws) {
-		repository.save(RefreshToken.builder()
-			.email(email)
-			.tokenValue(jws)
-			.build());
+	// public RefreshToken getRefreshToken(String tokenValue) {
+	// 	return repository.findByTokenValue(tokenValue)
+	// 		.orElse(null);
+	// }
+
+	public void addRefreshToken(String email, String refreshToken) {
+
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
+			redisTemplate.delete(email);
+		}
+		redisTemplate.opsForValue().set(email, refreshToken, 168 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
+
+		// repository.save(RefreshToken.builder()
+		// 	.email(email)
+		// 	.tokenValue(jws)
+		// 	.build());
 	}
 
 	@Transactional
-	public void removeRefreshToken(String tokenValue) {
-		repository.deleteByTokenValue(tokenValue);
+	public void removeRefreshToken(String email) {
+		redisTemplate.delete(email);
+		// repository.deleteByTokenValue(tokenValue);
 	}
 
 	public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
