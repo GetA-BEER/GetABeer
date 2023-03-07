@@ -29,7 +29,7 @@ export default function Kakao() {
       axios
         .get('/api/user')
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.age !== null) {
             swal.fire({
               title: 'Get A Beer',

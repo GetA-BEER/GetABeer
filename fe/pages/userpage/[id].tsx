@@ -34,7 +34,6 @@ export default function UserPage() {
       axios
         .get(`/api/user/${id}`)
         .then((res) => {
-          console.log(res);
           setUserName(res.data.nickname);
           setParingCount(res.data.pairingCount);
           setRatingCount(res.data.ratingCount);
@@ -132,7 +131,6 @@ export default function UserPage() {
     axios
       .post(`/api/follows/${id}`)
       .then((res) => {
-        console.log(res);
         if (res.data === 'Create Follow') {
           setFollow(true);
           setFollowerCount(followerCount + 1);

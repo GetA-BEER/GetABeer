@@ -22,16 +22,16 @@ export default function Follower() {
       content: <FollowUser />,
     },
   ];
-  useEffect(() => {
-    if (id !== undefined) {
-      axios
-        .get(`/api/follows/${id}/followings`)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id !== undefined) {
+  //     axios
+  //       .get(`/api/follows/${id}/followings`)
+  //       .then((res) => {
+  //         console.log(res.data);
+  //       })
+  //       .catch((error) => console.log(error));
+  //   }
+  // }, [id]);
   return (
     <>
       <Head>
