@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.repository.BeerQueryRepository;
 import be.domain.search.repository.SearchQueryRepository;
+import be.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,11 +29,9 @@ public class SearchService {
 
 		Page<Beer> beerPage;
 
-		queryParam = queryParam.strip();
-
 		if (queryParam.isEmpty()) {
 			beerPage = new PageImpl<>(new ArrayList<>());
-		} else if (queryParam.charAt(0) == '@') {
+		} else if (queryParam.charAt(0) == '*') {
 			beerPage = searchQueryRepository.findBeersPageByBeerCategoryQueryParam(queryParam, pageRequest);
 		} else if (queryParam.charAt(0) == '#') {
 			beerPage = searchQueryRepository.findBeersPageByBeerTagQueryParam(queryParam, pageRequest);
@@ -43,5 +42,13 @@ public class SearchService {
 		}
 
 		return beerPage;
+	}
+
+	@Transactional(readOnly = true)
+	public Page<User> findUsersPageByQueryParam(String queryParam, Integer page) {
+
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return searchQueryRepository.findUsersPageByQueryParam(queryParam, pageRequest);
 	}
 }

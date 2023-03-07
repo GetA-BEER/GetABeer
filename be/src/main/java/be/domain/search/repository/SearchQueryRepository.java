@@ -3,6 +3,7 @@ package be.domain.search.repository;
 import static be.domain.beer.entity.QBeer.*;
 import static be.domain.beer.entity.QBeerBeerCategory.*;
 import static be.domain.beercategory.entity.QBeerCategory.*;
+import static be.domain.user.entity.QUser.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import be.domain.beer.entity.Beer;
+import be.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +38,8 @@ public class SearchQueryRepository {
 
 		log.info("####: " + queryParam);
 
-		List<Beer> fullTextResultList = jpaQueryFactory.selectFrom(beer)
+		List<Beer> fullTextResultList = jpaQueryFactory
+			.selectFrom(beer)
 			.where(korName.containsIgnoreCase(queryParam)
 				.or(engName.containsIgnoreCase(queryParam)))
 			.fetch();
@@ -134,5 +137,26 @@ public class SearchQueryRepository {
 			.fetchOne();
 
 		return new PageImpl<>(beerList, pageable, total);
+	}
+
+	public Page<User> findUsersPageByQueryParam(String queryParam, Pageable pageable) {
+
+		queryParam = queryParam.substring(1);
+
+		List<User> userList = jpaQueryFactory
+			.selectFrom(user)
+			.where(user.nickname.contains(queryParam))
+			.orderBy(user.followerCount.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		Long total = jpaQueryFactory
+			.select(user.count())
+			.from(user)
+			.where(user.nickname.contains(queryParam))
+			.fetchOne();
+
+		return new PageImpl<>(userList, pageable, total);
 	}
 }

@@ -2,25 +2,29 @@ package be.global.security.config;
 
 import java.util.Arrays;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import be.domain.mail.controller.MailController;
 import be.domain.user.mapper.UserMapper;
-import be.domain.user.repository.UserRepository;
 import be.global.security.auth.cookieManager.CookieManager;
 import be.global.security.auth.filter.JwtAuthenticationFilter;
 import be.global.security.auth.filter.JwtVerificationFilter;
@@ -29,17 +33,22 @@ import be.global.security.auth.handler.UserAuthenticationEntryPoint;
 import be.global.security.auth.handler.UserAuthenticationFailureHandler;
 import be.global.security.auth.handler.UserAuthenticationSuccessHandler;
 import be.global.security.auth.jwt.JwtTokenizer;
+import be.global.security.auth.userdetails.UserDetailService;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
+@EnableWebSecurity(debug = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
 	private final CookieManager cookieManager;
 	private final UserMapper userMapper;
 	private final JwtTokenizer jwtTokenizer;
+	private final UserDetailService userDetailService;
 	private final CustomAuthorityUtils customAuthorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
+	private final DataSource dataSource;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -70,7 +79,13 @@ public class SecurityConfig {
 			.deleteCookies("visit_cookie")
 			.and()
 			.authorizeHttpRequests(authorize -> authorize
-				.anyRequest().permitAll());
+				.anyRequest().permitAll())
+			.rememberMe()
+			.key("getabeerCalander")
+			.rememberMeParameter("getabeer-remember-me")
+			.rememberMeCookieName("getabeer-remember-me")
+			.userDetailsService(userDetailService)
+			.tokenRepository(persistentTokenRepository());
 
 		// 후속 작업용 필터. 지우지 말아주세용.
 		// .addFilterBefore(oAuth2AuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -84,7 +99,8 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
 			JwtAuthenticationFilter jwtAuthenticationFilter =
-				new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, userMapper, cookieManager);
+				new JwtAuthenticationFilter(
+					authenticationManager, jwtTokenizer, userMapper, cookieManager, redisTemplate);
 
 			jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
@@ -122,5 +138,22 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 
 		return source;
+	}
+
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+		jdbcTokenRepository.setDataSource(dataSource);
+		return jdbcTokenRepository;
+	}
+
+	@Bean
+	public RememberMeServices rememberMeServices(PersistentTokenRepository persistentTokenRepository) {
+		PersistentTokenBasedRememberMeServices rememberMeServices = new
+			PersistentTokenBasedRememberMeServices("getabeerCalander",
+			userDetailService, persistentTokenRepository);
+		rememberMeServices.setParameter("getabeer-remember-me");
+		rememberMeServices.setCookieName("getabeer-remember-me");
+		return rememberMeServices;
 	}
 }

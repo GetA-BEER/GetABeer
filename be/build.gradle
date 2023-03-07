@@ -82,7 +82,7 @@ dependencies {
     implementation "com.h2database:h2" // h2
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
-    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2' // 내장 Redis
+//    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2' // 내장 Redis
 //    implementation 'org.springframework.session:spring-session-data-redis:2.6.1' // Redis 세션
 //    runtimeOnly 'mysql:mysql-connector-java' // MySQL
     //    --------------------------------------------------------------------------------------------

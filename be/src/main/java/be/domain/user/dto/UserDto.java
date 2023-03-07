@@ -169,4 +169,19 @@ public class UserDto {
 		}
 	}
 
+	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor(access = AccessLevel.PROTECTED)
+	public static class UserSearchResponse {
+		private Long id;
+		private String nickname;
+		private String imgUrl;
+		private Boolean isFollowing;
+
+		public void addIsFollowing(Boolean isFollowing) {
+			this.isFollowing = isFollowing;
+		}
+	}
+
 }

@@ -44,9 +44,6 @@ public class GetABeerScheduler {
 		statisticsService.createBeerCategoryStatistics();
 		statisticsService.createBeerTagStatistics();
 		statisticsService.createPairingCategoryStatistics();
-		TotalStatistics totalStatistics =
-			TotalStatistics.builder().build();
-		totalStatisticsRepository.save(totalStatistics);
 	}
 
 	/*
@@ -54,6 +51,9 @@ public class GetABeerScheduler {
 	 */
 	@Scheduled(cron = "0 0 0 * * *")
 	public void createTotalStatisticsObject() {
+		TotalStatistics totalStatistics =
+			TotalStatistics.builder().build();
+		totalStatisticsRepository.save(totalStatistics);
 	}
 
 }

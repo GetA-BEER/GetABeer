@@ -137,10 +137,23 @@ public class BeerTestConstants {
 
 	public static final List<BeerDto.MonthlyBestResponse> GET_MONTHLY_BEER_RESPONSE_LIST =
 		List.of(GET_MONTHLY_BEER_RESPONSE,
-			GET_MONTHLY_BEER_RESPONSE,
-			GET_MONTHLY_BEER_RESPONSE,
-			GET_MONTHLY_BEER_RESPONSE,
 			GET_MONTHLY_BEER_RESPONSE);
+
+	public static final BeerDto.WeeklyBestResponse GET_WEEKLY_BEER_RESPONSE =
+		BeerDto.WeeklyBestResponse.builder()
+			.beerId(1L)
+			.korName("한글 이름")
+			.thumbnail("썸네일 이미지 경로")
+			.beerCategories(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE))
+			.country("생산 국가")
+			.abv(3.5)
+			.ibu(17)
+			.averageStar(4.0)
+			.build();
+
+	public static final List<BeerDto.WeeklyBestResponse> GET_WEEKLY_BEER_RESPONSE_LIST =
+		List.of(GET_WEEKLY_BEER_RESPONSE,
+			GET_WEEKLY_BEER_RESPONSE);
 
 	public static final BeerDto.WishlistResponse GET_MY_PAGE_BEER_RESPONSE =
 		BeerDto.WishlistResponse.builder()
