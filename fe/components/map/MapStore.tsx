@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import KakaoBtn from '../login/KakaoBtn';
 
 interface MapProps {
   latitude: number;
@@ -12,11 +11,11 @@ declare global {
   }
 }
 
-export default function Map({ latitude, longitude }: MapProps) {
+export default function MapStore({ latitude, longitude }: MapProps) {
   useEffect(() => {
     const mapScript = document.createElement('script');
     mapScript.async = true;
-    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services`;
+    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services,clusterer`;
     document.head.appendChild(mapScript);
 
     const onLoadKakaoMap = () => {
@@ -26,8 +25,11 @@ export default function Map({ latitude, longitude }: MapProps) {
           center: new window.kakao.maps.LatLng(latitude, longitude),
         };
         const map = new window.kakao.maps.Map(container, options);
-        map.setZoomable(false);
-        const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+        // map.setZoomable(false);
+        const infoWindow = new window.kakao.maps.InfoWindow({
+          zIndex: 1,
+          removable: true,
+        });
 
         const ps = new window.kakao.maps.services.Places(map);
         ps.categorySearch('CS2', placesSearchCB, { useMapBounds: true });
@@ -41,15 +43,14 @@ export default function Map({ latitude, longitude }: MapProps) {
         }
         var imageSrc = '/images/marker.png', // 마커이미지의 주소입니다
           imageSize = new window.kakao.maps.Size(34, 39), // 마커이미지의 크기입니다
-          imageOption = { offset: new window.kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+          imageOption = { offset: new window.kakao.maps.Point(16, 36) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
         // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
         var markerImage = new window.kakao.maps.MarkerImage(
-            imageSrc,
-            imageSize,
-            imageOption
-          ),
-          markerPosition = new window.kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
+          imageSrc,
+          imageSize,
+          imageOption
+        );
 
         // 지도에 마커를 표시하는 함수입니다
         function displayMarker(place: any) {
