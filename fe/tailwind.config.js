@@ -26,15 +26,6 @@ module.exports = {
         'y-black': '#000000',
       },
     },
-    keyframes: {
-      upper: {
-        '0%': { transform: 'translateY(20px)' },
-        '100%': { transform: 'translateY(0px)' },
-      },
-    },
-    animation: {
-      upper: 'upper 0.5s linear',
-    },
   },
   plugins: [],
 };

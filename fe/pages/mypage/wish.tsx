@@ -21,13 +21,10 @@ export default function Wish() {
       router.push('/');
     }
   }, [TOKEN, router]);
-  //.get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`) 페이지네이션이 잘 되어 있는건가요?
   useEffect(() => {
-    // 그럼 페이지 부분 입력이 있으면 어떻게 넣어야 하는건지,..? /api/mypage/wishlist/page/?page=1&size=10
     axios.get(`/api/mypage/wishlist?&page=${page}`).then((response) => {
       setWishList(response.data.data);
       setTotalPages(response.data.pageInfo.totalPages);
-      console.log(response.data.pageInfo);
     });
   }, [page]);
 
@@ -67,7 +64,7 @@ export default function Wish() {
               등록된 위시 맥주가 없습니다.
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 mx-2">
               {wishList?.map((wishProps: any, idx: number) => (
                 <WishCard key={idx} wishProps={wishProps} idx={idx + 1} />
               ))}

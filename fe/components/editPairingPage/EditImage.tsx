@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import { AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
 import imageCompression from 'browser-image-compression';
+import { useState } from 'react';
+import Loading from '@/components/postPairingPage/Loading';
+import Swal from 'sweetalert2';
 
 export default function EditImage({
   imageData,
@@ -10,16 +13,10 @@ export default function EditImage({
   type,
   setType,
 }: any) {
-  interface FileData {
-    lastModified: number;
-    name: string;
-    size: number;
-    type: string;
-  }
-
+  const [showModal, setShowModal] = useState(false);
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files !== null) {
-      const imageFile = e.target.files[0];
+      let imageFile = e.target.files[0];
       const options = {
         //옵션 설정 필요
         maxSizeMB: 4,
@@ -27,13 +24,49 @@ export default function EditImage({
         useWebWorker: true,
       };
 
-      try {
-        const compressedFile = await imageCompression(imageFile, options);
-        setImageData([...imageData, compressedFile]);
-        let tmpUrl = URL.createObjectURL(compressedFile);
-        setUrl([...url, tmpUrl]);
-        setType([...type, 'file']);
-      } catch (error) {}
+      if (
+        imageFile.type.toLowerCase() === 'image/heic' ||
+        imageFile.name.toLowerCase().includes('.heic')
+      ) {
+        setShowModal(true);
+        const heic2any = require('heic2any');
+        heic2any({ blob: imageFile, toType: 'image/jpeg', quality: 1 }).then(
+          async (response: any) => {
+            imageFile = response;
+            try {
+              const compressedFile = await imageCompression(imageFile, options);
+              setImageData([...imageData, compressedFile]);
+              let tmpUrl = URL.createObjectURL(compressedFile);
+              setUrl([...url, tmpUrl]);
+              setType([...type, 'file']);
+              setShowModal(false);
+            } catch (error) {
+              setShowModal(false);
+              Swal.fire({
+                title: 'Sorry!',
+                text: '지원하지 않는 형식의 파일입니다.',
+                confirmButtonColor: '#F1B31C',
+                confirmButtonText: '확인',
+              });
+            }
+          }
+        );
+      } else {
+        try {
+          const compressedFile = await imageCompression(imageFile, options);
+          setImageData([...imageData, compressedFile]);
+          let tmpUrl = URL.createObjectURL(compressedFile);
+          setUrl([...url, tmpUrl]);
+          setType([...type, 'file']);
+        } catch (error) {
+          Swal.fire({
+            title: 'Sorry!',
+            text: '지원하지 않는 형식의 파일입니다.',
+            confirmButtonColor: '#F1B31C',
+            confirmButtonText: '확인',
+          });
+        }
+      }
     }
   }
 
@@ -188,6 +221,19 @@ export default function EditImage({
           </div>
         )}
       </form>
+      {showModal ? (
+        <div className="inset-0 flex justify-center items-center fixed z-10 bg-[rgb(0,0,0,0.3)]">
+          <div className="w-fit m-2 p-5 z-[11] bg-white text-base lg:text-lg text-y-gold rounded-lg">
+            <Loading />
+            <div className="mt-5 text-center text-y-brown">
+              <div>heic 파일을 변환 중입니다.</div>
+              <div>잠시만 기다려 주세요</div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
