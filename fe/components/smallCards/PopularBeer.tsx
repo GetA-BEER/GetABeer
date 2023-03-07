@@ -18,6 +18,10 @@ export default function PopularBeer({ popularBeer }: any) {
 
   return (
     <div className="w-full ">
+      <div className="m-3 mt-6 text-base font-semibold lg:text-xl">
+        <span className="text-y-brown mr-1">인기 많은</span>
+        <span className="text-black">맥주</span>
+      </div>
       <Swiper
         className="w-full h-fit"
         slidesPerView={2.4}

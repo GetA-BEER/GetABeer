@@ -1,5 +1,6 @@
-import { VscBell, VscBellDot } from 'react-icons/vsc';
 import { FiBellOff } from 'react-icons/fi';
+import { CgBell } from 'react-icons/cg';
+
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
@@ -137,11 +138,11 @@ export default function Alarm() {
       <div onClick={() => setShowModal(true)}>
         {isLogin && alarmList && alarmList.length > 0 ? (
           <div className="relative">
-            <VscBellDot className=" w-[28px] h-[28px]" />
-            <span className="absolute top-[1px] right-[1px] w-[11px] h-[11px] rounded-full bg-y-brown"></span>
+            <CgBell className=" w-[28px] h-[28px]" />
+            <span className="absolute top-0.5 right-0.5 w-[9px] h-[9px] rounded-full bg-y-brown"></span>
           </div>
         ) : isLogin ? (
-          <VscBell className="w-[28px] h-[28px]" />
+          <CgBell className="w-[28px] h-[28px]" />
         ) : (
           <></>
         )}
@@ -173,8 +174,8 @@ export default function Alarm() {
                   ))}
                 </>
               ) : (
-                <li className="text-[8px] text-y-brown px-4 py-1 lg:text-xs truncate">
-                  <FiBellOff className="w-4 h-4 inline" />
+                <li className="text-[8px] text-y-gray px-4 lg:text-xs truncate">
+                  <FiBellOff className="w-4 h-4 m-auto mb-1" />
                   알림이 없습니다.
                 </li>
               )}

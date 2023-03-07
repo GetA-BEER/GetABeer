@@ -115,7 +115,7 @@ export default function PairingCard(props: { pairingCardProps: any }) {
                 </>
               ) : (
                 <div
-                  className="text-xs leading-6 h-fit"
+                  className="text-xs leading-6 h-fit px-2"
                   id={`myDescribe${props?.pairingCardProps?.pairingId}`}
                 >
                   {props?.pairingCardProps?.content}
@@ -170,7 +170,7 @@ export default function PairingCard(props: { pairingCardProps: any }) {
         </div>
       </Link>
       {/* 코멘트수,엄지수 */}
-      <div className="flex justify-end mr-1">
+      <div className="flex justify-end mr-3 mb-3">
         <div className="flex justify-center items-center">
           <HiOutlineChat />
           <span className="text-xs ml-0.5 mr-2 mt-0.5">

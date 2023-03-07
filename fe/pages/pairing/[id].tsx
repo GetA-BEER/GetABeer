@@ -137,7 +137,7 @@ export default function PairingDetail() {
               }
             />
           </div>
-          <div>
+          <div className="mr-3">
             {pairingCommentList === null
               ? null
               : pairingCommentList.map((el) => {

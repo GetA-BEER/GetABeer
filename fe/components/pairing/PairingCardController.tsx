@@ -33,7 +33,7 @@ export default function PairingCardController(props: {
           {cardPropsList?.map((el: any, idx: number) => (
             <div
               key={idx}
-              className="rounded-lg bg-white text-y-black text-xs border-2 mx-2 mt-3 relative"
+              className="rounded-lg bg-white text-y-black text-xs border mx-2 mt-3 relative"
             >
               {/*닉네임, 날짜*/}
               <ProfileCard
