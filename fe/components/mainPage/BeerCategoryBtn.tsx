@@ -19,7 +19,7 @@ export default function BeerCategoryBtn() {
 
   return (
     <div className="my-4">
-      <div className="mx-3 mt-6 mb-2 font-bold">
+      <div className="m-3 mt-6 mb-2 font-bold text-base lg:text-xl">
         맥주<span className="text-y-brown ml-1">카테고리</span>
       </div>
       <Swiper
@@ -39,7 +39,7 @@ export default function BeerCategoryBtn() {
                 });
               }}
             >
-              <div className="ml-2 font-bold flex justify-center items-center h-[58px] lg:h-32 md:h-28 sm:h-24  bg-y-gold text-[10px] lg:text-base rounded-xl hover:text-y-cream">
+              <div className="ml-2 font-bold flex justify-center items-center h-[58px] lg:h-32 md:h-28 sm:h-24  bg-y-gold text-[10px] lg:text-lg rounded-xl hover:text-y-cream">
                 {el}
               </div>
             </SwiperSlide>

@@ -77,12 +77,14 @@ export default function PostPairing() {
       <main className="m-auto h-screen max-w-4xl">
         <div className="px-5">
           <PostDetailCard beerInfo={beerInfo} />
-          <div className="mt-6 mb-2 text-base font-semibold">
+          <div className="mt-6 mx-3 text-base lg:text-lg font-semibold">
             페어링 카테고리
           </div>
           <PairingSelect category={category} setCategory={setCategory} />
           <ImageUpload imageData={imageData} setImageData={setImageData} />
-          <div className="mt-6 mb-2 text-base font-semibold">설명</div>
+          <div className="mt-6 mb-2 text-base lg:text-lg font-semibold">
+            설명
+          </div>
           <BigInput
             placeholder="세글자 이상 적어주세요"
             inputState={content}

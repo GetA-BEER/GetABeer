@@ -51,7 +51,8 @@ export default function EditPairing() {
         })
         .catch((error) => console.log(error));
     }
-  }, [pairingId, types, url]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Vaild 로직
   const [isValid, setIsValid] = useState(false);

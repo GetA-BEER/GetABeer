@@ -8,6 +8,7 @@ import SearchModal from './SearchModal';
 import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import axios from '@/pages/api/axios';
+import Alarm from './Alarm';
 
 export default function Header() {
   const [isSearching, setIsSearching] = useState(false);
@@ -42,15 +43,17 @@ export default function Header() {
             className="ml-4 mr-2"
           />
         </Link>
-        {isSearching ? <SearchModal setIsSearching={setIsSearching} /> : null}
-        <button
-          className="mr-4"
-          onClick={() => {
-            setIsSearching(true);
-          }}
-        >
-          <BiSearch className="w-[30px] h-[30px]" />
-        </button>
+        <div className="flex justify-end items-center">
+          {isSearching ? <SearchModal setIsSearching={setIsSearching} /> : null}
+          <button
+            onClick={() => {
+              setIsSearching(true);
+            }}
+          >
+            <BiSearch className="w-[30px] h-[30px]" />
+          </button>
+          <Alarm />
+        </div>
       </div>
     </div>
   );

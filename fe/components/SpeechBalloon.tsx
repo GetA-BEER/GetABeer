@@ -93,7 +93,7 @@ export default function SpeechBalloon({
             userImage={props?.userImage}
           />
           {isMine ? (
-            <div className="flex-1 flex justify-end items-center  text-y-brown mr-3">
+            <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
               <button className="flex items-center mr-1" onClick={editComment}>
                 <MdModeEdit className="mb-[1px]" />
                 <span className="text-y-black ml-[1px]">수정</span>

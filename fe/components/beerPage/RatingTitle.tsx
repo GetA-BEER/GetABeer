@@ -9,9 +9,9 @@ export default function RatingTitle(props: {
   beerId: number | undefined;
 }) {
   return (
-    <div className="max-w-4xl flex justify-between mx-5 mt-4 mb-1">
+    <div className="max-w-4xl flex justify-between mx-3 mt-4 mb-1">
       <div className="flex items-center">
-        <span className="font-semibold mr-1 text-sm">평가</span>
+        <span className="font-semibold mr-1 text-base lg:text-xl">평가</span>
         <span className="text-xs">{props?.ratingCount}</span>
       </div>
       {props?.ratingCount === 0 ? (

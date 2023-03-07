@@ -151,6 +151,7 @@ export default function PairingDetail() {
                 })}
           </div>
         </div>
+        <div className="pb-16"></div>
       </main>
     </>
   );
