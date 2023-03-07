@@ -63,7 +63,7 @@ export default function Beer() {
         .get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
         .then((response) => {
           setRatingInfo(response.data);
-          if (USERID === response.data.data[0].userId) {
+          if (USERID === response?.data?.data[0]?.userId) {
             setHasRating(true);
             setMyRatingId(response.data.data[0].ratingId);
           } else {

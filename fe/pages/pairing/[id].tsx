@@ -45,6 +45,7 @@ export default function PairingDetail() {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
           if (response.data.userId === USERID) {
+            console.log(response.data);
             setIsMine(true);
           }
         })
@@ -136,7 +137,7 @@ export default function PairingDetail() {
               }
             />
           </div>
-          <div>
+          <div className="mr-3">
             {pairingCommentList === null
               ? null
               : pairingCommentList.map((el) => {

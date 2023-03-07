@@ -52,7 +52,7 @@ export default function Pairing() {
         {pariginCardPops?.length ? (
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         ) : (
-          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+          <div className="noneContent py-8">
             <Image
               className="m-auto pb-3 opacity-50"
               src="/images/logo.png"
@@ -60,7 +60,7 @@ export default function Pairing() {
               width={40}
               height={40}
             />
-            <span>등록된 페어링이 없습니다</span>
+            등록된 페어링이 없습니다.
           </div>
         )}
         <div className="pb-24"></div>
