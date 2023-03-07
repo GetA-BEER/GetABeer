@@ -84,7 +84,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
     implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2' // 내장 Redis
 //    implementation 'org.springframework.session:spring-session-data-redis:2.6.1' // Redis 세션
-//    runtimeOnly 'mysql:mysql-connector-java' // MySQL
+    runtimeOnly 'mysql:mysql-connector-java' // MySQL
     //    --------------------------------------------------------------------------------------------
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2' // AWS S3 이미지 업로드
     implementation 'com.github.downgoon:marvin:1.5.5' // 이미지 리사이징
