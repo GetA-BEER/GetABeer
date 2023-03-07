@@ -1,4 +1,3 @@
-import { IoChevronBack } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
@@ -13,6 +12,7 @@ import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function Rating() {
   const router = useRouter();
@@ -85,10 +85,7 @@ export default function Rating() {
   return (
     <PageContainer>
       <div className="px-2">
-        <IoChevronBack
-          onClick={() => router.back()}
-          className="text-xl text-y-gray my-2"
-        />
+        <BackBtn />
         <Link href={`/beer/${cardProps?.beerId}`}>
           <div className="flex justify-center mb-4 mt-8">
             <h1 className="text-xl lg:text-2xl font-semibold">
