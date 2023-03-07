@@ -8,6 +8,7 @@ import { TimeHandler } from '@/utils/TimeHandler';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import PairingThumbs from '../PairingThumbs';
 import { accessToken } from '@/atoms/login';
+import { useRouter } from 'next/router';
 
 export default function SmallPairingCard({ pairingProps }: any) {
   const [pairingList, setpairingList] = useState<any>([]);
@@ -20,6 +21,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
   const [likeCount, setLikeCount] = useState<any>(pairingProps.likeCount);
   const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -78,7 +80,10 @@ export default function SmallPairingCard({ pairingProps }: any) {
           <span className="flex justify-center items-center px-2 py-[2px] rounded-md bg-y-gold text-white">
             {CategoryMatcherToKor(pairingList?.category)}
           </span>
-          <span className="flex justify-end items-center w-2/5">
+          <span
+            className="flex justify-end items-center w-2/5"
+            onClick={() => router.push(`/userpage/${pairingList?.userId}`)}
+          >
             <span className="w-[70%] text-end truncate pr-[2px]">
               {pairingList?.nickname}
             </span>

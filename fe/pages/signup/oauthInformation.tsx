@@ -9,10 +9,6 @@ import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import axios from '@/pages/api/axios';
 import swal from 'sweetalert2';
-import { useRecoilState } from 'recoil';
-import { accessToken, userId } from '@/atoms/login';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 interface IFormValues {
   userBeerTags: Array<string>;
@@ -23,7 +19,7 @@ interface IFormValues {
   image: string[];
 }
 
-export default function Information() {
+export default function OauthInformation() {
   const {
     register,
     handleSubmit,
@@ -63,33 +59,20 @@ export default function Information() {
       .then((res) => {
         console.log(res);
         swal.fire({
-          title: '회원가입 완료!',
-          text: '로그인 후 이용하세요',
+          title: 'Get A Beer',
+          text: '로그인이 완료되었습니다.',
           confirmButtonColor: '#F1B31C',
           confirmButtonText: '확인',
         });
         Router.push({
-          pathname: '/login',
+          pathname: '/',
         });
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const skipClick = () => {
-    swal
-      .fire({
-        title: '회원가입 완료!',
-        text: '로그인 후 이용하세요',
-        confirmButtonColor: '#F1B31C',
-        confirmButtonText: '확인',
-      })
-      .then((result) => {
-        if (result.value) {
-          Router.push('/login');
-        }
-      });
-  };
+
   return (
     <>
       <Head>
@@ -99,7 +82,7 @@ export default function Information() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl">
-        <button className="m-4" onClick={() => Router.back()}>
+        <button className="m-4" onClick={() => Router.push('/login')}>
           <IoChevronBack className="w-6 h-6" />
         </button>
         <div className="my-4 text-center text-lg bg-white rounded-lg font-semibold">
@@ -150,9 +133,7 @@ export default function Information() {
               <div className="text-y-gray font-light">
                 나중에 입력하고 싶다면?
               </div>
-              <button className="flex text-y-brown" onClick={skipClick}>
-                Skip
-              </button>
+              <button className="flex text-y-brown">Skip</button>
             </div>
           </form>
         </div>
