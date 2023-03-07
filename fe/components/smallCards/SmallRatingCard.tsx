@@ -162,7 +162,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
                 alt="userImg"
                 width={100}
                 height={100}
-                className="w-4 h-4"
+                className="w-4 h-4 rounded-full"
                 priority
               />
             )}

@@ -165,7 +165,7 @@ export default function Alarm() {
                         src={el?.commentUserImage}
                         width={10}
                         height={10}
-                        className="w-4 h-4 inline mr-1"
+                        className="w-4 h-4 inline mr-1 rounded-full"
                         priority
                       />
                       <span>{el.title}</span>

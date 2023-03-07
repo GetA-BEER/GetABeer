@@ -45,6 +45,7 @@ export default function PairingDetail() {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
           if (response.data.userId === USERID) {
+            console.log(response.data);
             setIsMine(true);
           }
         })
