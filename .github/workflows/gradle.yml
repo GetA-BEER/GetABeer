@@ -40,6 +40,9 @@ jobs:
         with:
           files: ${{ env.RESOURCE_PATH }}
         env:
+          spring.datasource.url: ${{ secrets.SQL_ENDPOINT}}
+          spring.datasource.username: ${{ secrets.SQL_USERNAME}}
+          spring.datasource.password: ${{ secrets.SQL_PASSWORD}}
           spring.redis.host: ${{ secrets.REDIS_ENDPOINT }}
           spring.security.oauth2.client.registration.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
