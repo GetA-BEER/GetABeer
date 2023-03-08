@@ -22,6 +22,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.repository.BeerRepository;
@@ -303,9 +304,9 @@ public class GetABeerAop {
 
 	}
 
-	@AfterReturning(value = "Pointcuts.createPairing() && args(pairing, image, category, beerId)")
-	public void calculateBeerDetailsOnPairingCreation(JoinPoint joinPoint, Pairing pairing, List<String> image,
-		String category, Long beerId) {
+	@AfterReturning(value = "Pointcuts.createPairing() && args(pairing, files, beerId)")
+	public void calculateBeerDetailsOnPairingCreation(JoinPoint joinPoint, Pairing pairing, List<MultipartFile> files,
+		Long beerId) {
 
 		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
 		totalStatistics.addTotalPairingCount();
