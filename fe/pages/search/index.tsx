@@ -103,7 +103,7 @@ export default function Search() {
           )}
         </div>
 
-        {searchResultList.length ? (
+        {searchResultList.length || userList.length ? (
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         ) : null}
       </main>
