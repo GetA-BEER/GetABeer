@@ -1,5 +1,7 @@
 package be.domain.like.service;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ public class RatingLikeService {
 	private final RatingService ratingService;
 	private final RatingRepository ratingRepository;
 	private final RatingLikeRepository ratingLikeRepository;
+	private final EntityManager em;
 
 	@Transactional
 	public LikeResponseDto clickLike(Long ratingId) {
@@ -37,6 +40,9 @@ public class RatingLikeService {
 				.build();
 
 			ratingLikeRepository.save(ratingLike);
+
+			em.flush();
+
 			rating.calculateLikes(rating.getRatingLikeList().size());
 			ratingRepository.save(rating);
 
@@ -46,6 +52,8 @@ public class RatingLikeService {
 		} else {
 			RatingLike ratingLike = findRatingLike(rating.getId(), user.getId());
 			ratingLikeRepository.delete(ratingLike);
+
+			em.flush();
 
 			rating.calculateLikes(rating.getRatingLikeList().size());
 			ratingRepository.save(rating);

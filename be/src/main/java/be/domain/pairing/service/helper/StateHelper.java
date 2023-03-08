@@ -25,6 +25,7 @@ public class StateHelper {
 		} else if (userIsNull(user) && !categoryIsAll(category)){ /* 유저가 존재하지 않고, 카테고리가 존재한다면 */
 			changeState(new GetCategoryUserNotNull());
 		} else {
+			changeState(new GetAllUserNull());
 		}
 
 		return state

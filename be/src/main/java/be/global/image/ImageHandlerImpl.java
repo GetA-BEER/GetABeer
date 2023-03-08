@@ -45,7 +45,7 @@ public class ImageHandlerImpl implements ImageHandler {
 	private final AmazonS3Client s3Client;
 	private final PairingImageRepository pairingImageRepository;
 
-	private static final long limit = 1024 * 1024 * 4;
+	// private static final long limit = 1024 * 1024 * 4;
 
 	@Override
 	public HashMap createProfileImage(MultipartFile file, String folderSrc) throws IOException {
@@ -53,9 +53,9 @@ public class ImageHandlerImpl implements ImageHandler {
 			return null;
 		}
 
-		if (file.getSize() > limit) {
-			throw new BusinessLogicException(ExceptionCode.TOO_BIG_SIZE);
-		}
+		// if (file.getSize() > limit) {
+		// 	throw new BusinessLogicException(ExceptionCode.TOO_BIG_SIZE);
+		// }
 
 		String originalName = Arrays.toString(Objects.requireNonNull(file.getOriginalFilename())
 			.substring(0, file.getOriginalFilename().lastIndexOf("."))
@@ -194,9 +194,9 @@ public class ImageHandlerImpl implements ImageHandler {
 
 	private PairingImage savePairingImage(Pairing pairing, MultipartFile file) throws IOException {
 
-		if (file.getSize() > limit) {
-			throw new BusinessLogicException(ExceptionCode.TOO_BIG_SIZE);
-		}
+		// if (file.getSize() > limit) {
+		// 	throw new BusinessLogicException(ExceptionCode.TOO_BIG_SIZE);
+		// }
 
 		String ext;
 		String contentType = file.getContentType();
