@@ -17,7 +17,7 @@ export default function ShareBtn() {
       <button
         type="button"
         onClick={() => setShowModal(true)}
-        className="hover:text-y-gold mr-1 absolute"
+        className="hover:text-y-gold mr-1"
       >
         <span className="mr-1 ">
           <HiShare className="inline" /> 공유하기

@@ -79,6 +79,7 @@ export default function Beer() {
   useEffect(() => {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
+      console.log('curRoute', curRoute);
       axios
         .get(
           `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`
