@@ -1,7 +1,6 @@
 package be.domain.like.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.like.dto.LikeResponseDto;
 import be.domain.like.entity.LikeStatus;
@@ -23,7 +22,6 @@ public class PairingLikeService {
 	private final PairingRepository pairingRepository;
 	private final PairingLikeRepository pairingLikeRepository;
 
-	@Transactional
 	public LikeResponseDto clickLike(Long pairingId) {
 		User user = userService.getLoginUser();
 		Pairing pairing = pairingService.findPairing(pairingId);

@@ -3,6 +3,8 @@ package be.domain.comment.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RatingCommentService {
+	private final EntityManager em;
 	private final UserService userService;
 	private final RatingService ratingService;
 	private final RatingRepository ratingRepository;
@@ -38,6 +41,8 @@ public class RatingCommentService {
 		Rating rating = ratingService.findRating(ratingId);
 		ratingComment.saveDefault(rating, user);
 		ratingCommentRepository.save(ratingComment);
+
+		em.flush();
 
 		rating.calculateComments(rating.getRatingCommentList().size());
 		ratingRepository.save(rating);
@@ -75,6 +80,7 @@ public class RatingCommentService {
 	}
 
 	/* 맥주 댓글 삭제 */
+	@Transactional
 	public String delete(Long ratingCommentId) {
 		RatingComment findComment = findVerifiedRatingComment(ratingCommentId);
 
@@ -86,6 +92,9 @@ public class RatingCommentService {
 		Rating rating = findComment.getRating();
 
 		ratingCommentRepository.delete(findComment);
+
+		em.flush();
+
 		rating.calculateComments(rating.getRatingCommentList().size());
 		ratingRepository.save(rating);
 
