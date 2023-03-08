@@ -13,6 +13,8 @@ import { useRecoilState } from 'recoil';
 import Link from 'next/link';
 import Image from 'next/image';
 import CloseBtn from '@/components/button/CloseBtn';
+import Swal from 'sweetalert2';
+
 export default function UserPage() {
   const [pariginCardPops, setPairingCardProps] = useState<any>();
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
@@ -27,8 +29,35 @@ export default function UserPage() {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [TOKEN] = useRecoilState(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
+  const goToLogin = () => {
+    Swal.fire({
+      title: 'Get A Beer',
+      text: '로그인이 필요한 서비스 입니다.',
+      showCancelButton: true,
+      confirmButtonColor: '#f1b31c',
+      cancelButtonColor: '#A7A7A7',
+      confirmButtonText: '로그인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push({
+          pathname: '/login',
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     if (id !== undefined) {
       axios
@@ -141,6 +170,7 @@ export default function UserPage() {
       })
       .catch((err) => {
         console.log(err);
+        goToLogin();
       });
   };
   return (
@@ -194,6 +224,7 @@ export default function UserPage() {
               </div>
             </div>
           </div>
+
           {follow === null || follow === false ? (
             <SubmitBtn onClick={followClick}>팔로우</SubmitBtn>
           ) : (

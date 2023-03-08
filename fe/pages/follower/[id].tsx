@@ -20,7 +20,6 @@ export default function Follower() {
       axios
         .get(`/api/follows/${userid}/followers`)
         .then((res) => {
-          console.log(res.data);
           setFollowerList(res.data.data);
         })
         .catch((error) => console.log(error));
