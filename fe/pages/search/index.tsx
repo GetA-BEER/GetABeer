@@ -49,7 +49,7 @@ export default function Search() {
         </div>
         <div className="m-4">
           {searchResultList.length === 0 ? (
-            <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+            <div className="noneContent py-8">
               <Image
                 className="m-auto pb-3 opacity-50"
                 src="/images/logo.png"
@@ -57,7 +57,7 @@ export default function Search() {
                 width={40}
                 height={40}
               />
-              <span>검색 결과가 없습니다</span>
+              검색 결과가 없습니다.
             </div>
           ) : (
             searchResultList.map((el, idx) => {
