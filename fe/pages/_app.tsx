@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 import NavBar from '@/components/NavBar';
+import Chat from '@/components/Chat';
 
 import { AppContextType } from 'next/dist/shared/lib/utils';
 declare global {
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <RecoilRoot>
       <Header />
       <Component {...pageProps} />
+      <Chat />
       <NavBar />
     </RecoilRoot>
   );

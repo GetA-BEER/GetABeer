@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HiTrash } from 'react-icons/hi';
 import { MdModeEdit } from 'react-icons/md';
-import { GiSiren } from 'react-icons/gi';
+import { RiAlarmWarningFill } from 'react-icons/ri';
 import axios from '@/pages/api/axios';
 import { TimeHandler } from '@/utils/TimeHandler';
 import CommentInput from './inputs/CommentInput';
@@ -102,7 +102,7 @@ export default function SpeechBalloon({
                 className="flex items-center"
                 onClick={() => {
                   Swal.fire({
-                    text: '게시글을 삭제하시겠습니까?',
+                    text: '댓글을 삭제하시겠습니까?',
                     // text: '삭제하시면 다시 복구시킬 수 없습니다.',
                     showCancelButton: true,
                     confirmButtonColor: '#f1b31c',
@@ -128,8 +128,8 @@ export default function SpeechBalloon({
                   console.log('신고하기');
                 }}
               >
-                <GiSiren className="mb-[1px]" />
-                <span className="text-y-black ml-[1px]">수정</span>
+                <RiAlarmWarningFill className="mb-[1px]" />
+                <span className="text-y-black ml-[1px]">신고하기</span>
               </button>
             </div>
           )}
