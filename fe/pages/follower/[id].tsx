@@ -50,7 +50,7 @@ export default function Follower() {
           ) : (
             <div className="m-2 border divide-y divide-gray-200 rounded-xl">
               {followerList.map((el: FollowProps) => (
-                <div key={el.nickname}>
+                <div key={el.userId}>
                   <FollowUser followprops={el} />
                 </div>
               ))}
@@ -77,7 +77,7 @@ export default function Follower() {
           ) : (
             <div className="m-2 border divide-y divide-gray-200 rounded-xl">
               {followingList.map((el: FollowProps) => (
-                <div key={el.nickname}>
+                <div key={el.userId}>
                   <FollowUser followprops={el} />
                 </div>
               ))}
