@@ -85,7 +85,7 @@ export default function SpeechBalloon({
 
   return (
     <div className="mx-5 mb-4">
-      <div className="w-full h-fit relative ml-4 p-1 rounded-r-lg rounded-b-lg bg-y-cream after:border-t-[30px] after:border-l-[33px] after:border-t-y-cream after:border-l-transparent after:absolute after:top-0 after:-left-8">
+      <div className="w-full h-fit relative ml-4 p-1 rounded-r-xl rounded-b-xl bg-y-cream after:border-t-[17px] after:border-l-[20px] after:border-t-y-cream after:border-l-transparent after:absolute after:top-0 after:-left-5">
         <div className="flex items-center">
           <ProfileCard
             nickname={props?.nickname}
