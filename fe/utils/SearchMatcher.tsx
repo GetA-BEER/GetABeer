@@ -77,7 +77,7 @@ export const SearchMatcherToKor = (str: string | string[] | undefined) => {
       return '*밀맥주';
     case '*DUNKEL':
       return '*흑맥주';
-    case '*PILSENER':
+    case '*PILSNER':
       return '*필스너';
     case '*FRUIT':
       return '*과일';
