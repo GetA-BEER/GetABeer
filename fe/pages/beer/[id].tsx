@@ -31,7 +31,9 @@ export default function Beer() {
   const router = useRouter();
   const [curRoute, setCurRoute] = useState<number | undefined>();
   useEffect(() => {
-    setCurRoute(Number(router.query.id));
+    if (router.query.id !== undefined) {
+      setCurRoute(Number(router.query.id));
+    }
   }, [router, curRoute]);
 
   const [beerInfo, setBeerInfo] = useState<BeerInfo>();
@@ -77,6 +79,7 @@ export default function Beer() {
   useEffect(() => {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
+      console.log('curRoute', curRoute);
       axios
         .get(
           `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`

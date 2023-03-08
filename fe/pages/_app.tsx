@@ -17,7 +17,6 @@ export default function App({ Component, pageProps }: AppProps) {
     <RecoilRoot>
       <Header />
       <Component {...pageProps} />
-      <Chat />
       <NavBar />
     </RecoilRoot>
   );

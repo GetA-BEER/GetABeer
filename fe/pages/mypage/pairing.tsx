@@ -8,6 +8,7 @@ import Pagenation from '@/components/Pagenation';
 import { useRouter } from 'next/router';
 import { accessToken, userNickname } from '@/atoms/login';
 import { useRecoilState } from 'recoil';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function Pairing() {
   const [pariginCardPops, setPairingCardProps] = useState<any>();
@@ -36,15 +37,7 @@ export default function Pairing() {
   return (
     <PageContainer>
       <main className="m-auto h-screen max-w-4xl relative">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
         <div className="mb-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
           <span className="text-y-brown">{username}님</span>의 페어링
         </div>

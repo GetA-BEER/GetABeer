@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import { PairingCardProps } from '@/components/beerPage/BeerDeclare';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function PairingDetail() {
   let router = useRouter();
@@ -92,15 +93,8 @@ export default function PairingDetail() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl relative">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
+
         <div className="text-xl mt-4 mb-3 text-center font-semibold">
           {pairingProps?.korName}
         </div>

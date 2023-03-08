@@ -2,12 +2,12 @@ import Head from 'next/head';
 import SortBox, { Sort } from '@/components/selectBox/SortBox';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { IoChevronBack } from 'react-icons/io5';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
 import Pagenation from '@/components/Pagenation';
 import Image from 'next/image';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function AllPairing() {
   let router = useRouter();
@@ -48,15 +48,7 @@ export default function AllPairing() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl relative">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
         <div className="mt-4 text-center bg-white rounded-lg max-w-4xl font-semibold">
           {title}
         </div>
