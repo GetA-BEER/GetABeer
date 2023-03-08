@@ -23,9 +23,10 @@ export default function MapStore({ latitude, longitude }: MapProps) {
         const container = document.getElementById('map');
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
+          level: 4,
         };
         const map = new window.kakao.maps.Map(container, options);
-        // map.setZoomable(false);
+        map.setMaxLevel(5);
         const infoWindow = new window.kakao.maps.InfoWindow({
           zIndex: 1,
           removable: true,

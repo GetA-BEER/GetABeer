@@ -27,6 +27,24 @@ export default function BreweryMap() {
     <PageContainer>
       <MapNav curTab={1} />
       <div className="w-full h-full">
+        <div className="flex justify-end">
+          <button
+            className="text-xs rounded bg-y-cream text-y-brown p-0.5 mx-2 mb-2"
+            onClick={() => {}}
+          >
+            내 위치로
+          </button>
+          <button
+            className="text-xs rounded bg-y-cream text-y-brown p-0.5 mx-2 mb-2"
+            onClick={() => {
+              if (window !== undefined) {
+                window.location.replace('/map/brewery');
+              }
+            }}
+          >
+            새로고침
+          </button>
+        </div>
         <MapBrewery />
       </div>
     </PageContainer>

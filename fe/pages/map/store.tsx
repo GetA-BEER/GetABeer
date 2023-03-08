@@ -2,10 +2,12 @@ import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
 import MapNav from '@/components/map/MapNav';
 import MapStore from '@/components/map/MapStore';
+import { useRouter } from 'next/router';
 
 export default function StoreMap() {
   const [latitude, setLatitude] = useState<number>(0);
   const [longitude, setLongitude] = useState<number>(0);
+  const router = useRouter();
   useEffect(() => {
     const options = {
       enableHighAccuracy: true,
@@ -28,6 +30,18 @@ export default function StoreMap() {
     <PageContainer>
       <MapNav curTab={0} />
       <div className="w-full h-full">
+        <div className="flex justify-end">
+          <button
+            className="text-xs rounded bg-y-cream text-y-brown p-0.5 mx-2 mb-2"
+            onClick={() => {
+              if (window !== undefined) {
+                window.location.replace('/map/store');
+              }
+            }}
+          >
+            새로 고침
+          </button>
+        </div>
         <MapStore latitude={latitude} longitude={longitude} />
       </div>
     </PageContainer>
