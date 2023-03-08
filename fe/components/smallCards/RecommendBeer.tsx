@@ -40,16 +40,26 @@ export default function RecommendBeer({ recommendBeer }: any) {
                     {el?.beerCategories === null ? (
                       <></>
                     ) : (
-                      <span>{BeerCategoryMatcherToKor(el?.category)} / </span>
-                    )}
-                    {el?.country === null || el?.abv ? (
-                      <></>
-                    ) : (
                       <span>
-                        {BeerCountryMatcherToKor(el?.country)} / {el?.abv}%
+                        {el?.beerCategories?.map(
+                          (category: any, idx: number) => (
+                            <span key={idx}>
+                              {BeerCategoryMatcherToKor(
+                                category?.beerCategoryType
+                              )}
+                              /
+                            </span>
+                          )
+                        )}
                       </span>
                     )}
-                    {el?.ibu === null ? <></> : <span>{el?.ibu}IBU</span>}
+                    {el?.country === null ? (
+                      <></>
+                    ) : (
+                      <span>{BeerCountryMatcherToKor(el?.country)}/</span>
+                    )}
+                    {el?.abv === null ? <></> : <span>{el?.abv}%</span>}
+                    {el?.ibu === null ? <></> : <span>/{el?.ibu}IBU</span>}
                   </div>
                 </div>
                 {el?.thumbnail === null ? (

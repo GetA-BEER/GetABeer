@@ -26,7 +26,7 @@ import axios from '@/pages/api/axios';
 import { useRecoilValue } from 'recoil';
 import { userId } from '@/atoms/login';
 import Loading from '@/components/postPairingPage/Loading';
-
+import { accessToken } from '@/atoms/login';
 export default function Beer() {
   const router = useRouter();
   const [curRoute, setCurRoute] = useState<number | undefined>();
@@ -44,7 +44,7 @@ export default function Beer() {
   const [hasRating, setHasRating] = useState<boolean>(false);
   const [myRatingId, setMyRatingId] = useState<number>();
   const USERID: number = useRecoilValue(userId);
-
+  const [TOKEN] = useRecoilState<string>(accessToken);
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
@@ -79,15 +79,21 @@ export default function Beer() {
   useEffect(() => {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
-      console.log('curRoute', curRoute);
-      axios
-        .get(
-          `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`
-        )
-        .then((response) => setPairingInfo(response.data))
-        .catch((error) => console.log(error));
+      if (TOKEN !== '') {
+        const config = {
+          headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+          withCredentials: true,
+        };
+        axios
+          .get(
+            `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`,
+            config
+          )
+          .then((response) => setPairingInfo(response.data))
+          .catch((error) => console.log(error));
+      }
     }
-  }, [curRoute]);
+  }, [curRoute, TOKEN]);
 
   useEffect(() => {
     // 비슷한 맥주 조회

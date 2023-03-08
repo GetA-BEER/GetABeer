@@ -44,16 +44,19 @@ export default function PopularBeer({ popularBeer }: any) {
                     {el?.beerCategories === null ? (
                       <></>
                     ) : (
-                      <span>{BeerCategoryMatcherToKor(el?.category)} / </span>
+                      <span>
+                        {el?.beerCategories?.map(
+                          (category: string, idx: number) => (
+                            <span key={idx}>
+                              {BeerCategoryMatcherToKor(category)}/
+                            </span>
+                          )
+                        )}
+                      </span>
                     )}
-                    <span>
-                      {BeerCountryMatcherToKor(el?.country)} / {el?.abv}%
-                    </span>
-                    {el?.ibu === null ? (
-                      <></>
-                    ) : (
-                      <span className="ml-0.5">{el?.ibu}IBU</span>
-                    )}
+                    <span>{BeerCountryMatcherToKor(el?.country)}/</span>
+                    {el?.abv === null ? <></> : <span>{el?.abv}%</span>}
+                    {el?.ibu === null ? <></> : <span>/{el?.ibu}IBU</span>}
                   </div>
                 </div>
                 <Image
