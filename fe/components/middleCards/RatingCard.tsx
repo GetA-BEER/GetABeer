@@ -76,7 +76,7 @@ export default function RatingCard(props: {
               alt="user profile image"
               src={props.cardProps.userImage}
               fill
-              className="object-cover"
+              className="object-cover rounded-full"
             />
           </div>
           <div className="flex flex-col ml-2 text-xs">

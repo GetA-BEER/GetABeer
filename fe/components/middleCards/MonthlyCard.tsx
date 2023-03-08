@@ -28,7 +28,11 @@ export default function MonthlyCard({
   return (
     <div className="flex flex-col rounded-lg bg-white text-y-black border border-y-lightGray m-2">
       <div className="flex">
-        <div className="flex justify-center items-center w-6 h-6 rounded-[5px] bg-y-lightGray z-[5] m-1">
+        <div
+          className={`flex justify-center items-center w-6 h-6 rounded-[5px] z-[5] m-1 ${
+            idx === 0 || idx === 1 || idx === 2 ? `bg-y-gold` : `bg-y-lightGray`
+          }`}
+        >
           <span className="text-white">{idx + 1}</span>
         </div>
         <div className="relative w-[120px] h-[150px]">

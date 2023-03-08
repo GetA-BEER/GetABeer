@@ -23,13 +23,13 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
     useRecoilState(searchHistory);
 
   const beerCategoryList = [
-    '@에일',
-    '@라거',
-    '@밀맥주',
-    '@흑맥주',
-    '@필스너',
-    '@과일',
-    '@무알콜',
+    '*에일',
+    '*라거',
+    '*밀맥주',
+    '*흑맥주',
+    '*필스너',
+    '*과일',
+    '*무알콜',
   ];
 
   const tagList = [
@@ -121,7 +121,7 @@ export default function SearchModal({ setIsSearching }: SearchProps) {
             autoFocus
             ref={inputRef}
             type="text"
-            placeholder="Search"
+            placeholder="맥주이름 또는 @닉네임 을 검색해보세요"
             className="w-full outline-none bg-y-lightGray"
             value={inputState}
             onChange={(e) => {

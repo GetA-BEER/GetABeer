@@ -1,5 +1,4 @@
 import PageContainer from '@/components/PageContainer';
-import { IoChevronBack } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import SearchCard, {
@@ -10,6 +9,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Pagenation from '@/components/Pagenation';
 import { SearchMatcherToKor } from '@/utils/SearchMatcher';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function Search() {
   const router = useRouter();
@@ -36,10 +36,7 @@ export default function Search() {
   return (
     <PageContainer>
       <main className="px-2">
-        <IoChevronBack
-          onClick={() => router.back()}
-          className="text-xl text-y-gray mt-2"
-        />
+        <BackBtn />
         <div className="flex justify-center m-4">
           <h1 className="font-bold text-xl lg:text-2xl">
             <span className="text-y-brown">
@@ -52,7 +49,7 @@ export default function Search() {
         </div>
         <div className="m-4">
           {searchResultList.length === 0 ? (
-            <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+            <div className="noneContent py-8">
               <Image
                 className="m-auto pb-3 opacity-50"
                 src="/images/logo.png"
@@ -60,7 +57,7 @@ export default function Search() {
                 width={40}
                 height={40}
               />
-              <span>검색 결과가 없습니다</span>
+              검색 결과가 없습니다.
             </div>
           ) : (
             searchResultList.map((el, idx) => {

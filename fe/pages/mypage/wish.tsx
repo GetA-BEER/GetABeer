@@ -12,7 +12,7 @@ import Pagenation from '@/components/Pagenation';
 export default function Wish() {
   const [wishList, setWishList] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [TOKEN] = useRecoilState(accessToken);
   const [username] = useRecoilState(userNickname);
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function Wish() {
           </div>
 
           {wishList.length === 0 ? (
-            <div className="noneContent py-32">
+            <div className="noneContent py-8">
               <Image
                 className="m-auto pb-3 opacity-50"
                 src="/images/logo.png"
@@ -70,7 +70,12 @@ export default function Wish() {
               ))}
             </div>
           )}
-          <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          {totalPages === 0 ? (
+            <></>
+          ) : (
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          )}
+
           <div className="pb-14"></div>
         </div>
       </main>

@@ -8,12 +8,14 @@ import RatingCard, {
   RatingCardProps,
 } from '@/components/middleCards/RatingCard';
 import Pagenation from '@/components/Pagenation';
+import { userNickname } from '@/atoms/login';
+import { useRecoilState } from 'recoil';
 
 export default function MyRating() {
-  const [userNickname, setUserNickname] = useState('');
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [userName] = useRecoilState(userNickname);
 
   useEffect(() => {
     axios
@@ -31,14 +33,14 @@ export default function MyRating() {
         <BackBtn />
         <div className="flex justify-center my-4">
           <h1 className="text-xl lg:text-2xl font-bold">
-            {userNickname}님의 평가
+            <span className="text-y-brown">{userName}님</span>의 평가
           </h1>
         </div>
         <div className="mt-3">
           {ratingList.map((el: RatingCardProps) => {
             return (
               <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
-                <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
+                <div className="border border-y-lightGray rounded-lg px-3 py-4">
                   <RatingCard
                     cardProps={el}
                     isMine={false}
@@ -52,7 +54,7 @@ export default function MyRating() {
         {ratingList.length ? (
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         ) : (
-          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+          <div className="noneContent py-8">
             <Image
               className="m-auto pb-3 opacity-50"
               src="/images/logo.png"
@@ -60,7 +62,7 @@ export default function MyRating() {
               width={40}
               height={40}
             />
-            <span>등록된 평가가 없습니다</span>
+            등록된 평가가 없습니다.
           </div>
         )}
       </main>

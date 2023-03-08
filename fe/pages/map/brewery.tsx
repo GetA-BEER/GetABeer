@@ -1,9 +1,9 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
 import MapNav from '@/components/map/MapNav';
-import MapStore from '@/components/map/MapStore';
+import MapBrewery from '@/components/map/MapBrewery';
 
-export default function StoreMap() {
+export default function BreweryMap() {
   const [latitude, setLatitude] = useState<number>(0);
   const [longitude, setLongitude] = useState<number>(0);
   useEffect(() => {
@@ -23,12 +23,11 @@ export default function StoreMap() {
     }
     navigator.geolocation.getCurrentPosition(success, error, options);
   }, []);
-
   return (
     <PageContainer>
-      <MapNav curTab={0} />
+      <MapNav curTab={1} />
       <div className="w-full h-full">
-        <MapStore latitude={latitude} longitude={longitude} />
+        <MapBrewery />
       </div>
     </PageContainer>
   );

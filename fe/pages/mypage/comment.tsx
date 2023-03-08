@@ -6,9 +6,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import SpeechBalloon from '@/components/SpeechBalloon';
 import { RatingComment, PairingComment } from '@/components/SpeechBalloon';
+import { userNickname } from '@/atoms/login';
+import { useRecoilState } from 'recoil';
 
 export default function MyComment() {
-  const [userNickname, setUserNickname] = useState('');
+  const [userName] = useRecoilState(userNickname);
   const [ratingCommentList, setRatingCommentList] = useState<RatingComment[]>(
     []
   );
@@ -87,7 +89,7 @@ export default function MyComment() {
         <BackBtn />
         <div className="flex justify-center my-4">
           <h1 className="text-xl lg:text-2xl font-bold">
-            {userNickname}님의 댓글
+            <span className="text-y-brown">{userName}님</span>의 댓글
           </h1>
         </div>
         <ul className="flex justify-around mb-4">
@@ -123,7 +125,7 @@ export const MyRatingComment = ({
   return (
     <div>
       {ratingCommentList.length === 0 ? (
-        <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+        <div className="noneContent py-8">
           <Image
             className="m-auto pb-3 opacity-50"
             src="/images/logo.png"
@@ -131,7 +133,7 @@ export const MyRatingComment = ({
             width={40}
             height={40}
           />
-          <span>등록된 댓글이 없습니다</span>
+          등록된 댓글이 없습니다.
         </div>
       ) : (
         ratingCommentList.map((el) => {
@@ -160,7 +162,7 @@ export const MyPairingComment = ({
   return (
     <div>
       {pairingCommentList.length === 0 ? (
-        <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5 m-2">
+        <div className="noneContent py-8">
           <Image
             className="m-auto pb-3 opacity-50"
             src="/images/logo.png"
@@ -168,7 +170,7 @@ export const MyPairingComment = ({
             width={40}
             height={40}
           />
-          <span>등록된 댓글이 없습니다</span>
+          등록된 댓글이 없습니다.
         </div>
       ) : (
         pairingCommentList.map((el) => {

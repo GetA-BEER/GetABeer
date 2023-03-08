@@ -19,8 +19,8 @@ export default function SimilarBeer({ similarBeer }: any) {
   return (
     <div className="w-full ">
       <div className="mx-3 mt-6 text-base font-semibold lg:text-xl">
-        <span className="text-black mr-1">비슷한</span>
-        <span className="text-y-brown">맥주</span>
+        <span className="text-y-brown mr-1">비슷한</span>
+        <span className="text-black">맥주</span>
       </div>
       <Swiper
         className="w-full h-fit"
