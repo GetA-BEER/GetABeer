@@ -19,8 +19,10 @@ export default function Search() {
   const [searchResultList, setSearchResultList] = useState<SearchCardProps[]>(
     []
   );
+
   const [userList, setUserList] = useState<FollowProps[]>([]);
   const searchQuery = router.query.q;
+  const [nameSearch, setNameSearch] = useState(false);
   useEffect(() => {
     if (searchQuery && typeof searchQuery === 'string') {
       axios
@@ -30,8 +32,12 @@ export default function Search() {
         .then((res) => {
           if (searchQuery.includes('@') === true) {
             setUserList(res.data.data);
-          } else {
+            setSearchResultList([]);
+            setNameSearch(true);
+          } else if (searchQuery.includes('@') === false) {
             setSearchResultList(res.data.data);
+            setUserList([]);
+            setNameSearch(false);
           }
           setTotalPages(res.data.pageInfo.totalPages);
         })
@@ -54,7 +60,7 @@ export default function Search() {
           </h1>
         </div>
         <div className="m-4">
-          {userList.length === 0 ? (
+          {nameSearch === false ? (
             <div>
               {searchResultList.length === 0 ? (
                 <div className="noneContent py-8">
@@ -88,7 +94,7 @@ export default function Search() {
                     width={40}
                     height={40}
                   />
-                  검색 결과가 없습니다.
+                  검색된 유저가 없습니다
                 </div>
               ) : (
                 <div className="m-2 border divide-y divide-gray-200 rounded-xl">
@@ -103,7 +109,7 @@ export default function Search() {
           )}
         </div>
 
-        {searchResultList.length ? (
+        {searchResultList.length || userList.length ? (
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         ) : null}
       </main>
