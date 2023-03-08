@@ -29,11 +29,9 @@ import Loading from '@/components/postPairingPage/Loading';
 
 export default function Beer() {
   const router = useRouter();
-  const [curRoute, setCurRoute] = useState<number | undefined>();
-  useEffect(() => {
-    setCurRoute(Number(router.query.id));
-  }, [router, curRoute]);
 
+  const curRoute = Number(router.query.id);
+  console.log(curRoute);
   const [beerInfo, setBeerInfo] = useState<BeerInfo>();
   const [, setCurBeer] = useRecoilState(currentBeer);
   const [ratingInfo, setRatingInfo] = useState<RatingInfo>();
@@ -81,11 +79,14 @@ export default function Beer() {
         .get(
           `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`
         )
-        .then((response) => setPairingInfo(response.data))
+        .then((response) => {
+          setPairingInfo(response.data);
+        })
+
         .catch((error) => console.log(error));
     }
   }, [curRoute]);
-
+  console.log(curRoute);
   useEffect(() => {
     // 비슷한 맥주 조회
     if (curRoute !== undefined) {
