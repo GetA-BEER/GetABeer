@@ -8,6 +8,7 @@ import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Pagenation from '@/components/Pagenation';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function Wish() {
   const [wishList, setWishList] = useState<any>([]);
@@ -38,15 +39,7 @@ export default function Wish() {
       </Head>
 
       <main className="m-auto h-screen max-w-4xl">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
         <div className=" max-w-4xl m-auto">
           <div className="text-xl mb-10 text-center font-semibold break-keep">
             <span className="text-y-brown">{username}님</span>의 위시 맥주

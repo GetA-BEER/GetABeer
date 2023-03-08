@@ -6,6 +6,7 @@ import CameraModal from './modal/CameraModal';
 import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import { useState, useEffect } from 'react';
+import Chat from './Chat';
 
 export default function NavBar() {
   const TOKEN = useRecoilValue(accessToken);
@@ -19,7 +20,7 @@ export default function NavBar() {
 
   return (
     <nav className="w-full m-auto fixed bottom-0 z-[9] border-t border-gray-200 select-none">
-      <div className="max-w-4xl m-auto  flex justify-between px-4 bg-white text-center py-1">
+      <div className="max-w-4xl m-auto  flex justify-between px-4 bg-white text-center py-1 relative">
         <Link href={'/'} className="hover:text-y-brown">
           <AiOutlineHome className="m-auto text-3xl py-[1px]" />
           <div className="text-[8px]">홈</div>
@@ -47,6 +48,9 @@ export default function NavBar() {
             <div className="text-[8px]">마이페이지</div>
           </Link>
         )}
+        <div className="absolute right-0 bottom-16">
+          <Chat />
+        </div>
       </div>
     </nav>
   );

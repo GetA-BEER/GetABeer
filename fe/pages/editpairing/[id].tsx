@@ -7,7 +7,6 @@ import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import axios from '@/pages/api/axios';
 
 export default function EditPairing() {
@@ -107,7 +106,7 @@ export default function EditPairing() {
       axios
         .patch(`/api/pairings/${pairingId}`, finalData, config)
         .then((response) => {
-          router.push(`/beer/${beerInfo.beerId}`);
+          router.back();
         })
         .catch((error) => console.log(error));
     }

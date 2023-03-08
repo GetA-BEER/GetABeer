@@ -12,7 +12,7 @@ export default function Chat() {
     setInputState('');
   };
   return (
-    <div className="fixed bottom-[64px] right-3 z-[2]">
+    <div className=" bottom-[64px] right-3 z-[2]">
       {open ? (
         <div className="flex flex-col w-[280px] h-[350px] md:w-[400px] md:h-[480px] p-2 rounded-2xl border border-y-lightGray bg-white shadow-lg shadow-y-gray">
           <h1 className="flex justify-between items-center">

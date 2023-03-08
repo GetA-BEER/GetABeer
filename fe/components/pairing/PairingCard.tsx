@@ -131,7 +131,7 @@ export default function PairingCard(props: { pairingCardProps: any }) {
                 ) : (
                   <Image
                     src={props?.pairingCardProps?.thumbnail}
-                    className="m-auto w-full select-none"
+                    className="m-auto h-full w-auto select-none"
                     alt="star"
                     width={180}
                     height={200}
