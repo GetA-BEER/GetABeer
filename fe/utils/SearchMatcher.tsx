@@ -1,21 +1,21 @@
 export const SearchMatcherToEng = (str: string) => {
   switch (str) {
-    case '@에일':
-      return '@ALE';
-    case '@라거':
-      return '@LAGER';
-    case '@밀맥주':
-      return '@WEIZEN';
-    case '@흑맥주':
-      return '@DUNKEL';
-    case '@필스너':
-      return '@PILSNER';
-    case '@과일':
-      return '@FRUIT';
-    case '@무알콜':
-      return '@NON_ALCOHOLIC';
-    case '@기타':
-      return '@ETC';
+    case '*에일':
+      return '*ALE';
+    case '*라거':
+      return '*LAGER';
+    case '*밀맥주':
+      return '*WEIZEN';
+    case '*흑맥주':
+      return '*DUNKEL';
+    case '*필스너':
+      return '*PILSNER';
+    case '*과일':
+      return '*FRUIT';
+    case '*무알콜':
+      return '*NON_ALCOHOLIC';
+    case '*기타':
+      return '*ETC';
     case '#짚색':
       return '#STRAW';
     case '#금색':
@@ -69,22 +69,22 @@ export const SearchMatcherToEng = (str: string) => {
 
 export const SearchMatcherToKor = (str: string | string[] | undefined) => {
   switch (str) {
-    case '@ALE':
-      return '@에일';
-    case '@LAGER':
-      return '@라거';
-    case '@WEIZEN':
-      return '@밀맥주';
-    case '@DUNKEL':
-      return '@흑맥주';
-    case '@PILSENER':
-      return '@필스너';
-    case '@FRUIT':
-      return '@과일';
-    case '@NON_ALCOHOLIC':
-      return '@무알콜';
-    case '@ETC':
-      return '@기타';
+    case '*ALE':
+      return '*에일';
+    case '*LAGER':
+      return '*라거';
+    case '*WEIZEN':
+      return '*밀맥주';
+    case '*DUNKEL':
+      return '*흑맥주';
+    case '*PILSENER':
+      return '*필스너';
+    case '*FRUIT':
+      return '*과일';
+    case '*NON_ALCOHOLIC':
+      return '*무알콜';
+    case '*ETC':
+      return '*기타';
     case '#STRAW':
       return '#짚색';
     case '#GOLD':
