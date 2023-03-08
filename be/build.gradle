@@ -108,6 +108,7 @@ dependencies {
     //    ------------------------------------로깅 전용----------------------------
 //    implementation("ca.pjer:logback-awslogs-appender:1.4.0")
     implementation("com.github.napstr:logback-discord-appender:1.0.0")
+    implementation 'club.minnced:discord-webhooks:0.8.2'
 }
 
 tasks.named('test') {
