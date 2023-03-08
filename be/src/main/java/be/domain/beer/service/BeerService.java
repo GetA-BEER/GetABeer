@@ -31,8 +31,6 @@ public interface BeerService {
 
 	Rating findBestRating(Beer beer);
 
-	Page<Beer> findCategoryBeers(String queryParam, Integer page);
-
 	List<BeerTag> findTop4BeerTags(Beer beer);
 
 	String findBestPairingCategory(Beer beer);

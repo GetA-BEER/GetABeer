@@ -236,8 +236,8 @@ public class User implements Serializable {
 
 	@Builder
 	public User(Long id, String email, String nickname,
-		String password, List<String> roles,
-		String provider, String imageUrl,
+		String password, List<String> roles, Age age,
+		String provider, String imageUrl, Gender gender,
 		String status, String providerId) {
 		this.id = id;
 		this.email = email;

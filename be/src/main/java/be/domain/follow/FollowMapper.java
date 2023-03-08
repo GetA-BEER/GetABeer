@@ -36,7 +36,8 @@ public interface FollowMapper {
 			}).collect(Collectors.toList()));
 	}
 
-	default PageImpl<FollowDto.FollowingResponse> followingsToFollowingResponses(Page<User> findFollowers) {
+	default PageImpl<FollowDto.FollowingResponse> followingsToFollowingResponses(
+		Page<User> findFollowers, List<User> findFollowingsList) {
 
 		return new PageImpl<>(findFollowers.stream()
 			.map(user -> {
@@ -46,6 +47,12 @@ public interface FollowMapper {
 				followingResponseBuilder.userId(user.getId());
 				followingResponseBuilder.nickname(user.getNickname());
 				followingResponseBuilder.imageUrl(user.getImageUrl());
+
+				if (findFollowingsList.contains(user)) {
+					followingResponseBuilder.isFollowing(true);
+				} else {
+					followingResponseBuilder.isFollowing(false);
+				}
 
 				return followingResponseBuilder.build();
 

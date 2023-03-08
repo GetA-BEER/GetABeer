@@ -146,9 +146,9 @@ public class Init {
 
 			BeerDetailsStars beerDetailsStars =
 				BeerDetailsStars.builder()
-					.totalAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
-					.femaleAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
-					.maleAverageStars((double)(int)((Math.random() * 5) * 100) / 100)
+					.totalAverageStars(0.0)
+					.femaleAverageStars(0.0)
+					.maleAverageStars(0.0)
 					.build();
 
 			List<String> list = csvList.get(i);

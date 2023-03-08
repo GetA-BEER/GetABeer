@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter

@@ -98,18 +98,6 @@ public class BeerController {
 		return ResponseEntity.ok(responses);
 	}
 
-	@GetMapping("/category")
-	public ResponseEntity<MultiResponseDto<BeerDto.SearchResponse>> getCategoryBeer(
-
-		@RequestParam(name = "category") String queryParam, @RequestParam(name = "page", defaultValue = "1") int page) {
-
-		Page<Beer> beerPage = beerService.findCategoryBeers(queryParam, page);
-
-		PageImpl<BeerDto.SearchResponse> responsePage = beerMapper.beersPageToSearchResponse(beerPage);
-
-		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), beerPage));
-	}
-
 	@GetMapping("/weekly")
 	public ResponseEntity<List<BeerDto.WeeklyBestResponse>> getWeeklyBeer() {
 

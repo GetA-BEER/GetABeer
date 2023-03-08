@@ -130,6 +130,9 @@ public class UserDto {
 	}
 
 	@Getter
+	@Builder
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class Login {
 
 		@NotBlank
@@ -174,9 +177,9 @@ public class UserDto {
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class UserSearchResponse {
-		private Long id;
+		private Long userId;
 		private String nickname;
-		private String imgUrl;
+		private String imageUrl;
 		private Boolean isFollowing;
 
 		public void addIsFollowing(Boolean isFollowing) {

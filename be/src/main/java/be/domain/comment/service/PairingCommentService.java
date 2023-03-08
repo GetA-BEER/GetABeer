@@ -3,6 +3,8 @@ package be.domain.comment.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PairingCommentService {
+	private final EntityManager em;
 	private final UserService userService;
 	private final PairingService pairingService;
 	private final PairingRepository pairingRepository;
@@ -37,6 +40,8 @@ public class PairingCommentService {
 		Pairing pairing = pairingService.findPairing(pairingId);
 		pairingComment.saveDefault(user, pairing);
 		pairingCommentRepository.save(pairingComment);
+
+		em.flush();
 
 		pairing.calculateCount(pairing.getPairingCommentList().size());
 		pairingRepository.save(pairing);
@@ -70,6 +75,7 @@ public class PairingCommentService {
 	}
 
 	/* 페어링 댓글 리스트 조회 : 응답 객체 */
+	@Transactional(readOnly = true)
 	public List<PairingCommentDto.Response> getPairingComment(Long pairingId) {
 
 		return pairingCommentRepository.findPairingCommentList(pairingId);
@@ -87,6 +93,9 @@ public class PairingCommentService {
 
 		Pairing pairing = pairingComment.getPairing();
 		pairingCommentRepository.delete(pairingComment);
+
+		em.flush();
+
 		pairing.calculateCount(pairing.getPairingCommentList().size());
 		pairingRepository.save(pairing);
 

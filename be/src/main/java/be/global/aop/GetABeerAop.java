@@ -22,6 +22,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
 import be.domain.beer.repository.BeerRepository;
@@ -120,9 +121,9 @@ public class GetABeerAop {
 	/*
 	 * 레이팅 새로 등록될 때마다 인기 태그, 베스트 레이팅, 평균 별점 계산 후 변경 사항 저장
 	 */
-	@AfterReturning(value = "Pointcuts.createRating() && args(rating, beerId, ratingTag, userId)")
+	@AfterReturning(value = "Pointcuts.createRating() && args(rating, beerId, ratingTag)")
 	public void calculateBeerDetailsOnCreation(JoinPoint joinPoint, Rating rating, Long beerId,
-		RatingTag ratingTag, Long userId) {
+		RatingTag ratingTag) {
 
 		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
 		totalStatistics.addTotalRatingCount();
@@ -303,9 +304,9 @@ public class GetABeerAop {
 
 	}
 
-	@AfterReturning(value = "Pointcuts.createPairing() && args(pairing, image, category, beerId)")
-	public void calculateBeerDetailsOnPairingCreation(JoinPoint joinPoint, Pairing pairing, List<String> image,
-		String category, Long beerId) {
+	@AfterReturning(value = "Pointcuts.createPairing() && args(pairing, files, beerId)")
+	public void calculateBeerDetailsOnPairingCreation(JoinPoint joinPoint, Pairing pairing, List<MultipartFile> files,
+		Long beerId) {
 
 		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
 		totalStatistics.addTotalPairingCount();

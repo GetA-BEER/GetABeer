@@ -94,9 +94,9 @@ public interface UserMapper {
 
 			UserDto.UserSearchResponse.UserSearchResponseBuilder userSearchResponseBuilder = UserDto.UserSearchResponse.builder();
 
-			userSearchResponseBuilder.id(user.getId());
+			userSearchResponseBuilder.userId(user.getId());
 			userSearchResponseBuilder.nickname(user.getNickname());
-			userSearchResponseBuilder.imgUrl(user.getImageUrl());
+			userSearchResponseBuilder.imageUrl(user.getImageUrl());
 			userSearchResponseBuilder
 				.isFollowing(followQueryRepository.findFollowByUserIds(followingUserId, user.getId()) != null);
 
@@ -112,10 +112,10 @@ public interface UserMapper {
 
 			UserDto.UserSearchResponse.UserSearchResponseBuilder userSearchResponseBuilder = UserDto.UserSearchResponse.builder();
 
-			userSearchResponseBuilder.id(user.getId());
+			userSearchResponseBuilder.userId(user.getId());
 			userSearchResponseBuilder.nickname(user.getNickname());
-			userSearchResponseBuilder.imgUrl(user.getImageUrl());
-			userSearchResponseBuilder.isFollowing(null);
+			userSearchResponseBuilder.imageUrl(user.getImageUrl());
+			userSearchResponseBuilder.isFollowing(false);
 
 			return userSearchResponseBuilder.build();
 
