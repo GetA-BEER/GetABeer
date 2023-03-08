@@ -157,10 +157,10 @@ export default function UserPage() {
           <div className="flex gap-3 p-2 justify-center">
             <div className="relative rounded-full w-20 h-20 self-center">
               <Image
-                alt="user profile image"
+                alt=" user profile image"
                 src={userImg}
                 fill
-                className="object-cover"
+                className="object-cover rounded-full"
               />
             </div>
             <div className="p-1 self-center">
@@ -174,7 +174,7 @@ export default function UserPage() {
                   onClick={() =>
                     router.push({
                       pathname: `/follower/${id}`,
-                      query: { state: 0 },
+                      query: { tap: 0 },
                     })
                   }
                 >
@@ -185,7 +185,7 @@ export default function UserPage() {
                   onClick={() =>
                     router.push({
                       pathname: `/follower/${id}`,
-                      query: { state: 1 },
+                      query: { tap: 1 },
                     })
                   }
                 >

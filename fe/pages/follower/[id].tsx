@@ -1,37 +1,94 @@
 import BackBtn from '@/components/button/BackPageBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
-import FollowUser from '@/components/followPage/FollowUser';
+import FollowUser, { FollowProps } from '@/components/followPage/FollowUser';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
+import Image from 'next/image';
 
 export default function Follower() {
   const router = useRouter();
-  const { id } = router.query;
-  const state = router.query.state;
-  const [curTab, setCurTab] = useState(Number(state));
+  const userid = router.query.id;
+  const tap = router.query.tap;
+  const [curTab, setCurTab] = useState(Number(tap) || 0);
+  const [followerList, setFollowerList] = useState<FollowProps[]>([]);
+  const [followingList, setFollowingList] = useState<FollowProps[]>([]);
 
-  // const tabArr = [
-  //   {
-  //     name: '팔로워',
-  //     content: <FollowUser />,
-  //   },
-  //   {
-  //     name: '팔로잉',
-  //     content: <FollowUser />,
-  //   },
-  // ];
-  // useEffect(() => {
-  //   if (id !== undefined) {
-  //     axios
-  //       .get(`/api/follows/${id}/followings`)
-  //       .then((res) => {
-  //         console.log(res.data);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    if (userid !== undefined) {
+      axios
+        .get(`/api/follows/${userid}/followers`)
+        .then((res) => {
+          console.log(res.data);
+          setFollowerList(res.data.data);
+        })
+        .catch((error) => console.log(error));
+      axios
+        .get(`/api/follows/${userid}/followings`)
+        .then((res) => {
+          setFollowingList(res.data.data);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [userid]);
+  const tabArr = [
+    {
+      name: '팔로워',
+      content: (
+        <div>
+          {followerList.length === 0 ? (
+            <div className="noneContent">
+              <Image
+                className="m-auto pb-3 opacity-50"
+                src="/images/logo.png"
+                alt="logo"
+                width={40}
+                height={40}
+              />
+              팔로워가 없습니다.
+            </div>
+          ) : (
+            <div className="m-2 border divide-y divide-gray-200 rounded-xl">
+              {followerList.map((el: FollowProps) => (
+                <div key={el.nickname}>
+                  <FollowUser followprops={el} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      name: '팔로잉',
+      content: (
+        <div>
+          {followingList.length === 0 ? (
+            <div className="noneContent">
+              <Image
+                className="m-auto pb-3 opacity-50"
+                src="/images/logo.png"
+                alt="logo"
+                width={40}
+                height={40}
+              />
+              팔로잉이 없습니다.
+            </div>
+          ) : (
+            <div className="m-2 border divide-y divide-gray-200 rounded-xl">
+              {followingList.map((el: FollowProps) => (
+                <div key={el.nickname}>
+                  <FollowUser followprops={el} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <Head>
@@ -43,7 +100,7 @@ export default function Follower() {
       <main className="m-auto h-screen max-w-md">
         <BackBtn></BackBtn>
         <div>
-          {/* <ul className="flex justify-around mb-4">
+          <ul className="flex justify-around mb-4">
             {tabArr.map((el, idx) => {
               return (
                 <li
@@ -60,7 +117,7 @@ export default function Follower() {
               );
             })}
           </ul>
-          {tabArr[curTab].content} */}
+          {tabArr[curTab].content}
         </div>
       </main>
     </>
