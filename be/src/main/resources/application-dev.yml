@@ -91,7 +91,7 @@ spring:
   #            port: 587
   servlet:
     multipart:
-      max-file-size: 5MB
+      max-file-size: 4MB
       max-request-size: 10MB
   cloud:
     gcp:
