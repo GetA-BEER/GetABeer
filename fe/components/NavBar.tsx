@@ -48,7 +48,7 @@ export default function NavBar() {
             <div className="text-[8px]">마이페이지</div>
           </Link>
         )}
-        <div className="absolute right-0 bottom-16">
+        <div className="absolute right-2 bottom-16">
           <Chat />
         </div>
       </div>
