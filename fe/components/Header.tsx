@@ -5,14 +5,14 @@ import { useState, useEffect } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import SearchModal from './SearchModal';
 
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import axios from '@/pages/api/axios';
 import Alarm from './Alarm';
 
 export default function Header() {
   const [isSearching, setIsSearching] = useState(false);
-  const TOKEN = useRecoilValue(accessToken);
+  const [TOKEN, setAccessToken] = useRecoilState(accessToken);
 
   useEffect(() => {
     if (TOKEN) {
@@ -23,6 +23,7 @@ export default function Header() {
       axios
         .post('/api/refresh', {}, config)
         .then((res) => {
+          setAccessToken(res.headers.authorization);
           axios.defaults.headers.common['Authorization'] =
             res.headers.authorization;
         })
@@ -30,7 +31,7 @@ export default function Header() {
           console.log(err);
         });
     }
-  }, [TOKEN]);
+  }, [TOKEN, setAccessToken]);
   return (
     <div className="w-full bg-white sticky top-0 z-10 border-b mb-6">
       <div className="flex justify-between items-center max-w-4xl m-auto h-16 border-y-lightGray ">

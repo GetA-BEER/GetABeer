@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRecoilState } from 'recoil';
@@ -21,22 +20,24 @@ import {
 import swal from 'sweetalert2';
 
 export default function Mypage() {
-  const [, setAccessToken] = useRecoilState(accessToken);
+  const [TOKEN, setAccessToken] = useRecoilState(accessToken);
   const [, setUserId] = useRecoilState(userId);
   const [userName, setUserName] = useRecoilState(userNickname);
   const [userImge, setUserImge] = useState('');
-  const fetchUser = () => {
-    axios
-      .get('/api/user')
-      .then((res) => {
-        setUserName(res.data.nickname);
-        setUserImge(res.data.imageUrl);
-      })
-      .catch((err) => console.log(err));
-  };
+  const [name, setName] = useState('');
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if (TOKEN) {
+      axios
+        .get('/api/user')
+        .then((res) => {
+          setUserName(res.data.nickname);
+          setUserImge(res.data.imageUrl);
+          setName(res.data.nickname);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [TOKEN, setUserName]);
+
   const handleClickLogout = () => {
     swal
       .fire({
@@ -53,7 +54,7 @@ export default function Mypage() {
           axios
             .post('/api/user/logout')
             .then((res) => {
-              console.log(res);
+              // console.log(res);
               setAccessToken('');
               setUserId('');
               setUserName('');
@@ -94,7 +95,8 @@ export default function Mypage() {
             height={80}
           />
           <div className="flex justify-center items-center gap-1 mt-2">
-            <div className="text-sm">{userName}님</div>
+            <div className="text-sm">{name}</div>
+            <div className="text-sm">님</div>
             <Link href={'/myedit'} className="hover:text-y-brown">
               <button className="w-5 h-5 text-y-brown">
                 <HiPencil className="w-5 h-5" />

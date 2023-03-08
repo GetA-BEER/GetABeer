@@ -45,7 +45,6 @@ export default function PairingDetail() {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
           if (response.data.userId === USERID) {
-            console.log(response.data);
             setIsMine(true);
           }
         })
@@ -111,7 +110,7 @@ export default function PairingDetail() {
             pairingProps={pairingProps}
             count={pairingCommentList ? pairingCommentList?.length : 0}
           />
-          <div className="px-3 my-5">
+          <div className="px-4 my-5">
             <CommentInput
               inputState={inputState}
               setInputState={setInputState}
@@ -145,7 +144,7 @@ export default function PairingDetail() {
                     <SpeechBalloon
                       key={el.pairingCommentId}
                       props={el}
-                      isMine={isMine}
+                      isMine={USERID === el.userId}
                       deleteFunc={deletePairingComment}
                     />
                   );

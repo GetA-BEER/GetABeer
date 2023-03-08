@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { HiTrash } from 'react-icons/hi';
 import { MdModeEdit } from 'react-icons/md';
+import { RiAlarmWarningFill } from 'react-icons/ri';
 import axios from '@/pages/api/axios';
-import Image from 'next/image';
 import { TimeHandler } from '@/utils/TimeHandler';
 import CommentInput from './inputs/CommentInput';
 import Swal from 'sweetalert2';
@@ -85,7 +85,7 @@ export default function SpeechBalloon({
 
   return (
     <div className="mx-5 mb-4">
-      <div className="w-full h-fit relative ml-4 p-1 rounded-r-lg rounded-b-lg bg-y-cream after:border-t-[30px] after:border-l-[33px] after:border-t-y-cream after:border-l-transparent after:absolute after:top-0 after:-left-8">
+      <div className="w-full h-fit relative ml-4 p-1 rounded-r-xl rounded-b-xl bg-y-cream after:border-t-[17px] after:border-l-[20px] after:border-t-y-cream after:border-l-transparent after:absolute after:top-0 after:-left-5">
         <div className="flex items-center">
           <ProfileCard
             nickname={props?.nickname}
@@ -102,7 +102,7 @@ export default function SpeechBalloon({
                 className="flex items-center"
                 onClick={() => {
                   Swal.fire({
-                    text: '게시글을 삭제하시겠습니까?',
+                    text: '댓글을 삭제하시겠습니까?',
                     // text: '삭제하시면 다시 복구시킬 수 없습니다.',
                     showCancelButton: true,
                     confirmButtonColor: '#f1b31c',
@@ -120,7 +120,19 @@ export default function SpeechBalloon({
                 <span className="text-y-black">삭제</span>
               </button>
             </div>
-          ) : null}{' '}
+          ) : (
+            <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
+              <button
+                className="flex items-center mr-1"
+                onClick={() => {
+                  console.log('신고하기');
+                }}
+              >
+                <RiAlarmWarningFill className="mb-[1px]" />
+                <span className="text-y-black ml-[1px]">신고하기</span>
+              </button>
+            </div>
+          )}
         </div>
         {isEditMode ? (
           <CommentInput

@@ -2,7 +2,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 export default function GoogleBtn() {
   const REST_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-  const REDIRECT_URI = 'http://localhost:3000/oauth/google';
+  const REDIRECT_URI = 'https://www.getabeer.co.kr/oauth/google';
   const link = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=email%20profile`;
   const handleLogin = () => {
     return window.location.assign(link);

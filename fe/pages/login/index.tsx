@@ -89,7 +89,7 @@ export default function Login() {
     axios
       .post('/api/user/logout')
       .then((res) => {
-        console.log(res);
+        // console.log(res);
       })
       .catch((err) => {
         console.log(err);
