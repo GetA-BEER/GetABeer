@@ -29,7 +29,7 @@ public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
 
 		logExceptionMessage(authException, exception);
-		sendErrorToDiscord(authException, exception);
+		// sendErrorToDiscord(authException, exception);
 	}
 
 	private void logExceptionMessage(AuthenticationException authException, Exception exception) {
@@ -38,7 +38,8 @@ public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		log.warn("Unauthorized error happened: {}", message);
 	}
 
-	private static void sendErrorToDiscord(AuthenticationException authException, Exception exception) throws IOException {
+	private static void sendErrorToDiscord(AuthenticationException authException, Exception exception) throws
+		IOException {
 		String message = exception != null ? exception.getMessage() : authException.getMessage();
 		DiscordWebhook webhook = new DiscordWebhook();
 		webhook.setContent(message);

@@ -45,21 +45,31 @@ public class SearchController {
 
 		if (queryParam.charAt(0) == '@') {
 
-			Page<User> userPage = searchService.findUsersPageByQueryParam(queryParam, page);
-			PageImpl<UserDto.UserSearchResponse> responsePage;
+			// Page<User> userPage = searchService.findUsersPageByQueryParam(queryParam, page);
+			// PageImpl<UserDto.UserSearchResponse> responsePage;
 
 			if (userService.getLoginUserReturnNull() != null) {
+
+				Page<User> userPage = searchService.findUsersPageByQueryParam(queryParam, page);
+				PageImpl<UserDto.UserSearchResponse> responsePage;
 
 				User findUser = userService.getLoginUser();
 				Long userId = findUser.getId();
 
 				responsePage = userMapper.userToUserSearchResponses(userPage, followQueryRepository, userId);
+
+				return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), userPage));
 			} else {
 
+				Page<User> userPage = searchService.findUsersPageByQueryParam(queryParam, page);
+				PageImpl<UserDto.UserSearchResponse> responsePage;
+
 				responsePage = userMapper.userToUserSearchResponses(userPage, followQueryRepository);
+
+				return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), userPage));
 			}
 
-			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), userPage));
+			// return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), userPage));
 
 		} else {
 

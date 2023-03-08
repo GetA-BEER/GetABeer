@@ -25,6 +25,11 @@ public class BeerTestConstants {
 			.beerCategoryType(ALE)
 			.build();
 
+	public static final BeerCategoryDto.BeerResponse BEER_CATEGORY_WITH_TYPE =
+		BeerCategoryDto.BeerResponse.builder()
+			.beerCategoryType(ALE)
+			.build();
+
 	public static final BeerTagDto.Response BEER_TAG_WITH_ID_AND_TYPE =
 		BeerTagDto.Response.builder()
 			.beerTagId(1L)
@@ -169,9 +174,39 @@ public class BeerTestConstants {
 	public static final PageImpl<BeerDto.WishlistResponse> GET_MY_PAGE_RESPONSE_PAGE_IMPL =
 		new PageImpl<>(
 			List.of(GET_MY_PAGE_BEER_RESPONSE,
-				GET_MY_PAGE_BEER_RESPONSE,
-				GET_MY_PAGE_BEER_RESPONSE,
-				GET_MY_PAGE_BEER_RESPONSE,
 				GET_MY_PAGE_BEER_RESPONSE
 			));
+
+	public static final BeerDto.RecommendResponse GET_RECOMMEND_BEER_RESPONSE =
+		BeerDto.RecommendResponse.builder()
+			.beerId(1L)
+			.korName("한글 이름")
+			.thumbnail("썸네일 이미지 경로")
+			.beerCategories(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE))
+			.country("생산 국가")
+			.abv(3.5)
+			.ibu(17)
+			.averageStar(4.0)
+			.build();
+
+	public static final List<BeerDto.RecommendResponse> GET_RECOMMEND_BEER_RESPONSE_LIST =
+		List.of(GET_RECOMMEND_BEER_RESPONSE,
+			GET_RECOMMEND_BEER_RESPONSE);
+
+	public static final BeerDto.SimilarResponse GET_SIMILAR_BEER_RESPONSE =
+		BeerDto.SimilarResponse.builder()
+			.beerId(1L)
+			.korName("한글 이름")
+			.thumbnail("썸네일 이미지 경로")
+			.beerCategories(List.of(BEER_CATEGORY_WITH_TYPE))
+			.country("생산 국가")
+			.abv(3.5)
+			.ibu(17)
+			.averageStar(4.0)
+			.starCount(40)
+			.build();
+
+	public static final List<BeerDto.SimilarResponse> GET_SIMILAR_BEER_RESPONSE_LIST =
+		List.of(GET_SIMILAR_BEER_RESPONSE,
+			GET_SIMILAR_BEER_RESPONSE);
 }
