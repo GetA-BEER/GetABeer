@@ -32,7 +32,6 @@ export default function Beer() {
   const [curRoute, setCurRoute] = useState<number | undefined>();
   useEffect(() => {
     if (router.query.id !== undefined) {
-      console.log(router.query.id);
       setCurRoute(Number(router.query.id));
     }
   }, [router, curRoute]);
