@@ -19,10 +19,10 @@ export default function Search() {
   const [searchResultList, setSearchResultList] = useState<SearchCardProps[]>(
     []
   );
-
+  const [nameSearch, setNameSearch] = useState(false);
   const [userList, setUserList] = useState<FollowProps[]>([]);
   const searchQuery = router.query.q;
-  const [nameSearch, setNameSearch] = useState(false);
+
   useEffect(() => {
     if (searchQuery && typeof searchQuery === 'string') {
       axios
