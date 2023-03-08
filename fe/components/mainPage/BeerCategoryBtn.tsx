@@ -35,7 +35,7 @@ export default function BeerCategoryBtn() {
               onClick={() => {
                 router.push({
                   pathname: '/search',
-                  query: { q: SearchMatcherToEng(`@${el}`) },
+                  query: { q: SearchMatcherToEng(`*${el}`) },
                 });
               }}
             >
