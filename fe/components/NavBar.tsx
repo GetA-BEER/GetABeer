@@ -19,7 +19,7 @@ export default function NavBar() {
   }, [TOKEN]);
 
   return (
-    <nav className="w-full m-auto fixed bottom-0 z-[9] border-t border-gray-200 select-none">
+    <nav className="w-full m-auto fixed bottom-0 z-[9] border-t border-gray-200 select-none bg-white">
       <div className="max-w-4xl m-auto  flex justify-between px-4 bg-white text-center py-1 relative">
         <Link href={'/'} className="hover:text-y-brown">
           <AiOutlineHome className="m-auto text-3xl py-[1px]" />

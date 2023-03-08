@@ -7,7 +7,7 @@ import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import PopularBeer from '@/components/smallCards/PopularBeer';
 import { useRecoilState } from 'recoil';
-import { userNickname } from '@/atoms/login';
+import { userNickname, accessToken } from '@/atoms/login';
 import {
   PopularBeerType,
   RecommendBeerType,
@@ -15,6 +15,7 @@ import {
 
 export default function Main() {
   const [username] = useRecoilState<string>(userNickname);
+  const [TOKEN] = useRecoilState<string>(accessToken);
   const [popularBeer, setPopularBeer] = useState<PopularBeerType[] | string>();
   const [recommendBeer, setRecommendBeer] = useState<
     RecommendBeerType[] | string
@@ -32,14 +33,21 @@ export default function Main() {
 
   // 사용자 추천맥주
   useEffect(() => {
-    axios
-      .get(`/api/beers/recommend`)
-      .then((response) => {
-        setRecommendBeer(response.data);
-        setRecommendFlag(response.data[0].beerId);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    if (TOKEN !== '') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios
+        .get(`/api/beers/recommend`, config)
+        .then((response) => {
+          setRecommendBeer(response.data);
+          setRecommendFlag(response.data[0].beerId);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [TOKEN]);
+
   return (
     <>
       <Head>
