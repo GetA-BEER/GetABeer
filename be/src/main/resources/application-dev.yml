@@ -1,20 +1,19 @@
 spring:
   application:
     name: Get_A_Beer
-  h2:
-    console:
-      enabled: true
-      path: /h2
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${SQL_ENDPOINT}:3306/getabeer
+    username: ${SQL_USERNAME}
+    password: ${SQL_PASSWORD}
   cache:
     type: redis
   redis:
     host: ${REDIS_ENDPOINT}
     port: 6379
-  datasource:
-    url: jdbc:h2:mem:test
-    properties:
-      rewriteBatchedStatements: true
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -28,6 +27,7 @@ spring:
         order_updates: true
         jdbc:
           batch_size: 100
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   security:
     oauth2:
       client:
