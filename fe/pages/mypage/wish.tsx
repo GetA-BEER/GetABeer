@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import WishCard from '@/components/wish/WishCard';
-import { IoChevronBack } from 'react-icons/io5';
 import { useRecoilState } from 'recoil';
 import { accessToken, userNickname } from '@/atoms/login';
 import { useRouter } from 'next/router';
