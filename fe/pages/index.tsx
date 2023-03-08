@@ -37,7 +37,6 @@ export default function Main() {
       .then((response) => {
         setRecommendBeer(response.data);
         setRecommendFlag(response.data[0].beerId);
-        console.log(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
