@@ -44,8 +44,7 @@ export default function Search() {
         .catch((err) => console.log(err));
     }
   }, [searchQuery, page]);
-  console.log(userList);
-  console.log(searchResultList);
+
   return (
     <PageContainer>
       <main>
