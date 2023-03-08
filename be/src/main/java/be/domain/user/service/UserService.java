@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +34,13 @@ import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.ProfileImageRepository;
 import be.domain.user.repository.UserQueryRepository;
 import be.domain.user.repository.UserRepository;
+import be.domain.user.service.pattern.EditImage;
+import be.domain.user.service.pattern.FirstEditImage;
 import be.domain.user.service.pattern.StateButton;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
+import be.global.security.auth.userdetails.AuthUser;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +59,7 @@ public class UserService {
 	private final RedisTemplate<String, String> redisTemplate;
 	private final UserPreferenceService userPreferenceService;
 	private final ProfileImageRepository profileImageRepository;
-	private static StateButton stateButton = new StateButton();
+	private final StateButton stateButton = new StateButton();
 
 	/* 유저 회원가입 */
 	@Transactional
@@ -122,7 +127,13 @@ public class UserService {
 	@Transactional
 	public User updateProfileImage(MultipartFile image) throws IOException {
 		User user = getLoginUser();
-		ProfileImage saved = stateButton.clickButton(stateButton, new HashMap<>(), image, imageHandler, user);
+
+		ProfileImage saved;
+		if (user.getProfileImage() == null) {
+			saved = stateButton.clickButton(new FirstEditImage(), stateButton, new HashMap<>(), image, imageHandler, user);
+		} else {
+		    saved = stateButton.clickButton(new EditImage(), stateButton, new HashMap<>(), image, imageHandler, user);
+		}
 
 		profileImageRepository.save(saved);
 		user.putImageUrl(saved.getImageUrl());

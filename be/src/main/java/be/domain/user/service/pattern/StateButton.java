@@ -10,14 +10,15 @@ import be.domain.user.entity.User;
 import be.global.image.ImageHandler;
 
 public class StateButton {
-	private StatePattern statePattern = new FirstEditImage();
+	public StatePattern statePattern;
 
 	public void setStatePattern(StatePattern statePattern) {
 		this.statePattern = statePattern;
 	}
 
-	public ProfileImage clickButton(StateButton stateButton, HashMap map, MultipartFile image,
+	public ProfileImage clickButton(StatePattern statePattern, StateButton stateButton, HashMap map, MultipartFile image,
 		ImageHandler imageHandler, User user) throws IOException {
-		return statePattern.click(stateButton, map, image, imageHandler, user);
+		stateButton.setStatePattern(statePattern);
+		return statePattern.click(statePattern, stateButton, map, image, imageHandler, user);
 	}
 }

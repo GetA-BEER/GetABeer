@@ -2,6 +2,8 @@ package be.domain.beerwishlist.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -18,10 +20,13 @@ import be.domain.beerwishlist.service.pattern.WishButton;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BeerWishlistServiceImpl implements BeerWishlistService {
+	private final EntityManager em;
 	private final UserService userService;
 	private final BeerService beerService;
 	private final BeerWishlistRepository beerWishlistRepository;
@@ -48,15 +53,13 @@ public class BeerWishlistServiceImpl implements BeerWishlistService {
 	@Override
 	public BeerWishlist getIsWishlist(Beer beer) {
 
-		User user;
+		User user = null;
 		try {
 			user = userService.getLoginUser();
 		} catch (Exception e) {
-			user = null;
 		}
 
-		return user == null ? beerWishlistRepository.findByBeer(beer) :
-			beerWishlistRepository.findByBeerAndUser(beer, user);
+		return user == null ? null : beerWishlistRepository.findByBeerAndUser(beer, user);
 	}
 
 	@Override

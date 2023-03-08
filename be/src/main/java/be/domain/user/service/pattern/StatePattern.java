@@ -10,41 +10,7 @@ import be.domain.user.entity.User;
 import be.global.image.ImageHandler;
 
 public interface StatePattern {
-	ProfileImage click(StateButton stateButton, HashMap map, MultipartFile image, ImageHandler imageHandler,
+	ProfileImage click(StatePattern statePattern, StateButton stateButton, HashMap map, MultipartFile image, ImageHandler imageHandler,
 		User user) throws IOException;
 }
 
-class FirstEditImage implements StatePattern {
-
-	@Override
-	public ProfileImage click(StateButton stateButton, HashMap map, MultipartFile image, ImageHandler imageHandler,
-		User user) throws IOException {
-		stateButton.setStatePattern(new EditImage());
-
-		map = imageHandler.createProfileImage(image, "/profileImage");
-
-		return ProfileImage.builder()
-			.imageUrl(map.get("url").toString())
-			.fileKey(map.get("fileKey").toString())
-			.user(user)
-			.build();
-	}
-}
-
-class EditImage implements StatePattern {
-
-	@Override
-	public ProfileImage click(StateButton stateButton, HashMap map, MultipartFile image, ImageHandler imageHandler,
-		User user) throws IOException {
-		ProfileImage profileImage = user.getProfileImage();
-
-		map = imageHandler.updateProfileImage(image, "/profileImage", profileImage.getFileKey());
-
-		return ProfileImage.builder()
-			.id(profileImage.getId())
-			.imageUrl(map.get("url").toString())
-			.fileKey(map.get("fileKey").toString())
-			.user(user)
-			.build();
-	}
-}
