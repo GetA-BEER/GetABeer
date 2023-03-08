@@ -120,9 +120,9 @@ public class GetABeerAop {
 	/*
 	 * 레이팅 새로 등록될 때마다 인기 태그, 베스트 레이팅, 평균 별점 계산 후 변경 사항 저장
 	 */
-	@AfterReturning(value = "Pointcuts.createRating() && args(rating, beerId, ratingTag, userId)")
+	@AfterReturning(value = "Pointcuts.createRating() && args(rating, beerId, ratingTag)")
 	public void calculateBeerDetailsOnCreation(JoinPoint joinPoint, Rating rating, Long beerId,
-		RatingTag ratingTag, Long userId) {
+		RatingTag ratingTag) {
 
 		TotalStatistics totalStatistics = totalStatisticsQueryRepository.findTotalStatistics();
 		totalStatistics.addTotalRatingCount();

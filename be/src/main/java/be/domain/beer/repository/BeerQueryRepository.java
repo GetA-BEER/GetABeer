@@ -175,28 +175,6 @@ public class BeerQueryRepository {
 			.fetchFirst();
 	}
 
-	public Page<Beer> findCategoryBeers(String queryParam, Pageable pageable) {
-
-		List<Beer> beerList = jpaQueryFactory.selectFrom(beer)
-			.join(beer.beerBeerCategories, beerBeerCategory)
-			.join(beerBeerCategory.beerCategory, beerCategory)
-			.where(beerCategory.beerCategoryType.stringValue().eq(queryParam))
-			.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
-
-		Long total = jpaQueryFactory
-			.select(beer.count())
-			.from(beer)
-			.join(beer.beerBeerCategories, beerBeerCategory)
-			.join(beerBeerCategory.beerCategory, beerCategory)
-			.where(beerCategory.beerCategoryType.stringValue().eq(queryParam))
-			.fetchOne();
-
-		return new PageImpl<>(beerList, pageable, total);
-	}
-
 	public Rating findBestRating(Beer findBeer) {
 
 		return jpaQueryFactory.selectFrom(rating)

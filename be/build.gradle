@@ -140,7 +140,6 @@ test { // 빌드시 테스트 제외
     exclude '**/*'
 }
 
-
 //    ---------------------------------------Query DSL--------------------------------------------
 // 경로 지정
 def querydslDir = "$buildDir/generated/'querydsl'"

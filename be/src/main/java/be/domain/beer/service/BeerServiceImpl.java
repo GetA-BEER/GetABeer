@@ -176,15 +176,6 @@ public class BeerServiceImpl implements BeerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<Beer> findCategoryBeers(String queryParam, Integer page) {
-
-		PageRequest pageRequest = PageRequest.of(page - 1, 10);
-
-		return beerQueryRepository.findCategoryBeers(queryParam, pageRequest);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
 	public Rating findBestRating(Beer beer) {
 		return beerQueryRepository.findBestRating(beer);
 	}

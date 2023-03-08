@@ -1,5 +1,6 @@
 package be.domain.follow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Positive;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/follows")
 public class FollowController {
 
+	private final UserService userService;
 	private final FollowService followService;
 	private final FollowMapper followMapper;
 
@@ -44,14 +46,28 @@ public class FollowController {
 		@PathVariable("userId") @Positive Long followedUserId,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 
-		Page<User> findFollowers = followService.findFollowers(followedUserId, page);
+		User findUser = userService.getLoginUserReturnNull();
 
-		List<User> findFollowingsList = followService.findFollowingsList(followedUserId, findFollowers);
+		if (findUser == null) {
 
-		PageImpl<FollowDto.FollowerResponse> responsePage =
-			followMapper.followersToFollowerResponses(findFollowers, findFollowingsList);
+			Page<User> findFollowers = followService.findFollowers(followedUserId, page);
 
-		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowers));
+			PageImpl<FollowDto.FollowerResponse> responsePage =
+				followMapper.followersToFollowerResponses(findFollowers, new ArrayList<>());
+
+			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowers));
+		} else {
+
+			Page<User> findFollowers = followService.findFollowers(followedUserId, page);
+
+			List<User> findFollowingsList = followService.findFollowingsList(findUser.getId(), findFollowers);
+
+			PageImpl<FollowDto.FollowerResponse> responsePage =
+				followMapper.followersToFollowerResponses(findFollowers, findFollowingsList);
+
+			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowers));
+		}
+
 	}
 
 	@GetMapping("/{userId}/followings")
@@ -59,11 +75,27 @@ public class FollowController {
 		@PathVariable("userId") @Positive Long followingUserId,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 
-		Page<User> findFollowings = followService.findFollowings(followingUserId, page);
+		User findUser = userService.getLoginUserReturnNull();
 
-		PageImpl<FollowDto.FollowingResponse> responsePage =
-			followMapper.followingsToFollowingResponses(findFollowings);
+		if (findUser == null) {
 
-		return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowings));
+			Page<User> findFollowings = followService.findFollowings(followingUserId, page);
+
+			PageImpl<FollowDto.FollowingResponse> responsePage =
+				followMapper.followingsToFollowingResponses(findFollowings, new ArrayList<>());
+
+			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowings));
+			
+		} else {
+
+			Page<User> findFollowings = followService.findFollowings(followingUserId, page);
+
+			List<User> findFollowingsList = followService.findFollowingsList(findUser.getId(), findFollowings);
+
+			PageImpl<FollowDto.FollowingResponse> responsePage =
+				followMapper.followingsToFollowingResponses(findFollowings, findFollowingsList);
+
+			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowings));
+		}
 	}
 }
