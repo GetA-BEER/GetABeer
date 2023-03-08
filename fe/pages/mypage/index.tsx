@@ -54,7 +54,7 @@ export default function Mypage() {
           axios
             .post('/api/user/logout')
             .then((res) => {
-              console.log(res);
+              // console.log(res);
               setAccessToken('');
               setUserId('');
               setUserName('');

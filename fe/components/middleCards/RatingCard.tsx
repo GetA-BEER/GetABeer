@@ -19,6 +19,7 @@ import Image from 'next/image';
 import { HiTrash, HiOutlineChat } from 'react-icons/hi';
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import { MdModeEdit } from 'react-icons/md';
+import { RiAlarmWarningFill } from 'react-icons/ri';
 import Tag from '../Tag';
 import { TagMatcherToKor } from '@/utils/TagMatcher';
 import { useRouter } from 'next/router';
@@ -116,7 +117,19 @@ export default function RatingCard(props: {
                 <span className="text-y-black text-xs">삭제</span>
               </button>
             </div>
-          ) : null}
+          ) : (
+            <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
+              <button
+                className="flex items-center mr-1"
+                onClick={() => {
+                  console.log('신고하기');
+                }}
+              >
+                <RiAlarmWarningFill className="mb-[1px]" />
+                <span className="text-y-black ml-[1px]">신고하기</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="m-2 flex flex-wrap">

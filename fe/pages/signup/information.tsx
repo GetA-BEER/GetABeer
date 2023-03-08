@@ -61,7 +61,7 @@ export default function Information() {
     axios
       .post(`/api/register/user/${Router.query.user_id}`, reqBody)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         swal.fire({
           title: '회원가입 완료!',
           text: '로그인 후 이용하세요',

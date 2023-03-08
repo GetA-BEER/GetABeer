@@ -4,11 +4,13 @@ type InputProps = {
   inputState: string;
   setInputState: React.Dispatch<React.SetStateAction<string>>;
   postFunc: Function;
+  placeholder?: string;
 };
 export default function CommentInput({
   inputState,
   setInputState,
   postFunc,
+  placeholder,
 }: InputProps) {
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputState(e.target.value);
@@ -23,7 +25,7 @@ export default function CommentInput({
         minRows={1}
         maxRows={6}
         className="w-full rounded-l-lg p-2 border border-y-lightGray focus:outline-y-gold placeholder-slate-300 font-light resize-none"
-        placeholder="댓글을 남겨보세요"
+        placeholder={placeholder || '댓글을 남겨보세요'}
         value={inputState}
         maxLength={1000}
         onChange={(e) => {
@@ -39,7 +41,7 @@ export default function CommentInput({
         className="w-[70px] bg-y-gold rounded-r-lg px-3 py-1 text-xs text-y-black hover:text-white"
         onClick={handleSubmit}
       >
-        등록
+        {placeholder ? '보내기' : '등록'}
       </button>
     </form>
   );

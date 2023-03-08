@@ -57,7 +57,7 @@ export default function OauthInformation() {
     axios
       .post(`/api/register/user/${Router.query.user_id}`, reqBody)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         swal.fire({
           title: 'Get A Beer',
           text: '로그인이 완료되었습니다.',
