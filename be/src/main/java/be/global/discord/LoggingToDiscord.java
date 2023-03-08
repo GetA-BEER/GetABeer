@@ -35,7 +35,7 @@ public class LoggingToDiscord {
 			String host = InetAddress.getLocalHost().getHostName();
 
 			WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
-			embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("💯서버 실행돼따~~~~~", null));
+			embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("🎉🎉🎉서버 실행 확인🎉🎉🎉", null));
 			embedBuilder.setColor(0x5ced73);
 			embedBuilder.setDescription(host + " 에서 " + ip + " 서버가 정상적으로 실행되었습니다.");
 			client.send(embedBuilder.build());
