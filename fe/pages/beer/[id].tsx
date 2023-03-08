@@ -31,7 +31,9 @@ export default function Beer() {
   const router = useRouter();
   const [curRoute, setCurRoute] = useState<number | undefined>();
   useEffect(() => {
-    setCurRoute(Number(router.query.id));
+    if (router.query.id !== undefined) {
+      setCurRoute(Number(router.query.id));
+    }
   }, [router, curRoute]);
 
   const [beerInfo, setBeerInfo] = useState<BeerInfo>();
