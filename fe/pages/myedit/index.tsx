@@ -14,7 +14,8 @@ import Image from 'next/image';
 import { BiErrorAlt } from 'react-icons/bi';
 import Router from 'next/router';
 import { EditImg } from '@/components/signup/EditImg';
-
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 interface IFormValues {
   userBeerTags: Array<string>;
   gender: string;
@@ -46,17 +47,19 @@ export default function MyEdit() {
   const [nameMessage, setNameMessage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
   const image = watch('image');
-
+  const [TOKEN, setAccessToken] = useRecoilState(accessToken);
   useEffect(() => {
-    axios
-      .get('api/user')
-      .then((res) => {
-        // console.log(res.data);
-        setUserImge(res.data.imageUrl);
-        reset(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, [reset]);
+    if (TOKEN) {
+      axios
+        .get('api/user')
+        .then((res) => {
+          // console.log(res.data);
+          setUserImge(res.data.imageUrl);
+          reset(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [TOKEN, reset]);
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
     // console.log(data);

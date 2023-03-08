@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Pagenation from '@/components/Pagenation';
 import { SearchMatcherToKor } from '@/utils/SearchMatcher';
 import BackBtn from '@/components/button/BackPageBtn';
+import FollowUser, { FollowProps } from '@/components/followPage/FollowUser';
 
 export default function Search() {
   const router = useRouter();
@@ -18,24 +19,29 @@ export default function Search() {
   const [searchResultList, setSearchResultList] = useState<SearchCardProps[]>(
     []
   );
-
+  const [userList, setUserList] = useState<FollowProps[]>([]);
+  const searchQuery = router.query.q;
   useEffect(() => {
-    if (router.query.q && typeof router.query.q === 'string') {
+    if (searchQuery && typeof searchQuery === 'string') {
       axios
         .get(
-          `/api/search?query=${encodeURIComponent(router.query.q)}&page=${page}`
+          `/api/search?query=${encodeURIComponent(searchQuery)}&page=${page}`
         )
         .then((res) => {
-          setSearchResultList(res.data.data);
+          if (searchQuery.includes('@') === true) {
+            setUserList(res.data.data);
+          } else {
+            setSearchResultList(res.data.data);
+          }
           setTotalPages(res.data.pageInfo.totalPages);
         })
         .catch((err) => console.log(err));
     }
-  }, [router.query.q, page]);
+  }, [searchQuery, page]);
 
   return (
     <PageContainer>
-      <main className="px-2">
+      <main>
         <BackBtn />
         <div className="flex justify-center m-4">
           <h1 className="font-bold text-xl lg:text-2xl">
@@ -48,27 +54,55 @@ export default function Search() {
           </h1>
         </div>
         <div className="m-4">
-          {searchResultList.length === 0 ? (
-            <div className="noneContent py-8">
-              <Image
-                className="m-auto pb-3 opacity-50"
-                src="/images/logo.png"
-                alt="logo"
-                width={40}
-                height={40}
-              />
-              검색 결과가 없습니다.
+          {userList.length === 0 ? (
+            <div>
+              {searchResultList.length === 0 ? (
+                <div className="noneContent py-8">
+                  <Image
+                    className="m-auto pb-3 opacity-50"
+                    src="/images/logo.png"
+                    alt="logo"
+                    width={40}
+                    height={40}
+                  />
+                  검색 결과가 없습니다.
+                </div>
+              ) : (
+                searchResultList.map((el, idx) => {
+                  return (
+                    <Link key={el.beerId} href={`/beer/${el.beerId}`}>
+                      <SearchCard cardProps={el} idx={idx} />
+                    </Link>
+                  );
+                })
+              )}
             </div>
           ) : (
-            searchResultList.map((el, idx) => {
-              return (
-                <Link key={el.beerId} href={`/beer/${el.beerId}`}>
-                  <SearchCard cardProps={el} idx={idx} />
-                </Link>
-              );
-            })
+            <div>
+              {userList.length === 0 ? (
+                <div className="noneContent">
+                  <Image
+                    className="m-auto pb-3 opacity-50"
+                    src="/images/logo.png"
+                    alt="logo"
+                    width={40}
+                    height={40}
+                  />
+                  검색 결과가 없습니다.
+                </div>
+              ) : (
+                <div className="m-2 border divide-y divide-gray-200 rounded-xl">
+                  {userList.map((el: FollowProps) => (
+                    <div key={el.nickname}>
+                      <FollowUser followprops={el} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
+
         {searchResultList.length ? (
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         ) : null}
