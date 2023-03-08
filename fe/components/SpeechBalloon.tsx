@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { HiTrash } from 'react-icons/hi';
 import { MdModeEdit } from 'react-icons/md';
+import { GiSiren } from 'react-icons/gi';
 import axios from '@/pages/api/axios';
-import Image from 'next/image';
 import { TimeHandler } from '@/utils/TimeHandler';
 import CommentInput from './inputs/CommentInput';
 import Swal from 'sweetalert2';
@@ -120,7 +120,19 @@ export default function SpeechBalloon({
                 <span className="text-y-black">삭제</span>
               </button>
             </div>
-          ) : null}{' '}
+          ) : (
+            <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
+              <button
+                className="flex items-center mr-1"
+                onClick={() => {
+                  console.log('신고하기');
+                }}
+              >
+                <GiSiren className="mb-[1px]" />
+                <span className="text-y-black ml-[1px]">수정</span>
+              </button>
+            </div>
+          )}
         </div>
         {isEditMode ? (
           <CommentInput

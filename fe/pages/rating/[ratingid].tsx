@@ -93,7 +93,7 @@ export default function Rating() {
             </h1>
           </div>
         </Link>
-        <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
+        <div className="border border-y-lightGray rounded-lg px-2 py-4">
           {cardProps !== undefined ? (
             <RatingCard
               cardProps={cardProps}
@@ -101,33 +101,35 @@ export default function Rating() {
               count={ratingCommentList ? ratingCommentList?.length : 0}
             />
           ) : null}
-          <div className="my-5">
-            <CommentInput
-              inputState={inputState}
-              setInputState={setInputState}
-              postFunc={
-                isLogin
-                  ? postRatingComment
-                  : () => {
-                      Swal.fire({
-                        text: '로그인이 필요한 서비스 입니다.',
-                        showCancelButton: true,
-                        confirmButtonColor: '#f1b31c',
-                        cancelButtonColor: '#A7A7A7',
-                        confirmButtonText: '로그인',
-                        cancelButtonText: '취소',
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          router.push({
-                            pathname: '/login',
-                          });
-                        }
-                      });
-                    }
-              }
-            />
-          </div>
           <div>
+            <div className="px-2 my-5">
+              <CommentInput
+                inputState={inputState}
+                setInputState={setInputState}
+                postFunc={
+                  isLogin
+                    ? postRatingComment
+                    : () => {
+                        Swal.fire({
+                          text: '로그인이 필요한 서비스 입니다.',
+                          showCancelButton: true,
+                          confirmButtonColor: '#f1b31c',
+                          cancelButtonColor: '#A7A7A7',
+                          confirmButtonText: '로그인',
+                          cancelButtonText: '취소',
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            router.push({
+                              pathname: '/login',
+                            });
+                          }
+                        });
+                      }
+                }
+              />
+            </div>
+          </div>
+          <div className="mr-1 -ml-1">
             {ratingCommentList === null
               ? null
               : ratingCommentList.map((el) => {
@@ -135,7 +137,7 @@ export default function Rating() {
                     <SpeechBalloon
                       key={el.ratingCommentId}
                       props={el}
-                      isMine={isMine}
+                      isMine={USERID === el.userId}
                       deleteFunc={deleteRatingComment}
                     />
                   );
