@@ -189,12 +189,16 @@ export default function UserPage() {
         <div>
           <div className="flex gap-3 p-2 justify-center">
             <div className="relative rounded-full w-20 h-20 self-center">
-              <Image
-                alt=" user profile image"
-                src={userImg}
-                fill
-                className="object-cover rounded-full"
-              />
+              {userImg ? (
+                <Image
+                  alt=" user profile image"
+                  src={userImg}
+                  fill
+                  className="object-cover rounded-full"
+                />
+              ) : (
+                <></>
+              )}
             </div>
             <div className="p-1 self-center">
               <div>{userName}님</div>

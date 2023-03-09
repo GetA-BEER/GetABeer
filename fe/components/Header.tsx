@@ -14,24 +14,24 @@ export default function Header() {
   const [isSearching, setIsSearching] = useState(false);
   const [TOKEN, setAccessToken] = useRecoilState(accessToken);
 
-  useEffect(() => {
-    if (TOKEN) {
-      const config = {
-        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-        withCredentials: true,
-      };
-      axios
-        .post('/api/refresh', {}, config)
-        .then((res) => {
-          setAccessToken(res.headers.authorization);
-          axios.defaults.headers.common['Authorization'] =
-            res.headers.authorization;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [TOKEN, setAccessToken]);
+  // useEffect(() => {
+  //   if (TOKEN) {
+  //     const config = {
+  //       headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+  //       withCredentials: true,
+  //     };
+  //     axios
+  //       .post('/api/refresh', {}, config)
+  //       .then((res) => {
+  //         setAccessToken(res.headers.authorization);
+  //         axios.defaults.headers.common['Authorization'] =
+  //           res.headers.authorization;
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [TOKEN, setAccessToken]);
   return (
     <div className="w-full bg-white sticky top-0 z-10 border-b mb-6">
       <div className="flex justify-between items-center max-w-4xl m-auto h-16 border-y-lightGray ">
