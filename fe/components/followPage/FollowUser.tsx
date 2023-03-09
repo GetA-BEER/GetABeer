@@ -86,7 +86,9 @@ export default function FollowUser(props: { followprops: FollowProps }) {
               <CloseBtn onClick={followClick}>팔로잉</CloseBtn>
             )}
           </div>
-        ) : null}
+        ) : (
+          <div className="my-2 p-3 text-center text-sm">🍋 Me 🍋</div>
+        )}
       </div>
     </div>
   );
