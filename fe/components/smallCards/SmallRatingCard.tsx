@@ -154,17 +154,17 @@ export default function SmallRatingCard({ ratingProps }: any) {
             <span className="w-[70%] text-end truncate pr-[2px]">
               {ratingList?.nickname}
             </span>
-            {ratingList?.userImage === null ? (
-              <></>
-            ) : (
+            {ratingList?.userImage ? (
               <Image
-                src={ratingList?.userImage}
                 alt="userImg"
+                src={ratingList?.userImage}
                 width={100}
                 height={100}
                 className="w-4 h-4 rounded-full"
                 priority
               />
+            ) : (
+              <></>
             )}
           </span>
         </div>

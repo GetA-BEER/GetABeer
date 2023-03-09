@@ -14,19 +14,23 @@ export default function Wish() {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [TOKEN] = useRecoilState(accessToken);
-  const [username] = useRecoilState(userNickname);
-  const router = useRouter();
+  const [username, setUserName] = useState('');
+
   useEffect(() => {
-    if (TOKEN === '') {
-      router.push('/');
+    if (TOKEN !== '') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios
+        .get(`/api/mypage/wishlist?&page=${page}`, config)
+        .then((response) => {
+          setWishList(response.data.data);
+          setTotalPages(response.data.pageInfo.totalPages);
+          setUserName(response.data.nickname);
+        });
     }
-  }, [TOKEN, router]);
-  useEffect(() => {
-    axios.get(`/api/mypage/wishlist?&page=${page}`).then((response) => {
-      setWishList(response.data.data);
-      setTotalPages(response.data.pageInfo.totalPages);
-    });
-  }, [page]);
+  }, [TOKEN, page]);
 
   return (
     <>

@@ -46,22 +46,25 @@ export default function SimilarBeer({ similarBeer }: any) {
                       <></>
                     ) : (
                       <span>
-                        {el?.beerCategories.map(
+                        {el?.beerCategories?.map(
                           (category: any, idx: number) => (
                             <span key={idx}>
                               {BeerCategoryMatcherToKor(
-                                category.beerCategoryType
-                              )}{' '}
+                                category?.beerCategoryType
+                              )}
                               /
                             </span>
                           )
                         )}
                       </span>
                     )}
-                    <span className="ml-1">
-                      {BeerCountryMatcherToKor(el?.country)} / {el?.abv}%
-                    </span>
-                    {el?.ibu === null ? <></> : <span>{el?.ibu}IBU</span>}
+                    {el?.country === null ? (
+                      <></>
+                    ) : (
+                      <span>{BeerCountryMatcherToKor(el?.country)}/</span>
+                    )}
+                    {el?.abv === null ? <></> : <span>{el?.abv}%</span>}
+                    {el?.ibu === null ? <></> : <span>/{el?.ibu}IBU</span>}
                   </div>
                 </div>
                 <Image
