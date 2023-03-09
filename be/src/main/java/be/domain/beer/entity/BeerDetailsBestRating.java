@@ -31,7 +31,7 @@ public class BeerDetailsBestRating {
 	public Rating createRating() {
 		return Rating.builder()
 			.id(bestRatingId)
-			.nickname(bestNickname)
+			// .nickname(bestNickname)
 			.star(bestStar)
 			.content(bestContent)
 			.build();

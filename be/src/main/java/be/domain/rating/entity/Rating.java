@@ -40,8 +40,6 @@ public class Rating extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String nickname;
-
 	@Column(columnDefinition = "TEXT")
 	private String content;
 
@@ -119,11 +117,10 @@ public class Rating extends BaseTimeEntity {
 		this.star = star;
 	}
 
-	public void saveDefault(Beer beer, User user, RatingTag ratingTag, String nickname,
+	public void saveDefault(Beer beer, User user, RatingTag ratingTag,
 		Integer likeCount, Integer commentCount, List<RatingComment> ratingCommentList) {
 		this.beer = beer;
 		this.user = user;
-		this.nickname = nickname;
 		this.ratingTag = ratingTag;
 		this.likeCount = likeCount;
 		this.commentCount = commentCount;
