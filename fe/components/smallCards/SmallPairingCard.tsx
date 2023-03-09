@@ -87,6 +87,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
             <span className="w-[70%] text-end truncate pr-[2px]">
               {pairingList?.nickname}
             </span>
+
             {pairingList.userImage ? (
               <Image
                 alt="userImg"
@@ -109,10 +110,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
             }`}
             id="pairingParents"
           >
-            {pairingList?.thumbnail === '' ||
-            pairingList?.thumbnail === null ? (
-              <div id={`pairingImage${pairingList?.pairingId}`}></div>
-            ) : (
+            {pairingList?.thumbnail ? (
               <div className="h-[77px] w-auto overflow-hidden">
                 <Image
                   src={pairingList?.thumbnail}
@@ -124,6 +122,8 @@ export default function SmallPairingCard({ pairingProps }: any) {
                   priority
                 />
               </div>
+            ) : (
+              <div id={`pairingImage${pairingList?.pairingId}`}></div>
             )}
             {pairingList?.content === undefined ? (
               <div
