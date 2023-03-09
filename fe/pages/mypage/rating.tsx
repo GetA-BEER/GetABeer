@@ -41,11 +41,7 @@ export default function MyRating() {
             return (
               <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
                 <div className="border border-y-lightGray rounded-lg px-3 py-4">
-                  <RatingCard
-                    cardProps={el}
-                    isMine={false}
-                    count={el.commentCount}
-                  />
+                  <RatingCard cardProps={el} count={el.commentCount} />
                 </div>
               </Link>
             );

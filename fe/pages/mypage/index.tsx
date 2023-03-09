@@ -95,12 +95,18 @@ export default function Mypage() {
         </div>
         <div className="flex gap-3 px-2 pb-8 justify-center">
           <div className="relative rounded-full w-20 h-20 self-center">
-            <Image
-              alt=" user profile image"
-              src={userImg}
-              fill
-              className="object-cover rounded-full"
-            />
+            {userImg ? (
+              <Image
+                unoptimized
+                className="h-20 w-20 rounded-full"
+                alt="프로필사진"
+                src={userImg}
+                width={80}
+                height={80}
+              />
+            ) : (
+              <></>
+            )}
           </div>
           <div className="p-1 self-cente">
             <div
