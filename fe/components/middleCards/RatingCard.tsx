@@ -26,16 +26,17 @@ import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 
 export default function RatingCard(props: {
   cardProps: RatingCardProps;
-  isMine: boolean;
+  isMine?: boolean;
   count: number;
 }) {
   const router = useRouter();
   const TOKEN = useRecoilValue(accessToken);
+  const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
@@ -67,12 +68,21 @@ export default function RatingCard(props: {
         }
       });
   };
-
+  const userCheck = () => {
+    if (USERID !== props.cardProps.userId) {
+      router.push(`/userpage/${props.cardProps.userId}`);
+    } else {
+      router.push(`/mypage`);
+    }
+  };
   return (
     <div>
       <div className="flex justify-between">
         <div className="flex">
-          <div className="relative rounded-full w-7 h-7 ml-1">
+          <div
+            className="relative rounded-full w-7 h-7 ml-1"
+            onClick={userCheck}
+          >
             <Image
               alt="user profile image"
               src={props.cardProps.userImage}
@@ -80,7 +90,7 @@ export default function RatingCard(props: {
               className="object-cover rounded-full"
             />
           </div>
-          <div className="flex flex-col ml-2 text-xs">
+          <div className="flex flex-col ml-2 text-xs" onClick={userCheck}>
             <span>{props.cardProps.nickname}</span>
             <span className="text-[5px] text-y-gray">
               {ToDateString(props.cardProps.modifiedAt)}

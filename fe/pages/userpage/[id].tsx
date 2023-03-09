@@ -14,6 +14,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import CloseBtn from '@/components/button/CloseBtn';
 import Swal from 'sweetalert2';
+import Pagenation from '@/components/Pagenation';
 
 export default function UserPage() {
   const [pariginCardPops, setPairingCardProps] = useState<any>();
@@ -120,17 +121,16 @@ export default function UserPage() {
                 return (
                   <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
                     <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
-                      <RatingCard
-                        cardProps={el}
-                        isMine={false}
-                        count={el.commentCount}
-                      />
+                      <RatingCard cardProps={el} count={el.commentCount} />
                     </div>
                   </Link>
                 );
               })}
             </div>
           )}
+          {ratingList?.length ? (
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          ) : null}
         </div>
       ),
     },
@@ -151,7 +151,10 @@ export default function UserPage() {
               />
               등록된 페어링이 없습니다.
             </div>
-          )}
+          )}{' '}
+          {pariginCardPops?.length ? (
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          ) : null}
         </div>
       ),
     },

@@ -91,6 +91,7 @@ export default function SpeechBalloon({
             nickname={props?.nickname}
             date={date}
             userImage={props?.userImage}
+            userId={props?.userId}
           />
           {isMine ? (
             <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">

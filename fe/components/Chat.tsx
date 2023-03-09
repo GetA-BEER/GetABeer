@@ -4,11 +4,39 @@ import { IoClose } from 'react-icons/io5';
 import { ChatBalloonLeft, ChatBalloonRight } from './ChatBalloon';
 import CommentInput from './inputs/CommentInput';
 
+interface ChatProps {
+  time: number;
+  role: 'user' | 'mater';
+  msg: string;
+}
+
 export default function Chat() {
   const [open, setOpen] = useState(false);
   const [inputState, setInputState] = useState('');
+  const [chatList, setChatList] = useState<ChatProps[]>([]);
+
+  // if (typeof window !== 'undefined') {
+  //   const socket = new WebSocket('wss://f3ff-175-210-242-219.jp.ngrok.io/ws/');
+  //   console.log(socket, socket.readyState);
+  //   socket.addEventListener('open', () => {
+  //     console.log('드디어 서버와 연결되었다! ✅');
+  //   });
+  //   socket.addEventListener('message', (message) => {
+  //     console.log('서버로부터 온 메세지: ', message);
+  //   });
+  //   socket.onopen = () => {
+  //     socket.send('클라이언트에서 날리는 메시지');
+  //   };
+  // }
+
   const postChat = () => {
-    console.log('운영자에게 보냅니다', inputState);
+    if (inputState !== '') {
+      chatList.push({
+        time: new Date().getTime(),
+        role: 'user',
+        msg: inputState,
+      });
+    }
     setInputState('');
   };
   return (
@@ -30,10 +58,21 @@ export default function Chat() {
           <h3 className="text-y-gray text-xs font-thin my-0.5">
             응답시간: 평일 14:00~18:00 (주말/공휴일 휴무)
           </h3>
-          <div className="flex flex-col gap-y-2 border shadow-sm mb-1 py-1 rounded-lg w-full h-full overflow-scroll">
+          <ul className="flex flex-col gap-y-2 border shadow-sm mb-1 py-1 rounded-lg w-full h-full overflow-scroll">
             <ChatBalloonLeft>운영자가 말하는 말풍선</ChatBalloonLeft>
             <ChatBalloonRight>유저가 말하는 말풍선</ChatBalloonRight>
-          </div>
+            {chatList.map((el) => {
+              return (
+                <li key={el.time}>
+                  {el.role === 'user' ? (
+                    <ChatBalloonRight>{el.msg}</ChatBalloonRight>
+                  ) : (
+                    <ChatBalloonLeft>{el.msg}</ChatBalloonLeft>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
           <div>
             <CommentInput
               inputState={inputState}
