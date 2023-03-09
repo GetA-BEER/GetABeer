@@ -194,6 +194,7 @@ export default function UserPage() {
                   alt=" user profile image"
                   src={userImg}
                   fill
+                  sizes="100vw"
                   className="object-cover rounded-full"
                 />
               ) : (

@@ -31,6 +31,7 @@ export default function SearchCard(props: {
             alt={props.cardProps?.korName}
             src={props.cardProps?.thumbnail}
             fill
+            sizes="50vw"
             className="object-cover rounded-lg"
           />
         </div>

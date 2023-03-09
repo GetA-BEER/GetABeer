@@ -54,8 +54,7 @@ export default function MonthlyCard({
               alt={cardProps?.korName}
               src={cardProps?.thumbnail}
               fill
-              sizes="100vw"
-              priority
+              sizes="50vw"
               className="rounded-lg object-none object-top "
             />
           </div>
@@ -105,7 +104,7 @@ export default function MonthlyCard({
                     alt="user profile image"
                     src={cardProps?.bestRating?.profileImage}
                     fill
-                    sizes="100vw"
+                    sizes="50vw"
                     className="object-cover"
                   />
                 </div>
