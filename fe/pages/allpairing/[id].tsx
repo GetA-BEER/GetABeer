@@ -7,10 +7,13 @@ import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
 import Pagenation from '@/components/Pagenation';
 import Image from 'next/image';
+import { useRecoilState } from 'recoil';
 import BackBtn from '@/components/button/BackPageBtn';
+import { accessToken } from '@/atoms/login';
 
 export default function AllPairing() {
   let router = useRouter();
+  const [TOKEN] = useRecoilState<string>(accessToken);
   const [curRoute, setCurRoute] = useState<any>();
   const [sort, setSort] = useState<Sort>('mostlikes');
   const [title, setTitle] = useState<string>('');
@@ -26,18 +29,25 @@ export default function AllPairing() {
   useEffect(() => {
     if (curRoute !== undefined) {
       let tmpCategory = category.toLowerCase();
-      axios
-        .get(
-          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
-        )
-        .then((response) => {
-          setPairingCardProps(response.data);
-          setTotalPages(response.data.pageInfo.totalPages);
-          setTitle(response.data.pageInfo.beerKorName);
-        })
-        .catch((error) => console.log(error));
+      if (TOKEN !== '') {
+        const config = {
+          headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+          withCredentials: true,
+        };
+        axios
+          .get(
+            `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`,
+            config
+          )
+          .then((response) => {
+            setPairingCardProps(response.data);
+            setTotalPages(response.data.pageInfo.totalPages);
+            setTitle(response.data.pageInfo.beerKorName);
+          })
+          .catch((error) => console.log(error));
+      }
     }
-  }, [curRoute, sort, page, category]);
+  }, [curRoute, sort, page, category, TOKEN]);
 
   return (
     <>

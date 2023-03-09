@@ -86,14 +86,26 @@ export default function Mypage() {
           마이 페이지
         </div>
         <div className="flex flex-col items-center my-6">
-          <Image
+          {userImge ? (
+            <Image
+              unoptimized
+              className="h-20 w-20 rounded-full"
+              alt="프로필사진"
+              src={userImge}
+              width={80}
+              height={80}
+            />
+          ) : (
+            <></>
+          )}
+          {/* <Image
             unoptimized
             className="h-20 w-20 rounded-full"
             alt="프로필사진"
             src={userImge}
             width={80}
             height={80}
-          />
+          /> */}
           <div className="flex justify-center items-center gap-1 mt-2">
             <div className="text-sm">{name}</div>
             <div className="text-sm">님</div>

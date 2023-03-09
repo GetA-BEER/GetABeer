@@ -2,6 +2,8 @@ import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import axios from '@/pages/api/axios';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 // "isUserLikes": true,  "likeCount": 1,
 export default function PairingThumbs({
@@ -12,6 +14,8 @@ export default function PairingThumbs({
   likeCount,
   setLikeCount,
 }: any) {
+  const [TOKEN] = useRecoilState<string>(accessToken);
+
   const router = useRouter();
   const goToLogin = () => {
     Swal.fire({
@@ -31,8 +35,12 @@ export default function PairingThumbs({
   };
   const isUserLikeHandler = () => {
     if (isLogin) {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .post(`/api/pairings/likes?pairingId=${pairingId}`)
+        .post(`/api/pairings/likes?pairingId=${pairingId}`, config)
         .then((response) => {
           setIsLike(!isLike);
           if (isLike) {
