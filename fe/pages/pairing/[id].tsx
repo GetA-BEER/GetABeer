@@ -39,7 +39,7 @@ export default function PairingDetail() {
 
   useEffect(() => {
     // 특정 페어링 조회
-    if (curRoute !== undefined && TOKEN !== '') {
+    if (curRoute && TOKEN !== '') {
       const config = {
         headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
         withCredentials: true,

@@ -73,15 +73,15 @@ export default function AllPairing() {
             <div className="pb-32"></div>
           </>
         ) : (
-          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+          <div className="noneContent py-8">
             <Image
               className="m-auto pb-3 opacity-50"
               src="/images/logo.png"
               alt="logo"
-              width={100}
-              height={100}
+              width={40}
+              height={40}
             />
-            <span>등록된 페어링이 없습니다</span>
+            등록된 페어링이 없습니다.
           </div>
         )}
       </main>
