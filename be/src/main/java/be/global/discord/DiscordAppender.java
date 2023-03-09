@@ -1,5 +1,6 @@
 package be.global.discord;
 
+import java.io.File;
 import java.time.Instant;
 
 import ch.qos.logback.classic.Level;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class DiscordAppender extends AppenderBase<ILoggingEvent> {
+	private WebhookClient client;
 	private String webhookUri;
 
 	Layout<ILoggingEvent> layout;
@@ -49,24 +51,20 @@ public class DiscordAppender extends AppenderBase<ILoggingEvent> {
 	@Override
 	protected void append(ILoggingEvent eventObject) {
 		WebhookClientBuilder builder = new WebhookClientBuilder(webhookUri);
-		WebhookClient client = builder.build();
+		client = builder.build();
 
-		// if (eventObject.getLevel().toInt() == Level.ERROR_INT) {
-		// 	WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
-		// 	embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("🚨🚨🚨🚨🚨🚨에러 발생!!!!🚨🚨🚨🚨🚨🚨", null));
-		// 	// embedBuilder.setDescription(eventObject.getThreadName() + " " + eventObject.getLoggerName()
-		// 		/*+eventObject.getLevel() +
-		// 			eventObject.getFormattedMessage()
-		// 		 " "
-		// 		+ eventObject.getThreadName() + " "
-		// 		+ eventObject.getLoggerName() + " : "
-		// 		+ Arrays.toString(eventObject.getCallerData())); */
-		// 	// embedBuilder.addField(new WebhookEmbed.EmbedField(true,
-		// 	// 	eventObject.getThreadName() + " "
-		// 	// 	+ eventObject.getLoggerName(), Arrays.toString(eventObject.getCallerData())));
-		// 	embedBuilder.setColor(0xFF0000);
-		// 	embedBuilder.setTimestamp(Instant.ofEpochMilli(eventObject.getTimeStamp()));
-		// 	client.send(embedBuilder.build());
-		// }
+		if (eventObject.getLevel().toInt() == Level.ERROR_INT) {
+			WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
+			embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("🚨🚨🚨에러가 발생했습니다!!!!🚨🚨🚨", null));
+			embedBuilder.setDescription("[" + eventObject.getThreadName() + "] " + eventObject.getLoggerName());
+			embedBuilder.addField(new WebhookEmbed.EmbedField(
+				true,
+				"자세한 에러사항은 첨부파일을 확인해주세요.",
+				/*Arrays.toString(eventObject.getCallerData())*/ ""));
+			embedBuilder.setColor(0xFF0000);
+			embedBuilder.setTimestamp(Instant.ofEpochMilli(eventObject.getTimeStamp()));
+			client.send(embedBuilder.build());
+			client.send(new File("be/error/error.log"));
+		}
 	}
 }

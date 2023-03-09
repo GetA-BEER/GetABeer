@@ -1,11 +1,8 @@
 package be.global.discord;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -16,7 +13,6 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
-import jdk.jfr.Timestamp;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,7 +31,7 @@ public class LoggingToDiscord {
 			String host = InetAddress.getLocalHost().getHostName();
 
 			WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
-			embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("💯서버 실행돼따~~~~~", null));
+			embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("🎉🎉🎉서버 실행 확인🎉🎉🎉", null));
 			embedBuilder.setColor(0x5ced73);
 			embedBuilder.setDescription(host + " 에서 " + ip + " 서버가 정상적으로 실행되었습니다.");
 			client.send(embedBuilder.build());
