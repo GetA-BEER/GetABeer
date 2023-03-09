@@ -27,7 +27,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
             <!-- .gz,.zip 등을 넣으면 자동 분 당 로그파일 압축 -->
-            <fileNamePattern>be/error/error-%d{yyyy-MM-dd-HH-mm}-%i.log</fileNamePattern>
+            <fileNamePattern>be/error/error-%d{yyyy-MM-dd-HH-mm-ss-SSS}-%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- 파일당 최고 용량 kb, mb, gb -->
                 <maxFileSize>10MB</maxFileSize>
