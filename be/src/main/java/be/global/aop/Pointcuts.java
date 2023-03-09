@@ -42,4 +42,8 @@ public class Pointcuts {
 	public void clickRatingLike() {
 	}
 
+	@Pointcut("execution(* be.domain.user.service.UserService.updateUser(..))")
+	public void updateUser() {
+	}
+
 }

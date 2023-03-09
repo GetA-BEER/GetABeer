@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -93,7 +94,8 @@ public class BeerController {
 	public ResponseEntity<List<BeerDto.MonthlyBestResponse>> getMonthlyBeer() {
 
 		List<MonthlyBeer> monthlyBeerList = beerService.findMonthlyBeers();
-		List<BeerDto.MonthlyBestResponse> responses = beerMapper.beersToMonthlyBestBeerResponse(monthlyBeerList);
+		List<BeerDto.MonthlyBestResponse> responses =
+			beerMapper.beersToMonthlyBestBeerResponse(monthlyBeerList);
 
 		return ResponseEntity.ok(responses);
 	}
@@ -102,7 +104,8 @@ public class BeerController {
 	public ResponseEntity<List<BeerDto.WeeklyBestResponse>> getWeeklyBeer() {
 
 		List<WeeklyBeer> weeklyBeerList = beerService.findWeeklyBeers();
-		List<BeerDto.WeeklyBestResponse> responses = beerMapper.beersToWeeklyBestBeerResponse(weeklyBeerList);
+		List<BeerDto.WeeklyBestResponse> responses =
+			beerMapper.beersToWeeklyBestBeerResponse(weeklyBeerList);
 
 		return ResponseEntity.ok(responses);
 	}

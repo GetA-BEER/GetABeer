@@ -25,6 +25,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
+import be.domain.beer.repository.BeerQueryRepository;
 import be.domain.beer.repository.BeerRepository;
 import be.domain.beer.service.BeerService;
 import be.domain.beertag.entity.BeerTag;
@@ -54,6 +55,7 @@ public class GetABeerAop {
 	private final BeerTagService beerTagService;
 	private final RatingService ratingService;
 	private final BeerRepository beerRepository;
+	private final BeerQueryRepository beerQueryRepository;
 	private final TotalStatisticsRepository totalStatisticsRepository;
 	private final TotalStatisticsQueryRepository totalStatisticsQueryRepository;
 
@@ -160,7 +162,8 @@ public class GetABeerAop {
 		// ---------------------------------------------------------------------------------------
 		// ----------------------------------BEST RATING------------------------------------------
 
-		if (findBeer.getBeerDetailsBestRating() == null ||
+		if (findBeer.getBeerDetailsBestRating() == null
+			|| findBeer.getBeerDetailsBestRating().getBestLikeCount() == 0 &&
 			rating.getStar() >= findBeer.getBeerDetailsBestRating().getBestStar()) {
 			findBeer.updateBestRating(rating);
 		}
@@ -396,6 +399,47 @@ public class GetABeerAop {
 			}
 		}
 		beerRepository.save(findBeer);
+	}
+
+	@AfterReturning(value = "Pointcuts.updateUser() && args(edit)")
+	public void calculateStarsOnUpdateUser(JoinPoint joinPoint, User edit) {
+
+		User loginUser = userService.getLoginUser();
+		Gender loginUserGender = loginUser.getGender();
+		Gender updatedUserGender = edit.getGender();
+
+		List<Beer> beerList = beerQueryRepository.findRatedBeersListByUserId(loginUser.getId());
+
+		beerList.stream()
+			.map(beer -> {
+
+				Double star = beer.getRatingList().stream()
+					.filter(rating -> rating.getUser().getId().equals(loginUser.getId()))
+					.findFirst().get().getStar();
+
+				if (loginUserGender == Gender.REFUSE) {
+					if (updatedUserGender == Gender.FEMALE) {
+						beer.calculateFemaleAverageStars(star);
+					} else if (updatedUserGender == Gender.MALE) {
+						beer.calculateMaleAverageStars(star);
+					}
+				} else if (loginUserGender == Gender.FEMALE) {
+					if (updatedUserGender == Gender.REFUSE) {
+						beer.deleteFemaleAverageStars(star);
+					} else if (updatedUserGender == Gender.MALE) {
+						beer.deleteFemaleAverageStars(star);
+						beer.calculateMaleAverageStars(star);
+					}
+				} else if (loginUserGender == Gender.MALE) {
+					if (updatedUserGender == Gender.REFUSE) {
+						beer.calculateMaleAverageStars(star);
+					} else if (updatedUserGender == Gender.FEMALE) {
+						beer.deleteMaleAverageStars(star);
+						beer.calculateFemaleAverageStars(star);
+					}
+				}
+				return beerRepository.save(beer);
+			}).collect(Collectors.toList());
 	}
 
 	private void createStatCookie(HttpServletRequest request, HttpServletResponse response, Cookie cookie) {

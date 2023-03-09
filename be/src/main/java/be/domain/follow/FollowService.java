@@ -71,7 +71,7 @@ public class FollowService {
 
 	public List<User> findFollowingsList(Long followedUserId, Page<User> userPage) {
 		return userPage.stream()
-			.filter(user -> followQueryRepository.findFollowByUserIds(user.getId(), followedUserId) != null)
+			.filter(user -> followQueryRepository.findFollowByUserIds(followedUserId, user.getId()) != null)
 			.collect(Collectors.toList());
 	}
 

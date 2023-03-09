@@ -44,7 +44,7 @@ public class WeeklyBeer extends BaseTimeEntity implements Serializable {
 	private Double averageStar;
 
 	public void create(Beer beer) {
-		this.id = beer.getId();
+		this.beerId = beer.getId();
 		this.korName = beer.getBeerDetailsBasic().getKorName();
 		this.country = beer.getBeerDetailsBasic().getCountry();
 		this.thumbnail = beer.getBeerDetailsBasic().getThumbnail();

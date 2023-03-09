@@ -45,10 +45,10 @@ public class SearchService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<User> findUsersPageByQueryParam(String queryParam, Integer page) {
+	public Page<User> findUsersPageByQueryParam(User findUser, String queryParam, Integer page) {
 
 		PageRequest pageRequest = PageRequest.of(page - 1, 10);
 
-		return searchQueryRepository.findUsersPageByQueryParam(queryParam, pageRequest);
+		return searchQueryRepository.findUsersPageByQueryParam(findUser, queryParam, pageRequest);
 	}
 }

@@ -149,7 +149,7 @@ public class BeerTestConstants {
 			.beerId(1L)
 			.korName("한글 이름")
 			.thumbnail("썸네일 이미지 경로")
-			.beerCategories(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE))
+			.beerCategories(List.of("ALE"))
 			.country("생산 국가")
 			.abv(3.5)
 			.ibu(17)

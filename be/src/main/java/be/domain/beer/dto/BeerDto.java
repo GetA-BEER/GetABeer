@@ -70,7 +70,8 @@ public class BeerDto {
 		private List<String> category;
 		private Double abv;
 		private Integer ibu;
-		private BeerDetailsTopTags beerDetailsTopTags;
+		private List<String> beerDetailsTopTags;
+		// private BeerDetailsTopTags beerDetailsTopTags;
 		private Double totalAverageStar;
 		private Integer totalStarcount;
 		private String thumbnail;
@@ -82,6 +83,7 @@ public class BeerDto {
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class MonthlyBestResponse {
 
+		private Long monthlyBeerId;
 		private Long beerId;
 		private String korName;
 		// private List<String> beerDetailsTopTags;
@@ -99,10 +101,11 @@ public class BeerDto {
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class WeeklyBestResponse {
 
+		private Long weeklyBeerId;
 		private Long beerId;
 		private String korName;
 		private String thumbnail;
-		private List<BeerCategoryDto.Response> beerCategories;
+		private List<String> beerCategories;
 		private String country;
 		private Double abv;
 		private Integer ibu;
@@ -115,6 +118,7 @@ public class BeerDto {
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class RecommendResponse {
 
+		private Long weeklyBeerId;
 		private Long beerId;
 		private String korName;
 		private String thumbnail;
@@ -172,7 +176,5 @@ public class BeerDto {
 		// private BeerDetailsTopTags beerDetailsTopTags;
 		private BeerDetailsStars beerDetailsStars;
 		private BeerDetailsCounts beerDetailsCounts;
-		private List<SimilarResponse> similarBeers;
-
 	}
 }

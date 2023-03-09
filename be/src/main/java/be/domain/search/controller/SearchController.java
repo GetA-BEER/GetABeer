@@ -50,7 +50,7 @@ public class SearchController {
 
 			if (userService.getLoginUserReturnNull() != null) {
 
-				Page<User> userPage = searchService.findUsersPageByQueryParam(queryParam, page);
+				Page<User> userPage = searchService.findUsersPageByQueryParam(null, queryParam, page);
 				PageImpl<UserDto.UserSearchResponse> responsePage;
 
 				User findUser = userService.getLoginUser();
@@ -61,7 +61,8 @@ public class SearchController {
 				return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), userPage));
 			} else {
 
-				Page<User> userPage = searchService.findUsersPageByQueryParam(queryParam, page);
+				User findUser = userService.getLoginUserReturnNull();
+				Page<User> userPage = searchService.findUsersPageByQueryParam(findUser, queryParam, page);
 				PageImpl<UserDto.UserSearchResponse> responsePage;
 
 				responsePage = userMapper.userToUserSearchResponses(userPage, followQueryRepository);

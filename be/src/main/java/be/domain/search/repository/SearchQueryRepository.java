@@ -40,11 +40,19 @@ public class SearchQueryRepository {
 
 		List<Beer> fullTextResultList = jpaQueryFactory
 			.selectFrom(beer)
+			.where(korName.likeIgnoreCase(queryParam)
+				.or(engName.likeIgnoreCase(queryParam)))
+			.fetch();
+
+		List<Beer> fullTextContainsResultList = jpaQueryFactory
+			.selectFrom(beer)
 			.where(korName.containsIgnoreCase(queryParam)
 				.or(engName.containsIgnoreCase(queryParam)))
 			.fetch();
 
 		log.info("#####: " + fullTextResultList);
+
+		fullTextResultList.addAll(fullTextContainsResultList);
 
 		for (String query : queryParamArr) {
 
@@ -139,9 +147,14 @@ public class SearchQueryRepository {
 		return new PageImpl<>(beerList, pageable, total);
 	}
 
-	public Page<User> findUsersPageByQueryParam(String queryParam, Pageable pageable) {
+	public Page<User> findUsersPageByQueryParam(User loginUser, String queryParam, Pageable pageable) {
 
 		queryParam = queryParam.substring(1);
+
+		User findUser = jpaQueryFactory
+			.selectFrom(user)
+			.where(user.nickname.like(queryParam))
+			.fetchOne();
 
 		List<User> userList = jpaQueryFactory
 			.selectFrom(user)
@@ -157,6 +170,13 @@ public class SearchQueryRepository {
 			.where(user.nickname.contains(queryParam))
 			.fetchOne();
 
-		return new PageImpl<>(userList, pageable, total);
+		if (findUser != null) {
+			userList.add(0, findUser);
+			List<User> result = userList.stream().distinct().collect(Collectors.toList());
+			return new PageImpl<>(result, pageable, total + 1);
+		} else {
+			return new PageImpl<>(userList, pageable, total);
+		}
+
 	}
 }
