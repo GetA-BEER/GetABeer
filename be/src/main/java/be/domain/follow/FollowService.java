@@ -69,9 +69,16 @@ public class FollowService {
 		return followQueryRepository.findFollowersByUserId(userId, pageRequest);
 	}
 
-	public List<User> findFollowingsList(Long followedUserId, Page<User> userPage) {
+	public Page<User> findFollowersWithLoginUser(Long loginUserId, Long userId, Integer page) {
+
+		PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+		return followQueryRepository.findFollowersWithLoginUserByUserId(loginUserId, userId, pageRequest);
+	}
+
+	public List<User> findFollowingsList(Long followingUserId, Page<User> userPage) {
 		return userPage.stream()
-			.filter(user -> followQueryRepository.findFollowByUserIds(followedUserId, user.getId()) != null)
+			.filter(user -> followQueryRepository.findFollowByUserIds(followingUserId, user.getId()) != null)
 			.collect(Collectors.toList());
 	}
 
