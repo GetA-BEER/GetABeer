@@ -2,15 +2,12 @@ package be.utils;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Age;
 import be.domain.user.entity.enums.Gender;
 
-public class UserTestConstants {
+public class UserControllerConstants {
 
 	public static final UserDto.RegisterPost USER_REGISTER_POST_DTO =
 		UserDto.RegisterPost.builder()

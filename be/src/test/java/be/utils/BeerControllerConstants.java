@@ -17,7 +17,7 @@ import be.domain.beertag.dto.BeerTagDto;
 import be.domain.beertag.entity.BeerTagType;
 import lombok.Getter;
 
-public class BeerTestConstants {
+public class BeerControllerConstants {
 
 	public static final BeerCategoryDto.Response BEER_CATEGORY_WITH_ID_AND_TYPE =
 		BeerCategoryDto.Response.builder()

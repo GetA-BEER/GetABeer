@@ -1,10 +1,9 @@
 package be.controller;
 
 import static be.utils.ApiDocumentUtils.*;
-import static be.utils.UserTestConstants.*;
+import static be.utils.UserControllerConstants.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -20,25 +19,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.beust.ah.A;
 import com.google.gson.Gson;
 
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
-import be.domain.user.entity.enums.Age;
-import be.domain.user.entity.enums.Gender;
 import be.domain.user.mapper.UserMapper;
 import be.domain.user.service.UserService;
-import be.global.security.auth.userdetails.AuthUser;
 import be.global.security.auth.userdetails.UserDetailService;
 
 @Transactional

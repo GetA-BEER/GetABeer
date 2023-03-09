@@ -2,7 +2,7 @@
 package be.controller;
 
 import static be.utils.ApiDocumentUtils.*;
-import static be.utils.BeerTestConstants.*;
+import static be.utils.BeerControllerConstants.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,10 +54,6 @@ public class BeerControllerRestDocs {
 	private BeerService beerService;
 	@MockBean
 	private BeerWishlistService beerWishlistService;
-
-	@BeforeEach
-	private void init() {
-	}
 
 	@Test
 	void postBeerTest() throws Exception {
