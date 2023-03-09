@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import { BsChatDotsFill, BsPersonCircle } from 'react-icons/bs';
 import { IoClose } from 'react-icons/io5';
 import { ChatBalloonLeft, ChatBalloonRight } from './ChatBalloon';
@@ -14,6 +14,14 @@ export default function Chat() {
   const [open, setOpen] = useState(false);
   const [inputState, setInputState] = useState('');
   const [chatList, setChatList] = useState<ChatProps[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (chatList.length <= 10) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      bottomRef.current?.scrollIntoView({ behavior: 'auto' });
+    }
+  }, [open, chatList]);
 
   // if (typeof window !== 'undefined') {
   //   const socket = new WebSocket('wss://f3ff-175-210-242-219.jp.ngrok.io/ws/');
@@ -29,18 +37,31 @@ export default function Chat() {
   //   };
   // }
 
+  const inputValid = (str: string) => {
+    const strTrim = str.trim();
+    if (str === (`\n` || '')) {
+      return false;
+    } else if (strTrim === '') {
+      return false;
+    } else {
+      return true;
+    }
+  };
   const postChat = () => {
-    if (inputState.length > 1) {
-      chatList.push({
-        time: new Date().getTime(),
-        role: 'user',
-        msg: inputState,
-      });
+    if (inputValid(inputState)) {
+      setChatList([
+        ...chatList,
+        {
+          time: new Date().getTime(),
+          role: 'user',
+          msg: inputState,
+        },
+      ]);
     }
     setInputState('');
   };
   return (
-    <div className=" bottom-[64px] right-3 z-[2]">
+    <div>
       {open ? (
         <div className="flex flex-col w-[280px] h-[350px] md:w-[400px] md:h-[480px] p-2 rounded-2xl border border-y-lightGray bg-white shadow-lg shadow-y-gray">
           <h1 className="flex justify-between items-center">
@@ -55,12 +76,31 @@ export default function Chat() {
               <IoClose className="w-6 h-6" />
             </button>
           </h1>
-          <h3 className="text-y-gray text-xs font-thin my-0.5">
+          <h3 className="flex items-start text-y-gray text-xs font-thin my-0.5">
             응답시간: 평일 14:00~18:00 (주말/공휴일 휴무)
           </h3>
-          <ul className="flex flex-col gap-y-2 border shadow-sm mb-1 py-1 rounded-lg w-full h-full overflow-scroll">
-            <ChatBalloonLeft>운영자가 말하는 말풍선</ChatBalloonLeft>
-            <ChatBalloonRight>유저가 말하는 말풍선</ChatBalloonRight>
+          <ul className="flex flex-col gap-y-2 border shadow-sm mb-1 p-1 rounded-lg w-full h-full overflow-scroll">
+            <ChatBalloonLeft>
+              안녕하세요. Get A Beer 운영자입니다.
+              <br />
+              <br />
+              문의주시는 내용은 내부 검토 후 <br />
+              빠르게 답변 및 반영하겠습니다.
+              <br />
+              <br />
+              +새로운 맥주가 추가되길 원하시면, <br />
+              아래 버튼을 누르고 맥주의 이름을 <br />
+              정확하게 입력하여 보내주세요.
+              <br />
+              <button
+                className="bg-white text-y-brown rounded-lg px-12 mb-1"
+                onClick={() => {
+                  setInputState('신청하는 맥주 이름: ');
+                }}
+              >
+                맥주 등록신청
+              </button>
+            </ChatBalloonLeft>
             {chatList.map((el) => {
               return (
                 <li key={el.time}>
@@ -72,6 +112,7 @@ export default function Chat() {
                 </li>
               );
             })}
+            <div ref={bottomRef} />
           </ul>
           <div>
             <CommentInput
