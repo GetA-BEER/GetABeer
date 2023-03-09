@@ -49,6 +49,41 @@ public class FollowQueryRepository {
 		return new PageImpl<>(followList, pageable, total);
 	}
 
+	public Page<User> findFollowersWithLoginUserByUserId(Long loginUserId, Long userId, Pageable pageable) {
+
+		User loginUser =
+			jpaQueryFactory.select(follow.followingUser)
+				.from(follow)
+				.where(follow.followingUser.id.eq(loginUserId).and(follow.followedUser.id.eq(userId)))
+				.fetchFirst();
+
+		List<User> followList =
+			jpaQueryFactory.select(follow.followingUser)
+				.from(follow)
+				// .join(follow.followingUser, user)
+				.where(follow.followingUser.id.ne(loginUserId))
+				.where(follow.followedUser.id.eq(userId))
+				.orderBy(follow.createdAt.desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetch();
+
+		Long total =
+			jpaQueryFactory.select(follow.followingUser.count())
+				.from(follow)
+				// .join(follow.followingUser, user)
+				.where(follow.followedUser.id.eq(userId))
+				.fetchOne();
+
+		if (loginUser != null) {
+			followList.add(0, loginUser);
+			total = total + 1;
+			return new PageImpl<>(followList, pageable, total);
+		} else {
+			return new PageImpl<>(followList, pageable, total);
+		}
+	}
+
 	public Page<User> findFollowingsByUserId(Long userId, Pageable pageable) {
 
 		List<User> followList =

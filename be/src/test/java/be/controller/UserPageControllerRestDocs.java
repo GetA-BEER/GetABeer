@@ -34,6 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 
+import be.domain.comment.mapper.PairingCommentMapper;
+import be.domain.comment.mapper.RatingCommentMapper;
 import be.domain.like.repository.PairingLikeRepository;
 import be.domain.like.repository.RatingLikeRepository;
 import be.domain.pairing.mapper.PairingMapper;
@@ -73,6 +75,10 @@ public class UserPageControllerRestDocs {
 	private PairingMapper pairingMapper;
 	@MockBean
 	private MyPageMultiResponseDto myPageMultiResponseDto;
+	@MockBean
+	private RatingCommentMapper ratingCommentMapper;
+	@MockBean
+	private PairingCommentMapper pairingCommentMapper;
 
 	@Test
 	void getMyRatingsTest() throws Exception {
@@ -158,6 +164,178 @@ public class UserPageControllerRestDocs {
 						fieldWithPath(".data[].content").type(JsonFieldType.STRING).description("페어링 내용"),
 						fieldWithPath(".data[].thumbnail").type(JsonFieldType.STRING).description("페어링 사진"),
 						fieldWithPath(".data[].category").type(JsonFieldType.STRING).description("페어링 카테고리"),
+						fieldWithPath(".data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 숫자"),
+						fieldWithPath(".data[].commentCount").type(JsonFieldType.NUMBER).description("코멘트 숫자"),
+						fieldWithPath(".data[].isUserLikes").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+						fieldWithPath(".data[].createdAt").type(JsonFieldType.STRING).description("작성 시간"),
+						fieldWithPath(".data[].modifiedAt").type(JsonFieldType.STRING).description("마지막 수정 시간"),
+						fieldWithPath(".pageInfo").type(JsonFieldType.OBJECT).description("Pageble 설정"),
+						fieldWithPath(".pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 번호"),
+						fieldWithPath(".pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+						fieldWithPath(".pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 레이팅 수"),
+						fieldWithPath(".pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+					)
+				)));
+	}
+
+	@Test
+	void getMyRatingCommentsTest() throws Exception {
+
+		Integer page = 1;
+
+		given(userPageService.getUserRatingComment(anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
+		given(ratingCommentMapper.ratingCommentsToResponsePage(Mockito.any(Page.class)))
+			.willReturn(MY_RATING_COMMENT_RESPONSE_PAGE);
+		given(userService.getLoginUser()).willReturn(User.builder().build());
+
+		ResultActions actions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/mypage/comment/rating?page={page}", page)
+					.accept(MediaType.APPLICATION_JSON)
+			);
+
+		actions
+			.andExpect(status().isOk())
+			.andDo(document(
+				"Get_My_Rating_Comment",
+				requestParameters(
+					parameterWithName("page").description("페이지 번호")
+				),
+				responseFields(
+					List.of(
+						fieldWithPath("data.").type(JsonFieldType.ARRAY).description("결과 데이터"),
+						fieldWithPath(".data[].ratingId").type(JsonFieldType.NUMBER).description("레이팅 아이디"),
+						fieldWithPath(".data[].ratingCommentId").type(JsonFieldType.NUMBER).description("레이팅 코멘트 아이디"),
+						fieldWithPath(".data[].userId").type(JsonFieldType.NUMBER).description("사용자 아이디"),
+						fieldWithPath(".data[].nickname").type(JsonFieldType.STRING).description("닉네임"),
+						fieldWithPath(".data[].userImage").type(JsonFieldType.STRING).description("프로필 이미지"),
+						fieldWithPath(".data[].content").type(JsonFieldType.STRING).description("레이팅 내용"),
+						fieldWithPath(".data[].createdAt").type(JsonFieldType.STRING).description("작성 시간"),
+						fieldWithPath(".data[].modifiedAt").type(JsonFieldType.STRING).description("마지막 수정 시간"),
+						fieldWithPath(".pageInfo").type(JsonFieldType.OBJECT).description("Pageble 설정"),
+						fieldWithPath(".pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 번호"),
+						fieldWithPath(".pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+						fieldWithPath(".pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 레이팅 수"),
+						fieldWithPath(".pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+					)
+				)));
+	}
+
+	@Test
+	void getMyPairingCommentsTest() throws Exception {
+
+		Integer page = 1;
+
+		given(userPageService.getUserPairingComment(anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
+		given(pairingCommentMapper.pairingCommentsToPageResponse(Mockito.any(Page.class)))
+			.willReturn(MY_PAIRING_COMMENT_RESPONSE_PAGE);
+		given(userService.getLoginUser()).willReturn(User.builder().build());
+
+		ResultActions actions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/mypage/comment/pairing?page={page}", page)
+					.accept(MediaType.APPLICATION_JSON)
+			);
+
+		actions
+			.andExpect(status().isOk())
+			.andDo(document(
+				"Get_My_Pairing_Comment",
+				requestParameters(
+					parameterWithName("page").description("페이지 번호")
+				),
+				responseFields(
+					List.of(
+						fieldWithPath("data.").type(JsonFieldType.ARRAY).description("결과 데이터"),
+						fieldWithPath(".data[].pairingId").type(JsonFieldType.NUMBER).description("페어링 아이디"),
+						fieldWithPath(".data[].pairingCommentId").type(JsonFieldType.NUMBER).description("페어링 코멘트 아이디"),
+						fieldWithPath(".data[].userId").type(JsonFieldType.NUMBER).description("사용자 아이디"),
+						fieldWithPath(".data[].nickname").type(JsonFieldType.STRING).description("닉네임"),
+						fieldWithPath(".data[].userImage").type(JsonFieldType.STRING).description("프로필 이미지"),
+						fieldWithPath(".data[].content").type(JsonFieldType.STRING).description("레이팅 내용"),
+						fieldWithPath(".data[].createdAt").type(JsonFieldType.STRING).description("작성 시간"),
+						fieldWithPath(".data[].modifiedAt").type(JsonFieldType.STRING).description("마지막 수정 시간"),
+						fieldWithPath(".pageInfo").type(JsonFieldType.OBJECT).description("Pageble 설정"),
+						fieldWithPath(".pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 번호"),
+						fieldWithPath(".pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+						fieldWithPath(".pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 레이팅 수"),
+						fieldWithPath(".pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+					)
+				)));
+	}
+
+	@Test
+	void readUserPageTest() throws Exception {
+
+		Long userId = 1L;
+
+		given(userPageService.getUserPage(anyLong())).willReturn(USER_PAGE_RESPONSE_DTO);
+
+		ResultActions actions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/user/{user_Id}", userId)
+					.accept(MediaType.APPLICATION_JSON)
+			);
+
+		actions
+			.andExpect(status().isOk())
+			.andDo(document(
+				"Get_USER_PAGE",
+				pathParameters(
+					parameterWithName("user_Id").description("사용자 아이디")
+				),
+				responseFields(
+					List.of(
+						fieldWithPath(".id").type(JsonFieldType.NUMBER).description("사용자 아이디"),
+						fieldWithPath(".nickname").type(JsonFieldType.STRING).description("닉네임"),
+						fieldWithPath(".imgUrl").type(JsonFieldType.STRING).description("프로필 사진"),
+						fieldWithPath(".isFollowing").type(JsonFieldType.BOOLEAN).description("팔로우 여부"),
+						fieldWithPath(".followerCount").type(JsonFieldType.NUMBER).description("팔로워 숫자"),
+						fieldWithPath(".followingCount").type(JsonFieldType.NUMBER).description("팔로잉 숫자"),
+						fieldWithPath(".ratingCount").type(JsonFieldType.NUMBER).description("레이팅 숫자"),
+						fieldWithPath(".pairingCount").type(JsonFieldType.NUMBER).description("페어링 숫자"),
+						fieldWithPath(".commentCount").type(JsonFieldType.NUMBER).description("코멘트 숫자")
+					)
+				)));
+	}
+
+	@Test
+	void getUserRatingsTest() throws Exception {
+
+		Long userId = 1L;
+		Integer page = 1;
+
+		given(userPageService.getUserRatingByUserId(anyLong(), anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
+		given(ratingMapper.ratingToUserRatingResponse(Mockito.any(Page.class), Mockito.any(RatingLikeRepository.class)))
+			.willReturn(USER_RATING_PAGE_RESPONSE_PAGE);
+
+		ResultActions actions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/user/{user_Id}/ratings?page={page}", userId, page)
+					.accept(MediaType.APPLICATION_JSON)
+			);
+
+		actions
+			.andExpect(status().isOk())
+			.andDo(document(
+				"Get_USER_PAGE",
+				pathParameters(
+					parameterWithName("user_Id").description("사용자 아이디")
+				),
+				requestParameters(
+					parameterWithName("page").description("페이지 번호")
+				),
+				responseFields(
+					List.of(
+						fieldWithPath("data.").type(JsonFieldType.ARRAY).description("결과 데이터"),
+						fieldWithPath(".data[].beerId").type(JsonFieldType.NUMBER).description("맥주 아이디"),
+						fieldWithPath(".data[].ratingId").type(JsonFieldType.NUMBER).description("레이팅 아이디"),
+						fieldWithPath(".data[].userId").type(JsonFieldType.NUMBER).description("사용자 아이디"),
+						fieldWithPath(".data[].nickname").type(JsonFieldType.STRING).description("닉네임"),
+						fieldWithPath(".data[].userImage").type(JsonFieldType.STRING).description("프로필 이미지"),
+						fieldWithPath(".data[].content").type(JsonFieldType.STRING).description("레이팅 내용"),
+						fieldWithPath(".data[].ratingTag[]").type(JsonFieldType.ARRAY).description("레이팅 태그"),
+						fieldWithPath(".data[].star").type(JsonFieldType.NUMBER).description("별점"),
 						fieldWithPath(".data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 숫자"),
 						fieldWithPath(".data[].commentCount").type(JsonFieldType.NUMBER).description("코멘트 숫자"),
 						fieldWithPath(".data[].isUserLikes").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),

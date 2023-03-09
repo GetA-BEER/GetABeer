@@ -231,10 +231,8 @@ public class GetABeerAop {
 
 		if (loginUser.getGender().equals(Gender.FEMALE)) {
 			findBeer.updateFemaleAverageStars(previousStar, afterStar);
-			findBeer.addFemaleStarCount();
 		} else if (loginUser.getGender().equals(Gender.MALE)) {
 			findBeer.updateMaleAverageStars(previousStar, afterStar);
-			findBeer.addMaleStarCount();
 		}
 
 		// ---------------------------------------------------------------------------------------
@@ -276,12 +274,14 @@ public class GetABeerAop {
 			// @AfterReturning
 			List<BeerTag> beerTags = beerService.findTop4BeerTags(findBeer); // 상위 태그 새로 계산
 
-			List<String> beerTagTypes = beerTags.stream() // 입력받은 맥주 태그 타입 문자열 리스트로 전환
+			List<String> beerTagTypes = beerTags.stream() // 맥주 태그 타입 문자열 리스트로 전환
 				.map(beerTag -> beerTag.getBeerTagType().toString())
 				.collect(Collectors.toList());
 
-			if (presentBeerTagTypes != beerTagTypes) { // 둘이 다르면 교체
+			if (presentBeerTagTypes != beerTagTypes && beerTagTypes.size() != 0) { // 둘이 다르면 교체
 				findBeer.getBeerDetailsTopTags().changeTags(beerTagTypes);
+			} else if (presentBeerTagTypes != beerTagTypes && beerTagTypes.size() == 0) {
+				findBeer.makeTopTagsNull();
 			}
 
 			// 삭제되는 레이팅이 베스트 레이팅일 경우
@@ -401,7 +401,7 @@ public class GetABeerAop {
 		beerRepository.save(findBeer);
 	}
 
-	@AfterReturning(value = "Pointcuts.updateUser() && args(edit)")
+	@Before(value = "Pointcuts.updateUser() && args(edit)")
 	public void calculateStarsOnUpdateUser(JoinPoint joinPoint, User edit) {
 
 		User loginUser = userService.getLoginUser();

@@ -58,7 +58,7 @@ public class FollowController {
 			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowers));
 		} else {
 
-			Page<User> findFollowers = followService.findFollowers(followedUserId, page);
+			Page<User> findFollowers = followService.findFollowersWithLoginUser(findUser.getId(), followedUserId, page);
 
 			List<User> findFollowingsList = followService.findFollowingsList(findUser.getId(), findFollowers);
 
@@ -82,7 +82,7 @@ public class FollowController {
 			Page<User> findFollowings = followService.findFollowings(followingUserId, page);
 
 			PageImpl<FollowDto.FollowingResponse> responsePage =
-				followMapper.followingsToFollowingResponses(findFollowings, false);
+				followMapper.followingsToFollowingResponses(findFollowings, new ArrayList<>());
 
 			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowings));
 
@@ -93,7 +93,7 @@ public class FollowController {
 			List<User> findFollowingsList = followService.findFollowingsList(findUser.getId(), findFollowings);
 
 			PageImpl<FollowDto.FollowingResponse> responsePage =
-				followMapper.followingsToFollowingResponses(findFollowings, true);
+				followMapper.followingsToFollowingResponses(findFollowings, findFollowingsList);
 
 			return ResponseEntity.ok(new MultiResponseDto<>(responsePage.getContent(), findFollowings));
 		}
