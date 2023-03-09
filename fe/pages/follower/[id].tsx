@@ -6,7 +6,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import Image from 'next/image';
-
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 export default function Follower() {
   const router = useRouter();
   const userid = router.query.id;
@@ -23,6 +24,10 @@ export default function Follower() {
           setFollowerList(res.data.data);
         })
         .catch((error) => console.log(error));
+    }
+  }, [userid]);
+  useEffect(() => {
+    if (userid !== undefined) {
       axios
         .get(`/api/follows/${userid}/followings`)
         .then((res) => {

@@ -85,12 +85,9 @@ export default function Alarm() {
 
   const initNotify = () => {
     /* 2. 보통의 axios 로 알림 기능 구현 */
-    const config = {
-      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-      withCredentials: true,
-    };
+
     axios
-      .get(`/api/notifications`, config)
+      .get(`/api/notifications`)
       .then((response) => {
         setAlarmList(response.data.notifications);
         setUnreadCount(response.data.unreadCount);
@@ -103,14 +100,10 @@ export default function Alarm() {
     notifyType: string,
     idForNotifyType?: number
   ) => {
-    const config = {
-      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-      withCredentials: true,
-    };
     if (notifyType === 'RATING') {
       const notifyid = idForNotifyType;
       axios
-        .delete(`/api/notifications/${id}`, config)
+        .delete(`/api/notifications/${id}`)
         .then(() => {
           setShowModal(false);
           initNotify();
@@ -119,13 +112,13 @@ export default function Alarm() {
         .catch((error) => console.log(error));
     } else if (notifyType === 'PAIRING') {
       const notifyid = idForNotifyType;
-      axios.delete(`/api/notifications/${id}`, config).then(() => {
+      axios.delete(`/api/notifications/${id}`).then(() => {
         setShowModal(false);
         initNotify();
         router.push(`/pairing/${notifyid}`);
       });
     } else if (notifyType === 'FOLLOWING') {
-      axios.delete(`/api/notifications/${id}`, config).then(() => {
+      axios.delete(`/api/notifications/${id}`).then(() => {
         setShowModal(false);
         initNotify();
         router.push(`/mypage`);

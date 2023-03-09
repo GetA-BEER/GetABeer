@@ -79,21 +79,14 @@ export default function Beer() {
   useEffect(() => {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
-      if (TOKEN !== '') {
-        const config = {
-          headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-          withCredentials: true,
-        };
-        axios
-          .get(
-            `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`,
-            config
-          )
-          .then((response) => setPairingInfo(response.data))
-          .catch((error) => console.log(error));
-      }
+      axios
+        .get(
+          `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`
+        )
+        .then((response) => setPairingInfo(response.data))
+        .catch((error) => console.log(error));
     }
-  }, [curRoute, TOKEN]);
+  }, [curRoute]);
 
   useEffect(() => {
     // 비슷한 맥주 조회

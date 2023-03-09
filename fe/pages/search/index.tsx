@@ -11,7 +11,8 @@ import Pagenation from '@/components/Pagenation';
 import { SearchMatcherToKor } from '@/utils/SearchMatcher';
 import BackBtn from '@/components/button/BackPageBtn';
 import FollowUser, { FollowProps } from '@/components/followPage/FollowUser';
-
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 export default function Search() {
   const router = useRouter();
   const [page, setPage] = useState<number>(1);
@@ -22,7 +23,7 @@ export default function Search() {
   const [nameSearch, setNameSearch] = useState(false);
   const [userList, setUserList] = useState<FollowProps[]>([]);
   const searchQuery = router.query.q;
-
+  const [TOKEN] = useRecoilState(accessToken);
   useEffect(() => {
     if (searchQuery && typeof searchQuery === 'string') {
       axios
