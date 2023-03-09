@@ -86,6 +86,7 @@ export default function DetailCard({ pairingProps, count }: any) {
           nickname={pairingProps?.nickname}
           date={date}
           userImage={pairingProps?.userImage}
+          userId={pairingProps?.userId}
         />
         {pairingProps?.userId === curUserId ? (
           <div className="flex px-4">

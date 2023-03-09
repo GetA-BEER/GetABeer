@@ -14,6 +14,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import CloseBtn from '@/components/button/CloseBtn';
 import Swal from 'sweetalert2';
+import Pagenation from '@/components/Pagenation';
 
 export default function UserPage() {
   const [pariginCardPops, setPairingCardProps] = useState<any>();
@@ -127,6 +128,9 @@ export default function UserPage() {
               })}
             </div>
           )}
+          {ratingList?.length ? (
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          ) : null}
         </div>
       ),
     },
@@ -147,7 +151,10 @@ export default function UserPage() {
               />
               등록된 페어링이 없습니다.
             </div>
-          )}
+          )}{' '}
+          {pariginCardPops?.length ? (
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          ) : null}
         </div>
       ),
     },
