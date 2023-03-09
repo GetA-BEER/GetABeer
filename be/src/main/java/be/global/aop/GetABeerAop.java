@@ -176,10 +176,10 @@ public class GetABeerAop {
 
 		if (loginUser.getGender() == Gender.FEMALE) {
 			findBeer.calculateFemaleAverageStars(rating.getStar());
-			findBeer.addFemaleStarCount();
+			// findBeer.addFemaleStarCount();
 		} else if (loginUser.getGender() == Gender.MALE) {
 			findBeer.calculateMaleAverageStars(rating.getStar());
-			findBeer.addMaleStarCount();
+			// findBeer.addMaleStarCount();
 		}
 		// ---------------------------------------------------------------------------------------
 		totalStatisticsRepository.save(totalStatistics);
@@ -432,7 +432,7 @@ public class GetABeerAop {
 					}
 				} else if (loginUserGender == Gender.MALE) {
 					if (updatedUserGender == Gender.REFUSE) {
-						beer.calculateMaleAverageStars(star);
+						beer.deleteMaleAverageStars(star);
 					} else if (updatedUserGender == Gender.FEMALE) {
 						beer.deleteMaleAverageStars(star);
 						beer.calculateFemaleAverageStars(star);

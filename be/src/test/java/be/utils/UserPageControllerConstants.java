@@ -12,10 +12,9 @@ import be.domain.comment.dto.RatingCommentDto;
 import be.domain.pairing.dto.PairingResponseDto;
 import be.domain.pairing.entity.PairingCategory;
 import be.domain.rating.dto.RatingResponseDto;
-import be.domain.user.dto.MyPageMultiResponseDto;
 import be.domain.user.dto.UserDto;
 
-public class UserPageTestConstants {
+public class UserPageControllerConstants {
 
 	public static final RatingResponseDto.MyPageResponse MY_RATING_RESPONSE_DTO =
 		RatingResponseDto.MyPageResponse.builder()
@@ -120,5 +119,26 @@ public class UserPageTestConstants {
 
 	public static final PageImpl<RatingResponseDto.UserPageResponse> USER_RATING_PAGE_RESPONSE_PAGE =
 		new PageImpl<>(List.of(USER_RATING_PAGE_RESPONSE_DTO, USER_RATING_PAGE_RESPONSE_DTO));
+
+	public static final PairingResponseDto.UserPageResponse USER_PAIRING_PAGE_RESPONSE_DTO =
+		PairingResponseDto.UserPageResponse.builder()
+			.beerId(1L)
+			.korName("한글 이름")
+			.pairingId(1L)
+			.userId(1L)
+			.nickname("닉네임")
+			.userImage("프로필 사진")
+			.content("내용")
+			.thumbnail("페어링 사진")
+			.category(PairingCategory.FRIED)
+			.likeCount(10)
+			.commentCount(10)
+			.isUserLikes(false)
+			.createdAt(LocalDateTime.now())
+			.modifiedAt(LocalDateTime.now())
+			.build();
+
+	public static final PageImpl<PairingResponseDto.UserPageResponse> USER_PAIRING_PAGE_RESPONSE_PAGE =
+		new PageImpl<>(List.of(USER_PAIRING_PAGE_RESPONSE_DTO, USER_PAIRING_PAGE_RESPONSE_DTO));
 
 }
