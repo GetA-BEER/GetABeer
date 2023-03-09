@@ -13,7 +13,6 @@ if (typeof window !== 'undefined') {
   let tmpTOKEN: any = localStorage.getItem('recoil-persist');
   tmpTOKEN = JSON.parse(tmpTOKEN);
   const TOKEN = tmpTOKEN.accessToken;
-  console.log('TOKEN', TOKEN);
   if (TOKEN !== '') {
     instance = axios.create({
       baseURL: process.env.API_URL,
