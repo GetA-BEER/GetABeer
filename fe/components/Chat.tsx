@@ -15,19 +15,19 @@ export default function Chat() {
   const [inputState, setInputState] = useState('');
   const [chatList, setChatList] = useState<ChatProps[]>([]);
 
-  if (typeof window !== 'undefined') {
-    const socket = new WebSocket('wss://f3ff-175-210-242-219.jp.ngrok.io/ws/');
-    console.log(socket, socket.readyState);
-    socket.addEventListener('open', () => {
-      console.log('드디어 서버와 연결되었다! ✅');
-    });
-    socket.addEventListener('message', (message) => {
-      console.log('서버로부터 온 메세지: ', message);
-    });
-    socket.onopen = () => {
-      socket.send('빈님 가나요...??');
-    };
-  }
+  // if (typeof window !== 'undefined') {
+  //   const socket = new WebSocket('wss://f3ff-175-210-242-219.jp.ngrok.io/ws/');
+  //   console.log(socket, socket.readyState);
+  //   socket.addEventListener('open', () => {
+  //     console.log('드디어 서버와 연결되었다! ✅');
+  //   });
+  //   socket.addEventListener('message', (message) => {
+  //     console.log('서버로부터 온 메세지: ', message);
+  //   });
+  //   socket.onopen = () => {
+  //     socket.send('클라이언트에서 날리는 메시지');
+  //   };
+  // }
 
   const postChat = () => {
     if (inputState !== '') {
