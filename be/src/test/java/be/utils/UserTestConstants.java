@@ -2,6 +2,9 @@ package be.utils;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Age;
@@ -14,6 +17,36 @@ public class UserTestConstants {
 			.email("e@mail.com")
 			.nickname("닉네임")
 			.password("password1@")
+			.build();
+
+	public static final UserDto.UserInfoPost USER_INFO_POST_DTO =
+		UserDto.UserInfoPost.builder()
+			.gender(Gender.FEMALE)
+			.age(Age.TWENTIES)
+			.userBeerCategories(List.of("ALE"))
+			.userBeerTags(List.of("SWEET"))
+			.build();
+
+	public static final UserDto.UserInfoResponse USER_INFO_RESPONSE_DTO =
+		UserDto.UserInfoResponse.builder()
+			.imageUrl("이미지 주소")
+			.nickname("닉네임")
+			.age(Age.TWENTIES)
+			.gender(Gender.FEMALE)
+			.followingCount(10L)
+			.followerCount(10L)
+			.userBeerCategories(List.of("ALE"))
+			.userBeerTags(List.of("SWEET"))
+			.build();
+
+	public static final UserDto.EditUserInfo USER_EDIT_INFO_DTO =
+		UserDto.EditUserInfo.builder()
+			.imageUrl("이미지 주소")
+			.nickname("닉네임")
+			.gender(Gender.FEMALE)
+			.age(Age.TWENTIES)
+			.userBeerCategories(List.of("ALE"))
+			.userBeerTags(List.of("SWEET"))
 			.build();
 
 	public static final UserDto.Login USER_LOGIN_DTO =
@@ -44,5 +77,12 @@ public class UserTestConstants {
 			.email("e@mail.com")
 			.password("password1@")
 			.provider("NONE")
+			.build();
+
+	public static final UserDto.EditPassword EDIT_PASSWORD_DTO =
+		UserDto.EditPassword.builder()
+			.oldPassword("password1@")
+			.newPassword("password1@@")
+			.newVerifyPassword("password1@@")
 			.build();
 }

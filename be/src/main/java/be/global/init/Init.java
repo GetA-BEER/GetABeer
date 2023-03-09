@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import be.domain.beer.controller.BeerController;
 import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
+import be.domain.beer.entity.BeerDetailsBestRating;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.entity.WeeklyBeer;
@@ -202,13 +203,26 @@ public class Init {
 		 * MONTHLY BEER STUB DATA
 		 */
 		for (int i = 0; i < 5; i++) {
-			Long rand = (long)(Math.random() * 9 + 1);
+			Long rand = (long)(Math.random() * 179 + 1);
 
 			Beer findBeer = beerService.findVerifiedBeer(rand);
 
 			MonthlyBeer monthlyBeer = MonthlyBeer.builder().build();
 
 			monthlyBeer.create(findBeer);
+
+			BeerDetailsBestRating bestRating =
+				BeerDetailsBestRating.builder()
+					.bestRatingId(rand)
+					.bestUserId((long)i)
+					.bestNickname("닉네임 " + i)
+					.profileImage(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
+					.bestStar(4.5)
+					.bestContent("레이팅 " + i)
+					.bestLikeCount(25)
+					.build();
+
+			monthlyBeer.addBestRating(bestRating);
 
 			monthlyBeerRepository.save(monthlyBeer);
 		}

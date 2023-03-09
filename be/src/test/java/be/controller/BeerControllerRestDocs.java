@@ -75,7 +75,6 @@ public class BeerControllerRestDocs {
 				.isWishlist(false)
 				.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
 				.beerDetailsTopTags(new ArrayList<>())
-				.similarBeers(new ArrayList<>())
 				.build();
 
 		given(beerMapper.beerPostToBeer(Mockito.any(BeerDto.Post.class))).willReturn(Beer.builder().build());
@@ -146,8 +145,7 @@ public class BeerControllerRestDocs {
 
 						fieldWithPath(".isWishlist").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
 						fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
-						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트"),
-						fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
+						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트")
 					)
 				)));
 	}
@@ -169,7 +167,6 @@ public class BeerControllerRestDocs {
 				.isWishlist(false)
 				.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
 				.beerDetailsTopTags(new ArrayList<>())
-				.similarBeers(new ArrayList<>())
 				.build();
 
 		given(beerMapper.beerPatchToBeer(Mockito.any(BeerDto.Patch.class))).willReturn(Beer.builder().build());
@@ -245,8 +242,7 @@ public class BeerControllerRestDocs {
 
 						fieldWithPath(".isWishlist").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
 						fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
-						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트"),
-						fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
+						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트")
 					)
 				)));
 	}
@@ -265,7 +261,6 @@ public class BeerControllerRestDocs {
 				.isWishlist(false)
 				.beerCategoryTypes(List.of(BEER_CATEGORY_WITH_ID_AND_TYPE.getBeerCategoryType()))
 				.beerDetailsTopTags(new ArrayList<>())
-				.similarBeers(new ArrayList<>())
 				.build();
 
 		given(beerService.getBeer(anyLong())).willReturn(Beer.builder().build());
@@ -323,8 +318,7 @@ public class BeerControllerRestDocs {
 
 						fieldWithPath(".isWishlist").type(JsonFieldType.BOOLEAN).description("위시리스트 등록 여부"),
 						fieldWithPath(".beerCategoryTypes[]").type(JsonFieldType.ARRAY).description("맥주 카테고리 타입 리스트"),
-						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트"),
-						fieldWithPath(".similarBeers").type(JsonFieldType.ARRAY).description("비슷한 맥주 리스트")
+						fieldWithPath(".beerDetailsTopTags[]").type(JsonFieldType.ARRAY).description("맥주 탑 태그 리스트")
 					)
 				)));
 	}
@@ -333,7 +327,8 @@ public class BeerControllerRestDocs {
 	void getMonthlyBeerTest() throws Exception {
 
 		given(beerService.findMonthlyBeers()).willReturn(new ArrayList<>());
-		given(beerMapper.beersToMonthlyBestBeerResponse(Mockito.any())).willReturn(GET_MONTHLY_BEER_RESPONSE_LIST);
+		given(beerMapper.beersToMonthlyBestBeerResponse(Mockito.any())).willReturn(
+			GET_MONTHLY_BEER_RESPONSE_LIST);
 
 		ResultActions actions =
 			mockMvc.perform(
@@ -365,12 +360,16 @@ public class BeerControllerRestDocs {
 						fieldWithPath("[].bestRating").type(JsonFieldType.OBJECT).description("베스트 평가"),
 						fieldWithPath("[].bestRating.bestRatingId").type(JsonFieldType.NUMBER)
 							.description("베스트 평가 아이디"),
+						fieldWithPath("[].bestRating.bestUserId").type(JsonFieldType.NUMBER)
+							.description("베스트 평가 사용자 아이디"),
 						fieldWithPath("[].bestRating.bestNickname").type(JsonFieldType.STRING)
 							.description("베스트 평가 닉네임"),
 						fieldWithPath("[].bestRating.profileImage").type(JsonFieldType.STRING)
 							.description("베스트 평가 프로필 이미지"),
 						fieldWithPath("[].bestRating.bestStar").type(JsonFieldType.NUMBER).description("베스트 평가 별점"),
-						fieldWithPath("[].bestRating.bestContent").type(JsonFieldType.STRING).description("베스트 평가 내용")
+						fieldWithPath("[].bestRating.bestContent").type(JsonFieldType.STRING).description("베스트 평가 내용"),
+						fieldWithPath("[].bestRating.bestLikeCount").type(JsonFieldType.STRING)
+							.description("베스트 평가 좋아요")
 					)
 				)));
 

@@ -144,6 +144,7 @@ public class BeerQueryRepository {
 				.selectFrom(beer)
 				.join(beer.beerBeerCategories, beerBeerCategory)
 				.join(beerBeerCategory.beerCategory, beerCategory)
+				.where(beer.ne(findBeer))
 				.where(beerCategory.beerCategoryType.stringValue().eq(beerCategories.get(0)))
 				.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
 				.limit(5 - beerList.size())
@@ -213,6 +214,14 @@ public class BeerQueryRepository {
 			.join(beerWishlist.user, user)
 			.from(rating)
 			.where(beerWishlist.user.eq(loginUser))
+			.fetch();
+	}
+
+	public List<Beer> findRatedBeersListByUserId(Long userId) {
+
+		return jpaQueryFactory.selectFrom(beer)
+			.join(beer.ratingList, rating)
+			.where(rating.user.id.eq(userId))
 			.fetch();
 	}
 

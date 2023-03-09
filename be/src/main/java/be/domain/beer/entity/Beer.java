@@ -175,10 +175,12 @@ public class Beer extends BaseTimeEntity implements Serializable {
 		this.beerDetailsBestRating =
 			BeerDetailsBestRating.builder()
 				.bestRatingId(rating.getId())
+				.bestUserId(rating.getUser().getId())
 				.bestStar(rating.getStar())
 				.profileImage(rating.getUser().getImageUrl())
 				.bestNickname(rating.getNickname())
 				.bestContent(rating.getContent())
+				.bestLikeCount(rating.getLikeCount())
 				.build();
 	}
 

@@ -17,6 +17,7 @@ import be.domain.beer.entity.BeerDetailsCounts;
 import be.domain.beer.entity.BeerDetailsStars;
 import be.domain.beer.entity.MonthlyBeer;
 import be.domain.beer.entity.WeeklyBeer;
+import be.domain.beer.service.BeerService;
 import be.domain.beercategory.dto.BeerCategoryDto;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beertag.entity.BeerTag;
@@ -118,7 +119,8 @@ public interface BeerMapper {
 
 				BeerDto.MonthlyBestResponse.MonthlyBestResponseBuilder monthlyBestResponse = BeerDto.MonthlyBestResponse.builder();
 
-				monthlyBestResponse.beerId(monthlyBeer.getId());
+				monthlyBestResponse.monthlyBeerId(monthlyBeer.getId());
+				monthlyBestResponse.beerId(monthlyBeer.getBeerId());
 				monthlyBestResponse.korName(monthlyBeer.getKorName());
 				monthlyBestResponse.thumbnail(monthlyBeer.getThumbnail());
 				monthlyBestResponse.totalAverageStars(monthlyBeer.getAverageStar());
@@ -132,9 +134,53 @@ public interface BeerMapper {
 			}).collect(Collectors.toList());
 	}
 
-	List<BeerDto.WeeklyBestResponse> beersToWeeklyBestBeerResponse(List<WeeklyBeer> beerList);
+	default List<BeerDto.WeeklyBestResponse> beersToWeeklyBestBeerResponse(List<WeeklyBeer> beerList) {
 
-	List<BeerDto.RecommendResponse> beersToRecommendResponse(List<Beer> beerList);
+		return beerList.stream()
+			.map(weeklyBeer -> {
+
+				BeerDto.WeeklyBestResponse.WeeklyBestResponseBuilder weeklyBestResponseBuilder = BeerDto.WeeklyBestResponse.builder();
+
+				weeklyBestResponseBuilder.weeklyBeerId(weeklyBeer.getId());
+				weeklyBestResponseBuilder.beerId(weeklyBeer.getBeerId());
+				weeklyBestResponseBuilder.korName(weeklyBeer.getKorName());
+				weeklyBestResponseBuilder.thumbnail(weeklyBeer.getThumbnail());
+
+				weeklyBestResponseBuilder.beerCategories(weeklyBeer.getWeeklyBeerCategory().createList());
+
+				weeklyBestResponseBuilder.country(weeklyBeer.getCountry());
+				weeklyBestResponseBuilder.abv(weeklyBeer.getAbv());
+				weeklyBestResponseBuilder.ibu(weeklyBeer.getIbu());
+
+				weeklyBestResponseBuilder.averageStar(weeklyBeer.getAverageStar());
+
+				return weeklyBestResponseBuilder.build();
+
+			}).collect(Collectors.toList());
+	}
+
+	default List<BeerDto.RecommendResponse> beersToRecommendResponse(List<Beer> beerList) {
+
+		return beerList.stream()
+			.map(beer -> {
+				return BeerDto.RecommendResponse.builder()
+					.beerId(beer.getId())
+					.korName(beer.getBeerDetailsBasic().getKorName())
+					.thumbnail(beer.getBeerDetailsBasic().getThumbnail())
+					.beerCategories(beer.getBeerBeerCategories().stream()
+						.map(category -> BeerCategoryDto.Response.builder()
+							.beerCategoryId(category.getBeerCategory().getId())
+							.beerCategoryType(category.getBeerCategory().getBeerCategoryType())
+							.build())
+						.collect(Collectors.toList()))
+					.country(beer.getBeerDetailsBasic().getCountry())
+					.abv(beer.getBeerDetailsBasic().getAbv())
+					.ibu(beer.getBeerDetailsBasic().getIbu())
+					.averageStar(beer.getBeerDetailsStars().getTotalAverageStars())
+					.build();
+			})
+			.collect(Collectors.toList());
+	}
 
 	default List<BeerDto.SimilarResponse> beersToSimilarBeerResponse(List<Beer> beerList) {
 
@@ -177,7 +223,11 @@ public interface BeerMapper {
 				searchResponseBuilder.ibu(beer.getBeerDetailsBasic().getIbu());
 				searchResponseBuilder.totalAverageStar(beer.getBeerDetailsStars().getTotalAverageStars());
 				searchResponseBuilder.totalStarcount(beer.getBeerDetailsCounts().getRatingCount());
-				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+				// searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+
+				if (beer.getBeerDetailsTopTags() != null) {
+					searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags().createList());
+				}
 
 				return searchResponseBuilder.build();
 			})
@@ -203,7 +253,19 @@ public interface BeerMapper {
 				searchResponseBuilder.ibu(beer.getBeerDetailsBasic().getIbu());
 				searchResponseBuilder.totalAverageStar(beer.getBeerDetailsStars().getTotalAverageStars());
 				searchResponseBuilder.totalStarcount(beer.getBeerDetailsCounts().getRatingCount());
-				searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+				// searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags());
+
+				if (beer.getBeerDetailsTopTags() != null) {
+					searchResponseBuilder.beerDetailsTopTags(beer.getBeerDetailsTopTags().createList());
+				}
+
+				// if (beerTags != null && beerTags.size() > 3) {
+				// 	List<String> tempList = new ArrayList<>();
+				// 	for (int i = 0; i < beerTags.size(); i++) {
+				// 		tempList.add(beerTags.get(i).getBeerTagType().toString());
+				// 		detailsResponse.beerDetailsTopTags(tempList);
+				// 	}
+				// }
 
 				return searchResponseBuilder.build();
 			})

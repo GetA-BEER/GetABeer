@@ -13,19 +13,23 @@ import lombok.RequiredArgsConstructor;
 public class BeerDetailsBestRating {
 
 	private Long bestRatingId;
+	private Long bestUserId;
 	private String bestNickname;
 	private String profileImage;
 	private Double bestStar;
 	private String bestContent;
+	private Integer bestLikeCount;
 
 	@Builder
-	public BeerDetailsBestRating(Long bestRatingId, String bestNickname, String profileImage, Double bestStar,
-		String bestContent) {
+	public BeerDetailsBestRating(Long bestRatingId, Long bestUserId, String bestNickname, String profileImage,
+		Double bestStar, String bestContent, Integer bestLikeCount) {
 		this.bestRatingId = bestRatingId;
+		this.bestUserId = bestUserId;
 		this.bestNickname = bestNickname;
 		this.profileImage = profileImage;
 		this.bestStar = bestStar;
 		this.bestContent = bestContent;
+		this.bestLikeCount = bestLikeCount;
 	}
 
 	public Rating createRating() {

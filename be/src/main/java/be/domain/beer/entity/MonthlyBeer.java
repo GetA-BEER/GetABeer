@@ -34,6 +34,7 @@ public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 	@Column(name = "monthly_beer_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private Long beerId;
 	private String korName;
 	// private String country;
 	private String thumbnail;
@@ -49,7 +50,7 @@ public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 	private BeerDetailsBestRating beerDetailsBestRating;
 
 	public void create(Beer beer) {
-		this.id = beer.getId();
+		this.beerId = beer.getId();
 		this.korName = beer.getBeerDetailsBasic().getKorName();
 		this.thumbnail = beer.getBeerDetailsBasic().getThumbnail();
 		this.beerDetailsTopTags = beer.getBeerDetailsTopTags();
@@ -61,6 +62,10 @@ public class MonthlyBeer extends BaseTimeEntity implements Serializable {
 	public List<String> createTagList() {
 		return List.of(this.beerDetailsTopTags.getTag1(), this.beerDetailsTopTags.getTag2(),
 			this.beerDetailsTopTags.getTag3(), this.beerDetailsTopTags.getTag4());
+	}
+
+	public void addBestRating(BeerDetailsBestRating beerDetailsBestRating) {
+		this.beerDetailsBestRating = beerDetailsBestRating;
 	}
 
 	// public void create(Beer beer) {

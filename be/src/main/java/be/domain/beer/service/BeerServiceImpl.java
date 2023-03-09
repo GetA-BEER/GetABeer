@@ -159,6 +159,7 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional(readOnly = true)
 	public List<Beer> findRecommendBeers() {
 
+		// User findUser = userService.getLoginUserReturnNull();
 		try {
 			userService.getLoginUser();
 		} catch (BusinessLogicException e) {

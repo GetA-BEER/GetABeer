@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 public class Rating extends BaseTimeEntity {
 
 	@Id
-	@Column(name = "beer_comment_id")
+	@Column(name = "rating_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

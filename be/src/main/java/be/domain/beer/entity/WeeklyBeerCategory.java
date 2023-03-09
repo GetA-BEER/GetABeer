@@ -29,4 +29,12 @@ public class WeeklyBeerCategory {
 		this.category1 = category1;
 		this.category2 = category2;
 	}
+
+	public List<String> createList() {
+		if (this.category2.isEmpty()) {
+			return List.of(this.category1);
+		} else {
+			return List.of(this.category1, this.category2);
+		}
+	}
 }
