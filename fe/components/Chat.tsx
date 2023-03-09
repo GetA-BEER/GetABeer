@@ -30,7 +30,7 @@ export default function Chat() {
   // }
 
   const postChat = () => {
-    if (inputState !== '') {
+    if (inputState.length > 1) {
       chatList.push({
         time: new Date().getTime(),
         role: 'user',
