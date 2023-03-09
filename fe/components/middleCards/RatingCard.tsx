@@ -31,7 +31,7 @@ import Swal from 'sweetalert2';
 
 export default function RatingCard(props: {
   cardProps: RatingCardProps;
-  isMine: boolean;
+  isMine?: boolean;
   count: number;
 }) {
   const router = useRouter();

@@ -4,6 +4,7 @@ import {
   BeerCategoryMatcherToKor,
   BeerCountryMatcherToKor,
 } from '@/utils/BeerMatcher';
+import { TagMatcherToKor } from '@/utils/TagMatcher';
 
 export interface SearchCardProps {
   beerId: number;
@@ -71,7 +72,7 @@ export default function SearchCard(props: {
             {props.cardProps?.beerDetailsTopTags
               ? props.cardProps?.beerDetailsTopTags.map(
                   (el: string, idx: number) => {
-                    return <Tag key={idx}>{el}</Tag>;
+                    return <Tag key={idx}>{TagMatcherToKor(el)}</Tag>;
                   }
                 )
               : null}
