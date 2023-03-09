@@ -61,7 +61,7 @@ public class RatingService {
 		Beer beer = beerService.findVerifiedBeer(beerId);
 
 		/* 기본 설정 저장하기 */
-		rating.saveDefault(beer, user, ratingTag, user.getNickname(),
+		rating.saveDefault(beer, user, ratingTag,
 			0, 0, new ArrayList<>());
 		ratingTag.saveRating(rating);
 

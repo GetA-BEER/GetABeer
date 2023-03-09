@@ -177,7 +177,7 @@ public class Beer extends BaseTimeEntity implements Serializable {
 				.bestRatingId(rating.getId())
 				.bestStar(rating.getStar())
 				.profileImage(rating.getUser().getImageUrl())
-				.bestNickname(rating.getNickname())
+				.bestNickname(rating.getUser().getNickname())
 				.bestContent(rating.getContent())
 				.build();
 	}

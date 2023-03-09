@@ -24,7 +24,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @Builder
-@ToString
+// @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BeerWishlist extends BaseTimeEntity {
