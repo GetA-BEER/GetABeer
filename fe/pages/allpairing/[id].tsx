@@ -29,25 +29,19 @@ export default function AllPairing() {
   useEffect(() => {
     if (curRoute !== undefined) {
       let tmpCategory = category.toLowerCase();
-      if (TOKEN !== '') {
-        const config = {
-          headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-          withCredentials: true,
-        };
-        axios
-          .get(
-            `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`,
-            config
-          )
-          .then((response) => {
-            setPairingCardProps(response.data);
-            setTotalPages(response.data.pageInfo.totalPages);
-            setTitle(response.data.pageInfo.beerKorName);
-          })
-          .catch((error) => console.log(error));
-      }
+
+      axios
+        .get(
+          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
+        )
+        .then((response) => {
+          setPairingCardProps(response.data);
+          setTotalPages(response.data.pageInfo.totalPages);
+          setTitle(response.data.pageInfo.beerKorName);
+        })
+        .catch((error) => console.log(error));
     }
-  }, [curRoute, sort, page, category, TOKEN]);
+  }, [curRoute, sort, page, category]);
 
   return (
     <>
@@ -73,15 +67,15 @@ export default function AllPairing() {
             <div className="pb-32"></div>
           </>
         ) : (
-          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+          <div className="noneContent py-8">
             <Image
               className="m-auto pb-3 opacity-50"
               src="/images/logo.png"
               alt="logo"
-              width={100}
-              height={100}
+              width={40}
+              height={40}
             />
-            <span>등록된 페어링이 없습니다</span>
+            등록된 페어링이 없습니다.
           </div>
         )}
       </main>

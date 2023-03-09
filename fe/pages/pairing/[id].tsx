@@ -39,13 +39,9 @@ export default function PairingDetail() {
 
   useEffect(() => {
     // 특정 페어링 조회
-    if (curRoute !== undefined && TOKEN !== '') {
-      const config = {
-        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-        withCredentials: true,
-      };
+    if (curRoute && TOKEN !== '') {
       axios
-        .get(`/api/pairings/${curRoute}`, config)
+        .get(`/api/pairings/${curRoute}`)
         .then((response) => {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
