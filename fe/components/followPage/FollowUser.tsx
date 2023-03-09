@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import axios from '@/pages/api/axios';
 import CloseBtn from '../button/CloseBtn';
 import { useRouter } from 'next/router';
-import { accessToken } from '@/atoms/login';
-import { useRecoilState } from 'recoil';
+import { accessToken, userId } from '@/atoms/login';
+import { useRecoilValue } from 'recoil';
 import Swal from 'sweetalert2';
 export interface FollowProps {
   userId: number;
@@ -14,11 +14,11 @@ export interface FollowProps {
   isFollowing: boolean;
 }
 export default function FollowUser(props: { followprops: FollowProps }) {
-  const [TOKEN] = useRecoilState(accessToken);
+  const [TOKEN] = useRecoilValue(accessToken);
   const router = useRouter();
   const [follow, setFollow] = useState<boolean>(props.followprops.isFollowing);
   const [isLogin, setIsLogin] = useState(false);
-
+  const USERID = useRecoilValue(userId);
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -58,16 +58,16 @@ export default function FollowUser(props: { followprops: FollowProps }) {
         goToLogin();
       });
   };
+  const userCheck = () => {
+    if (USERID !== props.followprops.userId) {
+      router.push(`/userpage/${props.followprops.userId}`);
+    } else {
+      router.push(`/mypage`);
+    }
+  };
   return (
     <div className=" px-2 m-2 flex justify-between ">
-      <div
-        className="flex gap-2"
-        onClick={() =>
-          router.push({
-            pathname: `/userpage/${props.followprops.userId}`,
-          })
-        }
-      >
+      <div className="flex gap-2" onClick={userCheck}>
         <Image
           className="h-11 w-11 m-auto mr-1 self-center rounded-full"
           src={props.followprops.imageUrl}
@@ -78,11 +78,15 @@ export default function FollowUser(props: { followprops: FollowProps }) {
         <div className="self-center text-sm">{props.followprops.nickname}</div>
       </div>
       <div className="w-32 self-center">
-        {follow === false ? (
-          <SubmitBtn onClick={followClick}>팔로우</SubmitBtn>
-        ) : (
-          <CloseBtn onClick={followClick}>팔로잉</CloseBtn>
-        )}
+        {USERID !== props.followprops.userId ? (
+          <div>
+            {follow === false ? (
+              <SubmitBtn onClick={followClick}>팔로우</SubmitBtn>
+            ) : (
+              <CloseBtn onClick={followClick}>팔로잉</CloseBtn>
+            )}
+          </div>
+        ) : null}
       </div>
     </div>
   );
