@@ -74,14 +74,9 @@ export default function PairingCard(props: { pairingCardProps: any }) {
 
   const isUserLikeHandler = () => {
     if (isLogin) {
-      const config = {
-        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-        withCredentials: true,
-      };
       axios
         .post(
-          `/api/pairings/likes?pairingId=${props?.pairingCardProps?.pairingId}`,
-          config
+          `/api/pairings/likes?pairingId=${props?.pairingCardProps?.pairingId}`
         )
         .then((response) => {
           setIsLike(!isLike);

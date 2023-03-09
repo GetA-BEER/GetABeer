@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import Pagenation from '@/components/Pagenation';
 import { useRouter } from 'next/router';
-import { accessToken, userNickname } from '@/atoms/login';
+import { accessToken } from '@/atoms/login';
 import { useRecoilState } from 'recoil';
 import BackBtn from '@/components/button/BackPageBtn';
 
@@ -16,16 +16,11 @@ export default function Pairing() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [TOKEN] = useRecoilState(accessToken);
   const [username, setUserName] = useState('');
-  const router = useRouter();
 
   useEffect(() => {
     if (TOKEN !== '') {
-      const config = {
-        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-        withCredentials: true,
-      };
       axios
-        .get(`/api/mypage/pairing`, config)
+        .get(`/api/mypage/pairing`)
         .then((response) => {
           setPairingCardProps(response.data.data);
           setTotalPages(response.data.pageInfo.totalPages);

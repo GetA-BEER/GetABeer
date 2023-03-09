@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const instance = axios.create({
+let instance = axios.create({
   baseURL: process.env.API_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -8,4 +8,21 @@ const instance = axios.create({
   withCredentials: true,
 });
 
+if (typeof window !== 'undefined') {
+  // Perform localStorage action
+  let tmpTOKEN: any = localStorage.getItem('recoil-persist');
+  tmpTOKEN = JSON.parse(tmpTOKEN);
+  const TOKEN = tmpTOKEN.accessToken;
+  console.log('TOKEN', TOKEN);
+  if (TOKEN !== '') {
+    instance = axios.create({
+      baseURL: process.env.API_URL,
+      headers: {
+        Authorization: TOKEN,
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
+  }
+}
 export default instance;

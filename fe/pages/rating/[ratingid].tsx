@@ -35,6 +35,7 @@ export default function Rating() {
 
   useEffect(() => {
     if (ratingId !== undefined) {
+      console.log('레이팅 조회한다아');
       axios
         .get(`/api/ratings/${ratingId}`)
         .then((res) => {

@@ -40,12 +40,8 @@ export default function PairingDetail() {
   useEffect(() => {
     // 특정 페어링 조회
     if (curRoute && TOKEN !== '') {
-      const config = {
-        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-        withCredentials: true,
-      };
       axios
-        .get(`/api/pairings/${curRoute}`, config)
+        .get(`/api/pairings/${curRoute}`)
         .then((response) => {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
