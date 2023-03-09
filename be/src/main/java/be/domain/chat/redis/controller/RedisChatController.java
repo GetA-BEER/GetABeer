@@ -10,6 +10,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +50,7 @@ public class RedisChatController {
 	}
 
 	@MessageMapping("/{roomId}")
+	@PostMapping("/{roomId}")
 	public void sendMessage(@DestinationVariable Long roomId, @RequestBody RedisMessageDto.Request request) {
 		User user = userService.findLoginUser();
 		Long userId = user.getId();
@@ -56,7 +58,7 @@ public class RedisChatController {
 		publisher.publish(ChannelTopic.of("room" + roomId),
 			new RedisChat(roomId, userId, request.getContent()));
 
-		chatService.save(roomId, request);
+		// chatService.save(roomId, request);
 	}
 
 	@GetMapping("/message/{roomId}")

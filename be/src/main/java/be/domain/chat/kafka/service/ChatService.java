@@ -32,7 +32,7 @@ public class ChatService {
 		KafkaChatRoom kafkaChatRoom = chatRoomRepository.findById(user.getId());
 
 		KafkaChatMessage message = KafkaChatMessage.builder()
-			.roomId(kafkaChatRoom.getId())
+			.roomId(user.getId())
 			.sender(user.getNickname())
 			.content(request.getContent())
 			.timestamp(LocalDateTime.now().toString())
@@ -61,14 +61,7 @@ public class ChatService {
 
 		/* 동기 처리 */
 		try {
-			if (request.getType().equalsIgnoreCase("SUGGEST")) {
-				kafkaTemplate.send(KafkaConstants.TOPIC_SUGGEST, message).get();
-			} else if (request.getType().equalsIgnoreCase("REPORT")) {
-				kafkaTemplate.send(KafkaConstants.TOPIC_REPORT, message).get();
-			} else {
-				throw new RuntimeException("잘못된 메세지 타입입니다.");
-			}
-
+			kafkaTemplate.send(KafkaConstants.TOPIC, message).get();
 			log.info("성공적 메세지 발송 : " + message.toString());
 		} catch (Exception e) {
 			log.error("ERROR 발생 : "  + e.getMessage());

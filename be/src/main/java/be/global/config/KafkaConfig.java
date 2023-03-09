@@ -9,6 +9,8 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -22,9 +24,9 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import be.domain.chat.kafka.entity.KafkaChatMessage;
 import be.domain.chat.kafka.KafkaConstants;
 
-// @EnableKafka
-// @Configuration
-public class KafkaConfig {
+@EnableKafka
+@Configuration
+class KafkaConfig {
 
 	/* --------------------------------------------- 카프카 토픽 등록? ------------------------------------------------- */
 	@Bean
@@ -36,13 +38,10 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public NewTopic topic1() {
-		return new NewTopic(KafkaConstants.TOPIC_SUGGEST, 1, (short) 1);
+	public NewTopic topic() {
+		return new NewTopic(KafkaConstants.TOPIC, 1, (short) 1);
 	}
 
-	@Bean NewTopic topic2() {
-		return new NewTopic(KafkaConstants.TOPIC_REPORT, 1, (short) 1);
-	}
 
 	/* --------------------------------------------- 카프카 컨슈머 빈 ------------------------------------------------- */
 	@Bean
