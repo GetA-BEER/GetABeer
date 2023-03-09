@@ -29,25 +29,19 @@ export default function AllPairing() {
   useEffect(() => {
     if (curRoute !== undefined) {
       let tmpCategory = category.toLowerCase();
-      if (TOKEN !== '') {
-        const config = {
-          headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-          withCredentials: true,
-        };
-        axios
-          .get(
-            `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`,
-            config
-          )
-          .then((response) => {
-            setPairingCardProps(response.data);
-            setTotalPages(response.data.pageInfo.totalPages);
-            setTitle(response.data.pageInfo.beerKorName);
-          })
-          .catch((error) => console.log(error));
-      }
+
+      axios
+        .get(
+          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
+        )
+        .then((response) => {
+          setPairingCardProps(response.data);
+          setTotalPages(response.data.pageInfo.totalPages);
+          setTitle(response.data.pageInfo.beerKorName);
+        })
+        .catch((error) => console.log(error));
     }
-  }, [curRoute, sort, page, category, TOKEN]);
+  }, [curRoute, sort, page, category]);
 
   return (
     <>

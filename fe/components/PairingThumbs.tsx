@@ -35,12 +35,8 @@ export default function PairingThumbs({
   };
   const isUserLikeHandler = () => {
     if (isLogin) {
-      const config = {
-        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-        withCredentials: true,
-      };
       axios
-        .post(`/api/pairings/likes?pairingId=${pairingId}`, config)
+        .post(`/api/pairings/likes?pairingId=${pairingId}`)
         .then((response) => {
           setIsLike(!isLike);
           if (isLike) {
