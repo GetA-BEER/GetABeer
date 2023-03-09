@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class RatingService {
+	private final EntityManager em;
 	private final RatingRepository ratingRepository;
 	private final BeerService beerService;
 	private final BeerTagService beerTagService;
@@ -59,6 +62,9 @@ public class RatingService {
 
 		/* 존재하는 맥주인지 확인 */
 		Beer beer = beerService.findVerifiedBeer(beerId);
+
+		ratingTag.saveRating(rating);
+		tagRepository.save(ratingTag);
 
 		/* 기본 설정 저장하기 */
 		rating.saveDefault(beer, user, ratingTag,
@@ -103,7 +109,7 @@ public class RatingService {
 		findTag.updateRatingTag(ratingTag);
 		tagRepository.save(findTag);
 
-		findRating.updateTag(findTag);
+		// findRating.updateTag(findTag);
 
 		/* 새로운 BeerBeerTag 생성 및 저장 */
 		saveBeerBeerTags(findBeer, ratingTag.createBeerTagTypeList());
@@ -154,6 +160,9 @@ public class RatingService {
 		userService.checkUser(user.getId(), loginUser.getId());
 
 		deleteBeerBeerTags(findBeer, rating.getRatingTag().createBeerTagTypeList());
+		tagRepository.delete(rating.getRatingTag());
+
+		em.flush();
 
 		ratingRepository.delete(rating);
 
