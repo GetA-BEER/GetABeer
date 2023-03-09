@@ -18,12 +18,17 @@ import {
   HiOutlineMapPin,
 } from 'react-icons/hi2';
 import swal from 'sweetalert2';
+import { useRouter } from 'next/router';
 
 export default function Mypage() {
+  const router = useRouter();
   const [TOKEN, setAccessToken] = useRecoilState(accessToken);
-  const [, setUserId] = useRecoilState(userId);
+  const [USERID, setUserId] = useRecoilState(userId);
   const [userName, setUserName] = useRecoilState(userNickname);
-  const [userImge, setUserImge] = useState('');
+  const [followingCount, setFollowingCount] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [follow, setFollow] = useState(false);
+  const [userImg, setUserImg] = useState('');
   const [name, setName] = useState('');
   useEffect(() => {
     if (TOKEN) {
@@ -31,7 +36,10 @@ export default function Mypage() {
         .get('/api/user')
         .then((res) => {
           setUserName(res.data.nickname);
-          setUserImge(res.data.imageUrl);
+          setFollowerCount(res.data.followerCount);
+          setFollowingCount(res.data.followingCount);
+          setUserImg(res.data.imageUrl);
+          setFollow(res.data.isFollowing);
           setName(res.data.nickname);
         })
         .catch((err) => console.log(err));
@@ -82,26 +90,58 @@ export default function Mypage() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl ">
-        <div className="my-4 text-center text-xl bg-white font-semibold">
+        <div className="my-8 text-center text-xl bg-white font-semibold">
           마이 페이지
         </div>
-        <div className="flex flex-col items-center my-6">
-          <Image
-            unoptimized
-            className="h-20 w-20 rounded-full"
-            alt="프로필사진"
-            src={userImge}
-            width={80}
-            height={80}
-          />
-          <div className="flex justify-center items-center gap-1 mt-2">
-            <div className="text-sm">{name}</div>
-            <div className="text-sm">님</div>
-            <Link href={'/myedit'} className="hover:text-y-brown">
-              <button className="w-5 h-5 text-y-brown">
+        <div className="flex gap-3 px-2 pb-8 justify-center">
+          <div className="relative rounded-full w-20 h-20 self-center">
+            <Image
+              alt=" user profile image"
+              src={userImg}
+              fill
+              className="object-cover rounded-full"
+            />
+          </div>
+          <div className="p-1 self-cente">
+            <div
+              className="pb-2 flex"
+              onClick={() =>
+                router.push({
+                  pathname: `/myedit`,
+                })
+              }
+            >
+              <div className="cursor-pointer hover:text-y-brown hover:">
+                {name}님
+              </div>
+              <button className="w-5 h-5 text-y-brown cursor-pointer">
                 <HiPencil className="w-5 h-5" />
               </button>
-            </Link>
+            </div>
+            <div className="flex gap-2">
+              <div
+                className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                onClick={() =>
+                  router.push({
+                    pathname: `/follower/${USERID}`,
+                    query: { tap: 0 },
+                  })
+                }
+              >
+                {followerCount} 팔로워
+              </div>
+              <div
+                className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                onClick={() =>
+                  router.push({
+                    pathname: `/follower/${USERID}`,
+                    query: { tap: 1 },
+                  })
+                }
+              >
+                {followingCount} 팔로잉
+              </div>
+            </div>
           </div>
         </div>
         <div className="m-auto max-w-md px-3 pb-20">
@@ -146,7 +186,20 @@ export default function Mypage() {
               </div>
               <IoChevronForwardOutline className="w-5 h-5" />
             </Link>
-            <button className="flex w-full p-5 justify-between hover:bg-gray-200">
+            <button
+              className="flex w-full p-5 justify-between hover:bg-gray-200"
+              onClick={() =>
+                swal.fire({
+                  title: 'Get A Beer',
+                  text: '서비스 준비중입니다',
+                  showCancelButton: true,
+                  confirmButtonColor: '#F1B31C',
+                  cancelButtonColor: '#A7A7A7',
+                  confirmButtonText: '확인',
+                  cancelButtonText: '취소',
+                })
+              }
+            >
               <div className="flex gap-2 ">
                 <HiOutlineMapPin className="self-center w-5 h-5" />
                 관심 가게

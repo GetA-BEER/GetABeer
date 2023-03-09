@@ -18,6 +18,7 @@ export default function FollowUser(props: { followprops: FollowProps }) {
   const router = useRouter();
   const [follow, setFollow] = useState<boolean>(props.followprops.isFollowing);
   const [isLogin, setIsLogin] = useState(false);
+
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -76,7 +77,7 @@ export default function FollowUser(props: { followprops: FollowProps }) {
         />
         <div className="self-center text-sm">{props.followprops.nickname}</div>
       </div>
-      <div className="w-36 self-center">
+      <div className="w-32 self-center">
         {follow === false ? (
           <SubmitBtn onClick={followClick}>팔로우</SubmitBtn>
         ) : (

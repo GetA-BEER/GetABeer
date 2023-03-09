@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from '@/pages/api/axios';
 import { useRouter } from 'next/router';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 
 export interface RatingCardProps {
@@ -41,6 +41,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
   const [likeCount, setLikeCount] = useState<number>(ratingProps.likeCount);
   const router = useRouter();
   const TOKEN = useRecoilValue(accessToken);
+  const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState<boolean>(false);
   useEffect(() => {
     if (TOKEN === '') {
@@ -129,7 +130,13 @@ export default function SmallRatingCard({ ratingProps }: any) {
       goToLogin();
     }
   };
-
+  const userCheck = () => {
+    if (USERID !== ratingList?.userId) {
+      router.push(`/userpage/${ratingList?.userId}`);
+    } else {
+      router.push(`/mypage`);
+    }
+  };
   return (
     <>
       <div className="w-full rounded-lg ml-2 mb-2 bg-white text-y-black drop-shadow-lg text-[8px] border">
@@ -149,7 +156,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
           </span>
           <span
             className="flex justify-end items-center w-2/5 text-[8px]"
-            onClick={() => router.push(`/userpage/${ratingList?.userId}`)}
+            onClick={userCheck}
           >
             <span className="w-[70%] text-end truncate pr-[2px]">
               {ratingList?.nickname}

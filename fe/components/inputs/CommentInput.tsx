@@ -24,7 +24,7 @@ export default function CommentInput({
       <TextareaAutosize
         minRows={1}
         maxRows={6}
-        className="w-full rounded-l-lg p-2 border border-y-lightGray focus:outline-y-gold placeholder-slate-300 font-light resize-none"
+        className="w-full rounded-l-lg p-2 border border-y-lightGray focus:outline-y-gold placeholder-slate-300 font-light resize-none text-xs"
         placeholder={placeholder || '댓글을 남겨보세요'}
         value={inputState}
         maxLength={1000}
