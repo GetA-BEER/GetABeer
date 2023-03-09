@@ -73,7 +73,8 @@ public class Rating extends BaseTimeEntity {
 		this.beer = beer;
 	}
 
-	@OneToOne(mappedBy = "rating", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	@OneToOne
+	@JoinColumn(name = "rating_tag_id")
 	private RatingTag ratingTag;
 
 	public void oneToOneByRatingTag(RatingTag ratingTag) {
