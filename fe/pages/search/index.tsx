@@ -44,7 +44,7 @@ export default function Search() {
         .catch((err) => console.log(err));
     }
   }, [searchQuery, page]);
-
+  console.log(userList);
   return (
     <PageContainer>
       <main>
@@ -98,8 +98,8 @@ export default function Search() {
                 </div>
               ) : (
                 <div className="m-2 border divide-y divide-gray-200 rounded-xl">
-                  {userList.map((el: FollowProps) => (
-                    <div key={el.nickname}>
+                  {userList.map((el, idx) => (
+                    <div key={idx}>
                       <FollowUser followprops={el} />
                     </div>
                   ))}

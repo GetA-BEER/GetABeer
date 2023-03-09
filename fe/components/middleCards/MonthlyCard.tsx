@@ -1,7 +1,9 @@
 import Tag from '../Tag';
 import Image from 'next/image';
 import { BsChatDots } from 'react-icons/bs';
-
+import { useRecoilValue } from 'recoil';
+import { userId } from '@/atoms/login';
+import { useRouter } from 'next/router';
 export interface MonthlyCardProps {
   beerId: number;
   korName: string;
@@ -15,6 +17,7 @@ export interface MonthlyCardProps {
     profileImage: string;
     bestStar: number;
     bestContent: string;
+    bestUserId: number;
   } | null;
 }
 
@@ -25,12 +28,21 @@ export default function MonthlyCard({
   cardProps: MonthlyCardProps;
   idx: number;
 }) {
+  const router = useRouter();
+  const USERID = useRecoilValue(userId);
+  const userCheck = () => {
+    if (USERID !== cardProps.bestRating?.bestUserId) {
+      router.push(`/userpage/${cardProps.bestRating?.bestUserId}`);
+    } else {
+      router.push(`/mypage`);
+    }
+  };
   return (
     <div className="flex flex-col rounded-lg bg-white text-y-black border border-y-lightGray m-2">
       <div className="flex">
         <div
           className={`flex justify-center items-center w-6 h-6 rounded-[5px] z-[5] m-1 ${
-            idx === 0 || idx === 1 || idx === 2 ? `bg-y-gold` : `bg-y-lightGray`
+            idx % 2 === 0 ? `bg-y-gold` : `bg-y-brown`
           }`}
         >
           <span className="text-white">{idx + 1}</span>
@@ -70,13 +82,16 @@ export default function MonthlyCard({
             <BsChatDots className="ml-4" />
           </div>
           {cardProps?.bestRating ? (
-            <div className="flex flex-col text-sm my-4 mx-2">
-              <div className="text-xs sm:text-sm lg:text-lg">
+            <div className="text-sm my-4 mx-2 w-full">
+              <div className="flex flex-col text-xs sm:text-sm lg:text-lg">
                 <span>⭐️ {cardProps.bestRating?.bestStar} </span>
                 <span>{cardProps.bestRating?.bestContent}</span>
               </div>
-              <div className="flex justify-end mt-1 mr-2 text-xs sm:text-sm lg:text-lg">
-                <div className="relative rounded-full w-10 h-10 ml-1">
+              <div className="flex justify-end mt-1 mr-2 text-xs sm:text-sm lg:text-lg gap-1">
+                <div
+                  className="relative rounded-full w-5 h-5 sm:w-7 sm:h-7 ml-1 self-center"
+                  onClick={userCheck}
+                >
                   <Image
                     alt="user profile image"
                     src={cardProps?.bestRating?.profileImage}
@@ -84,7 +99,9 @@ export default function MonthlyCard({
                     className="object-cover"
                   />
                 </div>
-                <span>{cardProps.bestRating?.bestNickname}</span>
+                <span className="self-center" onClick={userCheck}>
+                  {cardProps.bestRating?.bestNickname}
+                </span>
               </div>
             </div>
           ) : null}

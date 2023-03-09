@@ -40,6 +40,7 @@ export default function PairingCardController(props: {
                 nickname={el?.nickname}
                 date={date}
                 userImage={el?.userImage}
+                userId={el?.userId}
               />
               <span className="top-3 right-3 px-2 py-[2px] text-[8px] rounded-md bg-y-gold text-white absolute">
                 {CategoryMatcherToKor(el?.category)}
