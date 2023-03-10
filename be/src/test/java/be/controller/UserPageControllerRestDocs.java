@@ -140,6 +140,7 @@ public class UserPageControllerRestDocs {
 			.andExpect(status().isOk())
 			.andDo(document(
 				"Get_My_Ratings",
+				getDocumentResponse(),
 				requestParameters(
 					parameterWithName("page").description("페이지 번호")
 				),
@@ -189,6 +190,7 @@ public class UserPageControllerRestDocs {
 			.andExpect(status().isOk())
 			.andDo(document(
 				"Get_My_Rating_Comment",
+				getDocumentResponse(),
 				requestParameters(
 					parameterWithName("page").description("페이지 번호")
 				),
@@ -232,6 +234,7 @@ public class UserPageControllerRestDocs {
 			.andExpect(status().isOk())
 			.andDo(document(
 				"Get_My_Pairing_Comment",
+				getDocumentResponse(),
 				requestParameters(
 					parameterWithName("page").description("페이지 번호")
 				),
@@ -272,6 +275,7 @@ public class UserPageControllerRestDocs {
 			.andExpect(status().isOk())
 			.andDo(document(
 				"Get_USER_PAGE",
+				getDocumentResponse(),
 				pathParameters(
 					parameterWithName("user_Id").description("사용자 아이디")
 				),
@@ -310,6 +314,7 @@ public class UserPageControllerRestDocs {
 			.andExpect(status().isOk())
 			.andDo(document(
 				"Get_USER_RATINGS",
+				getDocumentResponse(),
 				pathParameters(
 					parameterWithName("user_Id").description("사용자 아이디")
 				),
@@ -363,6 +368,7 @@ public class UserPageControllerRestDocs {
 			.andExpect(status().isOk())
 			.andDo(document(
 				"Get_USER_PAIRINGS",
+				getDocumentResponse(),
 				pathParameters(
 					parameterWithName("user_Id").description("사용자 아이디")
 				),

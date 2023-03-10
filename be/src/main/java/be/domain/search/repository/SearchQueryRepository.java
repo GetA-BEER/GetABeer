@@ -6,6 +6,7 @@ import static be.domain.beercategory.entity.QBeerCategory.*;
 import static be.domain.user.entity.QUser.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,12 +43,14 @@ public class SearchQueryRepository {
 			.selectFrom(beer)
 			.where(korName.likeIgnoreCase(queryParam)
 				.or(engName.likeIgnoreCase(queryParam)))
+			.orderBy(beer.beerDetailsBasic.korName.asc(), beer.beerDetailsBasic.engName.asc())
 			.fetch();
 
 		List<Beer> fullTextContainsResultList = jpaQueryFactory
 			.selectFrom(beer)
 			.where(korName.containsIgnoreCase(queryParam)
 				.or(engName.containsIgnoreCase(queryParam)))
+			.orderBy(beer.beerDetailsBasic.korName.asc(), beer.beerDetailsBasic.engName.asc())
 			.fetch();
 
 		log.info("#####: " + fullTextResultList);
@@ -59,6 +62,7 @@ public class SearchQueryRepository {
 			resultList.addAll(jpaQueryFactory
 				.selectFrom(beer)
 				.where(korName.containsIgnoreCase(query).or(engName.containsIgnoreCase(query)))
+				.orderBy(beer.beerDetailsBasic.korName.asc(), beer.beerDetailsBasic.engName.asc())
 				.fetch());
 		}
 
@@ -87,7 +91,8 @@ public class SearchQueryRepository {
 			.join(beer.beerBeerCategories, beerBeerCategory)
 			.join(beerBeerCategory.beerCategory, beerCategory)
 			.where(beerCategory.beerCategoryType.stringValue().eq(queryParam))
-			.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
+			.orderBy(beer.beerDetailsStars.totalAverageStars.desc(), beer.beerDetailsBasic.korName.asc(),
+				beer.beerDetailsBasic.engName.asc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -111,7 +116,8 @@ public class SearchQueryRepository {
 			.selectFrom(beer)
 			.where(beer.beerDetailsTopTags.tag1.eq(queryParam)
 				.or(beer.beerDetailsTopTags.tag2.eq(queryParam)))
-			.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
+			.orderBy(beer.beerDetailsStars.totalAverageStars.desc(), beer.beerDetailsBasic.korName.asc(),
+				beer.beerDetailsBasic.engName.asc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -133,7 +139,8 @@ public class SearchQueryRepository {
 		List<Beer> beerList = jpaQueryFactory
 			.selectFrom(beer)
 			.where(beer.beerDetailsStatistics.bestPairingCategory.eq(queryParam))
-			.orderBy(beer.beerDetailsStars.totalAverageStars.desc())
+			.orderBy(beer.beerDetailsStars.totalAverageStars.desc(), beer.beerDetailsBasic.korName.asc(),
+				beer.beerDetailsBasic.engName.asc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -159,7 +166,7 @@ public class SearchQueryRepository {
 		List<User> userList = jpaQueryFactory
 			.selectFrom(user)
 			.where(user.nickname.contains(queryParam))
-			.orderBy(user.followerCount.desc())
+			.orderBy(user.followerCount.desc(), user.nickname.asc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();

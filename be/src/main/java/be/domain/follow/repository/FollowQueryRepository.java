@@ -1,7 +1,6 @@
-package be.domain.follow;
+package be.domain.follow.repository;
 
-import static be.domain.follow.QFollow.*;
-import static be.domain.user.entity.QUser.*;
+import static be.domain.follow.entity.QFollow.*;
 
 import java.util.List;
 
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import be.domain.follow.entity.Follow;
 import be.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package be.domain.follow;
+package be.domain.follow.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.SliceImpl;
 
+import be.domain.follow.dto.FollowDto;
 import be.domain.user.entity.User;
 
 @Mapper(componentModel = "spring")

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,7 +63,8 @@ public class PairingController {
 	}
 
 	/* 페어링 수정 */
-	@PatchMapping("/{pairingId}")
+	// @PatchMapping("/{pairingId}")
+	@RequestMapping(value = "/{pairingId}", method = {RequestMethod.POST, RequestMethod.PATCH})
 	public ResponseEntity<String> patch(@PathVariable @Positive Long pairingId,
 		@RequestPart(value = "files", required = false) List<MultipartFile> files,
 		@RequestPart(value = "patch") @Valid PairingRequestDto.Patch patch) throws IOException {

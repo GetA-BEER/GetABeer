@@ -1,12 +1,8 @@
 package be.domain.search.controller;
 
-import java.util.ArrayList;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import be.domain.beer.dto.BeerDto;
 import be.domain.beer.entity.Beer;
 import be.domain.beer.mapper.BeerMapper;
-import be.domain.follow.FollowQueryRepository;
+import be.domain.follow.repository.FollowQueryRepository;
 import be.domain.search.service.SearchService;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,7 +85,8 @@ public class UserController {
 	}
 
 	/* 유저 정보 수정(프로필 이미지) */
-	@PatchMapping("/mypage/userinfo/image")
+	// @PatchMapping("/mypage/userinfo/image")
+	@RequestMapping(value = "/mypage/userinfo/image", method = {RequestMethod.POST, RequestMethod.PATCH})
 	public ResponseEntity<UserDto.UserInfoResponse> editProfileImage(
 		@RequestParam(value = "image") MultipartFile image) throws IOException {
 		User user = userService.updateProfileImage(image);

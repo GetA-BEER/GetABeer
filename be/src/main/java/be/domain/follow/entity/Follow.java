@@ -1,4 +1,4 @@
-package be.domain.follow;
+package be.domain.follow.entity;
 
 import java.sql.Timestamp;
 
