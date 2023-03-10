@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { accessToken, userId } from '@/atoms/login';
 import { useRecoilValue } from 'recoil';
 import Swal from 'sweetalert2';
-import { follower } from '@/atoms/follow';
 
 export interface BtnProps {
   id: number;
