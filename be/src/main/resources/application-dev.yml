@@ -3,7 +3,7 @@ spring:
     name: Get_A_Beer
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${SQL_ENDPOINT}:3306/getabeer?serverTimezone=Asia/Seoul
+    url: ${SQL_ENDPOINT}
     username: ${SQL_USERNAME}
     password: ${SQL_PASSWORD}
   cache:
