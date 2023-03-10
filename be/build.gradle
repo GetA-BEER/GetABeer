@@ -29,7 +29,6 @@ sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 }
 
 //ext {
