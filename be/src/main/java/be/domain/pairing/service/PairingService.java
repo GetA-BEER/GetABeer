@@ -77,13 +77,6 @@ public class PairingService {
 		pairing.saveDefault(beer, user, thumbnail, pairingImages);
 		pairingRepository.save(pairing);
 
-		log.info("**************************************************************");
-		log.info("페어링 등록 확인 : " + pairing.getContent());
-		log.info("페어링 등록 확인 : " + pairing.getPairingCategory());
-		log.info("페어링 등록 확인 : " + pairing.getBeer().getBeerDetailsBasic().getKorName());
-		log.info("페어링 유저 확인 : " + pairing.getUser().getNickname());
-		log.info("**************************************************************");
-
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
 	}
 
