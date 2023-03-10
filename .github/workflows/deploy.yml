@@ -56,6 +56,7 @@ jobs:
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY}}
           cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
           cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_KEY }}
+          elasticsearch.host: ${{ secrets.EC2_HOST}}
           discord.webhook: ${{ secrets.WEBHOOK }}
 
       - name: Build with Gradle # 파일 빌드
@@ -70,3 +71,15 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
         shell : bash
+        
+      - name: Docker Run # 도커 실행
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker rm -f $(docker ps -qa)
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
+            docker-compose up -d
