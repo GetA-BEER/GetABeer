@@ -28,12 +28,12 @@ public class ChatService {
 
 	@Transactional
 	public String send(MessageDto.Request request) {
-		User user = userService.findLoginUser();
-		KafkaChatRoom kafkaChatRoom = chatRoomRepository.findById(user.getId());
+		// User user = userService.findLoginUser();
+		// KafkaChatRoom kafkaChatRoom = chatRoomRepository.findById(user.getId());
 
 		KafkaChatMessage message = KafkaChatMessage.builder()
-			.roomId(user.getId())
-			.sender(user.getNickname())
+			.roomId(request.getRoomId())
+			// .sender(user.getNickname())
 			.content(request.getContent())
 			.timestamp(LocalDateTime.now().toString())
 			.build();

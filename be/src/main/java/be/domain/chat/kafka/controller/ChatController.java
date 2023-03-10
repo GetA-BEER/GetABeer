@@ -36,13 +36,13 @@ public class ChatController {
 	}
 
 	/* 프론트엔드 메시지 전송 */
-	@MessageMapping("/sendMessage")
+	@MessageMapping("/send")
 	@SendTo("/topic/group") /* 해당 토픽을 구독하고 있는 클라이언트에게 전송 */
-	public KafkaChatMessage broadcastGroupMessage(@Payload KafkaChatMessage message) {
+	public ResponseEntity<String> broadcastGroupMessage(@Payload MessageDto.Request request) {
 		log.info("구독자들에게 메세지 전송");
-		log.info("메세지 내용 : " +  message.getContent());
+		log.info("메세지 내용 : " +  request.getContent());
 
-		return message;
+		return ResponseEntity.ok(chatService.send(request));
 	}
 
 	/* 카프카로 보내고 나면 출력이 되지만, 바로 실행하면 출력 안됨. -> 디비에 저장 필요? */

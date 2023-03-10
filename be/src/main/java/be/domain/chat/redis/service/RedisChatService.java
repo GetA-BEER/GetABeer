@@ -35,7 +35,7 @@ public class RedisChatService {
 
 	@Transactional
 	public void save(Long roomId, RedisMessageDto.Request request) {
-		User user = userService.findLoginUser();
+		User user = userService.getUser(request.getId());
 
 		RedisChatRoom room = roomService.findById(roomId);
 
@@ -43,7 +43,7 @@ public class RedisChatService {
 			.chatRoom(room)
 			.sender(user)
 			.content(request.getContent())
-			.type(request.getType())
+			// .type(request.getType())
 			.createdAt(LocalDateTime.now())
 			.build();
 
