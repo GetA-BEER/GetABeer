@@ -54,10 +54,7 @@ public class RedisChatController {
 	@MessageMapping("/api/chats/{roomId}")
 	@PostMapping("/api/chats/{roomId}")
 	public void sendMessage(@DestinationVariable Long roomId, @RequestBody RedisMessageDto.Request request) {
-		log.info("여기는 레디스 챗 컨트롤러");
-		log.error("여기는 레디스 챗 컨트롤러");
-		log.info("요청이 들어온다아아아아아악!!!!");
-		log.error("요청이 들어온다아아아아아악!!!!");
+		log.info("*************** 레디스 체팅 컨트롤러에 오신 여러분 환영합니다 ***********");
 
 		// User user = userService.findLoginUser();
 		Long userId = request.getId();
@@ -66,11 +63,7 @@ public class RedisChatController {
 			new RedisChat(roomId, userId, request.getContent()));
 
 		chatService.save(roomId, request);
-		log.info("디비에 저장했다아아아ㅏㄱ");
-		log.error("디비에 저장했다아아아ㅏㄱ");
-		log.info("여기는 레디스 챗 컨트롤러 끄읏");
-		log.error("여기는 레디스 챗 컨트롤러 끄읏");
-
+		log.info("*************** 레디스 체팅 컨트롤러에 오신 여러분 안녕하 가셰요 ***********");
 	}
 
 
