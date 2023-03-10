@@ -65,6 +65,7 @@ jobs:
         
       - name : Build Docker Image For Spring # 도커 이미지 빌드
         run : |
+          cd /home/runner/work/GetABeer/GetABeer/be
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
