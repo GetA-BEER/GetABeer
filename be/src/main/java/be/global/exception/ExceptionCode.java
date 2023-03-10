@@ -35,6 +35,7 @@ public enum ExceptionCode {
 	SLEEP_USER(403, "휴면 계정입니다. 휴면 해제가 필요합니다."),
 	WRONG_PASSWORD(404, "비밀번호가 일치하지 않습니다."),
 	EMAIL_USED_ANOTHER_ACCOUNT(404, "Email is Being Used By Another Account."),
+	DUPLICATION_PASSWORD(409, "전 비밀번호와 동일한 비밀번호로 변경할 수 없습니다."),
 
 	/* BEER 관련 예외 */
 	BEER_NOT_FOUND(404, "Beer Not Found"),

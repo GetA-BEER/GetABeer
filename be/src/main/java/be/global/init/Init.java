@@ -143,7 +143,7 @@ public class Init {
 			}
 		}
 
-		for (int i = 1; i < 205; i++) {
+		for (int i = 1; i < 220; i++) {
 
 			BeerDetailsStars beerDetailsStars =
 				BeerDetailsStars.builder()
@@ -203,7 +203,7 @@ public class Init {
 		 * MONTHLY BEER STUB DATA
 		 */
 		for (int i = 0; i < 5; i++) {
-			Long rand = (long)(Math.random() * 204 + 1);
+			Long rand = (long)(Math.random() * 219 + 1);
 
 			Beer findBeer = beerService.findVerifiedBeer(rand);
 
@@ -231,7 +231,7 @@ public class Init {
 		 * WEEKLY BEER STUB DATA
 		 */
 		for (int i = 0; i < 5; i++) {
-			Long rand = (long)(Math.random() * 204 + 1);
+			Long rand = (long)(Math.random() * 219 + 1);
 
 			Beer findBeer = beerService.findVerifiedBeer(rand);
 

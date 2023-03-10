@@ -39,15 +39,17 @@ public class NotificationService {
 
 	// SSE 통신
 	public SseEmitter subscribe(String lastEventId) {
-		Long userId = userService.getLoginUser().getId();
+		User user = userService.getLoginUser();
+		Long userId = user.getId();
 		String id = userId + "_" + System.currentTimeMillis();
 		SseEmitter emitter = emitterRepository.save(id, new SseEmitter(DEFAULT_TIMEOUT));
 
 		emitter.onCompletion(() -> emitterRepository.deleteAllStartByWithId(id));
 		emitter.onTimeout(() -> emitterRepository.deleteAllStartByWithId(id));
+		emitter.onError((e) -> emitterRepository.deleteAllStartByWithId(id));
 
 		// 503 에러를 방지 더미 데이터
-		sendToClient(emitter, id, "(503에러 방지 더미데이터) SSE 연결됐습니당! [이거슨 유저아이디=" + userId + "]");
+		sendToClient(emitter, id, "SSE에 연결되었습니다. " + user.getNickname() + "님 환영합니다." /* +"[=" + userId + "]" */);
 
 		// 미수신 Event 목록 존재 시 전송으로 Event 유실 방지
 		if (!lastEventId.isEmpty()) {
@@ -75,6 +77,7 @@ public class NotificationService {
 	@Transactional
 	public void send(User user, Long idForNotifyType, String title, String content, String commenterImage,
 		NotificationType notificationType) {
+
 		Notification notification = createNotification(user, idForNotifyType, title, content, commenterImage,
 			notificationType);
 		String id = String.valueOf(user.getId());
@@ -108,18 +111,21 @@ public class NotificationService {
 
 	@Transactional
 	public NotificationDto.Total findAll() {
-		User user = userService.getLoginUser();
+		User user = userService.getLoginUserReturnNull();
 
-		List<NotificationDto.Response> responses = notificationRepository.findAllByUserId(user.getId()).stream()
-			.map(NotificationDto.Response::from)
-			.sorted(Comparator.comparing(NotificationDto.Response::getId).reversed())
-			.collect(Collectors.toList());
+		if (user != null) {
+			List<NotificationDto.Response> responses = notificationRepository.findAllByUserId(user.getId()).stream()
+				// .filter(notification -> !notification.getNotificationType().equals(NotificationType.FOLLOWING))
+				.map(NotificationDto.Response::from)
+				.sorted(Comparator.comparing(NotificationDto.Response::getId).reversed())
+				.collect(Collectors.toList());
 
-		long unreadCount = responses.stream()
-			.filter(notification -> !notification.getIsRead())
-			.count();
+			long unreadCount = responses.stream()
+				.filter(notification -> !notification.getIsRead())
+				.count();
 
-		return NotificationDto.Total.of(responses, unreadCount);
+			return NotificationDto.Total.of(responses, unreadCount);
+		} else return null;
 	}
 
 	@Transactional

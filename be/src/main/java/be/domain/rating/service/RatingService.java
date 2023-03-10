@@ -57,7 +57,7 @@ public class RatingService {
 		/* 이미 평가를 입력했던 유저라면 입력할 수 없음 */
 		verifyExistUser(user.getId(), beerId);
 
-		/* 0점은 줄 수 없음, MIN 은 Long 타입이라 여기서 한 번 거르기 */
+		/* 0점은 줄 수 없음, MIN 은 Long 타입이라 여기서 한 번 거르기 : 소수점을 선언할 수 없음.. */
 		cannotZeroStar(rating.getStar());
 
 		/* 존재하는 맥주인지 확인 */
