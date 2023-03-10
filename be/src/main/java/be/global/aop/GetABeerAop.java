@@ -252,13 +252,14 @@ public class GetABeerAop {
 			Double deleteStar = findRating.getStar();
 
 			findBeer.deleteTotalAverageStars(deleteStar);
-			findBeer.minusRatingCount();
 
 			if (loginUser.getGender().equals(Gender.FEMALE)) {
 				findBeer.deleteFemaleAverageStars(deleteStar);
 			} else if (loginUser.getGender().equals(Gender.MALE)) {
 				findBeer.deleteMaleAverageStars(deleteStar);
 			}
+
+			findBeer.minusRatingCount();
 
 			List<String> presentBeerTagTypes = new ArrayList<>();
 
