@@ -118,7 +118,7 @@ public class BeerDto {
 	@AllArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class RecommendResponse {
 
-		private Long weeklyBeerId;
+		// private Long weeklyBeerId;
 		private Long beerId;
 		private String korName;
 		private String thumbnail;

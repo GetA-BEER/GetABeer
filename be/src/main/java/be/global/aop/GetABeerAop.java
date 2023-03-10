@@ -256,10 +256,8 @@ public class GetABeerAop {
 
 			if (loginUser.getGender().equals(Gender.FEMALE)) {
 				findBeer.deleteFemaleAverageStars(deleteStar);
-				findBeer.minusFemaleStarCount();
 			} else if (loginUser.getGender().equals(Gender.MALE)) {
 				findBeer.deleteMaleAverageStars(deleteStar);
-				findBeer.minusMaleStarCount();
 			}
 
 			List<String> presentBeerTagTypes = new ArrayList<>();
@@ -289,6 +287,9 @@ public class GetABeerAop {
 				&& beerService.findBestRating(findBeer) != null) {
 				Rating bestRating = beerService.findBestRating(findBeer);
 				findBeer.updateBestRating(bestRating);
+			} else if (findBeer.getBeerDetailsBestRating().getBestRatingId() == ratingId
+				&& beerService.findBestRating(findBeer) == null) {
+				findBeer.deleteBeerDetailsBestRating();
 			}
 
 			beerRepository.save(findBeer);

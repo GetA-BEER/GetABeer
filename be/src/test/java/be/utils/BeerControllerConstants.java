@@ -123,15 +123,18 @@ public class BeerControllerConstants {
 	public static final BeerDetailsBestRating BEER_DETAILS_BEST_RATING =
 		BeerDetailsBestRating.builder()
 			.bestRatingId(1L)
+			.bestUserId(1L)
 			.bestNickname("닉네임")
 			.profileImage("프로필 이미지")
 			.bestStar(4.3)
+			.bestLikeCount(10)
 			.bestContent("내용")
 			.build();
 
 	public static final BeerDto.MonthlyBestResponse GET_MONTHLY_BEER_RESPONSE =
 		BeerDto.MonthlyBestResponse.builder()
 			.beerId(1L)
+			.monthlyBeerId(1L)
 			.korName("한글 이름")
 			.beerDetailsTopTags(BEER_DETAILS_TOP_TAGS)
 			.totalAverageStars(4.0)
@@ -147,6 +150,7 @@ public class BeerControllerConstants {
 	public static final BeerDto.WeeklyBestResponse GET_WEEKLY_BEER_RESPONSE =
 		BeerDto.WeeklyBestResponse.builder()
 			.beerId(1L)
+			.weeklyBeerId(1L)
 			.korName("한글 이름")
 			.thumbnail("썸네일 이미지 경로")
 			.beerCategories(List.of("ALE"))
