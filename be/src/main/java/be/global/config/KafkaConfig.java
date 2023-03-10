@@ -24,8 +24,8 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import be.domain.chat.kafka.entity.KafkaChatMessage;
 import be.domain.chat.kafka.KafkaConstants;
 
-@EnableKafka
-@Configuration
+// @EnableKafka
+// @Configuration
 class KafkaConfig {
 
 	/* --------------------------------------------- 카프카 토픽 등록? ------------------------------------------------- */
