@@ -9,7 +9,7 @@ import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
 import be.domain.comment.repository.pairing.PairingCommentRepository;
 import be.domain.comment.repository.rating.RatingCommentRepository;
-import be.domain.follow.FollowQueryRepository;
+import be.domain.follow.repository.FollowQueryRepository;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.repository.PairingRepository;
 import be.domain.rating.entity.Rating;

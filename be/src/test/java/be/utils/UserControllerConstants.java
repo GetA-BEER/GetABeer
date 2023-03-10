@@ -2,6 +2,8 @@ package be.utils;
 
 import java.util.List;
 
+import org.springframework.mock.web.MockMultipartFile;
+
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Age;
@@ -82,4 +84,10 @@ public class UserControllerConstants {
 			.newPassword("password1@@")
 			.newVerifyPassword("password1@@")
 			.build();
+
+	public static final MockMultipartFile MOCK_MULTIPART_FILE =
+		new MockMultipartFile("image", "image.png", "image/png", "<<png data>>".getBytes());
+
+	public static final MockMultipartFile PAIRING_MOCK_MULTIPART_FILE =
+		new MockMultipartFile("files", "image.png", "image/png", "<<png data>>".getBytes());
 }

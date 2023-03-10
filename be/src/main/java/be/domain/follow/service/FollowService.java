@@ -1,4 +1,4 @@
-package be.domain.follow;
+package be.domain.follow.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,6 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.domain.follow.entity.Follow;
+import be.domain.follow.repository.FollowQueryRepository;
+import be.domain.follow.repository.FollowRepository;
 import be.domain.notice.entity.NotificationType;
 import be.domain.notice.service.NotificationService;
 import be.domain.user.entity.User;

@@ -2,7 +2,7 @@ package be.domain.user.repository;
 
 import static be.domain.comment.entity.QPairingComment.*;
 import static be.domain.comment.entity.QRatingComment.*;
-import static be.domain.follow.QFollow.*;
+import static be.domain.follow.entity.QFollow.*;
 import static be.domain.pairing.entity.QPairing.*;
 import static be.domain.rating.entity.QRating.*;
 import static be.domain.user.entity.QUser.*;

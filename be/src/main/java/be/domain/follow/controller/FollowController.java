@@ -1,4 +1,4 @@
-package be.domain.follow;
+package be.domain.follow.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import be.domain.follow.dto.FollowDto;
+import be.domain.follow.mapper.FollowMapper;
+import be.domain.follow.service.FollowService;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.dto.MultiResponseDto;
@@ -42,7 +45,7 @@ public class FollowController {
 	}
 
 	@GetMapping("/{userId}/followers")
-	public ResponseEntity<MultiResponseDto<FollowDto.FollowerResponse>> followersList(
+	public ResponseEntity<MultiResponseDto<FollowDto.FollowerResponse>> getFollowersList(
 		@PathVariable("userId") @Positive Long followedUserId,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 
@@ -71,7 +74,7 @@ public class FollowController {
 	}
 
 	@GetMapping("/{userId}/followings")
-	public ResponseEntity<MultiResponseDto<FollowDto.FollowingResponse>> followingList(
+	public ResponseEntity<MultiResponseDto<FollowDto.FollowingResponse>> getFollowingList(
 		@PathVariable("userId") @Positive Long followingUserId,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 

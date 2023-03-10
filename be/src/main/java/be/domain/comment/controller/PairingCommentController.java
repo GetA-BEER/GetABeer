@@ -43,7 +43,7 @@ public class PairingCommentController {
 
 	/* 페어링 댓글 수정 */
 	@PatchMapping("/{commentId}")
-	public ResponseEntity<PairingCommentDto.Response>  patch(@RequestBody PairingCommentDto.Patch patch,
+	public ResponseEntity<PairingCommentDto.Response> patch(@RequestBody PairingCommentDto.Patch patch,
 		@PathVariable @Positive Long commentId) {
 		PairingComment pairingComment = pairingCommentService
 			.update(mapper.patchPairingCommentDtoToPairingComment(patch), commentId);
@@ -53,7 +53,7 @@ public class PairingCommentController {
 
 	/* 페어링 댓글 조회 */
 	@GetMapping
-	public ResponseEntity<List<PairingCommentDto.Response>>  getPairingCommentPage(@RequestParam Long pairingId) {
+	public ResponseEntity<List<PairingCommentDto.Response>> getPairingCommentPage(@RequestParam Long pairingId) {
 		List<PairingCommentDto.Response> responses = pairingCommentService.getPairingComment(pairingId);
 
 		return ResponseEntity.ok(responses);

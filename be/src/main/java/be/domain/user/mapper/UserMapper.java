@@ -11,7 +11,7 @@ import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.entity.BeerCategoryType;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
-import be.domain.follow.FollowQueryRepository;
+import be.domain.follow.repository.FollowQueryRepository;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.entity.UserBeerCategory;
