@@ -5,22 +5,25 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import Image from 'next/image';
+import Pagenation from '@/components/Pagenation';
 
 export default function Follower() {
   const router = useRouter();
   const userid = router.query.id;
   const [followerList, setFollowerList] = useState<FollowProps[]>([]);
-
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   useEffect(() => {
     if (userid !== undefined) {
       axios
         .get(`/api/follows/${userid}/followers`)
         .then((res) => {
           setFollowerList(res.data.data);
+          setTotalPages(res.data.pageInfo.totalPages);
         })
         .catch((error) => console.log(error));
     }
-  }, [userid]);
+  }, [page, userid]);
 
   return (
     <>
@@ -57,6 +60,10 @@ export default function Follower() {
             </div>
           )}
         </div>
+
+        {followerList.length ? (
+          <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+        ) : null}
       </main>
     </>
   );
