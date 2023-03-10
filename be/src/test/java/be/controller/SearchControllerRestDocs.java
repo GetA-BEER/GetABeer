@@ -1,10 +1,11 @@
 package be.controller;
 
 import static be.utils.ApiDocumentUtils.*;
-import static be.utils.BeerWishlistControllerConstants.*;
 import static be.utils.SearchControllerConstants.*;
 import static be.utils.UserControllerConstants.*;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.anyList;
+import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -36,8 +37,6 @@ import com.google.gson.Gson;
 import be.domain.beer.mapper.BeerMapper;
 import be.domain.search.service.SearchService;
 import be.domain.search.service.VisionService;
-import be.domain.user.entity.User;
-import be.domain.user.service.UserService;
 
 @Transactional
 @SpringBootTest

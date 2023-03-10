@@ -117,7 +117,7 @@ public class UserControllerRestDocs {
 				"Post_User_Info",
 				getDocumentRequest(),
 				pathParameters(
-					parameterWithName("user_id").description("사용자 번호")
+					parameterWithName("user-id").description("사용자 번호")
 				),
 				requestFields(
 					List.of(

@@ -214,7 +214,7 @@ public class Init {
 			BeerDetailsBestRating bestRating =
 				BeerDetailsBestRating.builder()
 					.bestRatingId(rand)
-					.bestUserId((long)i)
+					.bestUserId((long)i + 1)
 					.bestNickname("닉네임 " + i)
 					.profileImage(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
 					.bestStar(4.5)

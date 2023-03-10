@@ -266,4 +266,8 @@ public class Beer extends BaseTimeEntity implements Serializable {
 		this.beerDetailsCounts.minusMaleStarCount();
 	}
 
+	public void deleteBeerDetailsBestRating() {
+		this.beerDetailsBestRating = null;
+	}
+
 }
