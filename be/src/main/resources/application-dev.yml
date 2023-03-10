@@ -96,7 +96,7 @@ spring:
   cloud:
     gcp:
       credentials:
-        location: classpath:/getabeer-376509-6310d68578f1.json
+        location: /home/ubuntu/action/getabeer-376509-6310d68578f1.json
 cloud:
   aws:
     credentials:
