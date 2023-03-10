@@ -78,7 +78,8 @@ public class Notification {
 	}
 
 	@Builder
-	public Notification(User user, String title, Long idForNotifyType, Boolean isRead, String content, String commenterImage, NotificationType notificationType) {
+	public Notification(User user, String title, Long idForNotifyType, Boolean isRead, String content,
+		String commenterImage, NotificationType notificationType) {
 		this.user = user;
 		this.title = title;
 		this.idForNotifyType = idForNotifyType;

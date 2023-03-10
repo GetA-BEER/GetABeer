@@ -47,7 +47,7 @@ public class FollowService {
 			followedUser.addFollower();
 
 			String title = followingUser.getNickname() + "님이 회원님을 팔로우하기 시작했습니다.";
-			notificationService.send(followedUser, null, title, null, followingUser.getImageUrl(),
+			notificationService.send(followedUser, followingUser.getId(), title, null, followingUser.getImageUrl(),
 				NotificationType.FOLLOWING);
 
 			return "Create Follow";

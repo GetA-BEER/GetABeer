@@ -1,0 +1,88 @@
+name: GitHub Actions를 이용한 CI v0.0.1
+
+on:
+  push:
+    paths: [ 'be/**' ]
+    branches: [ "dev-be" ]
+    
+permissions:
+  contents: read
+
+env:
+  RESOURCE_PATH: ./be/src/main/resources/application-dev.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name : Checkout # 기본 체크 아웃
+        uses: actions/checkout@v3
+        
+      - name: Setup JAVA # JDK 설정
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Add permission # 권한 부여
+        run: chmod +x gradlew
+        working-directory: ./be/
+
+      - name: create-json # json 파일 생성
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "be/src/main/resources/getabeer-376509-6310d68578f1.json"
+          json: ${{ secrets.GOOGLE_JSON}}
+
+      - name: Set Yml # yml 파일 설정
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.RESOURCE_PATH }}
+        env:
+          spring.datasource.url: ${{ secrets.SQL_ENDPOINT}}
+          spring.datasource.username: ${{ secrets.SQL_USERNAME}}
+          spring.datasource.password: ${{ secrets.SQL_PASSWORD}}
+          spring.redis.host: ${{ secrets.REDIS_ENDPOINT }}
+          spring.security.oauth2.client.registration.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+          spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.naver.client-id: ${{ secrets.NAVER_CLIENT_ID }}
+          spring.security.oauth2.client.registration.naver.client-secret: ${{ secrets.NAVER_CLIENT_SECRET }}
+          spring.mail.username : ${{ secrets.SMTP_GOOGLE_ACCOUNT}}
+          spring.mail.password : ${{ secrets.SMTP_GOOGLE_PASSWORD}}
+          jwt.secret-key: ${{ secrets.JWT_SECRET_KEY}}
+          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
+          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_KEY }}
+          elasticsearch.host: ${{ secrets.EC2_HOST}}
+          discord.webhook: ${{ secrets.WEBHOOK }}
+
+      - name: Build with Gradle # 파일 빌드
+        run: ./gradlew clean build --exclude-task test
+        working-directory: ./be/
+        
+        
+      - name : Build Docker Image For Spring # 도커 이미지 빌드
+        run : |
+          cd /home/runner/work/GetABeer/GetABeer/be
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
+        shell : bash
+        
+      - name: Docker Run # 도커 실행
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/action
+            docker stop getabeer
+            docker rm getabeer
+            # docker rm -f $(docker ps -qa)
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
+            docker-compose up -d

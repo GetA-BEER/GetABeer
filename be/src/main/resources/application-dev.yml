@@ -3,7 +3,7 @@ spring:
     name: Get_A_Beer
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${SQL_ENDPOINT}:3306/getabeer?serverTimezone=Asia/Seoul
+    url: ${SQL_ENDPOINT}
     username: ${SQL_USERNAME}
     password: ${SQL_PASSWORD}
   cache:
@@ -127,7 +127,7 @@ webdriver:
     driverid: webdriver.chrome.driver
     location: src/main/java/be/domain/crawler/javaCrawler/chromedriver
 elasticsearch:
-  host: localhost
+  host: ${EC2_HOST}
   port: 9200
 python:
   crawler: src/main/java/be/domain/crawler/pycrawler/crawler.py
