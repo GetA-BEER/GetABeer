@@ -37,6 +37,7 @@ public class RedisSubscriber implements MessageListener {
 			log.info("레디스 챗 체킹 : " + redisChat.getContent());
 			messageTemplate.convertAndSend("/sub/room/" + redisChat.getRoomId(), redisChat);
 			messageTemplate.convertAndSend("/sub/room/mapper/" + redisChat.getRoomId(), publishMsg);
+			log.info("**************** 레디스 섭스크라이버 트라이 존 끝 ************************");
 		} catch (Exception exception) {
 			log.error("예외 발생 : " + exception.getMessage());
 		}
