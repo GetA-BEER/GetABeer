@@ -39,12 +39,20 @@
         </encoder>
     </appender>
 
-    <root>
-        <level value="INFO"/>
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="ERROR_LOG"/>
-        <appender-ref ref="DISCORD_API"/>
-        <!--        <appender-ref ref="DISCORD"/>-->
-    </root>
+    <springProfile name="dev">
+        <root>
+            <level value="INFO"/>
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ERROR_LOG"/>
+            <appender-ref ref="DISCORD_API"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="local">
+        <root>
+            <level value="INFO"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
 
 </configuration>
