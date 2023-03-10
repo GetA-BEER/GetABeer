@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { accessToken, userId } from '@/atoms/login';
 import { useRecoilValue } from 'recoil';
 import Swal from 'sweetalert2';
+import FollowBtn from './FollowBtn';
+
 export interface FollowProps {
   userId: number;
   nickname: string;
@@ -16,8 +18,11 @@ export interface FollowProps {
 export default function FollowUser(props: { followprops: FollowProps }) {
   const [TOKEN] = useRecoilValue(accessToken);
   const router = useRouter();
-  const [follow, setFollow] = useState<boolean>(props.followprops.isFollowing);
+  const [isFollow, setIsFollow] = useState<boolean>(
+    props.followprops.isFollowing
+  );
   const [isLogin, setIsLogin] = useState(false);
+
   const USERID = useRecoilValue(userId);
   useEffect(() => {
     if (TOKEN === '') {
@@ -26,38 +31,39 @@ export default function FollowUser(props: { followprops: FollowProps }) {
     }
   }, [TOKEN]);
 
-  const goToLogin = () => {
-    Swal.fire({
-      title: 'Get A Beer',
-      text: '로그인이 필요한 서비스 입니다.',
-      showCancelButton: true,
-      confirmButtonColor: '#f1b31c',
-      cancelButtonColor: '#A7A7A7',
-      confirmButtonText: '로그인',
-      cancelButtonText: '취소',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.push({
-          pathname: '/login',
-        });
-      }
-    });
-  };
-  const followClick = () => {
-    axios
-      .post(`/api/follows/${props.followprops.userId}`)
-      .then((res) => {
-        if (res.data === 'Create Follow') {
-          setFollow(true);
-        } else {
-          setFollow(false);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        goToLogin();
-      });
-  };
+  // const goToLogin = () => {
+  //   Swal.fire({
+  //     title: 'Get A Beer',
+  //     text: '로그인이 필요한 서비스 입니다.',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#f1b31c',
+  //     cancelButtonColor: '#A7A7A7',
+  //     confirmButtonText: '로그인',
+  //     cancelButtonText: '취소',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       router.push({
+  //         pathname: '/login',
+  //       });
+  //     }
+  //   });
+  // };
+  // const followClick = () => {
+  //   axios
+  //     .post(`/api/follows/${props.followprops.userId}`)
+  //     .then((res) => {
+  //       if (res.data === 'Create Follow') {
+  //         setIsFollow(true);
+  //       } else if (res.data === 'Delete Follow') {
+  //         setIsFollow(false);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       goToLogin();
+  //     });
+  // };
+
   const userCheck = () => {
     if (USERID !== props.followprops.userId) {
       router.push(`/userpage/${props.followprops.userId}`);
@@ -77,17 +83,11 @@ export default function FollowUser(props: { followprops: FollowProps }) {
         />
         <div className="self-center text-sm">{props.followprops.nickname}</div>
       </div>
-      <div className="w-32 self-center">
-        {USERID !== props.followprops.userId ? (
-          <div>
-            {follow === false ? (
-              <SubmitBtn onClick={followClick}>팔로우</SubmitBtn>
-            ) : (
-              <CloseBtn onClick={followClick}>팔로잉</CloseBtn>
-            )}
-          </div>
-        ) : null}
-      </div>
+      <FollowBtn
+        id={props.followprops.userId}
+        isFollow={isFollow}
+        setIsFollow={setIsFollow}
+      />
     </div>
   );
 }

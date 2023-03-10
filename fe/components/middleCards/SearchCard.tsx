@@ -31,6 +31,7 @@ export default function SearchCard(props: {
             alt={props.cardProps?.korName}
             src={props.cardProps?.thumbnail}
             fill
+            sizes="50vw"
             className="object-cover rounded-lg"
           />
         </div>
@@ -41,10 +42,10 @@ export default function SearchCard(props: {
         } flex-auto flex justify-center py-4 rounded-r-lg`}
       >
         <div className="flex flex-col justify-center items-center">
-          <h1 className="mb-2 font-bold text-xl lg:text-2xl">
+          <h1 className="mb-2 font-bold text-lg mx-3">
             {props.cardProps?.korName}
           </h1>
-          <div className="text-xs sm:text-sm lg:text-lg">
+          <div className="text-xs sm:text-sm">
             <span>
               {props.cardProps?.category.map((el: string, idx: number) => {
                 return (
@@ -68,7 +69,7 @@ export default function SearchCard(props: {
               ({props.cardProps?.totalStarCount} ratings)
             </span>
           </div>
-          <div className="flex flex-wrap ml-2">
+          <div className="flex flex-wrap mx-3">
             {props.cardProps?.beerDetailsTopTags
               ? props.cardProps?.beerDetailsTopTags.map(
                   (el: string, idx: number) => {

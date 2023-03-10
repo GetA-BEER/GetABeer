@@ -194,6 +194,7 @@ export default function UserPage() {
                   alt=" user profile image"
                   src={userImg}
                   fill
+                  sizes="100vw"
                   className="object-cover rounded-full"
                 />
               ) : (
@@ -207,22 +208,20 @@ export default function UserPage() {
               </div>
               <div className="flex gap-2">
                 <div
-                  className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                  className="bg-gray-300 text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
                   onClick={() =>
                     router.push({
                       pathname: `/follower/${id}`,
-                      query: { tap: 0 },
                     })
                   }
                 >
                   {followerCount} 팔로워
                 </div>
                 <div
-                  className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                  className="bg-gray-300 text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
                   onClick={() =>
                     router.push({
-                      pathname: `/follower/${id}`,
-                      query: { tap: 1 },
+                      pathname: `/following/${id}`,
                     })
                   }
                 >

@@ -41,6 +41,7 @@ export default function Header() {
             width={48}
             height={48}
             src="/images/logo.png"
+            priority
             className="ml-4 mr-2"
           />
         </Link>

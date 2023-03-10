@@ -7,16 +7,28 @@ import { useRecoilValue } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import { useState, useEffect } from 'react';
 import Chat from './Chat';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { searchingImage } from '@/atoms/searchingImage';
 
 export default function NavBar() {
   const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
+  const [searchResultList, setSearchResultList] =
+    useRecoilState(searchingImage);
   useEffect(() => {
     if (TOKEN === '') {
     } else {
       setIsLogin(true);
     }
   }, [TOKEN]);
+
+  useEffect(() => {
+    if (searchResultList.length > 0 && router.pathname !== '/search/image') {
+      setSearchResultList([]);
+    }
+  }, [router.pathname, searchResultList, setSearchResultList]);
 
   return (
     <nav className="w-full m-auto fixed bottom-0 z-[9] border-t border-gray-200 select-none bg-white">

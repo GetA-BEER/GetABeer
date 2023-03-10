@@ -30,6 +30,7 @@ export default function MiddleCard({
           alt={cardProps?.korName}
           src={cardProps?.thumbnail}
           fill
+          sizes="50vw"
           className="object-cover"
         />
       </div>
