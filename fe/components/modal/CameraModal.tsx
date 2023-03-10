@@ -41,12 +41,12 @@ export default function CameraModal() {
         };
         const formData = new FormData();
         formData.append('image', compressedFile);
+        router.push('/search/image');
+        setShowModal(false);
         axios
           .post(`/api/search/image`, formData, config)
           .then((res) => {
             setSearchResultList(res.data);
-            setShowModal(false);
-            router.push('/search/image');
           })
           .catch((error) => console.log(error));
       } catch (error) {

@@ -87,6 +87,7 @@ export default function RatingCard(props: {
               alt="user profile image"
               src={props.cardProps.userImage}
               fill
+              sizes="100vw"
               className="object-cover rounded-full"
             />
           </div>
@@ -127,7 +128,7 @@ export default function RatingCard(props: {
                 <span className="text-y-black text-xs">삭제</span>
               </button>
             </div>
-          ) : (
+          ) : router.pathname === '/rating/[ratingid]' ? (
             <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
               <button
                 className="flex items-center mr-1"
@@ -139,7 +140,7 @@ export default function RatingCard(props: {
                 <span className="text-y-black ml-[1px]">신고하기</span>
               </button>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
       <div className="m-2 flex flex-wrap">

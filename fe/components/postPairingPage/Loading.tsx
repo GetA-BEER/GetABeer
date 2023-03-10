@@ -11,6 +11,7 @@ export default function Loading() {
           className="absolute"
           src="/images/logo.png"
           alt="logo"
+          priority
           width={66}
           height={66}
         />

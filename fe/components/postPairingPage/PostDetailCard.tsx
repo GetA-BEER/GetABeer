@@ -22,6 +22,7 @@ export default function PostDetailCard(props: any) {
             alt={beerInfo?.beerDetailsBasic?.korName}
             src={beerInfo?.beerDetailsBasic?.thumbnail}
             fill
+            sizes="50vw"
           />
         </div>
       ) : (
