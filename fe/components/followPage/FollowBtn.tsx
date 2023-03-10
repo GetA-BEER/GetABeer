@@ -35,8 +35,12 @@ export default function FollowBtn({ id, isFollow, setIsFollow }: BtnProps) {
     });
   };
   const followClick = () => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .post(`/api/follows/${id}`)
+      .post(`/api/follows/${id}`, {}, config)
       .then((res) => {
         setIsFollow(!isFollow);
       })

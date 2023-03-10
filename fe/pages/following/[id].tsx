@@ -8,6 +8,8 @@ import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import Image from 'next/image';
 import Pagenation from '@/components/Pagenation';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 export default function Following() {
   const router = useRouter();
@@ -15,19 +17,22 @@ export default function Following() {
   const [followingList, setFollowingList] = useState<FollowingProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [TOKEN] = useRecoilState(accessToken);
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     if (userid !== undefined) {
       axios
-        .get(`/api/follows/${userid}/followings`)
+        .get(`/api/follows/${userid}/followings?page=${page}`, config)
         .then((res) => {
-          console.log(res.data);
           setFollowingList(res.data.data);
-          setPage(res.data.pageInfo.page);
           setTotalPages(res.data.pageInfo.totalPages);
         })
         .catch((error) => console.log(error));
     }
-  }, [userid]);
+  }, [TOKEN, page, userid]);
 
   return (
     <>
