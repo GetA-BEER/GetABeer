@@ -8,6 +8,7 @@ let instance = axios.create({
   withCredentials: true,
 });
 
+<<<<<<< HEAD
 // if (typeof window !== 'undefined') {
 //   // Perform localStorage action
 //   let tmpTOKEN: any = localStorage.getItem('recoil-persist');
@@ -24,4 +25,6 @@ let instance = axios.create({
 //     });
 //   }
 // }
+=======
+>>>>>>> 210f325c2c5ab385cb9061094de8a7ce5924a266
 export default instance;
