@@ -45,8 +45,7 @@ export default function Search() {
         })
         .catch((err) => console.log(err));
     }
-  }, [searchQuery, page, TOKEN]);
-
+  }, [searchQuery, page]);
   return (
     <PageContainer>
       <main>

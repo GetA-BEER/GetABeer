@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@next/font": "13.1.4",
+    "@stomp/stompjs": "^7.0.0",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "@types/react-share": "^4.0.0",
+    "@types/stompjs": "^2.3.5",
     "axios": "^1.2.3",
     "browser-image-compression": "^2.0.0",
     "eslint": "8.32.0",
