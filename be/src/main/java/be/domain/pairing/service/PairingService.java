@@ -27,9 +27,7 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PairingService {
