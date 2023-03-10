@@ -27,8 +27,8 @@ public class RedisSubscriber implements MessageListener {
 	public void onMessage(Message message, byte[] pattern) {
 		try {
 			log.info("*************** 여기는 레디스 섭스크라이버 ***************************");
-			log.info("메세지 어케 들어옴? : " + Arrays.toString(message.getBody()));
-			log.info("메세지 어케 들어오심? : " + Arrays.toString(message.getChannel()));
+			log.info("메세지 확인 : " + Arrays.toString(message.getBody()));
+			log.info("메세지 확인: " + Arrays.toString(message.getChannel()));
 
 			/* 레디스 데이터 역직렬화*/
 			String publishMsg = String.valueOf(redisTemplate.getStringSerializer().deserialize(message.getBody()));
