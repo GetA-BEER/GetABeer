@@ -1,22 +1,24 @@
 import BackBtn from '@/components/button/BackPageBtn';
-import FollowUser, { FollowProps } from '@/components/followPage/FollowUser';
+import FollowingUser, {
+  FollowingProps,
+} from '@/components/followPage/FollowingUser';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import Image from 'next/image';
 
-export default function Follower() {
+export default function Following() {
   const router = useRouter();
   const userid = router.query.id;
-  const [followerList, setFollowerList] = useState<FollowProps[]>([]);
+  const [followingList, setFollowingList] = useState<FollowingProps[]>([]);
 
   useEffect(() => {
     if (userid !== undefined) {
       axios
-        .get(`/api/follows/${userid}/followers`)
+        .get(`/api/follows/${userid}/followings`)
         .then((res) => {
-          setFollowerList(res.data.data);
+          setFollowingList(res.data.data);
         })
         .catch((error) => console.log(error));
     }
@@ -34,9 +36,9 @@ export default function Follower() {
         <BackBtn></BackBtn>
         <div>
           <div className="my-8 text-center text-xl bg-white font-semibold">
-            팔로워
+            팔로잉
           </div>
-          {followerList.length === 0 ? (
+          {followingList.length === 0 ? (
             <div className="noneContent">
               <Image
                 className="m-auto pb-3 opacity-50"
@@ -45,13 +47,13 @@ export default function Follower() {
                 width={40}
                 height={40}
               />
-              팔로워가 없습니다.
+              팔로잉이 없습니다.
             </div>
           ) : (
             <div className="m-2 border divide-y divide-gray-200 rounded-xl">
-              {followerList.map((el: FollowProps) => (
+              {followingList.map((el: FollowingProps) => (
                 <div key={el.userId}>
-                  <FollowUser followprops={el} />
+                  <FollowingUser followingProps={el} />
                 </div>
               ))}
             </div>
