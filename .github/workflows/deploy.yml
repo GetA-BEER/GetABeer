@@ -83,4 +83,4 @@ jobs:
             docker rm -f $(docker ps -qa)
             docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
-            docker-compose up -d
+            docker run --name 'getabeer' -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY}}
