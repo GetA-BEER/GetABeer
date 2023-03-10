@@ -24,4 +24,5 @@ let instance = axios.create({
 //     });
 //   }
 // }
+
 export default instance;
