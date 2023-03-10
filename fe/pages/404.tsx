@@ -11,6 +11,7 @@ export default function NotFoundPage() {
         <Image
           alt="not found image"
           src={'/images/NotFound.png'}
+          priority
           width={260}
           height={260}
         />
