@@ -127,7 +127,7 @@ webdriver:
     driverid: webdriver.chrome.driver
     location: src/main/java/be/domain/crawler/javaCrawler/chromedriver
 elasticsearch:
-  host: localhost
+  host: ${EC2_HOST}
   port: 9200
 python:
   crawler: src/main/java/be/domain/crawler/pycrawler/crawler.py
