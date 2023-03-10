@@ -121,6 +121,7 @@ export default function Alarm() {
       axios.delete(`/api/notifications/${id}`).then(() => {
         setShowModal(false);
         initNotify();
+        // userpage로 이동 필요
         router.push(`/mypage`);
       });
     }

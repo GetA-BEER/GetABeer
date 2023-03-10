@@ -19,8 +19,12 @@ export default function Pairing() {
 
   useEffect(() => {
     if (TOKEN !== '') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .get(`/api/mypage/pairing`)
+        .get(`/api/mypage/pairing`, config)
         .then((response) => {
           setPairingCardProps(response.data.data);
           setTotalPages(response.data.pageInfo.totalPages);

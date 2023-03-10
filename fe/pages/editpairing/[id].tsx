@@ -7,11 +7,14 @@ import CloseBtn from '@/components/button/CloseBtn';
 import SubmitBtn from '@/components/button/SubmitBtn';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 import axios from '@/pages/api/axios';
 
 export default function EditPairing() {
   const router = useRouter();
   const pairingId = router.query.id;
+  const [TOKEN] = useRecoilState<string>(accessToken);
   const [beerInfo, setBeerInfo] = useState<any>();
 
   const [content, setContent] = useState<any>('');
@@ -97,6 +100,7 @@ export default function EditPairing() {
   useEffect(() => {
     const config = {
       headers: {
+        Authorization: TOKEN,
         'content-type': 'multipart/form-data',
       },
       withCredentials: true,
@@ -110,7 +114,7 @@ export default function EditPairing() {
         })
         .catch((error) => console.log(error));
     }
-  }, [finalData, router, isSubmit, beerInfo, pairingId]);
+  }, [finalData, router, isSubmit, beerInfo, pairingId, TOKEN]);
 
   return (
     <>
