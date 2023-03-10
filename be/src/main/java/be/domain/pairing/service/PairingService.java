@@ -48,12 +48,6 @@ public class PairingService {
 	public String create(Pairing pairing, List<MultipartFile> files,
 		Long beerId) throws IOException {
 
-		log.info("**************************************************************");
-		log.info("서비스 시작 ");
-		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getContent());
-		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getLikeCount());
-		log.info("**************************************************************");
-
 		/* 존재하는 회원인지 확인 */
 		User user = userService.findLoginUser();
 
