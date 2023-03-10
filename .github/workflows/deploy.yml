@@ -33,9 +33,9 @@ jobs:
         id: create-json
         uses: jsdaniell/create-json@1.1.2
         with:
-          name: "getabeer.json"
-          json: ${{ secrets.GOOGLE_JSON}}
-          dir: 'src/main/resources/'
+          name: "be/src/main/resources/getabeer-376509-6310d68578f1.json"
+          json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+#           dir: 'src/main/resources/'
 
       - name: Set Yml # yml 파일 설정
         uses: microsoft/variable-substitution@v1
