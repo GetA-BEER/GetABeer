@@ -96,7 +96,7 @@ spring:
   cloud:
     gcp:
       credentials:
-        location: classpath:/getabeer-376509-e3dcb064cd58.json
+        location: ${GOOGLE_APPLICATION_CREDENTIALS}
 cloud:
   aws:
     credentials:
