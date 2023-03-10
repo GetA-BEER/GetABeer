@@ -4,6 +4,8 @@ import { IoClose } from 'react-icons/io5';
 import { ChatBalloonLeft, ChatBalloonRight } from './ChatBalloon';
 import CommentInput from './inputs/CommentInput';
 
+// import { Client, Message } from '@stomp/stompjs';
+
 interface ChatProps {
   time: number;
   role: 'user' | 'mater';
@@ -23,19 +25,44 @@ export default function Chat() {
     }
   }, [open, chatList]);
 
-  // if (typeof window !== 'undefined') {
-  //   const socket = new WebSocket('wss://f3ff-175-210-242-219.jp.ngrok.io/ws/');
-  //   console.log(socket, socket.readyState);
-  //   socket.addEventListener('open', () => {
-  //     console.log('드디어 서버와 연결되었다! ✅');
+  // const client = new Client({
+  //   brokerURL: 'wss://8c03-175-210-242-219.jp.ngrok.io/ws',
+  //   connectHeaders: {
+  //     login: 'user',
+  //     passcode: 'password',
+  //   },
+  //   debug: function (str) {
+  //     console.log('step', str);
+  //   },
+  //   reconnectDelay: 10000, //자동 재 연결
+  //   heartbeatIncoming: 4000,
+  //   heartbeatOutgoing: 4000,
+  // });
+
+  // client.onConnect = function (frame) {
+  //   console.log('서버와 연결되었다! ✅');
+  //   client.subscribe('/sub/room/1', (message) =>
+  //     console.log(`Received: ${message.body}`)
+  //   );
+  // };
+
+  // client.onStompError = function (frame) {
+  //   console.log('Broker reported error: ' + frame.headers['message']);
+  //   console.log('Additional details: ' + frame.body);
+  // };
+
+  // client.activate();
+
+  // const PubMessageObj = () => {
+  //   client.publish({
+  //     destination: '/pub/api/chats/1',
+  //     body: JSON.stringify({
+  //       id: 3,
+  //       content: '내용',
+  //     }),
+  //     skipContentLengthHeader: true,
   //   });
-  //   socket.addEventListener('message', (message) => {
-  //     console.log('서버로부터 온 메세지: ', message);
-  //   });
-  //   socket.onopen = () => {
-  //     socket.send('클라이언트에서 날리는 메시지');
-  //   };
-  // }
+  // };
 
   const inputValid = (str: string) => {
     const strTrim = str.trim();
@@ -114,6 +141,7 @@ export default function Chat() {
             })}
             <div ref={bottomRef} />
           </ul>
+          {/* <button onClick={PubMessageObj}>메세지보내기</button> */}
           <div>
             <CommentInput
               inputState={inputState}
