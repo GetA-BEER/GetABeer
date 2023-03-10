@@ -31,39 +31,6 @@ export default function FollowUser(props: { followprops: FollowProps }) {
     }
   }, [TOKEN]);
 
-  // const goToLogin = () => {
-  //   Swal.fire({
-  //     title: 'Get A Beer',
-  //     text: '로그인이 필요한 서비스 입니다.',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#f1b31c',
-  //     cancelButtonColor: '#A7A7A7',
-  //     confirmButtonText: '로그인',
-  //     cancelButtonText: '취소',
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       router.push({
-  //         pathname: '/login',
-  //       });
-  //     }
-  //   });
-  // };
-  // const followClick = () => {
-  //   axios
-  //     .post(`/api/follows/${props.followprops.userId}`)
-  //     .then((res) => {
-  //       if (res.data === 'Create Follow') {
-  //         setIsFollow(true);
-  //       } else if (res.data === 'Delete Follow') {
-  //         setIsFollow(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       goToLogin();
-  //     });
-  // };
-
   const userCheck = () => {
     if (USERID !== props.followprops.userId) {
       router.push(`/userpage/${props.followprops.userId}`);

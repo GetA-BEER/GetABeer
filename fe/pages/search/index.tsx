@@ -31,6 +31,7 @@ export default function Search() {
           `/api/search?query=${encodeURIComponent(searchQuery)}&page=${page}`
         )
         .then((res) => {
+          console.log(res.data.data);
           if (searchQuery.includes('@') === true) {
             setUserList(res.data.data);
             setSearchResultList([]);
@@ -99,8 +100,8 @@ export default function Search() {
                 </div>
               ) : (
                 <div className="m-2 border divide-y divide-gray-200 rounded-xl">
-                  {userList.map((el, idx) => (
-                    <div key={idx}>
+                  {userList.map((el) => (
+                    <div key={el.userId}>
                       <FollowUser followprops={el} />
                     </div>
                   ))}
