@@ -7,6 +7,8 @@ import { BiErrorAlt } from 'react-icons/bi';
 import axios from '@/pages/api/axios';
 import Router from 'next/router';
 import swal from 'sweetalert2';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 interface IFormValues {
   email: string;
@@ -23,6 +25,7 @@ export default function PwEdit() {
     getValues,
     formState: { errors },
   } = useForm<IFormValues>({ mode: 'onChange' });
+  const [TOKEN] = useRecoilState(accessToken);
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
     // console.log(data);
@@ -39,8 +42,12 @@ export default function PwEdit() {
       newPassword: editpassword,
       newVerifyPassword: passwordConfirm,
     };
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .patch('api/user/password', reqBody)
+      .patch('api/user/password', reqBody, config)
       .then((res) => {
         // console.log(res);
         swal.fire({
