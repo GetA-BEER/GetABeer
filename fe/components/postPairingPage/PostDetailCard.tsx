@@ -35,10 +35,6 @@ export default function PostDetailCard(props: any) {
         </h1>
         <div className="text-xs sm:text-sm lg:text-lg">
           <span>
-            {BeerCountryMatcherToKor(beerInfo?.beerDetailsBasic?.country)}
-          </span>
-          <span>
-            /
             {beerInfo?.beerCategoryTypes === undefined ? (
               <></>
             ) : (
@@ -51,7 +47,10 @@ export default function PostDetailCard(props: any) {
               })
             )}
           </span>
-          <span>/ {beerInfo?.beerDetailsBasic?.abv}%</span>
+          <span>
+            / {BeerCountryMatcherToKor(beerInfo?.beerDetailsBasic?.country)}
+          </span>
+          <span> / {beerInfo?.beerDetailsBasic?.abv}%</span>
           {beerInfo?.beerDetailsBasic?.ibu === null ? (
             <></>
           ) : (
