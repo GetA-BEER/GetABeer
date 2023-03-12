@@ -2,11 +2,14 @@ import SubmitBtn from '@/components/button/SubmitBtn';
 import { Input } from '@/components/inputs/Input';
 import Head from 'next/head';
 import BackBtn from '@/components/button/BackPageBtn';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BiErrorAlt } from 'react-icons/bi';
 import axios from '@/pages/api/axios';
 import Router from 'next/router';
 import swal from 'sweetalert2';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 interface IFormValues {
   email: string;
@@ -23,6 +26,8 @@ export default function PwEdit() {
     getValues,
     formState: { errors },
   } = useForm<IFormValues>({ mode: 'onChange' });
+  const [TOKEN] = useRecoilState(accessToken);
+  const [pwMessage, setPwMessage] = useState('');
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
     // console.log(data);
@@ -39,8 +44,12 @@ export default function PwEdit() {
       newPassword: editpassword,
       newVerifyPassword: passwordConfirm,
     };
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .patch('api/user/password', reqBody)
+      .patch('api/user/password', reqBody, config)
       .then((res) => {
         // console.log(res);
         swal.fire({
@@ -52,6 +61,9 @@ export default function PwEdit() {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.data.status === 409) {
+          setPwMessage('이전과 똑같은 비밀번호입니다!');
+        }
       });
   };
   return (
@@ -134,6 +146,12 @@ export default function PwEdit() {
                 {errors.passwordConfirm.message}
               </p>
             )}
+            {pwMessage ? (
+              <div className="flex mx-3 mb-1 gap-0.5 text-red-600 text-xs">
+                <BiErrorAlt />
+                {pwMessage}
+              </div>
+            ) : null}
             <SubmitBtn onClick={undefined}>비밀번호 변경</SubmitBtn>
           </form>
         </div>

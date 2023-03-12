@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import Image from 'next/image';
 import Pagenation from '@/components/Pagenation';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 export default function Follower() {
   const router = useRouter();
@@ -13,17 +15,20 @@ export default function Follower() {
   const [followerList, setFollowerList] = useState<FollowProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [TOKEN] = useRecoilState(accessToken);
   useEffect(() => {
-    if (userid !== undefined) {
-      axios
-        .get(`/api/follows/${userid}/followers`)
-        .then((res) => {
-          setFollowerList(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [page, userid]);
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+    axios
+      .get(`/api/follows/${userid}/followers?page=${page}`, config)
+      .then((res) => {
+        setFollowerList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((error) => console.log(error));
+  }, [TOKEN, page, userid]);
 
   return (
     <>
@@ -65,6 +70,7 @@ export default function Follower() {
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         ) : null}
       </main>
+      <div className="pb-20"></div>
     </>
   );
 }

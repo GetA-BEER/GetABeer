@@ -1,12 +1,8 @@
 import Image from 'next/image';
-import SubmitBtn from '../button/SubmitBtn';
 import { useEffect, useState } from 'react';
-import axios from '@/pages/api/axios';
-import CloseBtn from '../button/CloseBtn';
 import { useRouter } from 'next/router';
 import { accessToken, userId } from '@/atoms/login';
 import { useRecoilValue } from 'recoil';
-import Swal from 'sweetalert2';
 import FollowBtn from './FollowBtn';
 
 export interface FollowProps {

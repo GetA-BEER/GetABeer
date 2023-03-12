@@ -7,6 +7,8 @@ import { TimeHandler } from '@/utils/TimeHandler';
 import CommentInput from './inputs/CommentInput';
 import Swal from 'sweetalert2';
 import ProfileCard from './pairing/ProfileCard';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 export interface RatingComment {
   ratingId: number;
@@ -44,6 +46,11 @@ export default function SpeechBalloon({
   const [date, setDate] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [content, setContent] = useState(props.content);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   const editComment = () => {
     setIsEditMode(true);
@@ -52,16 +59,24 @@ export default function SpeechBalloon({
   const patchComment = () => {
     if ('ratingCommentId' in props) {
       axios
-        .patch(`/api/ratings/comments/${props.ratingCommentId}`, {
-          content: content,
-        })
+        .patch(
+          `/api/ratings/comments/${props.ratingCommentId}`,
+          {
+            content: content,
+          },
+          config
+        )
         .catch((err) => console.log(err));
     }
     if ('pairingCommentId' in props) {
       axios
-        .patch(`/api/pairings/comments/${props.pairingCommentId}`, {
-          content: content,
-        })
+        .patch(
+          `/api/pairings/comments/${props.pairingCommentId}`,
+          {
+            content: content,
+          },
+          config
+        )
         .catch((err) => console.log(err));
     }
     setIsEditMode(false);

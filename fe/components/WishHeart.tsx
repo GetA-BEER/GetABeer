@@ -2,6 +2,9 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
 import Swal from 'sweetalert2';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
+
 interface WishHeartProps {
   beerId: number;
   isWish: boolean;
@@ -16,10 +19,15 @@ export default function WishHeart({
   isLogin,
 }: WishHeartProps) {
   const router = useRouter();
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
   const handleWish = () => {
     if (isLogin) {
       axios
-        .patch(`/api/beers/${beerId}/wish`)
+        .patch(`/api/beers/${beerId}/wish`, {}, config)
         .then((res) => {
           setIsWish(!isWish);
         })

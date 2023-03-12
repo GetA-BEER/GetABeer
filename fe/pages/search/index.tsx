@@ -26,12 +26,16 @@ export default function Search() {
   const [TOKEN] = useRecoilState(accessToken);
   useEffect(() => {
     if (searchQuery && typeof searchQuery === 'string') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
         .get(
-          `/api/search?query=${encodeURIComponent(searchQuery)}&page=${page}`
+          `/api/search?query=${encodeURIComponent(searchQuery)}&page=${page}`,
+          config
         )
         .then((res) => {
-          console.log(res.data.data);
           if (searchQuery.includes('@') === true) {
             setUserList(res.data.data);
             setSearchResultList([]);
@@ -45,7 +49,7 @@ export default function Search() {
         })
         .catch((err) => console.log(err));
     }
-  }, [searchQuery, page]);
+  }, [searchQuery, page, TOKEN]);
   return (
     <PageContainer>
       <main>
