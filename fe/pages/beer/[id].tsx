@@ -60,7 +60,7 @@ export default function Beer() {
 
   useEffect(() => {
     // 코멘트 페이지 조회
-    if (curRoute !== undefined && TOKEN !== '') {
+    if (curRoute !== undefined) {
       const config = {
         headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
         withCredentials: true,
@@ -85,7 +85,7 @@ export default function Beer() {
 
   useEffect(() => {
     // 페어링 페이지 조회
-    if (curRoute !== undefined && TOKEN !== '') {
+    if (curRoute !== undefined) {
       const config = {
         headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
         withCredentials: true,
