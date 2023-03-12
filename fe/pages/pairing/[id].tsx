@@ -39,9 +39,13 @@ export default function PairingDetail() {
 
   useEffect(() => {
     // 특정 페어링 조회
-    if (curRoute && TOKEN !== '') {
+    if (curRoute) {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .get(`/api/pairings/${curRoute}`)
+        .get(`/api/pairings/${curRoute}`, config)
         .then((response) => {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
@@ -59,8 +63,12 @@ export default function PairingDetail() {
         pairingId: Number(curRoute),
         content: inputState,
       };
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .post('/api/pairings/comments', reqBody)
+        .post('/api/pairings/comments', reqBody, config)
         .then((res) => {
           if (pairingCommentList === null) {
             setPairingCommentList([res.data]);
@@ -74,14 +82,20 @@ export default function PairingDetail() {
   };
 
   const deletePairingComment = (pairingCommentId: number) => {
-    axios.delete(`/api/pairings/comments/${pairingCommentId}`).then((res) => {
-      if (pairingCommentList !== null) {
-        const filtered = pairingCommentList.filter((el) => {
-          return el.pairingCommentId !== pairingCommentId;
-        });
-        setPairingCommentList(filtered);
-      }
-    });
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+    axios
+      .delete(`/api/pairings/comments/${pairingCommentId}`, config)
+      .then((res) => {
+        if (pairingCommentList !== null) {
+          const filtered = pairingCommentList.filter((el) => {
+            return el.pairingCommentId !== pairingCommentId;
+          });
+          setPairingCommentList(filtered);
+        }
+      });
   };
 
   return (

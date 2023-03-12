@@ -2,7 +2,7 @@ import { FiBellOff } from 'react-icons/fi';
 import { CgBell } from 'react-icons/cg';
 
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import Image from 'next/image';
 import axios from '@/pages/api/axios';
@@ -24,7 +24,7 @@ export default function Alarm() {
   const curRouter = router.route;
   const [alarmList, setAlarmList] = useState<noti[] | undefined>();
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const TOKEN = useRecoilValue(accessToken);
+  const [TOKEN] = useRecoilState(accessToken);
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -85,14 +85,19 @@ export default function Alarm() {
 
   const initNotify = () => {
     /* 2. 보통의 axios 로 알림 기능 구현 */
-
-    axios
-      .get(`/api/notifications`)
-      .then((response) => {
-        setAlarmList(response.data.notifications);
-        setUnreadCount(response.data.unreadCount);
-      })
-      .catch((error) => console.log(error));
+    if (TOKEN !== '') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios
+        .get(`/api/notifications`, config)
+        .then((response) => {
+          setAlarmList(response.data.notifications);
+          setUnreadCount(response.data.unreadCount);
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
   const handleNotify = (
@@ -100,28 +105,42 @@ export default function Alarm() {
     notifyType: string,
     idForNotifyType?: number
   ) => {
-    if (notifyType === 'RATING') {
+    if (notifyType === 'RATING' && TOKEN !== '') {
       const notifyid = idForNotifyType;
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .delete(`/api/notifications/${id}`)
+        .delete(`/api/notifications/${id}`, config)
         .then(() => {
           setShowModal(false);
           initNotify();
           router.push(`/rating/${notifyid}`);
         })
         .catch((error) => console.log(error));
-    } else if (notifyType === 'PAIRING') {
+    } else if (notifyType === 'PAIRING' && TOKEN !== '') {
       const notifyid = idForNotifyType;
-      axios.delete(`/api/notifications/${id}`).then(() => {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios.delete(`/api/notifications/${id}`, config).then(() => {
         setShowModal(false);
         initNotify();
         router.push(`/pairing/${notifyid}`);
       });
-    } else if (notifyType === 'FOLLOWING') {
-      axios.delete(`/api/notifications/${id}`).then(() => {
+    } else if (notifyType === 'FOLLOWING' && TOKEN != '') {
+      const notifyid = idForNotifyType;
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios.delete(`/api/notifications/${id}`, config).then(() => {
         setShowModal(false);
         initNotify();
-        router.push(`/mypage`);
+        // userpage로 이동 필요
+        router.push(`/userpage/${notifyid}`);
       });
     }
   };

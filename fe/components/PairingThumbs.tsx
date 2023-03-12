@@ -15,6 +15,10 @@ export default function PairingThumbs({
   setLikeCount,
 }: any) {
   const [TOKEN] = useRecoilState<string>(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   const router = useRouter();
   const goToLogin = () => {
@@ -36,7 +40,7 @@ export default function PairingThumbs({
   const isUserLikeHandler = () => {
     if (isLogin) {
       axios
-        .post(`/api/pairings/likes?pairingId=${pairingId}`)
+        .post(`/api/pairings/likes?pairingId=${pairingId}`, {}, config)
         .then((response) => {
           setIsLike(!isLike);
           if (isLike) {

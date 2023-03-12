@@ -60,9 +60,13 @@ export default function UserPage() {
   };
 
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     if (id !== undefined) {
       axios
-        .get(`/api/user/${id}`)
+        .get(`/api/user/${id}`, config)
         .then((res) => {
           setUserName(res.data.nickname);
           setParingCount(res.data.pairingCount);
@@ -75,29 +79,30 @@ export default function UserPage() {
         })
         .catch((error) => console.log(error));
     }
-  }, [id]);
+  }, [TOKEN, id]);
   useEffect(() => {
-    if (id !== undefined) {
-      axios
-        .get(`/api/user/${id}/pairings`)
-        .then((res) => {
-          setPairingCardProps(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [id]);
-  useEffect(() => {
-    if (id !== undefined) {
-      axios
-        .get(`/api/user/${id}/ratings`)
-        .then((res) => {
-          setRatingList(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [id]);
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+
+    axios
+      .get(`/api/user/${id}/pairings?page=${page}`, config)
+      .then((res) => {
+        setPairingCardProps(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((error) => console.log(error));
+
+    axios
+      .get(`/api/user/${id}/ratings?page=${page}`, config)
+      .then((res) => {
+        setRatingList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((err) => console.log(err));
+  }, [TOKEN, id, page]);
+
   const [curTab, setCurTab] = useState(0);
   const tabArr = [
     {
@@ -160,8 +165,12 @@ export default function UserPage() {
     },
   ];
   const followClick = () => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .post(`/api/follows/${id}`)
+      .post(`/api/follows/${id}`, {}, config)
       .then((res) => {
         if (res.data === 'Create Follow') {
           setFollow(true);
@@ -257,6 +266,7 @@ export default function UserPage() {
           </ul>
           {tabArr[curTab].content}
         </div>
+        <div className="pb-20"></div>
       </main>
     </>
   );

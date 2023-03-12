@@ -29,10 +29,14 @@ export default function AllPairing() {
   useEffect(() => {
     if (curRoute !== undefined) {
       let tmpCategory = category.toLowerCase();
-
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
         .get(
-          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
+          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`,
+          config
         )
         .then((response) => {
           setPairingCardProps(response.data);
@@ -41,7 +45,7 @@ export default function AllPairing() {
         })
         .catch((error) => console.log(error));
     }
-  }, [curRoute, sort, page, category]);
+  }, [curRoute, sort, page, category, TOKEN]);
 
   return (
     <>

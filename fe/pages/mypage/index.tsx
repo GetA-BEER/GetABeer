@@ -32,8 +32,12 @@ export default function Mypage() {
   const [name, setName] = useState('');
   useEffect(() => {
     if (TOKEN) {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .get('/api/user')
+        .get('/api/user', config)
         .then((res) => {
           setUserName(res.data.nickname);
           setFollowerCount(res.data.followerCount);
@@ -59,8 +63,15 @@ export default function Mypage() {
       })
       .then((result) => {
         if (result.value) {
+          const config = {
+            headers: {
+              Authorization: TOKEN,
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          };
           axios
-            .post('/api/user/logout')
+            .post('/api/user/logout', {}, config)
             .then((res) => {
               // console.log(res);
               setAccessToken('');

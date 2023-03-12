@@ -14,9 +14,13 @@ export default function Kakao() {
 
   const code = router.query.code;
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     if (code !== undefined) {
       axios
-        .get(`/oauth/kakao?code=${code}`)
+        .get(`/oauth/kakao?code=${code}`, config)
         .then((res) => {
           setAccessToken(res.headers.authorization);
           setUserId(res.data.id);
@@ -27,9 +31,13 @@ export default function Kakao() {
     }
   }, [code]);
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     if (TOKEN) {
       axios
-        .get('/api/user')
+        .get('/api/user', config)
         .then((res) => {
           // console.log(res);
           if (res.data.age !== null) {

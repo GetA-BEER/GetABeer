@@ -7,14 +7,14 @@ import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import PopularBeer from '@/components/smallCards/PopularBeer';
 import { useRecoilState } from 'recoil';
-import { userNickname } from '@/atoms/login';
+import { accessToken } from '@/atoms/login';
 import {
   PopularBeerType,
   RecommendBeerType,
 } from '@/components/beerPage/BeerDeclare';
 
 export default function Main() {
-  const [username] = useRecoilState<string>(userNickname);
+  const [TOKEN] = useRecoilState<string>(accessToken);
   const [popularBeer, setPopularBeer] = useState<PopularBeerType[] | string>();
   const [recommendBeer, setRecommendBeer] = useState<
     RecommendBeerType[] | string
@@ -32,14 +32,20 @@ export default function Main() {
 
   // 사용자 추천맥주
   useEffect(() => {
-    axios
-      .get(`/api/beers/recommend`)
-      .then((response) => {
-        setRecommendBeer(response.data);
-        setRecommendFlag(response.data[0].beerId);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    if (TOKEN !== '') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios
+        .get(`/api/beers/recommend`, config)
+        .then((response) => {
+          setRecommendBeer(response.data);
+          setRecommendFlag(response.data[0].beerId);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [TOKEN]);
 
   return (
     <>
@@ -67,8 +73,8 @@ export default function Main() {
           ) : (
             <>
               <div className="m-3 mt-6 text-base font-semibold lg:text-xl">
-                <span className="text-y-brown mr-1">나를 위한</span>
-                <span className="text-black">추천 맥주</span>
+                <span className="text-black">나를 위한</span>
+                <span className="text-y-brown mr-1">추천 맥주</span>
               </div>
               <RecommendBeer recommendBeer={recommendBeer} />
             </>

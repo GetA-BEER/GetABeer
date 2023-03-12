@@ -25,6 +25,11 @@ export default function DetailCard({ pairingProps, count }: any) {
   const [isLike, setIsLike] = useState<any>(pairingProps?.isUserLikes);
   const [likeCount, setLikeCount] = useState<any>(pairingProps?.likeCount);
   const initialDate = pairingProps?.createdAt;
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   useEffect(() => {
     if (pairingProps !== undefined) {
@@ -39,7 +44,6 @@ export default function DetailCard({ pairingProps, count }: any) {
     setRandomNum(randomTmp);
   }, []);
 
-  const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     if (TOKEN === '') {
@@ -66,7 +70,7 @@ export default function DetailCard({ pairingProps, count }: any) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`/api/pairings/${curRoute}`)
+          .delete(`/api/pairings/${curRoute}`, config)
           .then(() => {
             router.back();
           })

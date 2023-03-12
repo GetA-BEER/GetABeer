@@ -12,9 +12,13 @@ export default function Naver() {
   const router = useRouter();
   const code = router.query.code;
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     if (code !== undefined) {
       axios
-        .get(`/oauth/naver?code=${code}`)
+        .get(`/oauth/naver?code=${code}`, config)
         .then((res) => {
           setAccessToken(res.headers.authorization);
           setUserId(res.data.id);
@@ -25,9 +29,13 @@ export default function Naver() {
     }
   }, [code]);
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     if (TOKEN) {
       axios
-        .get('/api/user')
+        .get('/api/user', config)
         .then((res) => {
           // console.log(res);
           if (res.data.age !== null) {
