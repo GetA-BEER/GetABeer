@@ -11,6 +11,7 @@ import axios from '@/pages/api/axios';
 import { useRouter } from 'next/router';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
+import { useRecoilState } from 'recoil';
 
 export interface RatingCardProps {
   beerId: number;
@@ -40,9 +41,13 @@ export default function SmallRatingCard({ ratingProps }: any) {
   const [isLike, setIsLike] = useState<boolean>(ratingProps.isUserLikes);
   const [likeCount, setLikeCount] = useState<number>(ratingProps.likeCount);
   const router = useRouter();
-  const TOKEN = useRecoilValue(accessToken);
   const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -117,7 +122,7 @@ export default function SmallRatingCard({ ratingProps }: any) {
   const isUserLikeHandler = () => {
     if (isLogin) {
       axios
-        .post(`/api/ratings/likes?ratingId=${ratingProps.ratingId}`)
+        .post(`/api/ratings/likes?ratingId=${ratingProps.ratingId}`, {}, config)
         .then((res) => {
           setIsLike(!isLike);
           if (isLike) {

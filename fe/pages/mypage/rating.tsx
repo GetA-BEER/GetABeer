@@ -10,22 +10,28 @@ import RatingCard, {
 import Pagenation from '@/components/Pagenation';
 import { userNickname } from '@/atoms/login';
 import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 export default function MyRating() {
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [userName] = useRecoilState(userNickname);
+  const [TOKEN] = useRecoilState(accessToken);
 
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .get('/api/mypage/ratings')
+      .get('/api/mypage/ratings', config)
       .then((res) => {
         setRatingList(res.data.data);
         setTotalPages(res.data.pageInfo.totalPages);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [TOKEN]);
 
   return (
     <PageContainer>

@@ -15,6 +15,7 @@ import axios from '@/pages/api/axios';
 import StarRating from '@/components/inputs/StarRating';
 import PageContainer from '@/components/PageContainer';
 import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 import { currentBeer } from '@/atoms/currentBeer';
 
 export default function PostRatingPage() {
@@ -27,6 +28,11 @@ export default function PostRatingPage() {
   const [taste, setTaste] = useState('');
   const [carbonation, setCarbonation] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   const cardProps: MiddleCardInfo = {
     beerId: beerInfo?.beerId,
@@ -78,7 +84,7 @@ export default function PostRatingPage() {
       carbonation: TagMatcherToEng(carbonation),
     };
     axios
-      .post('/api/ratings', reqBody)
+      .post('/api/ratings', reqBody, config)
       .then((res) => {
         router.back();
         reset();

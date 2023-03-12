@@ -13,14 +13,20 @@ import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
 import BackBtn from '@/components/button/BackPageBtn';
+import { useRecoilState } from 'recoil';
 
 export default function Rating() {
   const router = useRouter();
   const ratingId = router.query.ratingid;
-  const TOKEN = useRecoilValue(accessToken);
   const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState(false);
   const [isMine, setIsMine] = useState(false);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
+
   useEffect(() => {
     if (TOKEN === '') {
     } else {
@@ -55,7 +61,7 @@ export default function Rating() {
         content: inputState,
       };
       axios
-        .post('/api/ratings/comments', reqBody)
+        .post('/api/ratings/comments', reqBody, config)
         .then((res) => {
           if (ratingCommentList === null) {
             setRatingCommentList([res.data]);
@@ -70,7 +76,7 @@ export default function Rating() {
 
   const deleteRatingComment = (ratingCommentId: number) => {
     axios
-      .delete(`/api/ratings/comments/${ratingCommentId}`)
+      .delete(`/api/ratings/comments/${ratingCommentId}`, config)
       .then((res) => {
         if (ratingCommentList !== null) {
           const filtered = ratingCommentList.filter((el) => {

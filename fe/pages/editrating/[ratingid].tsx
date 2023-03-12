@@ -14,6 +14,8 @@ import { TagMatcherToEng, TagMatcherToKor } from '@/utils/TagMatcher';
 import axios from '@/pages/api/axios';
 import StarRating from '@/components/inputs/StarRating';
 import PageContainer from '@/components/PageContainer';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 export default function EditRatingPage() {
   const router = useRouter();
@@ -25,10 +27,10 @@ export default function EditRatingPage() {
   const [taste, setTaste] = useState('');
   const [carbonation, setCarbonation] = useState('');
   const [cardProps, setCardProps] = useState<any>();
-
-  const getBeerInfo = (beerId: number) => {
-    if (beerId !== undefined) {
-    }
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
   };
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export default function EditRatingPage() {
       taste: TagMatcherToEng(taste),
       carbonation: TagMatcherToEng(carbonation),
     };
-    axios.patch(`/api/ratings/${ratingId}`, reqBody).then((res) => {
+    axios.patch(`/api/ratings/${ratingId}`, reqBody, config).then((res) => {
       router.replace(`/rating/${ratingId}`);
     });
   };

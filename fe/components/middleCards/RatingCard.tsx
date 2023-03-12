@@ -24,6 +24,7 @@ import Tag from '../Tag';
 import { TagMatcherToKor } from '@/utils/TagMatcher';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
+import { useRecoilState } from 'recoil';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
@@ -35,9 +36,13 @@ export default function RatingCard(props: {
   count: number;
 }) {
   const router = useRouter();
-  const TOKEN = useRecoilValue(accessToken);
   const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState(false);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   useEffect(() => {
     if (TOKEN === '') {
@@ -52,13 +57,17 @@ export default function RatingCard(props: {
   };
 
   const deleteRating = () => {
-    axios.delete(`/api/ratings/${props.cardProps.ratingId}`);
+    axios.delete(`/api/ratings/${props.cardProps.ratingId}`, config);
     router.back();
   };
 
   const isUserLikeHandler = () => {
     axios
-      .post(`/api/ratings/likes?ratingId=${props.cardProps.ratingId}`)
+      .post(
+        `/api/ratings/likes?ratingId=${props.cardProps.ratingId}`,
+        {},
+        config
+      )
       .then((res) => {
         setIsLike(!isLike);
         if (isLike) {
