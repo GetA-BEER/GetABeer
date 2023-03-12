@@ -27,7 +27,7 @@ export default function AllPairing() {
   }, [router, curRoute]);
 
   useEffect(() => {
-    if (curRoute !== undefined && TOKEN !== '') {
+    if (curRoute !== undefined) {
       let tmpCategory = category.toLowerCase();
       const config = {
         headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },

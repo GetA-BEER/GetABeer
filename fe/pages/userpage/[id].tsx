@@ -85,24 +85,22 @@ export default function UserPage() {
       headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
       withCredentials: true,
     };
-    if (id !== undefined) {
-      axios
-        .get(`/api/user/${id}/pairings?page=${page}`, config)
-        .then((res) => {
-          setPairingCardProps(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((error) => console.log(error));
-    }
-    if (id !== undefined) {
-      axios
-        .get(`/api/user/${id}/ratings?page=${page}`, config)
-        .then((res) => {
-          setRatingList(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((err) => console.log(err));
-    }
+
+    axios
+      .get(`/api/user/${id}/pairings?page=${page}`, config)
+      .then((res) => {
+        setPairingCardProps(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((error) => console.log(error));
+
+    axios
+      .get(`/api/user/${id}/ratings?page=${page}`, config)
+      .then((res) => {
+        setRatingList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((err) => console.log(err));
   }, [TOKEN, id, page]);
 
   const [curTab, setCurTab] = useState(0);
@@ -268,6 +266,7 @@ export default function UserPage() {
           </ul>
           {tabArr[curTab].content}
         </div>
+        <div className="pb-20"></div>
       </main>
     </>
   );
