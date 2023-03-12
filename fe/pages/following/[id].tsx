@@ -23,15 +23,13 @@ export default function Following() {
       headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
       withCredentials: true,
     };
-    if (userid !== undefined) {
-      axios
-        .get(`/api/follows/${userid}/followings?page=${page}`, config)
-        .then((res) => {
-          setFollowingList(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((error) => console.log(error));
-    }
+    axios
+      .get(`/api/follows/${userid}/followings?page=${page}`, config)
+      .then((res) => {
+        setFollowingList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((error) => console.log(error));
   }, [TOKEN, page, userid]);
 
   return (
@@ -72,6 +70,7 @@ export default function Following() {
         {followingList.length ? (
           <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
         ) : null}
+        <div className="pb-20"></div>
       </main>
     </>
   );
