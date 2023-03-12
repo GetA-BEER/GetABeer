@@ -24,7 +24,7 @@ export default function FollowBtn({ id, isFollow, setIsFollow }: BtnProps) {
       setIsLogin(true);
     }
   }, [TOKEN]);
-  console.log(TOKEN);
+
   const goToLogin = () => {
     Swal.fire({
       title: 'Get A Beer',

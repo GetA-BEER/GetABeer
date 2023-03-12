@@ -36,7 +36,6 @@ export default function Search() {
           config
         )
         .then((res) => {
-          console.log(res.data.data);
           if (searchQuery.includes('@') === true) {
             setUserList(res.data.data);
             setSearchResultList([]);
