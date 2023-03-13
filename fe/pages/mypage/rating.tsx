@@ -29,6 +29,7 @@ export default function MyRating() {
       .then((res) => {
         setRatingList(res.data.data);
         setTotalPages(res.data.pageInfo.totalPages);
+        console.log(res.data.pageInfo);
       })
       .catch((err) => console.log(err));
   }, [TOKEN]);
@@ -46,7 +47,7 @@ export default function MyRating() {
           {ratingList.map((el: RatingCardProps) => {
             return (
               <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
-                <div className="border border-y-lightGray rounded-lg px-3 py-4">
+                <div className="border border-y-lightGray rounded-lg px-3 py-4 mb-2">
                   <RatingCard cardProps={el} count={el.commentCount} />
                 </div>
               </Link>

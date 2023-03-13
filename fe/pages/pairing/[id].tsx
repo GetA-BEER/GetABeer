@@ -109,7 +109,14 @@ export default function PairingDetail() {
       <main className="m-auto h-screen max-w-4xl relative">
         <BackBtn />
 
-        <div className="text-xl mt-4 mb-3 text-center font-semibold">
+        <div
+          className="text-xl mt-4 mb-3 text-center font-semibold"
+          onClick={() =>
+            router.push({
+              pathname: `/beer/${pairingProps?.beerId}`,
+            })
+          }
+        >
           {pairingProps?.korName}
         </div>
 
