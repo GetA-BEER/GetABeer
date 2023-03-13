@@ -166,6 +166,9 @@ public class RatingService {
 
 		ratingRepository.delete(rating);
 
+		em.persist(rating.getRatingTag());
+		em.persist(rating);
+
 		return "맥주에 대한 평가가 성공적으로 삭제되었습니다.";
 	}
 
