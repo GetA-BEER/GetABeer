@@ -177,15 +177,15 @@ export default function Alarm() {
         {showModal ? (
           <div>
             <ul className="bg-white border rounded-lg py-2 shadow-md">
-              <li
-                onClick={handleAllDelete}
-                className="text-[8px] px-4 py-1 lg:text-xs text-end text-y-gray hover:text-y-gold"
-              >
-                모두 읽음으로 표시
-                <GiConfirmed className="inline mb-0.5 ml-1" />
-              </li>
               {alarmList && alarmList.length > 0 ? (
                 <>
+                  <li
+                    onClick={handleAllDelete}
+                    className="text-[8px] px-4 py-1 lg:text-xs text-end text-y-gray hover:text-y-gold"
+                  >
+                    모두 읽음으로 표시
+                    <GiConfirmed className="inline mb-0.5 ml-1" />
+                  </li>
                   {alarmList.map((el: noti) => (
                     <li
                       onClick={() =>
