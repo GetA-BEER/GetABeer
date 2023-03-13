@@ -18,6 +18,7 @@ import be.domain.notice.dto.NotificationDto;
 import be.domain.notice.entity.Notification;
 import be.domain.notice.entity.NotificationType;
 import be.domain.notice.repository.EmitterRepository;
+import be.domain.notice.repository.NotificationQRepository;
 import be.domain.notice.repository.NotificationRepository;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
@@ -36,6 +37,7 @@ public class NotificationService {
 	private final UserService userService;
 	private final EmitterRepository emitterRepository;
 	private final NotificationRepository notificationRepository;
+	private final NotificationQRepository notificationQRepository;
 
 	// SSE 통신
 	public SseEmitter subscribe(String lastEventId) {
@@ -134,5 +136,11 @@ public class NotificationService {
 	public void deleteNotification(Long id) {
 		Notification notification = notificationRepository.findById(id).orElseThrow();
 		notificationRepository.delete(notification);
+	}
+
+	@Transactional
+	public void deleteAll() {
+		User user = userService.getLoginUser();
+		notificationQRepository.deleteAllNotification(user.getId());
 	}
 }
