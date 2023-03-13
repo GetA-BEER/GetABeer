@@ -29,7 +29,6 @@ export default function MyRating() {
       .then((res) => {
         setRatingList(res.data.data);
         setTotalPages(res.data.pageInfo.totalPages);
-        console.log(res.data.pageInfo);
       })
       .catch((err) => console.log(err));
   }, [TOKEN]);
