@@ -20,16 +20,15 @@ group = 'be'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-//configurations {
-//    compileOnly {
-//        extendsFrom annotationProcessor
-//    }
-//    asciidoctorExtensions
-//}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExtensions
+}
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 }
 
 //ext {
@@ -51,6 +50,8 @@ dependencies {
     //    --------------------------------------------------------------------------------------------
     implementation 'org.springframework.boot:spring-boot-starter-websocket' // WebSocket
 //    implementation 'org.springframework.kafka:spring-kafka' // Kafka
+//    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.8.1'
+//    implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.webjars:sockjs-client:1.5.1' // SockJS
     implementation 'org.webjars:stomp-websocket:2.3.4' // STOMP
     implementation 'org.springframework.boot:spring-boot-devtools:' // DevTools
@@ -129,7 +130,7 @@ tasks.named('test') {
 //build {
 //    dependsOn copyDocument
 //}
-//
+
 //bootJar {
 //    dependsOn copyDocument
 //    from("${asciidoctor.outputDir}") {

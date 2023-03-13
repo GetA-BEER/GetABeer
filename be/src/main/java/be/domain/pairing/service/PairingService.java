@@ -27,9 +27,7 @@ import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PairingService {
@@ -47,12 +45,6 @@ public class PairingService {
 	@Transactional
 	public String create(Pairing pairing, List<MultipartFile> files,
 		Long beerId) throws IOException {
-
-		log.info("**************************************************************");
-		log.info("서비스 시작 ");
-		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getContent());
-		log.info("매퍼가 내용을 잘 변환했나 : " + pairing.getLikeCount());
-		log.info("**************************************************************");
 
 		/* 존재하는 회원인지 확인 */
 		User user = userService.findLoginUser();
@@ -82,13 +74,6 @@ public class PairingService {
 		/* 페어링 등록하기 */
 		pairing.saveDefault(beer, user, thumbnail, pairingImages);
 		pairingRepository.save(pairing);
-
-		log.info("**************************************************************");
-		log.info("페어링 등록 확인 : " + pairing.getContent());
-		log.info("페어링 등록 확인 : " + pairing.getPairingCategory());
-		log.info("페어링 등록 확인 : " + pairing.getBeer().getBeerDetailsBasic().getKorName());
-		log.info("페어링 유저 확인 : " + pairing.getUser().getNickname());
-		log.info("**************************************************************");
 
 		return "맥주에 대한 페어링이 성공적으로 등록되었습니다.";
 	}

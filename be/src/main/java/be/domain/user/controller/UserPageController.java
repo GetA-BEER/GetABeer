@@ -122,7 +122,7 @@ public class UserPageController {
 	}
 
 	@GetMapping("/user/{user_Id}/pairings")
-	public ResponseEntity<MultiResponseDto<PairingResponseDto.UserPageResponse>> getUserPairing(
+	public ResponseEntity<MultiResponseDto<PairingResponseDto.UserPageResponse>> getUserPairings(
 		@PathVariable("user_Id") Long userId,
 		@RequestParam(name = "page", defaultValue = "1") Integer page) {
 

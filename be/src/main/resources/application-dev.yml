@@ -3,7 +3,7 @@ spring:
     name: Get_A_Beer
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${SQL_ENDPOINT}:3306/getabeer?serverTimezone=Asia/Seoul
+    url: ${SQL_ENDPOINT}
     username: ${SQL_USERNAME}
     password: ${SQL_PASSWORD}
   cache:
@@ -15,7 +15,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     open-in-view: true
     properties:
@@ -96,7 +96,7 @@ spring:
   cloud:
     gcp:
       credentials:
-        location: classpath:/getabeer-376509-6310d68578f1.json
+        location: classpath:/getabeer-376509-e3dcb064cd58.json
 cloud:
   aws:
     credentials:
@@ -127,7 +127,7 @@ webdriver:
     driverid: webdriver.chrome.driver
     location: src/main/java/be/domain/crawler/javaCrawler/chromedriver
 elasticsearch:
-  host: localhost
+  host: ${EC2_HOST}
   port: 9200
 python:
   crawler: src/main/java/be/domain/crawler/pycrawler/crawler.py
@@ -145,6 +145,7 @@ management:
     tags:
       application: ${spring.application.name}
 logging:
+  config: classpath:logback-spring.xml
   level:
     org:
       springframework:

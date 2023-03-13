@@ -1,11 +1,12 @@
 package be.controller;
 
 import static be.utils.ApiDocumentUtils.*;
-import static be.utils.UserTestConstants.*;
+import static be.utils.UserControllerConstants.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -24,12 +25,12 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.beust.ah.A;
 import com.google.gson.Gson;
 
 import be.domain.user.dto.UserDto;
@@ -40,6 +41,7 @@ import be.domain.user.mapper.UserMapper;
 import be.domain.user.service.UserService;
 import be.global.security.auth.userdetails.AuthUser;
 import be.global.security.auth.userdetails.UserDetailService;
+import be.utils.WithMockCustomUser;
 
 @Transactional
 @SpringBootTest
@@ -114,6 +116,9 @@ public class UserControllerRestDocs {
 			.andDo(document(
 				"Post_User_Info",
 				getDocumentRequest(),
+				pathParameters(
+					parameterWithName("user-id").description("사용자 번호")
+				),
 				requestFields(
 					List.of(
 						fieldWithPath("gender").type(JsonFieldType.STRING).description("성별"),
@@ -156,6 +161,47 @@ public class UserControllerRestDocs {
 						fieldWithPath("userBeerCategories").type(JsonFieldType.ARRAY).description("선호 맥주 카테고리"),
 						fieldWithPath("userBeerTags").type(JsonFieldType.ARRAY).description("선호 맥주 태그")
 					)),
+				responseFields(
+					List.of(
+						fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 이미지"),
+						fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+						fieldWithPath("gender").type(JsonFieldType.STRING).description("성별"),
+						fieldWithPath("age").type(JsonFieldType.STRING).description("나이"),
+						fieldWithPath("followerCount").type(JsonFieldType.NUMBER).description("팔로워 숫자"),
+						fieldWithPath("followingCount").type(JsonFieldType.NUMBER).description("팔로잉 숫자"),
+						fieldWithPath("userBeerCategories").type(JsonFieldType.ARRAY).description("선호 맥주 카테고리"),
+						fieldWithPath("userBeerTags").type(JsonFieldType.ARRAY).description("선호 맥주 태그")
+					)
+				)));
+	}
+
+	@Test
+	void editProfileImageTest() throws Exception {
+
+		MockMultipartFile image =
+			new MockMultipartFile("image",
+				"image.png", "image/png", "<<png data>>".getBytes());
+
+		String content = gson.toJson(image);
+
+		given(userService.updateProfileImage(Mockito.any(MultipartFile.class))).willReturn(User.builder().build());
+		given(userMapper.userToInfoResponse(Mockito.any(User.class))).willReturn(USER_INFO_RESPONSE_DTO);
+
+		ResultActions actions =
+
+			mockMvc.perform(multipart("/api/mypage/userinfo/image")
+				.file(MOCK_MULTIPART_FILE)
+				// .param("value", "image")
+				.contentType(MediaType.MULTIPART_FORM_DATA)
+				.accept(MediaType.APPLICATION_JSON)
+				.characterEncoding("UTF-8")
+			);
+
+		actions
+			.andExpect(status().isOk())
+			.andDo(document(
+				"Edit_Profile_Image",
+				getDocumentResponse(),
 				responseFields(
 					List.of(
 						fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 이미지"),
@@ -268,122 +314,4 @@ public class UserControllerRestDocs {
 				"Withdraw_User"
 			));
 	}
-
-	// HTTP Method가 POST가 되어야 통과
-	// @Test
-	// void editProfileImageTest() throws Exception {
-	//
-	// 	MockMultipartFile image =
-	// 		new MockMultipartFile("image",
-	// 			"image.png", "image/png", "<<png data>>".getBytes());
-	//
-	// 	String content = gson.toJson(image);
-	//
-	// 	given(userService.updateProfileImage(Mockito.any(MultipartFile.class))).willReturn(User.builder().build());
-	// 	given(userMapper.userToInfoResponse(Mockito.any(User.class))).willReturn(USER_INFO_RESPONSE_DTO);
-	//
-	// 	ResultActions actions =
-	//
-	// 		mockMvc.perform(multipart("/api/mypage/userinfo/image").file(image)
-	// 			.param("value", "image")
-	// 			.contentType(MediaType.MULTIPART_FORM_DATA)
-	// 			.accept(MediaType.APPLICATION_JSON)
-	// 			.characterEncoding("UTF-8")
-	// 		);
-	//
-	// 	// mockMvc.perform(
-	// 	// 	RestDocumentationRequestBuilders.patch("/api/mypage/userinfo/image")
-	// 	// 		.accept(MediaType.APPLICATION_JSON)
-	// 	// 		.contentType(MediaType.APPLICATION_JSON)
-	// 	// 		.content(content)
-	// 	// );
-	//
-	// 	actions
-	// 		.andExpect(status().isOk())
-	// 		.andDo(document(
-	// 			"Edit_Profile_Image",
-	// 			getDocumentRequest(),
-	// 			// requestFields(
-	// 			// 	List.of(
-	// 			// 		fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 이미지"),
-	// 			// 		fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-	// 			// 		fieldWithPath("gender").type(JsonFieldType.STRING).description("성별"),
-	// 			// 		fieldWithPath("age").type(JsonFieldType.STRING).description("나이"),
-	// 			// 		fieldWithPath("userBeerCategories").type(JsonFieldType.ARRAY).description("선호 맥주 카테고리"),
-	// 			// 		fieldWithPath("userBeerTags").type(JsonFieldType.ARRAY).description("선호 맥주 태그")
-	// 			// 	)),
-	// 			responseFields(
-	// 				List.of(
-	// 					fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 이미지"),
-	// 					fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-	// 					fieldWithPath("gender").type(JsonFieldType.STRING).description("성별"),
-	// 					fieldWithPath("age").type(JsonFieldType.STRING).description("나이"),
-	// 					fieldWithPath("followerCount").type(JsonFieldType.NUMBER).description("팔로워 숫자"),
-	// 					fieldWithPath("followingCount").type(JsonFieldType.NUMBER).description("팔로잉 숫자"),
-	// 					fieldWithPath("userBeerCategories").type(JsonFieldType.ARRAY).description("선호 맥주 카테고리"),
-	// 					fieldWithPath("userBeerTags").type(JsonFieldType.ARRAY).description("선호 맥주 태그")
-	// 				)
-	// 			)));
-	// }
-
-	// @Test
-	// void loginTest() throws Exception {
-	//
-	// 	String content = gson.toJson(USER_LOGIN_DTO);
-	//
-	// 	User user =
-	// 		User.builder()
-	// 			.id(1L)
-	// 			.age(Age.TWENTIES)
-	// 			.gender(Gender.FEMALE)
-	// 			.roles(List.of("ROLE_USER"))
-	// 			.nickname("닉네임")
-	// 			.email("e@mail.com")
-	// 			.password(passwordEncoder.encode("password1@"))
-	// 			.provider("NONE")
-	// 			.build();
-	//
-	// 	AuthUser authUser = AuthUser.of(user);
-	//
-	// 	given(userDetailService.loadUserByUsername(anyString())).willReturn(authUser);
-	//
-	// 	// given(userMapper.postToUser(Mockito.any(UserDto.RegisterPost.class))).willReturn(User.builder().build());
-	// 	// given(userService.findUserEmail(Mockito.any(String.class))).willReturn(1L);
-	// 	// given(userService.findVerifiedUser(Mockito.any(Long.class))).willReturn(User.builder().build());
-	// 	// doNothing().when(userService).verifyUserStatus(anyString());
-	// 	given(userMapper.userToInfoResponse(Mockito.any(User.class))).willReturn(USER_INFO_RESPONSE);
-	//
-	// 	ResultActions actions =
-	// 		mockMvc.perform(
-	// 			RestDocumentationRequestBuilders.post("/api/login")
-	// 				.accept(MediaType.APPLICATION_JSON)
-	// 				.contentType(MediaType.APPLICATION_JSON)
-	// 				.content(content)
-	// 		);
-	//
-	// 	actions
-	// 		.andExpect(status().isOk())
-	// 		.andDo(document(
-	// 			"Login",
-	// 			getDocumentRequest(),
-	// 			getDocumentResponse(),
-	// 			requestFields(
-	// 				List.of(
-	// 					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-	// 					fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
-	// 				)
-	// 			),
-	// 			responseFields(
-	// 				List.of(
-	// 					fieldWithPath(".imageUrl").type(JsonFieldType.STRING).description("프로필 이미지"),
-	// 					fieldWithPath(".nickname").type(JsonFieldType.STRING).description("닉네임"),
-	// 					fieldWithPath(".gender").type(JsonFieldType.STRING).description("성별"),
-	// 					fieldWithPath(".age").type(JsonFieldType.STRING).description("연령대"),
-	// 					fieldWithPath(".followerCount").type(JsonFieldType.NUMBER).description("팔로워 숫자"),
-	// 					fieldWithPath(".followingCount").type(JsonFieldType.NUMBER).description("팔로잉 숫자"),
-	// 					fieldWithPath(".userBeerCategories").type(JsonFieldType.ARRAY).description("선호 맥주 카테고리"),
-	// 					fieldWithPath(".userBeerTags").type(JsonFieldType.ARRAY).description("선호 맥주 태그")
-	// 				)
-	// 			)));
-	// }
 }

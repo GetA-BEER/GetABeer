@@ -3,10 +3,8 @@ package be.domain.user.service;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
@@ -15,14 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
-
-import be.domain.follow.FollowQueryRepository;
 
 import be.domain.notice.repository.EmitterRepository;
 
@@ -32,7 +26,6 @@ import be.domain.user.entity.User;
 import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.ProfileImageRepository;
-import be.domain.user.repository.UserQueryRepository;
 import be.domain.user.repository.UserRepository;
 import be.domain.user.service.pattern.EditImage;
 import be.domain.user.service.pattern.FirstEditImage;
@@ -40,7 +33,6 @@ import be.domain.user.service.pattern.StateButton;
 import be.global.exception.BusinessLogicException;
 import be.global.exception.ExceptionCode;
 import be.global.image.ImageHandler;
-import be.global.security.auth.userdetails.AuthUser;
 import be.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,9 +122,10 @@ public class UserService {
 
 		ProfileImage saved;
 		if (user.getProfileImage() == null) {
-			saved = stateButton.clickButton(new FirstEditImage(), stateButton, new HashMap<>(), image, imageHandler, user);
+			saved = stateButton.clickButton(new FirstEditImage(), stateButton, new HashMap<>(), image, imageHandler,
+				user);
 		} else {
-		    saved = stateButton.clickButton(new EditImage(), stateButton, new HashMap<>(), image, imageHandler, user);
+			saved = stateButton.clickButton(new EditImage(), stateButton, new HashMap<>(), image, imageHandler, user);
 		}
 
 		profileImageRepository.save(saved);
@@ -145,7 +138,10 @@ public class UserService {
 	@Transactional
 	public User verifyPassword(UserDto.EditPassword editPassword) {
 		User user = getLoginUser();
-		if (!passwordEncoder.matches(editPassword.getOldPassword(), user.getPassword())) {
+		if (passwordEncoder.matches(editPassword.getNewPassword(), user.getPassword())) {
+			throw new BusinessLogicException(ExceptionCode.DUPLICATION_PASSWORD);
+		}
+ 		if (!passwordEncoder.matches(editPassword.getOldPassword(), user.getPassword())) {
 			throw new BusinessLogicException(ExceptionCode.WRONG_PASSWORD);
 		}
 		if (!editPassword.getNewPassword().equals(editPassword.getNewVerifyPassword())) {

@@ -2,7 +2,7 @@
 package be.controller;
 
 import static be.utils.ApiDocumentUtils.*;
-import static be.utils.BeerTestConstants.*;
+import static be.utils.BeerControllerConstants.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,10 +54,6 @@ public class BeerControllerRestDocs {
 	private BeerService beerService;
 	@MockBean
 	private BeerWishlistService beerWishlistService;
-
-	@BeforeEach
-	private void init() {
-	}
 
 	@Test
 	void postBeerTest() throws Exception {
@@ -344,6 +338,7 @@ public class BeerControllerRestDocs {
 				responseFields(
 					List.of(
 						fieldWithPath("[].beerId").type(JsonFieldType.NUMBER).description("맥주 번호"),
+						fieldWithPath("[].monthlyBeerId").type(JsonFieldType.NUMBER).description("이달의 맥주 번호"),
 						fieldWithPath("[].korName").type(JsonFieldType.STRING).description("한글 이름"),
 						fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("썸네일 이미지 주소"),
 						fieldWithPath("[].totalAverageStars").type(JsonFieldType.NUMBER).description("맥주 총 별점 평균"),
@@ -368,7 +363,7 @@ public class BeerControllerRestDocs {
 							.description("베스트 평가 프로필 이미지"),
 						fieldWithPath("[].bestRating.bestStar").type(JsonFieldType.NUMBER).description("베스트 평가 별점"),
 						fieldWithPath("[].bestRating.bestContent").type(JsonFieldType.STRING).description("베스트 평가 내용"),
-						fieldWithPath("[].bestRating.bestLikeCount").type(JsonFieldType.STRING)
+						fieldWithPath("[].bestRating.bestLikeCount").type(JsonFieldType.NUMBER)
 							.description("베스트 평가 좋아요")
 					)
 				)));
@@ -395,13 +390,10 @@ public class BeerControllerRestDocs {
 				responseFields(
 					List.of(
 						fieldWithPath("[].beerId").type(JsonFieldType.NUMBER).description("맥주 번호"),
+						fieldWithPath("[].weeklyBeerId").type(JsonFieldType.NUMBER).description("인기 많은 맥주 번호"),
 						fieldWithPath("[].korName").type(JsonFieldType.STRING).description("한글 이름"),
 						fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("썸네일 이미지 주소"),
 						fieldWithPath("[].beerCategories[]").type(JsonFieldType.ARRAY).description("맥주 카테고리"),
-						fieldWithPath("[].beerCategories[].beerCategoryId").type(JsonFieldType.NUMBER)
-							.description("맥주 카테고리 아이디"),
-						fieldWithPath("[].beerCategories[].beerCategoryType").type(JsonFieldType.STRING)
-							.description("맥주 카테고리 타입"),
 						fieldWithPath("[].country").type(JsonFieldType.STRING).description("생산 국가"),
 						fieldWithPath("[].abv").type(JsonFieldType.NUMBER).description("알코올 도수"),
 						fieldWithPath("[].ibu").type(JsonFieldType.NUMBER).description("IBU"),

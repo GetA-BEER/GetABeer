@@ -159,19 +159,22 @@ public class BeerServiceImpl implements BeerService {
 	@Transactional(readOnly = true)
 	public List<Beer> findRecommendBeers() {
 
-		// User findUser = userService.getLoginUserReturnNull();
-		try {
-			userService.getLoginUser();
-		} catch (BusinessLogicException e) {
-			return null;
-		}
-
-		User findUser = userService.getLoginUser();
-
-		if (findUser.getUserBeerCategories().size() == 0) {
-			return beerRepository.findRandomBeer();
+		User findUser = userService.getLoginUserReturnNull();
+		// try {
+		// 	userService.getLoginUser();
+		// } catch (BusinessLogicException e) {
+		// 	return null;
+		// }
+		//
+		// User findUser = userService.getLoginUser();
+		if (findUser != null) {
+			if (findUser.getUserBeerCategories().size() == 0) {
+				return beerRepository.findRandomBeer();
+			} else {
+				return beerQueryRepository.findRecommendBeer(findUser);
+			}
 		} else {
-			return beerQueryRepository.findRecommendBeer(findUser);
+			return beerRepository.findRandomBeer();
 		}
 	}
 

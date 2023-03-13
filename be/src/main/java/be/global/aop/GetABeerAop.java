@@ -176,10 +176,10 @@ public class GetABeerAop {
 
 		if (loginUser.getGender() == Gender.FEMALE) {
 			findBeer.calculateFemaleAverageStars(rating.getStar());
-			findBeer.addFemaleStarCount();
+			// findBeer.addFemaleStarCount();
 		} else if (loginUser.getGender() == Gender.MALE) {
 			findBeer.calculateMaleAverageStars(rating.getStar());
-			findBeer.addMaleStarCount();
+			// findBeer.addMaleStarCount();
 		}
 		// ---------------------------------------------------------------------------------------
 		totalStatisticsRepository.save(totalStatistics);
@@ -252,15 +252,14 @@ public class GetABeerAop {
 			Double deleteStar = findRating.getStar();
 
 			findBeer.deleteTotalAverageStars(deleteStar);
-			findBeer.minusRatingCount();
 
 			if (loginUser.getGender().equals(Gender.FEMALE)) {
 				findBeer.deleteFemaleAverageStars(deleteStar);
-				findBeer.minusFemaleStarCount();
 			} else if (loginUser.getGender().equals(Gender.MALE)) {
 				findBeer.deleteMaleAverageStars(deleteStar);
-				findBeer.minusMaleStarCount();
 			}
+
+			findBeer.minusRatingCount();
 
 			List<String> presentBeerTagTypes = new ArrayList<>();
 
@@ -289,6 +288,9 @@ public class GetABeerAop {
 				&& beerService.findBestRating(findBeer) != null) {
 				Rating bestRating = beerService.findBestRating(findBeer);
 				findBeer.updateBestRating(bestRating);
+			} else if (findBeer.getBeerDetailsBestRating().getBestRatingId() == ratingId
+				&& beerService.findBestRating(findBeer) == null) {
+				findBeer.deleteBeerDetailsBestRating();
 			}
 
 			beerRepository.save(findBeer);
@@ -432,7 +434,7 @@ public class GetABeerAop {
 					}
 				} else if (loginUserGender == Gender.MALE) {
 					if (updatedUserGender == Gender.REFUSE) {
-						beer.calculateMaleAverageStars(star);
+						beer.deleteMaleAverageStars(star);
 					} else if (updatedUserGender == Gender.FEMALE) {
 						beer.deleteMaleAverageStars(star);
 						beer.calculateFemaleAverageStars(star);
