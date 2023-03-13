@@ -192,24 +192,24 @@ export default function SmallRatingCard({ ratingProps }: any) {
               <SmallTag tags={ratingList?.ratingTag} />
             </div>
             {ratingList?.content === undefined || ratingList?.content === '' ? (
-              <div className="text-y-gray text-[8px]">
+              <div className="text-y-gray text-[8px] md:text-xs">
                 {noReviewState[randomNum]?.contents}
               </div>
             ) : collisions ? (
               <>
                 <div
-                  className="text-[8px] leading-5 h-fit relative"
+                  className="text-[8px] leading-5 h-fit relative md:text-xs"
                   id={`overDescribe${ratingList?.ratingId}`}
                 >
                   {ratingList?.content}
                 </div>
-                <div className="absolute bottom-0.5  right-1 px-1 bg-white">
-                  ...<span className="text-y-gold">더보기</span>
+                <div className="absolute bottom-0.5 md:bottom-0 right-1 px-1 bg-white">
+                  ...<span className="text-y-gold md:text-xs">더보기</span>
                 </div>
               </>
             ) : (
               <div
-                className="text-[8px] leading-5 h-fit"
+                className="text-[8px] leading-5 h-fit md:text-xs"
                 id={`overDescribe${ratingList?.ratingId}`}
               >
                 {ratingList?.content}
