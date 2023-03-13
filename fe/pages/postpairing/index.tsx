@@ -8,6 +8,7 @@ import SubmitBtn from '@/components/button/SubmitBtn';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 import { currentBeer } from '@/atoms/currentBeer';
 import axios from '@/pages/api/axios';
 
@@ -18,6 +19,7 @@ export default function PostPairing() {
   const [category, setCategory] = useState<string>('카테고리');
   const [imageData, setImageData] = useState([]);
   const [finalData, setFinalData] = useState<any>('');
+  const [TOKEN] = useRecoilState<string>(accessToken);
 
   // Vaild 로직
   const [isValid, setIsValid] = useState(false);
@@ -48,22 +50,25 @@ export default function PostPairing() {
   };
   // Submit 과 formData 변경 감지 후 로직
   useEffect(() => {
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-      withCredentials: true,
-    };
-    if (finalData !== '' && !isSubmit) {
-      setIsSubmit(true);
-      axios
-        .post(`/api/pairings`, finalData, config)
-        .then((response) => {
-          router.push(`/beer/${beerInfo.beerId}`);
-        })
-        .catch((error) => console.log(error));
+    if (TOKEN !== '') {
+      const config = {
+        headers: {
+          Authorization: TOKEN,
+          'content-type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      };
+      if (finalData !== '' && !isSubmit) {
+        setIsSubmit(true);
+        axios
+          .post(`/api/pairings`, finalData, config)
+          .then((response) => {
+            router.push(`/beer/${beerInfo.beerId}`);
+          })
+          .catch((error) => console.log(error));
+      }
     }
-  }, [finalData, router, isSubmit, beerInfo]);
+  }, [finalData, router, isSubmit, beerInfo, TOKEN]);
 
   return (
     <>

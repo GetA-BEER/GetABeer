@@ -26,12 +26,14 @@ import axios from '@/pages/api/axios';
 import { useRecoilValue } from 'recoil';
 import { userId } from '@/atoms/login';
 import Loading from '@/components/postPairingPage/Loading';
-
+import { accessToken } from '@/atoms/login';
 export default function Beer() {
   const router = useRouter();
   const [curRoute, setCurRoute] = useState<number | undefined>();
   useEffect(() => {
-    setCurRoute(Number(router.query.id));
+    if (router.query.id !== undefined) {
+      setCurRoute(Number(router.query.id));
+    }
   }, [router, curRoute]);
 
   const [beerInfo, setBeerInfo] = useState<BeerInfo>();
@@ -42,7 +44,7 @@ export default function Beer() {
   const [hasRating, setHasRating] = useState<boolean>(false);
   const [myRatingId, setMyRatingId] = useState<number>();
   const USERID: number = useRecoilValue(userId);
-
+  const [TOKEN] = useRecoilState<string>(accessToken);
   useEffect(() => {
     // 특정 맥주 조회
     if (curRoute !== undefined) {
@@ -59,8 +61,15 @@ export default function Beer() {
   useEffect(() => {
     // 코멘트 페이지 조회
     if (curRoute !== undefined) {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .get(`/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`)
+        .get(
+          `/api/ratings/page/mostlikes?beerId=${curRoute}&page=1&size=5`,
+          config
+        )
         .then((response) => {
           setRatingInfo(response.data);
           if (USERID === response?.data?.data[0]?.userId) {
@@ -72,19 +81,24 @@ export default function Beer() {
         })
         .catch((error) => console.log(error));
     }
-  }, [curRoute, USERID]);
+  }, [curRoute, USERID, TOKEN]);
 
   useEffect(() => {
     // 페어링 페이지 조회
     if (curRoute !== undefined) {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
         .get(
-          `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`
+          `/api/pairings/page/mostlikes/all?beerId=${curRoute}&page=1&size=5`,
+          config
         )
         .then((response) => setPairingInfo(response.data))
         .catch((error) => console.log(error));
     }
-  }, [curRoute]);
+  }, [TOKEN, curRoute]);
 
   useEffect(() => {
     // 비슷한 맥주 조회

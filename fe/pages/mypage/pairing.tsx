@@ -6,47 +6,40 @@ import { useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import Pagenation from '@/components/Pagenation';
 import { useRouter } from 'next/router';
-import { accessToken, userNickname } from '@/atoms/login';
+import { accessToken } from '@/atoms/login';
 import { useRecoilState } from 'recoil';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function Pairing() {
   const [pariginCardPops, setPairingCardProps] = useState<any>();
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [TOKEN] = useRecoilState(accessToken);
-  const [username] = useRecoilState(userNickname);
-  const router = useRouter();
+  const [username, setUserName] = useState('');
 
   useEffect(() => {
-    if (TOKEN === '') {
-      router.push('/');
+    if (TOKEN !== '') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios
+        .get(`/api/mypage/pairing`, config)
+        .then((response) => {
+          setPairingCardProps(response.data.data);
+          setTotalPages(response.data.pageInfo.totalPages);
+          setUserName(response.data.nickname);
+        })
+        .catch((error) => console.log(error));
     }
-  }, [TOKEN, router]);
-
-  useEffect(() => {
-    axios
-      .get(`/api/mypage/pairing`)
-      .then((response) => {
-        setPairingCardProps(response.data.data);
-        setTotalPages(response.data.pageInfo.totalPages);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  }, [TOKEN]);
 
   return (
     <PageContainer>
       <main className="m-auto h-screen max-w-4xl relative">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
         <div className="mb-4 text-center text-xl bg-white rounded-lg max-w-4xl font-semibold">
-          <span className="text-y-brown">{username}님</span>의 페어링
+          <div className="text-y-brown inline">{username}님</div>의 페어링
         </div>
         <PairingCardController pairingCardProps={pariginCardPops} />
         {pariginCardPops?.length ? (

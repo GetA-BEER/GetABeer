@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { accessToken } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import { PairingCardProps } from '../beerPage/BeerDeclare';
+import { useRecoilState } from 'recoil';
 
 export default function PairingCard(props: { pairingCardProps: any }) {
   const noReviewState = useRecoilValue<NoReviewTypes[]>(noReview);
@@ -22,7 +23,11 @@ export default function PairingCard(props: { pairingCardProps: any }) {
     props.pairingCardProps.likeCount
   );
   const router = useRouter();
-  const TOKEN = useRecoilValue(accessToken);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
@@ -76,7 +81,9 @@ export default function PairingCard(props: { pairingCardProps: any }) {
     if (isLogin) {
       axios
         .post(
-          `/api/pairings/likes?pairingId=${props?.pairingCardProps?.pairingId}`
+          `/api/pairings/likes?pairingId=${props?.pairingCardProps?.pairingId}`,
+          {},
+          config
         )
         .then((response) => {
           setIsLike(!isLike);
@@ -131,7 +138,7 @@ export default function PairingCard(props: { pairingCardProps: any }) {
                 ) : (
                   <Image
                     src={props?.pairingCardProps?.thumbnail}
-                    className="m-auto w-full select-none"
+                    className="m-auto h-full w-auto select-none"
                     alt="star"
                     width={180}
                     height={200}

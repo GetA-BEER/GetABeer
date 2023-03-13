@@ -2,15 +2,18 @@ import Head from 'next/head';
 import SortBox, { Sort } from '@/components/selectBox/SortBox';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { IoChevronBack } from 'react-icons/io5';
 import PairingBox from '@/components/selectBox/PairingBox';
 import PairingCardController from '@/components/pairing/PairingCardController';
 import axios from '@/pages/api/axios';
 import Pagenation from '@/components/Pagenation';
 import Image from 'next/image';
+import { useRecoilState } from 'recoil';
+import BackBtn from '@/components/button/BackPageBtn';
+import { accessToken } from '@/atoms/login';
 
 export default function AllPairing() {
   let router = useRouter();
+  const [TOKEN] = useRecoilState<string>(accessToken);
   const [curRoute, setCurRoute] = useState<any>();
   const [sort, setSort] = useState<Sort>('mostlikes');
   const [title, setTitle] = useState<string>('');
@@ -26,9 +29,14 @@ export default function AllPairing() {
   useEffect(() => {
     if (curRoute !== undefined) {
       let tmpCategory = category.toLowerCase();
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
         .get(
-          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`
+          `/api/pairings/page/${sort}/${tmpCategory}?beerId=${curRoute}&page=${page}&size=5`,
+          config
         )
         .then((response) => {
           setPairingCardProps(response.data);
@@ -37,7 +45,7 @@ export default function AllPairing() {
         })
         .catch((error) => console.log(error));
     }
-  }, [curRoute, sort, page, category]);
+  }, [curRoute, sort, page, category, TOKEN]);
 
   return (
     <>
@@ -48,15 +56,7 @@ export default function AllPairing() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl relative">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
         <div className="mt-4 text-center bg-white rounded-lg max-w-4xl font-semibold">
           {title}
         </div>
@@ -71,15 +71,15 @@ export default function AllPairing() {
             <div className="pb-32"></div>
           </>
         ) : (
-          <div className="flex flex-col justify-center items-center rounded-lg bg-y-lightGray py-5">
+          <div className="noneContent py-8">
             <Image
               className="m-auto pb-3 opacity-50"
               src="/images/logo.png"
               alt="logo"
-              width={100}
-              height={100}
+              width={40}
+              height={40}
             />
-            <span>등록된 페어링이 없습니다</span>
+            등록된 페어링이 없습니다.
           </div>
         )}
       </main>

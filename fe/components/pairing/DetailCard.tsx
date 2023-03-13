@@ -1,4 +1,5 @@
 import { MdModeEdit } from 'react-icons/md';
+import { RiAlarmWarningFill } from 'react-icons/ri';
 import { HiTrash, HiOutlineChat } from 'react-icons/hi';
 import ProfileCard from './ProfileCard';
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -24,6 +25,11 @@ export default function DetailCard({ pairingProps, count }: any) {
   const [isLike, setIsLike] = useState<any>(pairingProps?.isUserLikes);
   const [likeCount, setLikeCount] = useState<any>(pairingProps?.likeCount);
   const initialDate = pairingProps?.createdAt;
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   useEffect(() => {
     if (pairingProps !== undefined) {
@@ -38,7 +44,6 @@ export default function DetailCard({ pairingProps, count }: any) {
     setRandomNum(randomTmp);
   }, []);
 
-  const TOKEN = useRecoilValue(accessToken);
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     if (TOKEN === '') {
@@ -65,7 +70,7 @@ export default function DetailCard({ pairingProps, count }: any) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`/api/pairings/${curRoute}`)
+          .delete(`/api/pairings/${curRoute}`, config)
           .then(() => {
             router.back();
           })
@@ -85,6 +90,7 @@ export default function DetailCard({ pairingProps, count }: any) {
           nickname={pairingProps?.nickname}
           date={date}
           userImage={pairingProps?.userImage}
+          userId={pairingProps?.userId}
         />
         {pairingProps?.userId === curUserId ? (
           <div className="flex px-4">
@@ -97,7 +103,17 @@ export default function DetailCard({ pairingProps, count }: any) {
             </div>
           </div>
         ) : (
-          <></>
+          <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
+            <button
+              className="flex items-center mr-1"
+              onClick={() => {
+                console.log('신고하기');
+              }}
+            >
+              <RiAlarmWarningFill className="mb-[1px]" />
+              <span className="text-y-black ml-[1px]">신고하기</span>
+            </button>
+          </div>
         )}
       </div>
       {/* 사진,설명 */}

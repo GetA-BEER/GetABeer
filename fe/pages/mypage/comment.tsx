@@ -8,6 +8,7 @@ import SpeechBalloon from '@/components/SpeechBalloon';
 import { RatingComment, PairingComment } from '@/components/SpeechBalloon';
 import { userNickname } from '@/atoms/login';
 import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 export default function MyComment() {
   const [userName] = useRecoilState(userNickname);
@@ -17,10 +18,15 @@ export default function MyComment() {
   const [pairingCommentList, setPairingCommentList] = useState<
     PairingComment[]
   >([]);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   const deleteRatingComment = (ratingCommentId: number) => {
     axios
-      .delete(`/api/ratings/comments/${ratingCommentId}`)
+      .delete(`/api/ratings/comments/${ratingCommentId}`, config)
       .then((res) => {
         if (ratingCommentList !== null) {
           const filtered = ratingCommentList.filter((el) => {
@@ -34,7 +40,7 @@ export default function MyComment() {
 
   const deletePairingComment = (pairingCommentId: number) => {
     axios
-      .delete(`/api/pairings/comments/${pairingCommentId}`)
+      .delete(`/api/pairings/comments/${pairingCommentId}`, config)
       .then((res) => {
         if (pairingCommentList !== null) {
           const filtered = pairingCommentList.filter((el) => {
@@ -69,19 +75,23 @@ export default function MyComment() {
   ];
 
   useEffect(() => {
+    const axiosConfig = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .get(`/api/mypage/comment/rating`)
+      .get(`/api/mypage/comment/rating`, axiosConfig)
       .then((res) => {
         setRatingCommentList(res.data.data);
       })
       .catch((err) => console.log(err));
     axios
-      .get(`/api/mypage/comment/pairing`)
+      .get(`/api/mypage/comment/pairing`, axiosConfig)
       .then((res) => {
         setPairingCommentList(res.data.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [TOKEN]);
 
   return (
     <PageContainer>

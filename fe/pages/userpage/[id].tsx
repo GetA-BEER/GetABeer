@@ -13,6 +13,9 @@ import { useRecoilState } from 'recoil';
 import Link from 'next/link';
 import Image from 'next/image';
 import CloseBtn from '@/components/button/CloseBtn';
+import Swal from 'sweetalert2';
+import Pagenation from '@/components/Pagenation';
+
 export default function UserPage() {
   const [pariginCardPops, setPairingCardProps] = useState<any>();
   const [ratingList, setRatingList] = useState<RatingCardProps[]>([]);
@@ -27,12 +30,43 @@ export default function UserPage() {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [TOKEN] = useRecoilState(accessToken);
+  const [isLogin, setIsLogin] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+
   useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
+  const goToLogin = () => {
+    Swal.fire({
+      title: 'Get A Beer',
+      text: '로그인이 필요한 서비스 입니다.',
+      showCancelButton: true,
+      confirmButtonColor: '#f1b31c',
+      cancelButtonColor: '#A7A7A7',
+      confirmButtonText: '로그인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push({
+          pathname: '/login',
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     if (id !== undefined) {
       axios
-        .get(`/api/user/${id}`)
+        .get(`/api/user/${id}`, config)
         .then((res) => {
           setUserName(res.data.nickname);
           setParingCount(res.data.pairingCount);
@@ -45,29 +79,30 @@ export default function UserPage() {
         })
         .catch((error) => console.log(error));
     }
-  }, [id]);
+  }, [TOKEN, id]);
   useEffect(() => {
-    if (id !== undefined) {
-      axios
-        .get(`/api/user/${id}/pairings`)
-        .then((res) => {
-          setPairingCardProps(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [id]);
-  useEffect(() => {
-    if (id !== undefined) {
-      axios
-        .get(`/api/user/${id}/ratings`)
-        .then((res) => {
-          setRatingList(res.data.data);
-          setTotalPages(res.data.pageInfo.totalPages);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [id]);
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+
+    axios
+      .get(`/api/user/${id}/pairings?page=${page}`, config)
+      .then((res) => {
+        setPairingCardProps(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((error) => console.log(error));
+
+    axios
+      .get(`/api/user/${id}/ratings?page=${page}`, config)
+      .then((res) => {
+        setRatingList(res.data.data);
+        setTotalPages(res.data.pageInfo.totalPages);
+      })
+      .catch((err) => console.log(err));
+  }, [TOKEN, id, page]);
+
   const [curTab, setCurTab] = useState(0);
   const tabArr = [
     {
@@ -91,17 +126,16 @@ export default function UserPage() {
                 return (
                   <Link key={el.ratingId} href={`/rating/${el.ratingId}`}>
                     <div className="border border-y-lightGray rounded-lg px-3 py-4 m-2">
-                      <RatingCard
-                        cardProps={el}
-                        isMine={false}
-                        count={el.commentCount}
-                      />
+                      <RatingCard cardProps={el} count={el.commentCount} />
                     </div>
                   </Link>
                 );
               })}
             </div>
           )}
+          {ratingList?.length ? (
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          ) : null}
         </div>
       ),
     },
@@ -122,14 +156,21 @@ export default function UserPage() {
               />
               등록된 페어링이 없습니다.
             </div>
-          )}
+          )}{' '}
+          {pariginCardPops?.length ? (
+            <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
+          ) : null}
         </div>
       ),
     },
   ];
   const followClick = () => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .post(`/api/follows/${id}`)
+      .post(`/api/follows/${id}`, {}, config)
       .then((res) => {
         if (res.data === 'Create Follow') {
           setFollow(true);
@@ -141,6 +182,7 @@ export default function UserPage() {
       })
       .catch((err) => {
         console.log(err);
+        goToLogin();
       });
   };
   return (
@@ -156,12 +198,17 @@ export default function UserPage() {
         <div>
           <div className="flex gap-3 p-2 justify-center">
             <div className="relative rounded-full w-20 h-20 self-center">
-              <Image
-                alt="user profile image"
-                src={userImg}
-                fill
-                className="object-cover"
-              />
+              {userImg ? (
+                <Image
+                  alt=" user profile image"
+                  src={userImg}
+                  fill
+                  sizes="100vw"
+                  className="object-cover rounded-full"
+                />
+              ) : (
+                <></>
+              )}
             </div>
             <div className="p-1 self-center">
               <div>{userName}님</div>
@@ -170,22 +217,20 @@ export default function UserPage() {
               </div>
               <div className="flex gap-2">
                 <div
-                  className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                  className="bg-gray-300 text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
                   onClick={() =>
                     router.push({
                       pathname: `/follower/${id}`,
-                      query: { state: 0 },
                     })
                   }
                 >
                   {followerCount} 팔로워
                 </div>
                 <div
-                  className="bg-y-cream text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
+                  className="bg-gray-300 text-center py-2 w-16 rounded-lg text-xs cursor-pointer"
                   onClick={() =>
                     router.push({
-                      pathname: `/follower/${id}`,
-                      query: { state: 1 },
+                      pathname: `/following/${id}`,
                     })
                   }
                 >
@@ -194,6 +239,7 @@ export default function UserPage() {
               </div>
             </div>
           </div>
+
           {follow === null || follow === false ? (
             <SubmitBtn onClick={followClick}>팔로우</SubmitBtn>
           ) : (
@@ -220,6 +266,7 @@ export default function UserPage() {
           </ul>
           {tabArr[curTab].content}
         </div>
+        <div className="pb-20"></div>
       </main>
     </>
   );

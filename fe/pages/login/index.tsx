@@ -23,7 +23,7 @@ interface IFormValues {
   editpassword: string;
 }
 export default function Login() {
-  const [, setAccessToken] = useRecoilState(accessToken);
+  const [TOKEN, setAccessToken] = useRecoilState(accessToken);
   const [, setUserId] = useRecoilState(userId);
   const [showLoginError, setShowLoginError] = useState(false);
   const {
@@ -75,8 +75,12 @@ export default function Login() {
       });
   };
   const onRefresh = () => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .post('/api/refresh')
+      .post('/api/refresh', {}, config)
       .then((res) => {
         onLoginSuccess(res);
       })
@@ -86,8 +90,12 @@ export default function Login() {
   };
 
   const onLogout = () => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .post('/api/user/logout')
+      .post('/api/user/logout', {}, config)
       .then((res) => {
         console.log(res);
       })

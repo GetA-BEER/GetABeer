@@ -14,6 +14,8 @@ import Image from 'next/image';
 import { BiErrorAlt } from 'react-icons/bi';
 import Router from 'next/router';
 import { EditImg } from '@/components/signup/EditImg';
+import { useRecoilState } from 'recoil';
+import { accessToken } from '@/atoms/login';
 
 interface IFormValues {
   userBeerTags: Array<string>;
@@ -46,17 +48,21 @@ export default function MyEdit() {
   const [nameMessage, setNameMessage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
   const image = watch('image');
-
+  const [TOKEN] = useRecoilState(accessToken);
   useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .get('api/user')
+      .get('api/user', config)
       .then((res) => {
         // console.log(res.data);
         setUserImge(res.data.imageUrl);
         reset(res.data);
       })
       .catch((err) => console.log(err));
-  }, [reset]);
+  }, [TOKEN, reset]);
   const onValid = (data: any) => {
     // 기본으로 data 가져오기
     // console.log(data);
@@ -83,9 +89,12 @@ export default function MyEdit() {
       userBeerCategories: userBeerCategories,
       userBeerTags: userBeerTags,
     };
-
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
     axios
-      .patch(`/api/mypage/userinfo`, reqBody)
+      .patch(`/api/mypage/userinfo`, reqBody, config)
       .then((res) => {
         // console.log(res.data);
         Router.push({
@@ -105,12 +114,12 @@ export default function MyEdit() {
       setImagePreview(URL.createObjectURL(file));
       imgEdit(image);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image]);
+
   const imgEdit = (image: any) => {
     const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
+      headers: { Authorization: TOKEN, 'content-type': 'multipart/form-data' },
       withCredentials: true,
     };
     const formData = new FormData();
@@ -157,14 +166,20 @@ export default function MyEdit() {
                   className="h-20 w-20 rounded-full"
                 />
               ) : (
-                <Image
-                  unoptimized
-                  className="h-20 w-20 rounded-full"
-                  alt="프로필사진"
-                  src={userImge}
-                  width={80}
-                  height={80}
-                />
+                <div>
+                  {userImge ? (
+                    <Image
+                      unoptimized
+                      className="h-20 w-20 rounded-full"
+                      alt="프로필사진"
+                      src={userImge}
+                      width={80}
+                      height={80}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               )}
             </div>
           </div>

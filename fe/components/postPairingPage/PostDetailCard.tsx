@@ -22,6 +22,7 @@ export default function PostDetailCard(props: any) {
             alt={beerInfo?.beerDetailsBasic?.korName}
             src={beerInfo?.beerDetailsBasic?.thumbnail}
             fill
+            sizes="50vw"
           />
         </div>
       ) : (
@@ -69,7 +70,7 @@ export default function PostDetailCard(props: any) {
           {beerInfo?.beerDetailsTopTags === null ? (
             <></>
           ) : (
-            <div className="flex-wrap -mt-1 h-fit">
+            <div className="flex flex-wrap -mt-1 h-fit">
               {beerInfo?.beerDetailsTopTags?.map((el: string, idx: number) => {
                 return <Tag key={idx}>{TagMatcherToKor(el)}</Tag>;
               })}

@@ -9,10 +9,6 @@ import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import axios from '@/pages/api/axios';
 import swal from 'sweetalert2';
-import { useRecoilState } from 'recoil';
-import { accessToken, userId } from '@/atoms/login';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 interface IFormValues {
   userBeerTags: Array<string>;
@@ -61,7 +57,7 @@ export default function Information() {
     axios
       .post(`/api/register/user/${Router.query.user_id}`, reqBody)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         swal.fire({
           title: '회원가입 완료!',
           text: '로그인 후 이용하세요',

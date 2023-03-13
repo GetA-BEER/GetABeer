@@ -19,23 +19,30 @@ import Image from 'next/image';
 import { HiTrash, HiOutlineChat } from 'react-icons/hi';
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import { MdModeEdit } from 'react-icons/md';
+import { RiAlarmWarningFill } from 'react-icons/ri';
 import Tag from '../Tag';
 import { TagMatcherToKor } from '@/utils/TagMatcher';
 import { useRouter } from 'next/router';
 import axios from '@/pages/api/axios';
+import { useRecoilState } from 'recoil';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 
 export default function RatingCard(props: {
   cardProps: RatingCardProps;
-  isMine: boolean;
+  isMine?: boolean;
   count: number;
 }) {
   const router = useRouter();
-  const TOKEN = useRecoilValue(accessToken);
+  const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState(false);
+  const [TOKEN] = useRecoilState(accessToken);
+  const config = {
+    headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
 
   useEffect(() => {
     if (TOKEN === '') {
@@ -50,13 +57,17 @@ export default function RatingCard(props: {
   };
 
   const deleteRating = () => {
-    axios.delete(`/api/ratings/${props.cardProps.ratingId}`);
+    axios.delete(`/api/ratings/${props.cardProps.ratingId}`, config);
     router.back();
   };
 
   const isUserLikeHandler = () => {
     axios
-      .post(`/api/ratings/likes?ratingId=${props.cardProps.ratingId}`)
+      .post(
+        `/api/ratings/likes?ratingId=${props.cardProps.ratingId}`,
+        {},
+        config
+      )
       .then((res) => {
         setIsLike(!isLike);
         if (isLike) {
@@ -66,20 +77,30 @@ export default function RatingCard(props: {
         }
       });
   };
-
+  const userCheck = () => {
+    if (USERID !== props.cardProps.userId) {
+      router.push(`/userpage/${props.cardProps.userId}`);
+    } else {
+      router.push(`/mypage`);
+    }
+  };
   return (
     <div>
       <div className="flex justify-between">
         <div className="flex">
-          <div className="relative rounded-full w-7 h-7 ml-1">
+          <div
+            className="relative rounded-full w-7 h-7 ml-1"
+            onClick={userCheck}
+          >
             <Image
               alt="user profile image"
               src={props.cardProps.userImage}
               fill
+              sizes="100vw"
               className="object-cover rounded-full"
             />
           </div>
-          <div className="flex flex-col ml-2 text-xs">
+          <div className="flex flex-col ml-2 text-xs" onClick={userCheck}>
             <span>{props.cardProps.nickname}</span>
             <span className="text-[5px] text-y-gray">
               {ToDateString(props.cardProps.modifiedAt)}
@@ -114,6 +135,18 @@ export default function RatingCard(props: {
               >
                 <HiTrash />
                 <span className="text-y-black text-xs">삭제</span>
+              </button>
+            </div>
+          ) : router.pathname === '/rating/[ratingid]' ? (
+            <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
+              <button
+                className="flex items-center mr-1"
+                onClick={() => {
+                  console.log('신고하기');
+                }}
+              >
+                <RiAlarmWarningFill className="mb-[1px]" />
+                <span className="text-y-black ml-[1px]">신고하기</span>
               </button>
             </div>
           ) : null}

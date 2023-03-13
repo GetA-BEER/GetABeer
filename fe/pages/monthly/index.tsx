@@ -3,7 +3,6 @@ import MonthlyCard, {
 } from '@/components/middleCards/MonthlyCard';
 import PageContainer from '@/components/PageContainer';
 import axios from '@/pages/api/axios';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function MonthlyPage() {
@@ -27,9 +26,7 @@ export default function MonthlyPage() {
         </h2>
       </div>
       {monthlyBeerList.map((el, idx) => (
-        <Link key={el.beerId} href={`/beer/${el.beerId}`}>
-          <MonthlyCard cardProps={el} idx={idx} />
-        </Link>
+        <MonthlyCard key={el.beerId} cardProps={el} idx={idx} />
       ))}
     </PageContainer>
   );

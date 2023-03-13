@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { TimeHandler } from '@/utils/TimeHandler';
 import { CategoryMatcherToKor } from '@/utils/CategryMatcher';
 import PairingThumbs from '../PairingThumbs';
-import { accessToken } from '@/atoms/login';
+import { accessToken, userId } from '@/atoms/login';
 import { useRouter } from 'next/router';
 
 export default function SmallPairingCard({ pairingProps }: any) {
@@ -20,6 +20,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
   const [isLike, setIsLike] = useState<any>(pairingProps.isUserLikes);
   const [likeCount, setLikeCount] = useState<any>(pairingProps.likeCount);
   const TOKEN = useRecoilValue(accessToken);
+  const USERID = useRecoilValue(userId);
   const [isLogin, setIsLogin] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -71,7 +72,13 @@ export default function SmallPairingCard({ pairingProps }: any) {
       }
     }
   }, [collisions, pairingList]);
-
+  const userCheck = () => {
+    if (USERID !== pairingList?.userId) {
+      router.push(`/userpage/${pairingList?.userId}`);
+    } else {
+      router.push(`/mypage`);
+    }
+  };
   return (
     <>
       <div className="w-full ml-2 mb-2 rounded-lg bg-white text-y-black drop-shadow-lg text-[8px] border">
@@ -82,11 +89,12 @@ export default function SmallPairingCard({ pairingProps }: any) {
           </span>
           <span
             className="flex justify-end items-center w-2/5"
-            onClick={() => router.push(`/userpage/${pairingList?.userId}`)}
+            onClick={userCheck}
           >
             <span className="w-[70%] text-end truncate pr-[2px]">
               {pairingList?.nickname}
             </span>
+
             {pairingList.userImage ? (
               <Image
                 alt="userImg"
@@ -109,10 +117,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
             }`}
             id="pairingParents"
           >
-            {pairingList?.thumbnail === '' ||
-            pairingList?.thumbnail === null ? (
-              <div id={`pairingImage${pairingList?.pairingId}`}></div>
-            ) : (
+            {pairingList?.thumbnail ? (
               <div className="h-[77px] w-auto overflow-hidden">
                 <Image
                   src={pairingList?.thumbnail}
@@ -124,6 +129,8 @@ export default function SmallPairingCard({ pairingProps }: any) {
                   priority
                 />
               </div>
+            ) : (
+              <div id={`pairingImage${pairingList?.pairingId}`}></div>
             )}
             {pairingList?.content === undefined ? (
               <div

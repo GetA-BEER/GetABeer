@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { accessToken, userId } from '@/atoms/login';
 import Swal from 'sweetalert2';
 import { PairingCardProps } from '@/components/beerPage/BeerDeclare';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function PairingDetail() {
   let router = useRouter();
@@ -38,20 +39,23 @@ export default function PairingDetail() {
 
   useEffect(() => {
     // 특정 페어링 조회
-    if (curRoute !== undefined) {
+    if (curRoute) {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .get(`/api/pairings/${curRoute}`)
+        .get(`/api/pairings/${curRoute}`, config)
         .then((response) => {
           setPairingProps(response.data);
           setPairingCommentList(response.data.commentList);
           if (response.data.userId === USERID) {
-            console.log(response.data);
             setIsMine(true);
           }
         })
         .catch((error) => console.log(error));
     }
-  }, [curRoute, USERID]);
+  }, [curRoute, USERID, TOKEN]);
 
   const postPairingComment = () => {
     if (inputState !== '') {
@@ -59,8 +63,12 @@ export default function PairingDetail() {
         pairingId: Number(curRoute),
         content: inputState,
       };
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
       axios
-        .post('/api/pairings/comments', reqBody)
+        .post('/api/pairings/comments', reqBody, config)
         .then((res) => {
           if (pairingCommentList === null) {
             setPairingCommentList([res.data]);
@@ -74,14 +82,20 @@ export default function PairingDetail() {
   };
 
   const deletePairingComment = (pairingCommentId: number) => {
-    axios.delete(`/api/pairings/comments/${pairingCommentId}`).then((res) => {
-      if (pairingCommentList !== null) {
-        const filtered = pairingCommentList.filter((el) => {
-          return el.pairingCommentId !== pairingCommentId;
-        });
-        setPairingCommentList(filtered);
-      }
-    });
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+    axios
+      .delete(`/api/pairings/comments/${pairingCommentId}`, config)
+      .then((res) => {
+        if (pairingCommentList !== null) {
+          const filtered = pairingCommentList.filter((el) => {
+            return el.pairingCommentId !== pairingCommentId;
+          });
+          setPairingCommentList(filtered);
+        }
+      });
   };
 
   return (
@@ -93,15 +107,8 @@ export default function PairingDetail() {
         <link rel="icon" href="/images/logo.png" />
       </Head>
       <main className="m-auto h-screen max-w-4xl relative">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
+
         <div className="text-xl mt-4 mb-3 text-center font-semibold">
           {pairingProps?.korName}
         </div>

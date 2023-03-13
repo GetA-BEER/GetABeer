@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import WishCard from '@/components/wish/WishCard';
-import { IoChevronBack } from 'react-icons/io5';
 import { useRecoilState } from 'recoil';
 import { accessToken, userNickname } from '@/atoms/login';
 import { useRouter } from 'next/router';
@@ -8,25 +7,30 @@ import axios from '@/pages/api/axios';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Pagenation from '@/components/Pagenation';
+import BackBtn from '@/components/button/BackPageBtn';
 
 export default function Wish() {
   const [wishList, setWishList] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [TOKEN] = useRecoilState(accessToken);
-  const [username] = useRecoilState(userNickname);
-  const router = useRouter();
+  const [username, setUserName] = useState('');
+
   useEffect(() => {
-    if (TOKEN === '') {
-      router.push('/');
+    if (TOKEN !== '') {
+      const config = {
+        headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+      axios
+        .get(`/api/mypage/wishlist?&page=${page}`, config)
+        .then((response) => {
+          setWishList(response.data.data);
+          setTotalPages(response.data.pageInfo.totalPages);
+          setUserName(response.data.nickname);
+        });
     }
-  }, [TOKEN, router]);
-  useEffect(() => {
-    axios.get(`/api/mypage/wishlist?&page=${page}`).then((response) => {
-      setWishList(response.data.data);
-      setTotalPages(response.data.pageInfo.totalPages);
-    });
-  }, [page]);
+  }, [TOKEN, page]);
 
   return (
     <>
@@ -38,15 +42,7 @@ export default function Wish() {
       </Head>
 
       <main className="m-auto h-screen max-w-4xl">
-        <button
-          type="button"
-          onClick={() => {
-            router.back();
-          }}
-          className="ml-4 absolute"
-        >
-          <IoChevronBack className="w-6 h-6" />
-        </button>
+        <BackBtn />
         <div className=" max-w-4xl m-auto">
           <div className="text-xl mb-10 text-center font-semibold break-keep">
             <span className="text-y-brown">{username}님</span>의 위시 맥주
