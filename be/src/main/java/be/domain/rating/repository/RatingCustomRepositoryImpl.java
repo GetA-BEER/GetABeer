@@ -211,6 +211,7 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 		Long total = queryFactory
 			.select(rating.count())
 			.from(rating)
+			.where(rating.user.eq(user))
 			.fetchOne();
 
 		return new PageImpl<>(ratings, pageable, total);

@@ -59,4 +59,12 @@ public class NotificationController {
 	public void deleteNotification(@PathVariable(name = "notification-id") Long id) {
 		notificationService.deleteNotification(id);
 	}
+
+	/**
+	 * 전체 알림 삭제
+	 */
+	@DeleteMapping
+	public void deleteAll() {
+		notificationService.deleteAll();
+	}
 }
