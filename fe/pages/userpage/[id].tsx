@@ -85,24 +85,31 @@ export default function UserPage() {
       headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
       withCredentials: true,
     };
-
-    axios
-      .get(`/api/user/${id}/pairings?page=${page}`, config)
-      .then((res) => {
-        setPairingCardProps(res.data.data);
-        setTotalPages(res.data.pageInfo.totalPages);
-      })
-      .catch((error) => console.log(error));
-
-    axios
-      .get(`/api/user/${id}/ratings?page=${page}`, config)
-      .then((res) => {
-        setRatingList(res.data.data);
-        setTotalPages(res.data.pageInfo.totalPages);
-      })
-      .catch((err) => console.log(err));
+    if (id !== undefined) {
+      axios
+        .get(`/api/user/${id}/pairings?page=${page}`, config)
+        .then((res) => {
+          setPairingCardProps(res.data.data);
+          setTotalPages(res.data.pageInfo.totalPages);
+        })
+        .catch((error) => console.log(error));
+    }
   }, [TOKEN, id, page]);
-
+  useEffect(() => {
+    const config = {
+      headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+    if (id !== undefined) {
+      axios
+        .get(`/api/user/${id}/ratings?page=${page}`, config)
+        .then((res) => {
+          setRatingList(res.data.data);
+          setTotalPages(res.data.pageInfo.totalPages);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [TOKEN, id, page]);
   const [curTab, setCurTab] = useState(0);
   const tabArr = [
     {
@@ -156,7 +163,7 @@ export default function UserPage() {
               />
               등록된 페어링이 없습니다.
             </div>
-          )}{' '}
+          )}
           {pariginCardPops?.length ? (
             <Pagenation page={page} setPage={setPage} totalPages={totalPages} />
           ) : null}
