@@ -303,6 +303,7 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 		Long total = queryFactory
 			.select(pairing.count())
 			.from(pairing)
+			.where(pairing.user.eq(user))
 			.fetchOne();
 
 		return new PageImpl<>(pairings, pageable, total);
