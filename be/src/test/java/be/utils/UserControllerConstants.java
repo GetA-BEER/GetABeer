@@ -54,6 +54,13 @@ public class UserControllerConstants {
 			.password("password1@")
 			.build();
 
+	public static final UserDto.LoginResponse USER_LOGIN_RESPONSE_DTO =
+		UserDto.LoginResponse.builder()
+			.id(1L)
+			.nickname("닉네임")
+			.email("e@mail.com")
+			.build();
+
 	public static final UserDto.UserInfoResponse USER_INFO_RESPONSE =
 		UserDto.UserInfoResponse.builder()
 			.imageUrl("프로필 사진")
