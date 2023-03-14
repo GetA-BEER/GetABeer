@@ -103,5 +103,5 @@ export default function MapBrewery({
 
     return () => mapScript.removeEventListener('load', onLoadKakaoMap);
   }, [latitude, longitude, hugeMode]);
-  return <div id="map" className="aspect-square lg:aspect-video"></div>;
+  return <div id="map" className="w-full h-4/6"></div>;
 }
