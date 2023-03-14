@@ -21,8 +21,8 @@ export default function StoreMap() {
     function error(err: any) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
       setTimeout(() => {
-        setLatitude(37.4765092);
-        setLongitude(126.9759);
+        setLatitude(37.5699352);
+        setLongitude(126.984834);
       }, 2000);
     }
     navigator.geolocation.getCurrentPosition(success, error, options);

@@ -90,5 +90,5 @@ export default function MapStore({ latitude, longitude }: MapProps) {
     return () => mapScript.removeEventListener('load', onLoadKakaoMap);
   }, [latitude, longitude]);
 
-  return <div id="map" className="aspect-square lg:aspect-video"></div>;
+  return <div id="map" className="w-full h-4/6"></div>;
 }
