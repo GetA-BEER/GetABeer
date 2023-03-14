@@ -2,6 +2,7 @@ package be.domain.chat.redis.service;
 
 import java.util.Arrays;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,7 +25,7 @@ public class RedisSubscriber implements MessageListener {
 	private final SimpMessageSendingOperations messageTemplate;
 
 	@Override
-	public void onMessage(Message message, byte[] pattern) {
+	public void onMessage(@NotNull Message message, byte[] pattern) {
 		try {
 			log.info("*************** 여기는 레디스 섭스크라이버 ***************************");
 			log.info("메세지 확인 : " + Arrays.toString(message.getBody()));

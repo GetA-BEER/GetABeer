@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -38,9 +37,9 @@ public class RedisChatController {
 
 	/* 관리자는 채팅방을 생성할 수 없음 */
 	@GetMapping("/api/chats/room")
-	public ResponseEntity<Long> createRoom() {
+	public ResponseEntity<RedisRoomDto.Response> getChatRoom() {
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(roomService.getOrCreate());
+		return ResponseEntity.ok(roomService.getChatRoom());
 	}
 
 	@GetMapping("/api/chats/rooms")

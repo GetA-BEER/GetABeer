@@ -1,11 +1,13 @@
 package be.global.aop;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
@@ -44,6 +46,13 @@ public class ChatAop {
 				ChannelTopic channelTopic = new ChannelTopic(roomId);
 				redisMessageListener.addMessageListener(subscriber, channelTopic);
 				topics.put(roomId, channelTopic);
+
+				List<User> findAdmin = userService.findAdminUser();
+
+				/* 근데 이거 되는지 모름... 테스트를 할 수가 없슴...*/
+				for (User value : findAdmin) {
+					redisMessageListener.addMessageListener((MessageListener) value, channelTopic);
+				}
 			}
 		}
 	}

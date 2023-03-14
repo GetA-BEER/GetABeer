@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class RatingService {
-	private final EntityManager em;
 	private final RatingRepository ratingRepository;
 	private final BeerService beerService;
 	private final BeerTagService beerTagService;
@@ -161,8 +160,6 @@ public class RatingService {
 
 		deleteBeerBeerTags(findBeer, rating.getRatingTag().createBeerTagTypeList());
 		tagRepository.delete(rating.getRatingTag());
-
-		em.flush();
 
 		ratingRepository.delete(rating);
 

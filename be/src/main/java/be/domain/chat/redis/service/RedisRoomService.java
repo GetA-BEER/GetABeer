@@ -30,23 +30,15 @@ public class RedisRoomService {
 	private final RedisRoomRepository roomRepository;
 	private final RedisMessageListenerContainer redisMessageListener;
 
-	public Long getOrCreate() {
+	public RedisRoomDto.Response getChatRoom() {
 		User user = userService.findLoginUser();
 		if (!user.getRoles().contains("USER_ADMIN")) {
-			RedisChatRoom chatRoom =
-				chatRepository.getOrCreateRoom(user.getId())
-					.orElseGet(() -> RedisChatRoom.create(user));
-			String roomId = "room" + Objects.requireNonNull(chatRoom).getId();
-			roomRepository.saveAndFlush(chatRoom);
-			if (!topics.containsKey(roomId)) {
-				ChannelTopic channelTopic = new ChannelTopic(roomId);
-				redisMessageListener.addMessageListener(subscriber, channelTopic);
-				topics.put(roomId, channelTopic);
-			}
 
-			return chatRoom.getId();
+			return chatRepository.getChatRoom(user.getId());
 		}
-		throw new RuntimeException("관리자는 채팅방을 생성할 수 없습니다.");
+
+		/* 관리자는 채팅방 리스트를 불러온 후 -> 해당 채팅방 입장? */
+		throw new RuntimeException("관리자 요청 메서드가 아닙니다.");
 	}
 
 	/* 어드민용? */

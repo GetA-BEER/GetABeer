@@ -1,13 +1,14 @@
 package be.domain.chat.redis.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class RedisRoomDto {
 
 	@Getter
-	// @Builder
+	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class Response{

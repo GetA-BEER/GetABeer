@@ -36,12 +36,16 @@ public class RedisChatRepository {
 			.fetch();
 	}
 
-	public Optional<RedisChatRoom> getOrCreateRoom(Long clientId) {
+	public RedisRoomDto.Response getChatRoom(Long userId) {
 
-		return Optional.ofNullable(queryFactory
-			.selectFrom(redisChatRoom)
-			.where(redisChatRoom.sender.id.eq(clientId))
-			.fetchFirst());
+		return queryFactory
+			.select(Projections.fields(RedisRoomDto.Response.class,
+				redisChatRoom.id.as("roomId"),
+				redisChatRoom.sender.id.as("senderId"),
+				redisChatRoom.isAdminRead.as("isAdminRead")
+				)).from(redisChatRoom)
+			.where(redisChatRoom.id.eq(userId))
+			.fetchFirst();
 	}
 
 	public RedisChatRoom findChatRoom(Long roomId) {

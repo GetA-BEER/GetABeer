@@ -12,7 +12,7 @@ import be.domain.comment.dto.RatingCommentDto;
 import be.domain.comment.entity.RatingComment;
 import be.domain.comment.repository.rating.RatingCommentRepository;
 import be.domain.notice.entity.NotificationType;
-import be.domain.notice.service.NotificationService;
+// import be.domain.notice.service.NotificationService;
 import be.domain.rating.entity.Rating;
 import be.domain.rating.repository.RatingRepository;
 import be.domain.rating.service.RatingService;
@@ -29,7 +29,7 @@ public class RatingCommentService {
 	private final UserService userService;
 	private final RatingService ratingService;
 	private final RatingRepository ratingRepository;
-	private final NotificationService notificationService;
+	// private final NotificationService notificationService;
 	private final RatingCommentRepository ratingCommentRepository;
 
 	/* 맥주 댓글 등록 */
@@ -50,8 +50,8 @@ public class RatingCommentService {
 		if (!user.getId().equals(rating.getUser().getId())) {
 			String title = user.getNickname() + "님이 회원님의 게시글에 댓글을 남겼습니다.";
 			String content = "\"" + ratingComment.getContent() + "\"";
-			notificationService.send(rating.getUser(), rating.getId(), title, content, user.getImageUrl(),
-				NotificationType.RATING);
+			// notificationService.send(rating.getUser(), rating.getId(), title, content, user.getImageUrl(),
+			// 	NotificationType.RATING);
 		}
 
 		return ratingComment;

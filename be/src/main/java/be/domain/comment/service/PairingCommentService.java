@@ -12,7 +12,7 @@ import be.domain.comment.dto.PairingCommentDto;
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.repository.pairing.PairingCommentRepository;
 import be.domain.notice.entity.NotificationType;
-import be.domain.notice.service.NotificationService;
+// import be.domain.notice.service.NotificationService;
 import be.domain.pairing.entity.Pairing;
 import be.domain.pairing.repository.PairingRepository;
 import be.domain.pairing.service.PairingService;
@@ -29,7 +29,7 @@ public class PairingCommentService {
 	private final UserService userService;
 	private final PairingService pairingService;
 	private final PairingRepository pairingRepository;
-	private final NotificationService notificationService;
+	// private final NotificationService notificationService;
 	private final PairingCommentRepository pairingCommentRepository;
 
 	/* 페어링 댓글 등록 */
@@ -49,8 +49,8 @@ public class PairingCommentService {
 		if (!user.getId().equals(pairing.getUser().getId())) {
 			String title = user.getNickname() + "님이 회원님의 게시글에 댓글을 남겼습니다.";
 			String content = "\"" + pairingComment.getContent() + "\"";
-			notificationService.send(pairing.getUser(), pairing.getId(), title, content, user.getImageUrl(),
-				NotificationType.PAIRING);
+			// notificationService.send(pairing.getUser(), pairing.getId(), title, content, user.getImageUrl(),
+			// 	NotificationType.PAIRING);
 		}
 
 		return pairingComment;
