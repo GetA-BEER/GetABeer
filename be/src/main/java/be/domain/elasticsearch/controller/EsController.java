@@ -14,7 +14,7 @@ import be.domain.elasticsearch.service.ElasticsearchService;
 import lombok.RequiredArgsConstructor;
 
 @Validated
-// @RestController
+@RestController
 @RequestMapping({"/api/search/es"})
 @RequiredArgsConstructor
 public class EsController {

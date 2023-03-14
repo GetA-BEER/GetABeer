@@ -2,8 +2,9 @@ package be.controller;
 
 import static be.utils.ApiDocumentUtils.*;
 import static be.utils.FollowControllerConstants.*;
-import static be.utils.LikeControllerConstants.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.anyInt;
+import static org.mockito.BDDMockito.anyList;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
