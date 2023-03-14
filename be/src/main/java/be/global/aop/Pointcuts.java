@@ -46,4 +46,7 @@ public class Pointcuts {
 	public void updateUser() {
 	}
 
+	@Pointcut("execution(* be.domain.user.service.UserService.registerUser(..))")
+	public void createChatRoom() {
+	}
 }
