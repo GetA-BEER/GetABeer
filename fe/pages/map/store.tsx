@@ -2,12 +2,10 @@ import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
 import MapNav from '@/components/map/MapNav';
 import MapStore from '@/components/map/MapStore';
-import { useRouter } from 'next/router';
 
 export default function StoreMap() {
   const [latitude, setLatitude] = useState<number>(0);
   const [longitude, setLongitude] = useState<number>(0);
-  const router = useRouter();
   useEffect(() => {
     const options = {
       enableHighAccuracy: true,
@@ -22,6 +20,10 @@ export default function StoreMap() {
 
     function error(err: any) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
+      setTimeout(() => {
+        setLatitude(37.4765092);
+        setLongitude(126.9759);
+      }, 2000);
     }
     navigator.geolocation.getCurrentPosition(success, error, options);
   }, []);
