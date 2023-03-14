@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { MapProps } from './MapStore';
 
 declare global {
   interface Window {
@@ -6,7 +7,11 @@ declare global {
   }
 }
 
-export default function MapBrewery() {
+export default function MapBrewery({
+  latitude,
+  longitude,
+  hugeMode,
+}: MapProps) {
   useEffect(() => {
     const mapScript = document.createElement('script');
     mapScript.async = true;
@@ -17,14 +22,20 @@ export default function MapBrewery() {
       window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
-          center: new window.kakao.maps.LatLng(36.2683, 127.6358),
+          center: new window.kakao.maps.LatLng(latitude, longitude),
           level: 13,
         };
         const map = new window.kakao.maps.Map(container, options);
-        const infoWindow = new window.kakao.maps.InfoWindow({
-          zIndex: 1,
-          removable: true,
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          xAnchor: 0.5,
+          yAnchor: 1.8,
         });
+
+        if (hugeMode) {
+          map.setLevel(13);
+        } else {
+          map.setLevel(4);
+        }
 
         // 마커 클러스터러를 생성합니다
         var clusterer = new window.kakao.maps.MarkerClusterer({
@@ -58,12 +69,28 @@ export default function MapBrewery() {
               image: markerImage,
             });
             window.kakao.maps.event.addListener(marker, 'click', function () {
-              infoWindow.setContent(
-                '<div style="padding:5px;font-size:12px;">' +
+              customOverlay.setPosition(
+                new window.kakao.maps.LatLng(
+                  position.latitude,
+                  position.longitude
+                )
+              );
+              customOverlay.setContent(
+                '<div class="bg-y-cream text-xs rounded-md m-1 p-2 w-fit border-2 border-y-gold z-10">' +
+                  '<div class="title flex justify-between items-center">' +
                   position.name +
+                  '<button id="closeCustomOverlay" class="text-y-brown ml-2">x</button>' +
+                  ' </div>' +
+                  '<div class="body font-thin">' +
+                  position.address +
+                  '</div>' +
                   '</div>'
               );
-              infoWindow.open(map, marker);
+              customOverlay.setMap(map);
+              const closeBtn = document.getElementById('closeCustomOverlay');
+              closeBtn?.addEventListener('click', () => {
+                customOverlay.setMap(null);
+              });
             });
             return marker;
           });
@@ -75,6 +102,6 @@ export default function MapBrewery() {
     mapScript.addEventListener('load', onLoadKakaoMap);
 
     return () => mapScript.removeEventListener('load', onLoadKakaoMap);
-  }, []);
-  return <div id="map" className="aspect-square lg:aspect-video"></div>;
+  }, [latitude, longitude, hugeMode]);
+  return <div id="map" className="w-full h-4/6"></div>;
 }

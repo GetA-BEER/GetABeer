@@ -20,6 +20,10 @@ export default function StoreMap() {
 
     function error(err: any) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
+      setTimeout(() => {
+        setLatitude(37.5699352);
+        setLongitude(126.984834);
+      }, 2000);
     }
     navigator.geolocation.getCurrentPosition(success, error, options);
   }, []);
@@ -28,6 +32,18 @@ export default function StoreMap() {
     <PageContainer>
       <MapNav curTab={0} />
       <div className="w-full h-full">
+        <div className="flex justify-end">
+          <button
+            className="text-xs rounded bg-y-cream text-y-brown p-0.5 mx-2 mb-2"
+            onClick={() => {
+              if (window !== undefined) {
+                window.location.replace('/map/store');
+              }
+            }}
+          >
+            새로 고침
+          </button>
+        </div>
         <MapStore latitude={latitude} longitude={longitude} />
       </div>
     </PageContainer>
