@@ -67,7 +67,8 @@ export default function SmallPairingCard({ pairingProps }: any) {
         let parentHeight = parent.offsetHeight;
         let tagChildHeight = imageChild.clientHeight;
         let deschildHeight = deschild.clientHeight;
-        if (parentHeight <= tagChildHeight + deschildHeight)
+        if (parentHeight <= tagChildHeight + deschildHeight + 8)
+          // 8은 패딩 값
           setCollisions(true);
       }
     }
@@ -118,7 +119,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
             id="pairingParents"
           >
             {pairingList?.thumbnail ? (
-              <div className="h-[77px] w-auto overflow-hidden">
+              <div className="h-[77px] w-auto overflow-hidden mb-0.5">
                 <Image
                   src={pairingList?.thumbnail}
                   alt="img"
@@ -134,7 +135,7 @@ export default function SmallPairingCard({ pairingProps }: any) {
             )}
             {pairingList?.content === undefined ? (
               <div
-                className="text-y-gray text-[8px]"
+                className="text-y-gray text-[8px] md:text-xs"
                 id={`pairingDescribe${pairingList?.pairingId}`}
               >
                 {noReviewState[randomNum]?.contents}
@@ -143,18 +144,21 @@ export default function SmallPairingCard({ pairingProps }: any) {
               <>
                 <div
                   id={`pairingDescribe${pairingList?.pairingId}`}
-                  className="text-[8px]"
+                  className="text-[8px] md:text-xs md:mt-1"
                 >
                   {pairingList?.content}
                 </div>
-                <div className="absolute bottom-0.5 right-1 px-1 bg-white">
-                  ...<span className="text-y-gold">더보기</span>
+                <div className="absolute bottom-0.5 md:bottom-0 right-1 px-1 bg-white">
+                  ...
+                  <span className="text-y-gold text-[8px] md:text-xs ">
+                    더보기
+                  </span>
                 </div>
               </>
             ) : (
               <div
                 id={`pairingDescribe${pairingList?.pairingId}`}
-                className="text-[8px]"
+                className="text-[8px] md:text-xs"
               >
                 {pairingList?.content}
               </div>

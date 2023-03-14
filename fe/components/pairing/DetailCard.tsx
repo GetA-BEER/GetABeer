@@ -107,7 +107,7 @@ export default function DetailCard({ pairingProps, count }: any) {
             <button
               className="flex items-center mr-1"
               onClick={() => {
-                console.log('신고하기');
+                // console.log('신고하기');
               }}
             >
               <RiAlarmWarningFill className="mb-[1px]" />
@@ -125,15 +125,15 @@ export default function DetailCard({ pairingProps, count }: any) {
             <PairingImageCarousel imageList={pairingProps?.imageList} />
           )}
           <div className="p-2 h-fit overflow-hidden w-full leading-6">
-            <div className="w-fit px-2 py-[2px] text-xs rounded-md text-white bg-y-gold">
+            <div className="w-fit px-2 py-[2px] mb-2 text-xs md:text-sm rounded-md text-white bg-y-gold">
               {CategoryMatcherToKor(pairingProps?.category)}
             </div>
             {pairingProps?.content === undefined ? (
-              <div className="text-y-gray">
+              <div className="text-y-gray text-xs md:text-sm">
                 {noReviewState[randomNum]?.contents}
               </div>
             ) : (
-              <>{pairingProps?.content}</>
+              <div className="text-xs md:text-sm">{pairingProps?.content}</div>
             )}
           </div>
         </div>
