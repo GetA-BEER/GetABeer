@@ -326,7 +326,8 @@ public class Init {
 				.imageUrl(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
 				.build();
 
-			user.putUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.values()[(int)(Math.random() * 3)]);
+			// user.putUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.values()[(int)(Math.random() * 3)]);
+			user.putUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.MALE);
 			user.putUserBeerTags(new ArrayList<>());
 
 			for (int j = 0; j < 4; j++) {

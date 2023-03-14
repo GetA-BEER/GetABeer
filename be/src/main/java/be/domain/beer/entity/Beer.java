@@ -226,6 +226,7 @@ public class Beer extends BaseTimeEntity implements Serializable {
 
 	public void calculateTotalAverageStars(Double star) {
 		this.beerDetailsStars.calculateTotalAverageStars(star, this.beerDetailsCounts.getRatingCount());
+		this.beerDetailsCounts.addRatingCount();
 	}
 
 	public void calculateFemaleAverageStars(Double star) {
@@ -257,12 +258,12 @@ public class Beer extends BaseTimeEntity implements Serializable {
 	}
 
 	public void deleteFemaleAverageStars(Double deleteStar) {
-		this.beerDetailsStars.deleteFemaleAverageStars(deleteStar, this.beerDetailsCounts.getRatingCount());
+		this.beerDetailsStars.deleteFemaleAverageStars(deleteStar, this.beerDetailsCounts.getFemaleStarCount());
 		this.beerDetailsCounts.minusFemaleStarCount();
 	}
 
 	public void deleteMaleAverageStars(Double deleteStar) {
-		this.beerDetailsStars.deleteMaleAverageStars(deleteStar, this.beerDetailsCounts.getRatingCount());
+		this.beerDetailsStars.deleteMaleAverageStars(deleteStar, this.beerDetailsCounts.getMaleStarCount());
 		this.beerDetailsCounts.minusMaleStarCount();
 	}
 

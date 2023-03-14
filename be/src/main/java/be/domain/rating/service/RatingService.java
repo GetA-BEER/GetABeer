@@ -162,7 +162,8 @@ public class RatingService {
 		deleteBeerBeerTags(findBeer, rating.getRatingTag().createBeerTagTypeList());
 		tagRepository.delete(rating.getRatingTag());
 
-		em.flush();
+		em.persist(rating.getRatingTag());
+		em.persist(rating);
 
 		ratingRepository.delete(rating);
 

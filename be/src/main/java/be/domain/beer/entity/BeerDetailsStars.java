@@ -31,7 +31,7 @@ public class BeerDetailsStars {
 		if (this.totalAverageStars == 0.0) {
 			this.totalAverageStars = star;
 		} else {
-			Double numerator = totalAverageStars + star;
+			Double numerator = totalAverageStars * ratingCount + star;
 			int denominator = ratingCount + 1;
 			this.totalAverageStars = format(numerator, denominator);
 		}
@@ -41,7 +41,7 @@ public class BeerDetailsStars {
 		if (this.femaleAverageStars == 0.0) {
 			this.femaleAverageStars = star;
 		} else {
-			Double numerator = femaleAverageStars + star;
+			Double numerator = femaleAverageStars * femaleStarCount + star;
 			Integer denominator = femaleStarCount + 1;
 			this.femaleAverageStars = format(numerator, denominator);
 		}
@@ -51,9 +51,9 @@ public class BeerDetailsStars {
 		if (this.maleAverageStars == 0.0) {
 			this.maleAverageStars = star;
 		} else {
-			Double numerator = maleAverageStars + star;
+			Double numerator = maleAverageStars * maleStarCount + star;
 			Integer denominator = maleStarCount + 1;
-			this.femaleAverageStars = format(numerator, denominator);
+			this.maleAverageStars = format(numerator, denominator);
 		}
 	}
 
