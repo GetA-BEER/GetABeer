@@ -4,8 +4,8 @@ import MapNav from '@/components/map/MapNav';
 import MapBrewery from '@/components/map/MapBrewery';
 
 export default function BreweryMap() {
-  const [latitude, setLatitude] = useState<number>(37.4765092);
-  const [longitude, setLongitude] = useState<number>(126.9759);
+  const [latitude, setLatitude] = useState<number>(37.5699352);
+  const [longitude, setLongitude] = useState<number>(126.984834);
   const [hugeMode, setHugeMode] = useState<boolean>(true);
   useEffect(() => {
     const options = {
