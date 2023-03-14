@@ -133,7 +133,7 @@ public class GetABeerAop {
 		Beer findBeer = beerService.findVerifiedBeer(beerId);
 
 		findBeer.addStatRatingCount(); // 맥주 통계용 레이팅 숫자 늘려주기
-		findBeer.addRatingCount(); // 맥주 전체 레이팅 숫자 늘려주기
+		// findBeer.addRatingCount(); // 맥주 전체 레이팅 숫자 늘려주기
 
 		// ------------------------------------BEER TAG-------------------------------------------
 
@@ -252,6 +252,7 @@ public class GetABeerAop {
 			Double deleteStar = findRating.getStar();
 
 			findBeer.deleteTotalAverageStars(deleteStar);
+			findBeer.minusRatingCount();
 
 			if (loginUser.getGender().equals(Gender.FEMALE)) {
 				findBeer.deleteFemaleAverageStars(deleteStar);
@@ -259,7 +260,7 @@ public class GetABeerAop {
 				findBeer.deleteMaleAverageStars(deleteStar);
 			}
 
-			findBeer.minusRatingCount();
+			beerRepository.save(findBeer);
 
 			List<String> presentBeerTagTypes = new ArrayList<>();
 

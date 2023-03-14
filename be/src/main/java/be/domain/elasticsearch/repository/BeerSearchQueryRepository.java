@@ -15,7 +15,7 @@ import be.domain.elasticsearch.entity.BeerDocument;
 import be.domain.elasticsearch.dto.SearchParam;
 import lombok.RequiredArgsConstructor;
 
-// @Component
+@Component
 @RequiredArgsConstructor
 public class BeerSearchQueryRepository {
 	private final ElasticsearchOperations elasticsearchOperations;

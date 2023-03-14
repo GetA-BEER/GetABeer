@@ -5,13 +5,12 @@
 :toc-title: Table of Contents
 :source-highlighter: prettify
 
-Team <Get a Beer>
+Team <Get A Beer>
 
-v1.0.1, 2023.3.10
+v1.0.5, 2023.3.14
 
 ***
 == UserController
-
 
 === 회원 가입
 
@@ -27,7 +26,6 @@ include::{snippets}/Register_User/request-fields.adoc[]
 .Http-Response
 include::{snippets}/Register_User/http-response.adoc[]
 
-
 === 로그인
 
 .Curl-Request
@@ -42,6 +40,28 @@ include::{snippets}/Login/request-fields.adoc[]
 .Http-Response
 include::{snippets}/Login/http-response.adoc[]
 
+=== OAuth2.0
+
+.Curl-Request
+include::{snippets}/OAuth2/curl-request.adoc[]
+
+.Http-Request
+include::{snippets}/OAuth2/http-request.adoc[]
+
+.Path-Parameters
+include::{snippets}/OAuth2/path-parameters.adoc[]
+
+.Request-Parameters
+include::{snippets}/OAuth2/request-parameters.adoc[]
+
+.Http-Response
+include::{snippets}/OAuth2/http-response.adoc[]
+
+.Response-Headers
+include::{snippets}/OAuth2/response-headers.adoc[]
+
+.Response-Fields
+include::{snippets}/OAuth2/response-fields.adoc[]
 
 === 첫 로그인 정보 입력
 
@@ -51,12 +71,14 @@ include::{snippets}/Post_User_Info/curl-request.adoc[]
 .Http-Request
 include::{snippets}/Post_User_Info/http-request.adoc[]
 
+.Path-Parameters
+include::{snippets}/Post_User_Info/path-parameters.adoc[]
+
 .Request-Fields
 include::{snippets}/Post_User_Info/request-fields.adoc[]
 
 .Http-Response
 include::{snippets}/Post_User_Info/http-response.adoc[]
-
 
 === 사용자 정보 수정
 
@@ -75,7 +97,6 @@ include::{snippets}/Patch_User_Info/http-response.adoc[]
 .Response-Fields
 include::{snippets}/Patch_User_Info/response-fields.adoc[]
 
-
 === 사용자 프로필 이미지 변경
 
 .Curl-Request
@@ -89,7 +110,6 @@ include::{snippets}/Edit_Profile_Image/http-response.adoc[]
 
 .Response-Fields
 include::{snippets}/Edit_Profile_Image/response-fields.adoc[]
-
 
 === 사용자 정보 조회
 
@@ -105,7 +125,6 @@ include::{snippets}/Read_User_Info/http-response.adoc[]
 .Response-Fields
 include::{snippets}/Read_User_Info/response-fields.adoc[]
 
-
 === 사용자 비밀번호 변경
 
 .Curl-Request
@@ -120,7 +139,6 @@ include::{snippets}/Edit_Password/request-fields.adoc[]
 .Http-Response
 include::{snippets}/Edit_Password/http-response.adoc[]
 
-
 === 로그아웃
 
 .Curl-Request
@@ -131,7 +149,6 @@ include::{snippets}/Logout_User/http-request.adoc[]
 
 .Http-Response
 include::{snippets}/Logout_User/http-response.adoc[]
-
 
 === 탈퇴
 
@@ -144,18 +161,22 @@ include::{snippets}/Withdraw_User/http-request.adoc[]
 .Http-Response
 include::{snippets}/Withdraw_User/http-response.adoc[]
 
-
-
-
-
 == UserPageController
+
 == FollowController
+
 == SearchController
+
 == RatingController
+
 == PairingController
+
 == RatingCommentController
+
 == PairingCommentController
+
 == LikeController
+
 == BeerController
 
 === 맥주 생성
@@ -219,7 +240,6 @@ include::{snippets}/Get_Monthly_Beers/http-response.adoc[]
 
 .Response-Fields
 include::{snippets}/Get_Monthly_Beers/response-fields.adoc[]
-
 
 === 맥주 삭제
 
