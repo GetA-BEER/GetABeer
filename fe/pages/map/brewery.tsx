@@ -4,8 +4,9 @@ import MapNav from '@/components/map/MapNav';
 import MapBrewery from '@/components/map/MapBrewery';
 
 export default function BreweryMap() {
-  const [latitude, setLatitude] = useState<number>(0);
-  const [longitude, setLongitude] = useState<number>(0);
+  const [latitude, setLatitude] = useState<number>(37.4765092);
+  const [longitude, setLongitude] = useState<number>(126.9759);
+  const [hugeMode, setHugeMode] = useState<boolean>(true);
   useEffect(() => {
     const options = {
       enableHighAccuracy: true,
@@ -27,7 +28,42 @@ export default function BreweryMap() {
     <PageContainer>
       <MapNav curTab={1} />
       <div className="w-full h-full">
-        <MapBrewery />
+        <div className="flex justify-end">
+          {hugeMode ? (
+            <button
+              className="text-xs rounded bg-y-cream text-y-brown p-0.5 mx-2 mb-2"
+              onClick={() => {
+                setHugeMode(!hugeMode);
+              }}
+            >
+              내 위치로
+            </button>
+          ) : (
+            <button
+              className="text-xs rounded bg-y-cream text-y-brown p-0.5 mx-2 mb-2"
+              onClick={() => {
+                setHugeMode(!hugeMode);
+              }}
+            >
+              전국 보기
+            </button>
+          )}
+          <button
+            className="text-xs rounded bg-y-cream text-y-brown p-0.5 mx-2 mb-2"
+            onClick={() => {
+              if (window !== undefined) {
+                window.location.replace('/map/brewery');
+              }
+            }}
+          >
+            새로고침
+          </button>
+        </div>
+        <MapBrewery
+          latitude={latitude}
+          longitude={longitude}
+          hugeMode={hugeMode}
+        />
       </div>
     </PageContainer>
   );

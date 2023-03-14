@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 
-interface MapProps {
-  latitude: number;
-  longitude: number;
+export interface MapProps {
+  latitude?: number;
+  longitude?: number;
+  hugeMode?: boolean;
 }
 
 declare global {
@@ -23,12 +24,14 @@ export default function MapStore({ latitude, longitude }: MapProps) {
         const container = document.getElementById('map');
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
+          level: 4,
         };
         const map = new window.kakao.maps.Map(container, options);
-        // map.setZoomable(false);
-        const infoWindow = new window.kakao.maps.InfoWindow({
-          zIndex: 1,
-          removable: true,
+        map.setMaxLevel(5);
+
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          xAnchor: 0.5,
+          yAnchor: 1.8,
         });
 
         const ps = new window.kakao.maps.services.Places(map);
@@ -64,12 +67,20 @@ export default function MapStore({ latitude, longitude }: MapProps) {
           // 마커에 클릭이벤트를 등록합니다
           window.kakao.maps.event.addListener(marker, 'click', function () {
             // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-            infoWindow.setContent(
-              '<div style="padding:5px;font-size:12px;">' +
+            customOverlay.setPosition(
+              new window.kakao.maps.LatLng(place.y, place.x)
+            );
+            customOverlay.setContent(
+              '<div class="bg-y-cream text-xs rounded-md m-1 p-2 w-fit border-2 border-y-gold">' +
                 place.place_name +
+                '<button id="closeCustomOverlay" class="text-y-brown ml-2">x</button>' +
                 '</div>'
             );
-            infoWindow.open(map, marker);
+            customOverlay.setMap(map);
+            const closeBtn = document.getElementById('closeCustomOverlay');
+            closeBtn?.addEventListener('click', () => {
+              customOverlay.setMap(null);
+            });
           });
         }
       });
