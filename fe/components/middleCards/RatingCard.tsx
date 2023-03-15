@@ -142,7 +142,7 @@ export default function RatingCard(props: {
               <button
                 className="flex items-center mr-1"
                 onClick={() => {
-                  console.log('신고하기');
+                  // console.log('신고하기');
                 }}
               >
                 <RiAlarmWarningFill className="mb-[1px]" />
