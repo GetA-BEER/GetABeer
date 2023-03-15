@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping({"", "/api/notifications"})
+@RequestMapping
 @RequiredArgsConstructor
 public class NotificationController {
 
@@ -39,7 +39,7 @@ public class NotificationController {
 	/**
 	 * 로그인 유저 알림 전체 조회
 	 */
-	@GetMapping
+	@GetMapping("/api/notifications")
 	public ResponseEntity<NotificationDto.Total> getNotifications() {
 		return ResponseEntity.ok().body(notificationService.findAll());
 	}
@@ -47,7 +47,7 @@ public class NotificationController {
 	/**
 	 * 알림 클릭
 	 */
-	@PatchMapping("/{notification-id}")
+	@PatchMapping("/api/notifications/{notification-id}")
 	public void readNotification(@PathVariable(name = "notification-id") Long id) {
 		notificationService.readNotification(id); // 알림 읽음처리
 	}
@@ -55,7 +55,7 @@ public class NotificationController {
 	/**
 	 * 알림 삭제
 	 */
-	@DeleteMapping("/{notification-id}")
+	@DeleteMapping("/api/notifications/{notification-id}")
 	public void deleteNotification(@PathVariable(name = "notification-id") Long id) {
 		notificationService.deleteNotification(id);
 	}
@@ -63,8 +63,9 @@ public class NotificationController {
 	/**
 	 * 전체 알림 삭제
 	 */
-	@DeleteMapping
+	@DeleteMapping("/api/notifications")
 	public void deleteAll() {
 		notificationService.deleteAll();
 	}
 }
+
