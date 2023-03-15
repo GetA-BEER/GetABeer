@@ -31,16 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RedisChatController {
 
-	private final UserService userService;
 	private final RedisPublisher publisher;
 	private final RedisChatService chatService;
 	private final RedisRoomService roomService;
 
 	/* 관리자는 채팅방을 생성할 수 없음 */
 	@GetMapping("/api/chats/room")
-	public ResponseEntity<Long> createRoom() {
+	public ResponseEntity<RedisRoomDto.Response> getChatRoom() {
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(roomService.getOrCreate());
+		return ResponseEntity.ok(roomService.getChatRoom());
 	}
 
 	@GetMapping("/api/chats/rooms")
