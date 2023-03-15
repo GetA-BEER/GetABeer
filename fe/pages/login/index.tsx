@@ -26,7 +26,7 @@ export default function Login() {
   const [TOKEN, setAccessToken] = useRecoilState(accessToken);
   const [, setUserId] = useRecoilState(userId);
   const [showLoginError, setShowLoginError] = useState(false);
-  const [token, setToken] = useState();
+
   const {
     register,
     handleSubmit,
@@ -74,7 +74,7 @@ export default function Login() {
     axios
       .post('/api/refresh', {}, config)
       .then((res) => {
-        onLoginSuccess(res);
+        onRefreshSuccess(res);
       })
       .catch(() => {
         onLogout();
@@ -99,6 +99,10 @@ export default function Login() {
   const onLoginSuccess = (res: any) => {
     setAccessToken(res.headers.authorization);
     setUserId(res.data.id);
+    setAxiosHeader(res.headers.authorization);
+  };
+  const onRefreshSuccess = (res: any) => {
+    setAccessToken(res.headers.authorization);
     setAxiosHeader(res.headers.authorization);
     if (TOKEN) {
       setTimeout(onRefresh, ACCESS_EXPIRY_TIME - 60000);
