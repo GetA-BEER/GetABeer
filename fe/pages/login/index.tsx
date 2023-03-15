@@ -101,12 +101,12 @@ export default function Login() {
     setUserId(res.data.id);
     setAxiosHeader(res.headers.authorization);
     if (TOKEN) {
-      setTimeout(onRefresh, ACCESS_EXPIRY_TIME);
+      setTimeout(onRefresh, ACCESS_EXPIRY_TIME - 60000);
     }
   };
   useEffect(() => {
     if (TOKEN) {
-      setTimeout(onRefresh, ACCESS_EXPIRY_TIME);
+      setTimeout(onRefresh, ACCESS_EXPIRY_TIME - 60000);
     }
   });
 
