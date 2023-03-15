@@ -7,6 +7,8 @@ import static be.domain.pairing.entity.QPairing.*;
 import static be.domain.rating.entity.QRating.*;
 import static be.domain.user.entity.QUser.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -68,5 +70,13 @@ public class UserQueryRepository {
 			.followerCount(followerCount)
 			.followingCount(followingCount)
 			.build();
+	}
+
+	public List<User> findAdminUser() {
+
+		return jpaQueryFactory
+			.selectFrom(user)
+			.where(user.roles.contains("ROLE_ADMIN"))
+			.fetch();
 	}
 }

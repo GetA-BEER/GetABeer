@@ -3,6 +3,7 @@ package be.domain.user.service;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +27,7 @@ import be.domain.user.entity.User;
 import be.domain.user.entity.enums.ProviderType;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.ProfileImageRepository;
+import be.domain.user.repository.UserQueryRepository;
 import be.domain.user.repository.UserRepository;
 import be.domain.user.service.pattern.EditImage;
 import be.domain.user.service.pattern.FirstEditImage;
@@ -48,6 +50,7 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final EmitterRepository emitterRepository;
 	private final CustomAuthorityUtils authorityUtils;
+	private final UserQueryRepository userQueryRepository;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final UserPreferenceService userPreferenceService;
 	private final ProfileImageRepository profileImageRepository;
@@ -299,4 +302,10 @@ public class UserService {
 	// public List<Object[]> findAllOfIdx() {
 	// 	return userRepository.indexTest();
 	// }
+
+	/* 관리자 리스트 찾기*/
+	public List<User> findAdminUser() {
+
+		return userQueryRepository.findAdminUser();
+	}
 }
