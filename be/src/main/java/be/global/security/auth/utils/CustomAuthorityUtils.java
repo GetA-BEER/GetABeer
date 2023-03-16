@@ -20,8 +20,8 @@ public class CustomAuthorityUtils {
 
 	private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
 	private final List<GrantedAuthority> USER_ROLES = AuthorityUtils.createAuthorityList("ROLE_USER");
-	private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
-	private final List<String> USER_ROLES_STRING = List.of("USER");
+	private final List<String> ADMIN_ROLES_STRING = List.of("ROLE_ADMIN", "ROLE_USER");
+	private final List<String> USER_ROLES_STRING = List.of("ROLE_USER");
 
 	public List<GrantedAuthority> createAuthorities(String email) {
 		if (email.equals(adminMailAddress)) {
@@ -40,7 +40,7 @@ public class CustomAuthorityUtils {
 		if (email.equals(adminMailAddress)) {
 			return ADMIN_ROLES_STRING;
 		}
-		
+
 		return USER_ROLES_STRING;
 	}
 }
