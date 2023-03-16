@@ -40,6 +40,7 @@ public class CustomAuthorityUtils {
 		if (email.equals(adminMailAddress)) {
 			return ADMIN_ROLES_STRING;
 		}
+		
 		return USER_ROLES_STRING;
 	}
 }
