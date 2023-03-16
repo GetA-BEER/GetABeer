@@ -62,10 +62,12 @@ public class ChatAop {
 	public void haveChatRoom(User userBuilder) {
 		log.info("***** 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
 
-		RedisChatRoom room = redisChatRepository.isChatRoom(userBuilder.getId());
+		User user = userService.findUserByEmail(userBuilder.getEmail());
 
-		if (room == null && !userBuilder.getRoles().contains("ROLE_ADMIN")) {
-			RedisChatRoom redisChatRoom = RedisChatRoom.create(userBuilder);
+		RedisChatRoom room = redisChatRepository.isChatRoom(user.getId());
+
+		if (room == null && !user.getRoles().contains("ROLE_ADMIN")) {
+			RedisChatRoom redisChatRoom = RedisChatRoom.create(user);
 			redisRoomRepository.save(Objects.requireNonNull(redisChatRoom));
 
 			String roomId = "room" + redisChatRoom.getId();
