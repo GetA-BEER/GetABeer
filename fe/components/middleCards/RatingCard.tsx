@@ -57,8 +57,11 @@ export default function RatingCard(props: {
   };
 
   const deleteRating = () => {
-    axios.delete(`/api/ratings/${props.cardProps.ratingId}`, config);
-    router.back();
+    axios
+      .delete(`/api/ratings/${props.cardProps.ratingId}`, config)
+      .then((res) => {
+        router.back();
+      });
   };
 
   const isUserLikeHandler = () => {
