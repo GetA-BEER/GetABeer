@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -42,8 +44,8 @@ public class RedisChatMessage {
 	@Column(nullable = false)
 	private String content;
 
-	@Column
-	private String type;
+	@Enumerated(EnumType.STRING)
+	private ChatType type;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "room")

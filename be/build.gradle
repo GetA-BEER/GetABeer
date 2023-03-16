@@ -54,7 +54,7 @@ dependencies {
 //    implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.webjars:sockjs-client:1.5.1' // SockJS
     implementation 'org.webjars:stomp-websocket:2.3.4' // STOMP
-    implementation 'org.springframework.boot:spring-boot-devtools:' // DevTools
+//    implementation 'org.springframework.boot:spring-boot-devtools:' // DevTools
     implementation 'org.springframework.boot:spring-boot-starter-mail' // Email 전송
     implementation 'com.google.code.gson:gson' // Serialization, Deserialization
     //    ------------------------------ DATA COLLECTING AND ANALYSIS---------------------------------

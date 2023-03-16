@@ -50,9 +50,42 @@ public class RedisRoomService {
 		return responses;
 	}
 
-	public RedisChatRoom findById(Long roomId) {
+	public RedisChatRoom getChatRoom(Long roomId) {
 
 		return roomRepository.findById(roomId)
 			.orElseThrow(() -> new RuntimeException("채팅방이 존재하지 않습니다."));
+	}
+
+	/* 채팅방이 만들어지지 않은 유저 만들어주기*/
+	@Transactional
+	public void createChatRoom(Long userId) {
+		User loginUser = userService.findLoginUser();
+
+		if (!loginUser.getRoles().contains("ROLE_ADMIN")) {
+			throw new RuntimeException("관리자만 접근할 수 있습니다.");
+		}
+
+		User user = userService.getUser(userId);
+		RedisChatRoom chatRoom = chatRepository.isChatRoom(user.getId());
+		if (chatRoom != null) {
+			throw new RuntimeException("이미 채팅방이 존재합니다.");
+		}
+
+		RedisChatRoom redisChatRoom = RedisChatRoom.create(user);
+		String roomId = "room" + Objects.requireNonNull(redisChatRoom).getId();
+
+		if (!topics.containsKey(roomId)) {
+			ChannelTopic channelTopic = new ChannelTopic(roomId);
+			redisMessageListener.addMessageListener(subscriber, channelTopic);
+			topics.put(roomId, channelTopic);
+
+			/* 관리자를 수동으로 구독자를 만드는 방법 ?*/
+			// List<User> findAdmin = userService.findAdminUser();
+			// for (User value : findAdmin) {
+			// 	redisMessageListener.setSubscriptionExecutor();
+			// }
+		}
+
+		roomRepository.save(Objects.requireNonNull(redisChatRoom));
 	}
 }

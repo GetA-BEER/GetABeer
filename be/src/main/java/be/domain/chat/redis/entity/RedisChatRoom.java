@@ -31,7 +31,7 @@ public class RedisChatRoom implements Serializable {
 
 	@Id
 	@Column(name = "redis_room_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -57,6 +57,7 @@ public class RedisChatRoom implements Serializable {
 	public static RedisChatRoom create(User user) {
 		if (!user.getRoles().contains("ROLE_ADMIN")) {
 			RedisChatRoom chatRoom = new RedisChatRoom();
+			chatRoom.id = user.getId();
 			chatRoom.sender = user;
 			chatRoom.createdAt = LocalDateTime.now();
 			return chatRoom;
