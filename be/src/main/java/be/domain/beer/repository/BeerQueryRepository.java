@@ -13,7 +13,10 @@ import static be.domain.user.entity.QUser.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -29,6 +32,7 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.User;
 import be.domain.user.entity.UserBeerCategory;
+import be.domain.user.entity.enums.Gender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -236,4 +240,91 @@ public class BeerQueryRepository {
 		}
 		return result;
 	}
+
+	//    --------------------------------------------------------------------------------------------
+
+	public List<Long> findRatingsCounts(Beer findBeer) {
+
+		Long totalRatingCount = Objects.requireNonNull(jpaQueryFactory.select(rating.count())
+			.from(rating)
+			.where(rating.beer.eq(findBeer))
+			.fetchOne());
+
+		Long totalFemaleRatingCount = Objects.requireNonNull(
+			jpaQueryFactory.select(rating.count())
+				.from(rating)
+				.join(rating.user, user)
+				.where(rating.beer.eq(findBeer).and(rating.user.gender.eq(Gender.FEMALE)))
+				.fetchOne());
+
+		Long totalMaleRatingCount = Objects.requireNonNull(
+			jpaQueryFactory.select(rating.count())
+				.from(rating)
+				.join(rating.user, user)
+				.where(rating.beer.eq(findBeer).and(rating.user.gender.eq(Gender.MALE)))
+				.fetchOne());
+
+		return new ArrayList<>(List.of(totalRatingCount, totalFemaleRatingCount, totalMaleRatingCount));
+	}
+
+	public List<?> findStarsAndCounts(Beer findBeer) {
+
+		List<Double> totalStarList = jpaQueryFactory.select(rating.star)
+			.from(rating)
+			.where(rating.beer.eq(findBeer))
+			.fetch();
+
+		Long totalStarCount = jpaQueryFactory.select(rating.count())
+			.from(rating)
+			.where(rating.beer.eq(findBeer))
+			.fetchOne();
+
+		List<Double> totalFemaleStarList = jpaQueryFactory.select(rating.star)
+			.from(rating)
+			.where(rating.user.gender.eq(Gender.FEMALE).and(rating.beer.eq(findBeer)))
+			.fetch();
+
+		Long totalFemaleStarCount = jpaQueryFactory.select(rating.count())
+			.from(rating)
+			.where(rating.user.gender.eq(Gender.FEMALE).and(rating.beer.eq(findBeer)))
+			.fetchOne();
+
+		List<Double> totalMaleStarList = jpaQueryFactory.select(rating.star)
+			.from(rating)
+			.where(rating.user.gender.eq(Gender.MALE).and(rating.beer.eq(findBeer)))
+			.fetch();
+
+		Long totalMaleStarCount = jpaQueryFactory.select(rating.count())
+			.from(rating)
+			.where(rating.user.gender.eq(Gender.MALE).and(rating.beer.eq(findBeer)))
+			.fetchOne();
+
+		Double totalStar;
+		Double totalFemaleStar;
+		Double totalMaleStar;
+
+		if (totalStarList.size() != 0) {
+			totalStar = totalStarList.stream().mapToDouble(Double::doubleValue).sum();
+		} else {
+			totalStar = 0.0;
+		}
+
+		if (totalFemaleStarList.size() != 0) {
+			totalFemaleStar = totalFemaleStarList.stream().mapToDouble(Double::doubleValue).sum();
+		} else {
+			totalFemaleStar = 0.0;
+		}
+
+		if (totalMaleStarList.size() != 0) {
+			totalMaleStar = totalMaleStarList.stream().mapToDouble(Double::doubleValue).sum();
+		} else {
+			totalMaleStar = 0.0;
+		}
+
+		List<?> result = new ArrayList<>(List.of(totalStar, totalStarCount,
+			totalFemaleStar, totalFemaleStarCount, totalMaleStar, totalMaleStarCount));
+
+		return result;
+	}
+
 }

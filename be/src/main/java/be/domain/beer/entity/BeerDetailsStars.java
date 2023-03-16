@@ -93,6 +93,18 @@ public class BeerDetailsStars {
 		this.maleAverageStars = format(numerator, denominator);
 	}
 
+	public void setTotalAverageStars(Double totalAverageStars) {
+		this.totalAverageStars = totalAverageStars;
+	}
+
+	public void setFemaleAverageStars(Double femaleAverageStars) {
+		this.femaleAverageStars = femaleAverageStars;
+	}
+
+	public void setMaleAverageStars(Double maleAverageStars) {
+		this.maleAverageStars = maleAverageStars;
+	}
+
 	private Double format(Double num, Integer den) {
 		return (double)(Math.round(num * 100 / den)) / 100;
 	}

@@ -161,7 +161,7 @@ public class RatingCommentControllerRestDocs {
 		actions
 			.andExpect(status().isOk())
 			.andDo(document(
-				"Patch_Pairing_Comment",
+				"Get_Rating_Comment",
 				getDocumentResponse(),
 				requestParameters(
 					parameterWithName("ratingId").description("레이팅 번호")

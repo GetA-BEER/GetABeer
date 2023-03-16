@@ -1,14 +1,9 @@
 package be.domain.beer.service;
 
-import static be.domain.user.entity.enums.Role.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +22,6 @@ import be.domain.beer.repository.WeeklyBeerRepository;
 import be.domain.beercategory.entity.BeerCategory;
 import be.domain.beercategory.service.BeerCategoryService;
 import be.domain.beertag.entity.BeerTag;
-import be.domain.beerwishlist.repository.BeerWishListQRepository;
 import be.domain.rating.entity.Rating;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
