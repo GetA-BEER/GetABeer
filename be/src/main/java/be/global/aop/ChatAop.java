@@ -59,7 +59,7 @@ public class ChatAop {
 
 	@AfterReturning(value =
 		"(Pointcuts.googleChatRoom() || Pointcuts.kakaoChatRoom() || Pointcuts.naverChatRoom()) && args(userBuilder)")
-	public void haveChatRoom(User userBuilder) {
+	public void haveChatRoom(JoinPoint joinPoint, User userBuilder) {
 		log.info("***** 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
 
 		User user = userService.findUserByEmail(userBuilder.getEmail());
