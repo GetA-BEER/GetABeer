@@ -40,34 +40,7 @@ public class ChatAop {
 		createChatRoom(user);
 	}
 
-	@AfterReturning(value = "Pointcuts.googleChatRoom() && args(userBuilder)")
-	public void googleChatRoom(JoinPoint joinPoint, User userBuilder) {
-		log.info("***** 구글 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
-
-		User user = userService.findUserByEmail(userBuilder.getEmail());
-
-		createChatRoom(user);
-	}
-
-	@AfterReturning(value = "Pointcuts.kakaoChatRoom() && args(userBuilder)")
-	public void kakaoChatRoom(JoinPoint joinPoint, User userBuilder) {
-		log.info("***** 카카오 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
-
-		User user = userService.findUserByEmail(userBuilder.getEmail());
-
-		createChatRoom(user);
-	}
-
-	@AfterReturning(value = "Pointcuts.naverChatRoom() && args(userBuilder)")
-	public void naverChatRoom(JoinPoint joinPoint, User userBuilder) {
-		log.info("***** 네이버 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
-
-		User user = userService.findUserByEmail(userBuilder.getEmail());
-
-		createChatRoom(user);
-	}
-
-	private void createChatRoom(User user){
+	public void createChatRoom(User user){
 
 		RedisChatRoom room = redisChatRepository.isChatRoom(user.getId());
 
