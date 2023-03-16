@@ -12,12 +12,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +46,11 @@ import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
 import be.domain.beertag.repository.BeerTagRepository;
 import be.domain.beertag.service.BeerTagService;
+import be.domain.chat.redis.entity.RedisChatRoom;
+import be.domain.chat.redis.repository.RedisChatRepository;
+import be.domain.chat.redis.repository.RedisRoomRepository;
+import be.domain.chat.redis.service.RedisRoomService;
+import be.domain.chat.redis.service.RedisSubscriber;
 import be.domain.user.entity.User;
 import be.domain.user.entity.UserBeerCategory;
 import be.domain.user.entity.UserBeerTag;
@@ -75,7 +84,9 @@ public class Init {
 		BeerCategoryRepository beerCategoryRepository, UserRepository userRepository,
 		BeerTagRepository beerTagRepository, TotalStatisticsRepository totalStatisticsRepository,
 		BeerCategoryService beerCategoryService, MonthlyBeerRepository monthlyBeerRepository,
-		WeeklyBeerRepository weeklyBeerRepository) throws IOException {
+		WeeklyBeerRepository weeklyBeerRepository, RedisChatRepository chatRepository,
+		RedisRoomRepository roomRepository, Map<String, ChannelTopic> topics,
+		RedisMessageListenerContainer redisMessageListener, RedisSubscriber subscriber) throws IOException {
 
 		for (int i = 0; i < 8; i++) {
 			BeerCategory beerCategory = BeerCategory.builder()
@@ -314,7 +325,46 @@ public class Init {
 		/*
 		 * USER STUB DATA
 		 */
-		for (int i = 1; i <= 20; i++) {
+
+		for (int i = 1; i <= 2; i++) {
+			User user = User.builder()
+				.email("e" + i + "@mail.com")
+				.provider("LOCAL")
+				.nickname("닉네임" + i)
+				.roles(List.of(Role.ROLE_ADMIN.toString()))
+				.password(passwordEncoder.encode("password" + i + "!"))
+				.status(UserStatus.ACTIVE_USER.getStatus())
+				.imageUrl(RandomProfile.values()[(int)(Math.random() * 4)].getValue())
+				.build();
+
+			// user.putUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.values()[(int)(Math.random() * 3)]);
+			user.putUserInfo(Age.values()[(int)(Math.random() * 6)], Gender.MALE);
+			user.putUserBeerTags(new ArrayList<>());
+
+			for (int j = 0; j < 4; j++) {
+				UserBeerTag userBeerTag =
+					UserBeerTag.builder()
+						.beerTag(beerTagService.findVerifiedBeerTag((long)(Math.random() * 16) + 1))
+						.user(user)
+						.build();
+				user.addUserBeerTags(userBeerTag);
+			}
+
+			user.putUserBeerCategories(new ArrayList<>());
+
+			for (int j = 0; j < 2; j++) {
+				UserBeerCategory userBeerCategory =
+					UserBeerCategory.builder()
+						.beerCategory(beerCategoryService.findVerifiedBeerCategoryById((long)(Math.random() * 7) + 1))
+						.user(user)
+						.build();
+
+				user.addUserBeerCategories(userBeerCategory);
+			}
+			userRepository.save(user);
+		}
+
+		for (int i = 3; i <= 20; i++) {
 
 			User user = User.builder()
 				.email("e" + i + "@mail.com")
@@ -352,6 +402,25 @@ public class Init {
 			}
 			userRepository.save(user);
 
+			RedisChatRoom chatRoom = chatRepository.isChatRoom(user.getId());
+			if (chatRoom == null) {
+				RedisChatRoom redisChatRoom = RedisChatRoom.create(user);
+				String roomId = "room" + Objects.requireNonNull(redisChatRoom).getId();
+
+				if (!topics.containsKey(roomId)) {
+					ChannelTopic channelTopic = new ChannelTopic(roomId);
+					redisMessageListener.addMessageListener(subscriber, channelTopic);
+					topics.put(roomId, channelTopic);
+
+					/* 관리자를 수동으로 구독자를 만드는 방법 ? */
+					// List<User> findAdmin = userService.findAdminUser();
+					// for (User value : findAdmin) {
+					// 	redisMessageListener.setSubscriptionExecutor();
+					// }
+				}
+
+				roomRepository.save(Objects.requireNonNull(redisChatRoom));
+			}
 		}
 
 		return null;
