@@ -17,13 +17,15 @@ public class RedisChat {
 	private Long senderId;
 	private String content;
 
+	private ChatType type;
 	// @JsonSerialize(using = LocalDateTimeSerializer.class)
 	// @JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	// private LocalDateTime createdAt;
 
-	public RedisChat(Long roomId, Long senderId, String content) {
+	public RedisChat(Long roomId, Long senderId, String content, String type) {
 		this.roomId = roomId;
 		this.senderId = senderId;
 		this.content = content;
+		this.type = ChatType.to(type);
 	}
 }

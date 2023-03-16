@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import be.domain.chat.redis.dto.RedisMessageDto;
 import be.domain.chat.redis.dto.RedisRoomDto;
 import be.domain.chat.redis.entity.RedisChatMessage;
 import be.domain.chat.redis.entity.RedisChatRoom;
@@ -28,10 +29,18 @@ public class RedisChatRepository {
 		em.persist(message);
 	}
 
-	public List<RedisChatMessage> findAllChatInRoom(Long roomId) {
+	public List<RedisMessageDto.Response> findAllChatInRoom(Long roomId) {
 
 		return queryFactory
-			.selectFrom(redisChatMessage)
+			.select(Projections.fields(RedisMessageDto.Response.class,
+				redisChatMessage.chatRoom.id.as("roomId"),
+				redisChatMessage.id.as("messageId"),
+				redisChatMessage.sender.id.as("userId"),
+				redisChatMessage.sender.nickname.as("userNickname"),
+				redisChatMessage.createdAt,
+				redisChatMessage.content,
+				redisChatMessage.type
+				)).from(redisChatMessage)
 			.where(redisChatMessage.chatRoom.id.eq(roomId))
 			.fetch();
 	}
@@ -48,11 +57,20 @@ public class RedisChatRepository {
 			.fetchFirst();
 	}
 
+	public RedisChatRoom isChatRoom(Long userId) {
+
+		return queryFactory
+			.selectFrom(redisChatRoom)
+			.where(redisChatRoom.id.eq(userId))
+			.fetchFirst();
+	}
+
 	public RedisChatRoom findChatRoom(Long roomId) {
 
 		return queryFactory.selectFrom(redisChatRoom)
 			.where(redisChatRoom.id.eq(roomId)).fetchFirst();
 	}
+
 	public List<RedisRoomDto.Response> findByAll() {
 
 		return queryFactory
