@@ -15,7 +15,7 @@
  ## 📌 팀원소개
  | [가빈](https://github.com/Bhinney) |[김태영](https://github.com/gnidinger) | [서효진](https://github.com/hyoreal) |[방세린](https://github.com/serin-B) | [성유미](https://github.com/SeongYum) | [안유진](https://github.com/Eugenius1st) |
 | :--------------: | :-------------: | :-------------: | :--------------: | :-------------: | :-------------: | 
-| <img src="https://avatars.githubusercontent.com/u/107696895?v=4" alt="img" height="130px" width="130px" /> | <img src="https://avatars.githubusercontent.com/u/13742045?v=4" alt="img" height="130px" width="130px" /> | <img src="https://avatars.githubusercontent.com/u/102732425?v=4" alt="img" height="130px" width="130px" /> | <img src="https://avatars.githubusercontent.com/u/107970881?v=4" alt="img" height="130px" width="130px" /> | <img src="https://avatars.githubusercontent.com/u/107448607?v=4" alt="img" height="130px" width="130px" /> | <img src="https://avatars.githubusercontent.com/u/84161508?v=4" alt="img" height="130px" width="130px" />
+| <img src="https://avatars.githubusercontent.com/u/107696895?v=4" alt="img" height="110px" width="110px" /> | <img src="https://avatars.githubusercontent.com/u/13742045?v=4" alt="img" height="110px" width="110px" /> | <img src="https://avatars.githubusercontent.com/u/102732425?v=4" alt="img" height="110px" width="110px" /> | <img src="https://avatars.githubusercontent.com/u/107970881?v=4" alt="img" height="110px" width="110px" /> | <img src="https://avatars.githubusercontent.com/u/107448607?v=4" alt="img" height="110px" width="110px" /> | <img src="https://avatars.githubusercontent.com/u/84161508?v=4" alt="img" height="110px" width="110px" />
 | BE | BE | BE | FE | FE| FE|
 
 ## 🛠 기술 스택
