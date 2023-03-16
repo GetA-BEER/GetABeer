@@ -6,7 +6,6 @@ import java.util.Objects;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
@@ -38,31 +37,37 @@ public class ChatAop {
 
 		User user = userService.findUserByEmail(saved.getEmail());
 
-		if (!user.getRoles().contains("ROLE_ADMIN")) {
-			RedisChatRoom chatRoom = RedisChatRoom.create(user);
-			redisRoomRepository.save(Objects.requireNonNull(chatRoom));
-			String roomId = "room" + chatRoom.getId();
-
-			if (!topics.containsKey(roomId)) {
-				ChannelTopic channelTopic = new ChannelTopic(roomId);
-				redisMessageListener.addMessageListener(subscriber, channelTopic);
-				topics.put(roomId, channelTopic);
-
-				/* 관리자를 구독자로 어떻게 만들지? */
-				// List<User> findAdmin = userService.findAdminUser();
-				// for (User value : findAdmin) {
-				// 	redisMessageListener.addMessageListener((MessageListener) value, channelTopic);
-				// }
-			}
-		}
+		createChatRoom(user);
 	}
 
-	@AfterReturning(value =
-		"(Pointcuts.googleChatRoom() || Pointcuts.kakaoChatRoom() || Pointcuts.naverChatRoom()) && args(userBuilder)")
-	public void haveChatRoom(JoinPoint joinPoint, User userBuilder) {
-		log.info("***** 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
+	@AfterReturning(value = "Pointcuts.googleChatRoom() && args(userBuilder)")
+	public void googleChatRoom(JoinPoint joinPoint, User userBuilder) {
+		log.info("***** 구글 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
 
 		User user = userService.findUserByEmail(userBuilder.getEmail());
+
+		createChatRoom(user);
+	}
+
+	@AfterReturning(value = "Pointcuts.kakaoChatRoom() && args(userBuilder)")
+	public void kakaoChatRoom(JoinPoint joinPoint, User userBuilder) {
+		log.info("***** 카카오 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
+
+		User user = userService.findUserByEmail(userBuilder.getEmail());
+
+		createChatRoom(user);
+	}
+
+	@AfterReturning(value = "Pointcuts.naverChatRoom() && args(userBuilder)")
+	public void naverChatRoom(JoinPoint joinPoint, User userBuilder) {
+		log.info("***** 네이버 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
+
+		User user = userService.findUserByEmail(userBuilder.getEmail());
+
+		createChatRoom(user);
+	}
+
+	private void createChatRoom(User user){
 
 		RedisChatRoom room = redisChatRepository.isChatRoom(user.getId());
 
