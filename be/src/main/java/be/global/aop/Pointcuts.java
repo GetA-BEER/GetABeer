@@ -45,21 +45,4 @@ public class Pointcuts {
 	@Pointcut("execution(* be.domain.user.service.UserService.updateUser(..))")
 	public void updateUser() {
 	}
-
-	@Pointcut("execution(* be.domain.user.service.UserService.registerUser(..))")
-	public void createChatRoom() {
-	}
-
-
-	@Pointcut("execution(* be.global.security.oauth.service.GoogleService.createUser(..))")
-	public void googleChatRoom() {
-	}
-
-	@Pointcut("execution(* be.global.security.oauth.service.KakaoService.createOrReturnUser(..))")
-	public void kakaoChatRoom() {
-	}
-
-	@Pointcut("execution(* be.global.security.oauth.service.NaverService.createUser(..))")
-	public void naverChatRoom() {
-	}
 }

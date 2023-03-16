@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import be.domain.chat.ChatService;
 import be.domain.notice.repository.EmitterRepository;
 
 import be.domain.user.dto.UserDto;
@@ -44,6 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 	private final EntityManager em;
+	private final ChatService chatService;
 	// private final HttpSession httpSession;
 	private final ImageHandler imageHandler;
 	private final UserRepository userRepository;
@@ -77,7 +79,11 @@ public class UserService {
 
 		redisTemplate.delete(user.getEmail());
 
-		return userRepository.save(saved);
+		userRepository.save(saved);
+
+		chatService.createChatRoom(saved);
+
+		return saved;
 	}
 
 	/* 회원가입 유저 정보 입력 - 연령, 성별, 태그, 카테고리 */
