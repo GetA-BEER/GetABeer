@@ -150,7 +150,7 @@ public class UserService {
 		if (passwordEncoder.matches(editPassword.getNewPassword(), user.getPassword())) {
 			throw new BusinessLogicException(ExceptionCode.DUPLICATION_PASSWORD);
 		}
- 		if (!passwordEncoder.matches(editPassword.getOldPassword(), user.getPassword())) {
+		if (!passwordEncoder.matches(editPassword.getOldPassword(), user.getPassword())) {
 			throw new BusinessLogicException(ExceptionCode.WRONG_PASSWORD);
 		}
 		if (!editPassword.getNewPassword().equals(editPassword.getNewVerifyPassword())) {
