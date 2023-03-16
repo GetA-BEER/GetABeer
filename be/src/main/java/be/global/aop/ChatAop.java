@@ -58,14 +58,14 @@ public class ChatAop {
 	}
 
 	@AfterReturning(value =
-		"(Pointcuts.googleChatRoom() || Pointcuts.kakaoChatRoom() || Pointcuts.naverChatRoom()) && args(findUser)")
-	public void haveChatRoom(User findUser) {
+		"(Pointcuts.googleChatRoom() || Pointcuts.kakaoChatRoom() || Pointcuts.naverChatRoom()) && args(userBuilder)")
+	public void haveChatRoom(User userBuilder) {
 		log.info("***** 소셜 로그인 시 채팅방이 없으면 자동 생성 ****");
 
-		RedisChatRoom room = redisChatRepository.isChatRoom(findUser.getId());
+		RedisChatRoom room = redisChatRepository.isChatRoom(userBuilder.getId());
 
-		if (room == null && !findUser.getRoles().contains("ROLE_ADMIN")) {
-			RedisChatRoom redisChatRoom = RedisChatRoom.create(findUser);
+		if (room == null && !userBuilder.getRoles().contains("ROLE_ADMIN")) {
+			RedisChatRoom redisChatRoom = RedisChatRoom.create(userBuilder);
 			redisRoomRepository.save(Objects.requireNonNull(redisChatRoom));
 
 			String roomId = "room" + redisChatRoom.getId();
