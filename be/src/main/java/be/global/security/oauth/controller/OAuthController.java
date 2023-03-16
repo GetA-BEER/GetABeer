@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import be.domain.user.dto.UserDto;
 import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
-import be.global.aop.ChatAop;
+import be.domain.chat.ChatService;
 import be.global.security.auth.cookieManager.CookieManager;
 import be.global.security.auth.jwt.JwtTokenizer;
 import be.global.security.oauth.service.GoogleService;
@@ -38,7 +38,7 @@ public class OAuthController {
 	private final UserMapper userMapper;
 	private final CookieManager cookieManager;
 	private final JwtTokenizer jwtTokenizer;
-	private final ChatAop chatAop;
+	private final ChatService chatService;
 
 	@ResponseBody
 	@GetMapping("/{provider_id}")
@@ -70,7 +70,7 @@ public class OAuthController {
 
 		ResponseCookie cookie = cookieManager.createCookie("refreshToken", refreshToken);
 
-		chatAop.createChatRoom(findUser);
+		chatService.createChatRoom(findUser);
 
 		httpServletResponse.setHeader("Authorization", "Bearer " + accessToken);
 		httpServletResponse.setHeader("Set-Cookie", cookie.toString());
