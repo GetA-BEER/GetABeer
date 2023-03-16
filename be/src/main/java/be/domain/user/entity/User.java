@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,6 +27,7 @@ import org.hibernate.annotations.DynamicInsert;
 import be.domain.beerwishlist.entity.BeerWishlist;
 import be.domain.comment.entity.PairingComment;
 import be.domain.comment.entity.RatingComment;
+import be.domain.follow.entity.Follow;
 import be.domain.like.entity.PairingLike;
 import be.domain.like.entity.RatingLike;
 import be.domain.notice.entity.Notification;
@@ -203,6 +205,14 @@ public class User implements Serializable {
 
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<Notification> notifications;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "followingUserId")
+	private List<Follow> followerList;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "followedUserId")
+	private List<Follow> followingList;
 
 	public void addNotifications(Notification notification) {
 		notifications.add(notification);
