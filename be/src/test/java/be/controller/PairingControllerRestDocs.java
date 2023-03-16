@@ -136,6 +136,9 @@ public class PairingControllerRestDocs {
 			.andDo(document(
 				"Patch_Pairing",
 				getDocumentRequest(),
+				pathParameters(
+					parameterWithName("pairingId").description("페어링 아이디")
+				),
 				requestParts(
 					partWithName("patch").description("요청 바디"),
 					partWithName("files").description("페어링 사진")
@@ -277,7 +280,7 @@ public class PairingControllerRestDocs {
 			.andExpect(status().isOk())
 			.andDo(
 				document(
-					"Delete_Rating",
+					"Delete_Pairing",
 					pathParameters(
 						parameterWithName("pairingId").description("페어링 번호")
 					)

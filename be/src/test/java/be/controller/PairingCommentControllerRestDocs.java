@@ -158,7 +158,7 @@ public class PairingCommentControllerRestDocs {
 		actions
 			.andExpect(status().isOk())
 			.andDo(document(
-				"Patch_Pairing_Comment",
+				"Get_Pairing_Comment",
 				getDocumentResponse(),
 				requestParameters(
 					parameterWithName("pairingId").description("페어링 번호")

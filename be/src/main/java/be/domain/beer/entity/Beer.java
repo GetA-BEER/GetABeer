@@ -267,6 +267,28 @@ public class Beer extends BaseTimeEntity implements Serializable {
 		this.beerDetailsCounts.minusMaleStarCount();
 	}
 
+	public void correct(
+		Integer totalStarCount, Integer totalFemaleStarCount, Integer totalMaleStarCount) {
+
+		this.beerDetailsCounts.setRatingCount(totalStarCount);
+		this.beerDetailsCounts.setFemaleStarCount(totalFemaleStarCount);
+		this.beerDetailsCounts.setMaleStarCount(totalMaleStarCount);
+	}
+
+	public void correct(
+		Integer totalStarCount, Double totalAverageStars,
+		Integer totalFemaleStarCount, Double totalFemaleAverageStars,
+		Integer totalMaleStarCount, Double totalMaleAverageStars) {
+
+		this.beerDetailsCounts.setRatingCount(totalStarCount);
+		this.beerDetailsCounts.setFemaleStarCount(totalFemaleStarCount);
+		this.beerDetailsCounts.setMaleStarCount(totalMaleStarCount);
+
+		this.beerDetailsStars.setTotalAverageStars(totalAverageStars);
+		this.beerDetailsStars.setFemaleAverageStars(totalFemaleAverageStars);
+		this.beerDetailsStars.setMaleAverageStars(totalMaleAverageStars);
+	}
+
 	public void deleteBeerDetailsBestRating() {
 		this.beerDetailsBestRating = null;
 	}

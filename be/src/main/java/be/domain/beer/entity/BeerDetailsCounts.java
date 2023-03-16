@@ -56,4 +56,16 @@ public class BeerDetailsCounts {
 	public void minusMaleStarCount() {
 		this.maleStarCount--;
 	}
+
+	public void setFemaleStarCount(Integer femaleStarCount) {
+		this.femaleStarCount = femaleStarCount;
+	}
+
+	public void setMaleStarCount(Integer maleStarCount) {
+		this.maleStarCount = maleStarCount;
+	}
+
+	public void setRatingCount(Integer ratingCount) {
+		this.ratingCount = ratingCount;
+	}
 }

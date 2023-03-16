@@ -105,9 +105,6 @@ public class SearchControllerRestDocs {
 	@Test
 	void getImageResultTest() throws Exception {
 
-		String queryParam = "검색어";
-		Integer page = 1;
-
 		given(visionService.getSimilarProductsFile(Mockito.any(MultipartFile.class))).willReturn(new ArrayList<>());
 		given(visionService.findBeersListByImage(anyList())).willReturn(new ArrayList<>());
 		given(beerMapper.beersListToSearchResponse(anyList())).willReturn(SEARCH_RESPONSE_LIST);
@@ -126,6 +123,9 @@ public class SearchControllerRestDocs {
 			.andDo(document(
 				"Get_Image_Search_Result",
 				getDocumentResponse(),
+				requestParts(
+					partWithName("image").description("검색 이미지")
+				),
 				responseFields(
 					List.of(
 						fieldWithPath("[].beerId").type(JsonFieldType.NUMBER).description("맥주 아이디"),
