@@ -62,7 +62,7 @@ public class UserService {
 	@Transactional
 	public User registerUser(User user) {
 		verifyExistEmail(user.getEmail());
-		// verifiedEmail(user.getEmail()); // 이메일인증된 유저만 회원가입 가능
+		verifiedEmail(user.getEmail()); // 이메일인증된 유저만 회원가입 가능
 		verifyNickname(user.getNickname()); // 닉네임 중복 확인
 
 		User saved = User.builder()
