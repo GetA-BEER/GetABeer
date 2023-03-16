@@ -3,10 +3,13 @@ package be.domain.chat.redis.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import be.domain.chat.redis.entity.ChatType;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.Role;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class RedisMessageDto {
 
@@ -20,6 +23,8 @@ public class RedisMessageDto {
 
 	@Getter
 	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class Response {
 		private Long roomId;
 		private Long messageId;
@@ -28,7 +33,7 @@ public class RedisMessageDto {
 		private String userRole;
 		private LocalDateTime createdAt;
 		private String content;
-		private String type;
+		private ChatType type;
 
 		public void addRole(User user) {
 			if (user.getRoles().contains("ROLE_ADMIN")) {
