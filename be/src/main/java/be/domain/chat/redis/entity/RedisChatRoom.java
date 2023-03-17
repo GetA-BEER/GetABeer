@@ -65,4 +65,8 @@ public class RedisChatRoom implements Serializable {
 
 		return null;
 	}
+
+	public void changeStatus(boolean isAdminRead) {
+		this.isAdminRead = isAdminRead;
+	}
 }

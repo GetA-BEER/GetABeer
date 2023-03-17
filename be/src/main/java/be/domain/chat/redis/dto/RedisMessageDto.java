@@ -16,7 +16,7 @@ public class RedisMessageDto {
 	@Getter
 	@Builder
 	public static class Request {
-		// private Long id;
+		private Long id;
 		private String content;
 		private String type;
 	}
