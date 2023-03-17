@@ -30,6 +30,8 @@
 
 <img src="https://user-images.githubusercontent.com/107448607/225532217-f640a39d-b708-44cf-8c8f-3bf05caa30bd.png" alt="img" height="600px" >
 
+### 📝 [문서](https://github.com/GetA-BEER/GetABeer/wiki)(클릭)
+
 ## ⚙️ 주요 기능
 |[회원가입 페이지]|[로그인 페이지]|[소셜 로그인페이지]|[로그아웃 페이지]|
 | :--------------: | :--------------: | :--------------: | :--------------: | 
