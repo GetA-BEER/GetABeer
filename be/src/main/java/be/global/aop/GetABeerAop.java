@@ -25,11 +25,16 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import be.domain.beer.entity.Beer;
+import be.domain.beer.entity.BeerBeerCategory;
+import be.domain.beer.entity.BeerBeerTag;
 import be.domain.beer.repository.BeerQueryRepository;
 import be.domain.beer.repository.BeerRepository;
 import be.domain.beer.service.BeerService;
+import be.domain.beercategory.entity.BeerCategory;
+import be.domain.beercategory.repository.BeerCategoryRepository;
 import be.domain.beertag.entity.BeerTag;
 import be.domain.beertag.entity.BeerTagType;
+import be.domain.beertag.repository.BeerTagRepository;
 import be.domain.beertag.service.BeerTagService;
 import be.domain.pairing.entity.Pairing;
 import be.domain.rating.entity.Rating;
@@ -55,6 +60,8 @@ public class GetABeerAop {
 	private final BeerTagService beerTagService;
 	private final RatingService ratingService;
 	private final BeerRepository beerRepository;
+	private final BeerCategoryRepository beerCategoryRepository;
+	private final BeerTagRepository beerTagRepository;
 	private final BeerQueryRepository beerQueryRepository;
 	private final TotalStatisticsRepository totalStatisticsRepository;
 	private final TotalStatisticsQueryRepository totalStatisticsQueryRepository;
@@ -251,6 +258,16 @@ public class GetABeerAop {
 			Rating findRating = ratingService.findRating(ratingId);
 			Double deleteStar = findRating.getStar();
 
+			List<BeerTagType> beerTagTypeList = findRating.getRatingTag().createBeerTagTypeList();
+
+			findBeer.getBeerBeerTags().stream()
+				.filter(beerBeerTag -> beerTagTypeList.contains(beerBeerTag.getBeerTag().getBeerTagType()))
+				.map(BeerBeerTag::getBeerTag)
+				.forEach(beerTag -> {
+					beerTag.subtractDailyCount();
+					beerTagRepository.save(beerTag);
+				});
+
 			findBeer.deleteTotalAverageStars(deleteStar);
 			findBeer.minusRatingCount();
 
@@ -382,6 +399,12 @@ public class GetABeerAop {
 	public void test(JoinPoint joinPoint, Long beerId) {
 		Beer findBeer = beerService.findVerifiedBeer(beerId);
 		findBeer.addStatViewCount();
+		findBeer.getBeerBeerCategories().stream()
+			.map(BeerBeerCategory::getBeerCategory)
+			.forEach(beerCategory -> {
+				beerCategory.addStatCount();
+				beerCategoryRepository.save(beerCategory);
+			});
 		beerRepository.save(findBeer);
 	}
 

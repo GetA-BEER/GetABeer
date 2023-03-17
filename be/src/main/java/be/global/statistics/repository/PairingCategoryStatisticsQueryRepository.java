@@ -30,6 +30,7 @@ public class PairingCategoryStatisticsQueryRepository {
 
 		for (int i = 0; i < 8; i++) {
 			countList.add(jpaQueryFactory.select(pairing.pairingCategory)
+				.from(pairing)
 				.where(pairing.createdAt.eq(LocalDateTime.now().minusDays(1)))
 				.where(pairing.pairingCategory.eq(PairingCategory.values()[i]))
 				.fetch()
@@ -38,6 +39,7 @@ public class PairingCategoryStatisticsQueryRepository {
 
 		PairingCategoryStatistics.PairingCategoryStatisticsBuilder pairingCategoryStatisticsBuilder = PairingCategoryStatistics.builder();
 
+		pairingCategoryStatisticsBuilder.createdAt(LocalDateTime.now());
 		pairingCategoryStatisticsBuilder.date(LocalDate.now().minusDays(1));
 		pairingCategoryStatisticsBuilder.week(LocalDate.now().get(WeekFields.ISO.weekOfYear()));
 		pairingCategoryStatisticsBuilder.fried(countList.get(0));

@@ -31,7 +31,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BeerStatistics extends BaseTimeEntity {
+public class BeerStatistics {
 	@Id
 	@Column(name = "beer_statistics_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,8 +67,19 @@ public class BeerStatistics extends BaseTimeEntity {
 			this.category2 = list.get(1);
 		}
 		this.beerDetailsStars = beer.getBeerDetailsStars();
-		this.beerDetailsTopTags = beer.getBeerDetailsTopTags();
+		if (beer.getBeerDetailsTopTags() == null) {
+			this.beerDetailsTopTags =
+				BeerDetailsTopTags.builder()
+					.tag1(null)
+					.tag2(null)
+					.tag3(null)
+					.tag4(null)
+					.build();
+		} else {
+			this.beerDetailsTopTags = beer.getBeerDetailsTopTags();
+		}
 		this.viewCount = beer.getBeerDetailsStatistics().getStatViewCount();
 		this.ratingCount = beer.getBeerDetailsStatistics().getStatRatingCount();
+		this.createdAt = LocalDateTime.now();
 	}
 }

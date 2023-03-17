@@ -73,4 +73,12 @@ public class BeerCategory implements Serializable {
 		this.id = id;
 		this.beerCategoryType = beerCategoryType;
 	}
+
+	public void addStatCount() {
+		this.statCount++;
+	}
+
+	public void resetStatCount() {
+		this.statCount = 0;
+	}
 }

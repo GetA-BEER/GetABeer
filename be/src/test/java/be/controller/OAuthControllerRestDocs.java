@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 
+import be.domain.chat.ChatService;
 import be.domain.user.entity.User;
 import be.domain.user.mapper.UserMapper;
 import be.global.security.auth.cookieManager.CookieManager;
@@ -55,6 +56,8 @@ public class OAuthControllerRestDocs {
 	private CookieManager cookieManager;
 	@MockBean
 	private JwtTokenizer jwtTokenizer;
+	// @MockBean
+	// private ChatService chatService;
 
 	@Test
 	void oAuthCallbackTest() throws Exception {
@@ -68,6 +71,7 @@ public class OAuthControllerRestDocs {
 		doNothing().when(jwtTokenizer).addRefreshToken(anyString(), anyString());
 		given(cookieManager.createCookie(anyString(), anyString())).willReturn(ResponseCookie.from("a", "b").build());
 		doNothing().when(jwtTokenizer).addRefreshToken(anyString(), anyString());
+		// doNothing().when(chatService).createChatRoom(Mockito.any(User.class));
 		given(userMapper.userToLoginResponse(Mockito.any(User.class))).willReturn(USER_LOGIN_RESPONSE_DTO);
 
 		ResultActions actions =

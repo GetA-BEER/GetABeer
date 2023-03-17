@@ -233,7 +233,7 @@ public class UserPageControllerRestDocs {
 		actions
 			.andExpect(status().isOk())
 			.andDo(document(
-				"지",
+				"Get_My_Pairing_Comment",
 				getDocumentResponse(),
 				requestParameters(
 					parameterWithName("page").description("페이지 번호")

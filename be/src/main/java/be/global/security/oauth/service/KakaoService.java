@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 
 import be.domain.mail.controller.MailController;
 import be.domain.mail.dto.MailDto;
+import be.domain.mail.service.MailService;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.UserRepository;
@@ -46,6 +47,7 @@ public class KakaoService {
 	private String KAKAO_USER_INFO_URI;
 
 	private final MailController mailController;
+	private final MailService mailService;
 	private final UserRepository userRepository;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final PasswordEncoder passwordEncoder;
@@ -206,7 +208,7 @@ public class KakaoService {
 			.password(encodedPass)
 			.build();
 
-		mailController.sendOAuth2PasswordEmail(email, encodedPass);
+		mailService.sendPasswordMail(email, encodedPass);
 
 		return userRepository.save(userBuilder.build());
 	}
