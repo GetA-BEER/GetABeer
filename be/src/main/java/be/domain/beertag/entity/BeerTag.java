@@ -68,4 +68,8 @@ public class BeerTag implements Serializable {
 		}
 	}
 
+	public void resetStatCount() {
+		this.statCount = 0;
+	}
+
 }

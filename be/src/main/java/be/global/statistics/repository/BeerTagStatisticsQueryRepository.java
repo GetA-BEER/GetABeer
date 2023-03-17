@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import be.domain.beertag.repository.BeerTagRepository;
 import be.domain.pairing.entity.PairingCategory;
 import be.domain.user.entity.enums.Gender;
 import be.global.statistics.entity.BeerTagStatistics;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BeerTagStatisticsQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
+	private final BeerTagRepository beerTagRepository;
 	private final BeerTagStatisticsRepository beerTagStatisticsRepository;
 
 	public void createAndSaveBeerTagStatistics() {
@@ -37,7 +39,7 @@ public class BeerTagStatisticsQueryRepository {
 
 		List<Integer> genderCountList = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-			genderCountList.add(jpaQueryFactory.select(rating)
+			genderCountList.add(jpaQueryFactory.selectFrom(rating)
 				.join(rating.user, user)
 				.where(rating.createdAt.eq(LocalDateTime.now().minusDays(1)))
 				.where(rating.user.gender.eq(Gender.values()[i]))
@@ -46,6 +48,7 @@ public class BeerTagStatisticsQueryRepository {
 
 		BeerTagStatistics.BeerTagStatisticsBuilder beerTagStatisticsBuilder = BeerTagStatistics.builder();
 
+		beerTagStatisticsBuilder.createdAt(LocalDateTime.now());
 		beerTagStatisticsBuilder.date(LocalDate.now().minusDays(1));
 		beerTagStatisticsBuilder.week(LocalDate.now().get(WeekFields.ISO.weekOfYear()));
 		beerTagStatisticsBuilder.straw(countList.get(0));
@@ -70,9 +73,10 @@ public class BeerTagStatisticsQueryRepository {
 
 		beerTagStatisticsRepository.save(beerTagStatisticsBuilder.build());
 
-		jpaQueryFactory.update(beerTag)
-			.set(beerTag.statCount, 0)
-			.execute();
-
+		beerTagRepository.findAll().stream()
+			.forEach(beerTag1 -> {
+				beerTag1.resetStatCount();
+				beerTagRepository.save(beerTag1);
+			});
 	}
 }

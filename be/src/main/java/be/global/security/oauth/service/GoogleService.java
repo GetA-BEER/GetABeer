@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import be.domain.mail.service.MailService;
 import be.domain.user.entity.User;
 import be.domain.user.entity.enums.UserStatus;
 import be.domain.user.repository.UserRepository;
@@ -39,6 +40,7 @@ public class GoogleService {
 	private String GOOGLE_REDIRECT_URL;
 	private String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
 
+	private final MailService mailService;
 	private final UserRepository userRepository;
 	private final CustomAuthorityUtils customAuthorityUtils;
 	private final PasswordEncoder passwordEncoder;
@@ -166,6 +168,8 @@ public class GoogleService {
 		userBuilder.password(encodedPass);
 		userBuilder.provider("GOOGLE");
 		userBuilder.providerId(providerId);
+
+		mailService.sendPasswordMail(email, encodedPass);
 
 		return userRepository.save(userBuilder.build());
 	}

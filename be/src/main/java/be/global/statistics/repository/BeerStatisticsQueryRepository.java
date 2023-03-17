@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import be.domain.beer.repository.BeerRepository;
 import be.global.statistics.entity.BeerStatistics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BeerStatisticsQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
+	private final BeerRepository beerRepository;
 	private final BeerStatisticsJdbcRepository beerStatisticsJdbcRepository;
 
 	public void createAndSaveBeerStatistics() {
@@ -35,6 +37,7 @@ public class BeerStatisticsQueryRepository {
 				list.add(beerStatistics);
 
 				findBeer.getBeerDetailsStatistics().resetStatistic(); // 통계 초기화
+				beerRepository.save(findBeer);
 			});
 
 		beerStatisticsJdbcRepository.saveAll(list);

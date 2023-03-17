@@ -1,5 +1,6 @@
 package be.global.statistics.repository;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -41,28 +42,31 @@ public class BeerStatisticsJdbcRepository {
 
 	private Integer batchInsert(Integer batchCount, List<BeerStatistics> subList) {
 
-		jdbcTemplate.batchUpdate("INSERT INTO BEER_STATISTICS (create_at, date, beer_id, kor_name,"
+		jdbcTemplate.batchUpdate("INSERT INTO BEER_STATISTICS (created_at, date, week, beer_id, kor_name,"
 				+ "category1, category2, total_average_stars, female_average_stars, male_average_stars, tag1,"
-				+ "tag2, tag3, tag4, view_count, rating_count)" + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+				+ "tag2, tag3, tag4, view_count, rating_count)" + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			new BatchPreparedStatementSetter() {
 				@Override
 				public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
 					BeerStatistics beerStatistics = subList.get(i);
 					preparedStatement.setTimestamp(1, Timestamp.valueOf(beerStatistics.getCreatedAt()));
-					preparedStatement.setInt(2, beerStatistics.getWeek());
-					preparedStatement.setLong(3, beerStatistics.getBeerId());
-					preparedStatement.setString(4, beerStatistics.getKorName());
-					preparedStatement.setString(5, beerStatistics.getCategory1());
-					preparedStatement.setString(6, beerStatistics.getCategory2());
-					preparedStatement.setDouble(7, beerStatistics.getBeerDetailsStars().getTotalAverageStars());
-					preparedStatement.setDouble(8, beerStatistics.getBeerDetailsStars().getFemaleAverageStars());
-					preparedStatement.setDouble(9, beerStatistics.getBeerDetailsStars().getMaleAverageStars());
-					preparedStatement.setString(10, beerStatistics.getBeerDetailsTopTags().getTag1());
-					preparedStatement.setString(11, beerStatistics.getBeerDetailsTopTags().getTag2());
-					preparedStatement.setString(12, beerStatistics.getBeerDetailsTopTags().getTag3());
-					preparedStatement.setString(13, beerStatistics.getBeerDetailsTopTags().getTag4());
-					preparedStatement.setLong(14, beerStatistics.getViewCount());
-					preparedStatement.setLong(15, beerStatistics.getRatingCount());
+					preparedStatement.setDate(2, Date.valueOf(beerStatistics.getDate()));
+					preparedStatement.setInt(3, beerStatistics.getWeek());
+					preparedStatement.setLong(4, beerStatistics.getBeerId());
+					preparedStatement.setString(5, beerStatistics.getKorName());
+					preparedStatement.setString(6, beerStatistics.getCategory1());
+					preparedStatement.setString(7, beerStatistics.getCategory2());
+					preparedStatement.setDouble(8, beerStatistics.getBeerDetailsStars().getTotalAverageStars());
+					preparedStatement.setDouble(9, beerStatistics.getBeerDetailsStars().getFemaleAverageStars());
+					preparedStatement.setDouble(10, beerStatistics.getBeerDetailsStars().getMaleAverageStars());
+					// if (beerStatistics.getBeerDetailsTopTags() != null) {
+					preparedStatement.setString(11, beerStatistics.getBeerDetailsTopTags().getTag1());
+					preparedStatement.setString(12, beerStatistics.getBeerDetailsTopTags().getTag2());
+					preparedStatement.setString(13, beerStatistics.getBeerDetailsTopTags().getTag3());
+					preparedStatement.setString(14, beerStatistics.getBeerDetailsTopTags().getTag4());
+					// }
+					preparedStatement.setLong(15, beerStatistics.getViewCount());
+					preparedStatement.setLong(16, beerStatistics.getRatingCount());
 				}
 
 				@Override
