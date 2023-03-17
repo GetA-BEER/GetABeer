@@ -44,8 +44,9 @@
 |<img src="https://user-images.githubusercontent.com/107448607/225837474-2de73334-2719-4370-b339-ea7ed9554228.gif" width="100%" />|                       <img src="https://user-images.githubusercontent.com/107448607/225837491-2cc5e1c4-b1aa-4917-a83a-1f773ee5d0b0.gif" width="100%" />|<img src="https://user-images.githubusercontent.com/107448607/225831331-25274eee-e607-49ac-a130-8c7fc82ce137.gif" width="100%" />|<img src="https://user-images.githubusercontent.com/107448607/225832157-4a2d70a2-3e79-4012-8843-c2650570aa88.gif" width="100%" />| 
 |**[이미지 검색]**|**[유저 검색]**|**[카테고리 검색]**|**[텍스트 검색]**| 
 |<img src="https://user-images.githubusercontent.com/107448607/225838322-55e21a7d-913a-4082-bab1-d39b951d7294.gif" width="100%" />|                       <img src="https://user-images.githubusercontent.com/107448607/225838301-df9904f8-d07a-435f-8f8e-d17b9a452b6f.gif" width="100%" />|<img src="https://user-images.githubusercontent.com/107448607/225838213-5ec3a34e-2de5-46c4-99ea-0f6a13fee3aa.gif" width="100%" />|<img src="https://user-images.githubusercontent.com/107448607/225838238-0febc7f1-ed7b-43ea-b6db-3411a6164bc0.gif" width="100%" />| 
-|**[이달의 맥주]**|**[지도]**||| 
-|<img src="https://user-images.githubusercontent.com/107448607/225838265-bbc8b2c9-4a4f-4c5a-8d57-4d23ea5601b6.gif" width="100%" />|                       <img src="https://user-images.githubusercontent.com/107448607/225838277-588d3626-8cbc-468c-ae0d-87f8b11c7503.gif" width="100%" />||| 
+|**[유저 페이지]**|**[이달의 맥주]**|**[지도]**| 
+|<img src="https://user-images.githubusercontent.com/107448607/225839657-0330dc22-b464-44ed-81fd-7a9253be5ee8.gif" width="100%" />|                     <img src="https://user-images.githubusercontent.com/107448607/225838265-bbc8b2c9-4a4f-4c5a-8d57-4d23ea5601b6.gif" width="100%" />|                       <img src="https://user-images.githubusercontent.com/107448607/225838277-588d3626-8cbc-468c-ae0d-87f8b11c7503.gif" width="100%" />|
+
 
 
 ##  깃허브 커밋 컨벤션!
