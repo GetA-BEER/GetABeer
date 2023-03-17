@@ -48,7 +48,7 @@ public class RedisChatMessage {
 	private ChatType type;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false, name = "room")
+	@JoinColumn(nullable = false, name = "chatRoom")
 	private RedisChatRoom chatRoom;
 
 	@Column(name = "created_at")

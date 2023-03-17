@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import be.domain.chat.redis.entity.ChatType;
 import be.domain.chat.redis.repository.RedisChatRepository;
+import be.domain.chat.redis.repository.RedisRoomRepository;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.domain.chat.redis.dto.RedisMessageDto;
@@ -23,6 +24,7 @@ public class RedisChatService {
 	private final UserService userService;
 	private final RedisRoomService roomService;
 	private final RedisChatRepository chatRepository;
+	private final RedisRoomRepository roomRepository;
 
 	@Transactional
 	public List<RedisMessageDto.Response> findAllChatsInRoom(Long roomId) {
@@ -61,5 +63,9 @@ public class RedisChatService {
 			.build();
 
 		chatRepository.save(message);
+
+		room.changeStatus(user.getRoles().contains("ROLE_ADMIN"));
+
+		roomRepository.save(room);
 	}
 }

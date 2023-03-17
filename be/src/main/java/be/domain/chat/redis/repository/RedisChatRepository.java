@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import be.domain.chat.redis.dto.RedisMessageDto;
@@ -72,12 +73,18 @@ public class RedisChatRepository {
 	}
 
 	public List<RedisRoomDto.Response> findByAll() {
+		var sorting = new CaseBuilder()
+			.when(redisChatRoom.isAdminRead.eq(false)).then(1)
+			.otherwise(2);
 
+		/* 이후 메세지 시간에 따라 정렬? */
 		return queryFactory
 			.select(Projections.fields(RedisRoomDto.Response.class,
 				redisChatRoom.id.as("roomId"),
 				redisChatRoom.sender.id.as("senderId"),
 				redisChatRoom.isAdminRead
-				)).from(redisChatRoom).fetch();
+				)).from(redisChatRoom)
+			.orderBy(sorting.asc())
+			.fetch();
 	}
 }
