@@ -56,7 +56,7 @@ public class RedisChatController {
 	public void sendMessage(@DestinationVariable Long roomId, @RequestBody RedisMessageDto.Request request) {
 		log.info("*************** 레디스 체팅 컨트롤러에 오신 여러분 환영합니다 ***********");
 
-		User user = userService.findLoginUser();
+		User user = userService.getUser(request.getId());
 
 		publisher.publish(ChannelTopic.of("room" + roomId),
 			new RedisChat(roomId, user.getId(), request.getContent(), request.getType()));
