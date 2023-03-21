@@ -3,7 +3,7 @@ name: GitHub Actions를 이용한 CI v0.0.1
 on:
   push:
     paths: [ 'be/**' ]
-    branches: [ "dev-be" ]
+    branches: [ "main" ]
     
 permissions:
   contents: read
