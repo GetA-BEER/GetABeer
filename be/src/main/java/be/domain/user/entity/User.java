@@ -1,0 +1,350 @@
+package be.domain.user.entity;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
+import be.domain.beerwishlist.entity.BeerWishlist;
+import be.domain.comment.entity.PairingComment;
+import be.domain.comment.entity.RatingComment;
+import be.domain.follow.entity.Follow;
+import be.domain.like.entity.PairingLike;
+import be.domain.like.entity.RatingLike;
+import be.domain.notice.entity.Notification;
+import be.domain.pairing.entity.Pairing;
+import be.domain.rating.entity.Rating;
+import be.domain.user.entity.enums.Age;
+import be.domain.user.entity.enums.Gender;
+import be.domain.user.entity.enums.RandomProfile;
+import be.domain.user.entity.enums.UserStatus;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@Table(name = "users"
+	// ,indexes = @Index(name = "i_users", columnList = "nickname")
+)
+@DynamicInsert
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+public class User implements Serializable {
+
+	@Id
+	@Column(name = "user_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(nullable = false, unique = true, updatable = false)
+	private String email;
+
+	@Column(nullable = false)
+	private String nickname;
+
+	@ColumnDefault("0")
+	private Long followerCount;
+
+	@ColumnDefault("0")
+	private Long followingCount;
+
+	@Column(nullable = false)
+	private String password;
+
+	@Column
+	private String imageUrl;
+
+	@Column
+	private String provider;
+
+	@Column
+	private String providerId;
+
+	@Enumerated(EnumType.STRING)
+	private Gender gender;
+
+	@Enumerated(EnumType.STRING)
+	private Age age;
+
+	@Column
+	private String userStatus;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> roles = new ArrayList<>();
+
+	@OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private ProfileImage profileImage;
+
+	public void addProfileImage(ProfileImage profileImage) {
+		this.profileImage = profileImage;
+	}
+
+	/* UserBeerCategory Join */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<UserBeerCategory> userBeerCategories;
+
+	/* User - UserBeerCategory 연관관계 편의 메서드 */
+	public void addUserBeerCategories(UserBeerCategory userBeerCategory) {
+		userBeerCategories.add(userBeerCategory);
+
+		if (userBeerCategory.getUser() != this) {
+			userBeerCategory.addUser(this);
+		}
+	}
+
+	/* UserBeerTag Join */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<UserBeerTag> userBeerTags;
+
+	/* User - UserBeerTag 연관관계 편의 메서드 */
+	public void addUserBeerTags(UserBeerTag userBeerTag) {
+		userBeerTags.add(userBeerTag);
+
+		if (userBeerTag.getUser() != this) {
+			userBeerTag.addUser(this);
+		}
+	}
+
+	/* BeerWishlist 1:N 양방향 매핑 */
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private List<BeerWishlist> beerWishlists;
+
+	/* 🤎회원 - 맥주 평가 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<Rating> ratingList;
+
+	public void addRatingList(Rating rating) {
+		ratingList.add(rating);
+
+		if (rating.getUser() != this) {
+			rating.bndUser(this);
+		}
+	}
+
+	/* 💝 회원 - 맥주 평가 댓글 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<RatingComment> ratingCommentList;
+
+	public void addRatingCommentList(RatingComment ratingComment) {
+		ratingCommentList.add(ratingComment);
+
+		if (ratingComment.getUser() != this) {
+			ratingComment.bndUser(this);
+		}
+	}
+
+	/* 🖤 회원 - 페어링 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<Pairing> pairingList;
+
+	public void addPairingList(Pairing pairing) {
+		pairingList.add(pairing);
+
+		if (pairing.getUser() != this) {
+			pairing.bndUser(this);
+		}
+	}
+
+	/* 💙회원 - 페어링 댓글 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<PairingComment> pairingCommentList;
+
+	public void addPairingCommentList(PairingComment pairingComment) {
+		pairingCommentList.add(pairingComment);
+
+		if (pairingComment.getUser() != this) {
+			pairingComment.bndUser(this);
+		}
+	}
+
+	/* 📍 회원 - 평가 추천 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<RatingLike> ratingLikeList;
+
+	public void addRatingLikeList(RatingLike ratingLike) {
+		ratingLikeList.add(ratingLike);
+
+		if (ratingLike.getUser() != this) {
+			ratingLike.belongToUser(this);
+		}
+	}
+
+	/* 📍 회원 - 페어링 추천 일대다 연관관계 */
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<PairingLike> pairingLikeList;
+
+	public void addPairingLikeList(PairingLike pairingLike) {
+		pairingLikeList.add(pairingLike);
+
+		if (pairingLike.getUser() != this) {
+			pairingLike.belongToUser(this);
+		}
+	}
+
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<Notification> notifications;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "followingUserId")
+	private List<Follow> followerList;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "followedUserId")
+	private List<Follow> followingList;
+
+	public void addNotifications(Notification notification) {
+		notifications.add(notification);
+
+		if (notification.getUser() != this) {
+			notification.setUser(this);
+		}
+	}
+
+	/* ChatRoom 일대다 양방향 매핑 : 어드민? */
+	// @OneToOne (mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+	// private ChatRoom chatRoom;
+	//
+	// public void bndChatRoom(ChatRoom chatRoom) {
+	// 	this.chatRoom = chatRoom;
+	//
+	// 	if (chatRoom.getUser() != this) {
+	// 		chatRoom.bndUser(this);
+	// 	}
+	// }
+
+	//    /* ChatMessage 1:N 양방향 매핑 */
+	//    @OneToMany(mappedBy = "user")
+	//    private List<ChatMessage> chatMessages;
+
+	public User(String email, String nickname, String password) {
+		this.email = email;
+		this.nickname = nickname;
+		this.password = password;
+	}
+
+	@Builder
+	public User(Long id, String email, String nickname,
+		String password, List<String> roles, Age age,
+		String provider, String imageUrl, Gender gender,
+		String status, String providerId) {
+		this.id = id;
+		this.email = email;
+		this.nickname = nickname;
+		this.password = password;
+		this.roles = roles;
+		this.provider = provider;
+		this.imageUrl = imageUrl;
+		this.userStatus = status;
+		this.providerId = providerId;
+	}
+
+	public void edit(String imageUrl, String nickname, Gender gender, Age age) {
+		this.imageUrl = imageUrl == null ? this.imageUrl : imageUrl;
+		this.nickname = nickname == null ? this.nickname : nickname;
+		this.gender = gender == null ? this.gender : gender;
+		this.age = age == null ? this.age : age;
+	}
+
+	public void putUserInfo(Age age, Gender gender) {
+		this.age = age;
+		this.gender = gender;
+	}
+
+	public void putUserBeerTags(List<UserBeerTag> userBeerTags) {
+		this.userBeerTags = this.userBeerTags == null ? userBeerTags : this.userBeerTags;
+	}
+
+	public void putUserBeerCategories(List<UserBeerCategory> userBeerCategories) {
+		this.userBeerCategories = this.userBeerCategories == null ? userBeerCategories : this.userBeerCategories;
+	}
+
+	public void putId(Long id) {
+		this.id = id;
+	}
+
+	public void editPassword(String password) {
+		this.password = password;
+	}
+
+	public void withdraw() {
+		this.userStatus = UserStatus.QUIT_USER.getStatus();
+	}
+
+	public void randomProfileImage(String imageUrl) {
+		this.imageUrl =
+			imageUrl == null ? RandomProfile.values()[(int)(Math.random() * 4)].getValue() : this.imageUrl;
+	}
+
+	public void putImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public void changeNickname(String nickname) {
+		this.nickname = nickname + UUID.randomUUID().toString().substring(0, 5);
+	}
+
+	public void addFollower() {
+		this.followerCount++;
+	}
+
+	public void removeFollower() {
+		if (this.followerCount > 0) {
+			this.followerCount--;
+		}
+	}
+
+	public void addFollowing() {
+		this.followingCount++;
+	}
+
+	public void removeFollowing() {
+		if (this.followingCount > 0) {
+			this.followingCount--;
+		}
+	}
+
+	public void updateOAuthInfo(String email, String picture, String nickname) {
+
+		if (!this.email.equals(email)) {
+			this.email = email;
+		}
+		if (!this.imageUrl.equals(picture)) {
+			this.imageUrl = picture;
+		}
+		if (!this.nickname.equals(nickname)) {
+			this.nickname = nickname;
+		}
+	}
+
+	public void updateOAuthInfo(String picture, String nickname) {
+
+		if (!this.imageUrl.equals(picture)) {
+			this.imageUrl = picture;
+		}
+		if (!this.nickname.equals(nickname)) {
+			this.nickname = nickname;
+		}
+	}
+}

@@ -21,4 +21,16 @@ public class AsyncConfig extends AsyncConfigurerSupport {
         executor.initialize();
         return executor;
     }
+
+    /* 이메일 비동기 처리 */
+    @Bean(name = "threadPoolTaskExecutor-Mail")
+    public Executor getMailAsyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setMaxPoolSize(10);
+        executor.setCorePoolSize(5);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("mail_async-");
+        executor.initialize();
+        return executor;
+    }
 }

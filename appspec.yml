@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source:  /
+    destination: /home/ubuntu/action
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+
+hooks:
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 100
+      runas: ubuntu
