@@ -7,8 +7,10 @@ import { TimeHandler } from '@/utils/TimeHandler';
 import CommentInput from './inputs/CommentInput';
 import Swal from 'sweetalert2';
 import ProfileCard from './pairing/ProfileCard';
-import { useRecoilState } from 'recoil';
-import { accessToken } from '@/atoms/login';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { accessToken, userId } from '@/atoms/login';
+import { useRouter } from 'next/router';
+import { reportChat } from './Chat';
 
 export interface RatingComment {
   ratingId: number;
@@ -45,8 +47,19 @@ export default function SpeechBalloon({
 }: CommentProps) {
   const [date, setDate] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const [content, setContent] = useState(props.content);
+  const USERID = useRecoilValue(userId);
   const [TOKEN] = useRecoilState(accessToken);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (TOKEN === '') {
+    } else {
+      setIsLogin(true);
+    }
+  }, [TOKEN]);
+
   const config = {
     headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
     withCredentials: true,
@@ -140,9 +153,50 @@ export default function SpeechBalloon({
             <div className="flex-1 flex justify-end items-center  text-y-brown mr-3 text-xs">
               <button
                 className="flex items-center mr-1"
-                onClick={() => {
-                  console.log('신고하기');
-                }}
+                onClick={
+                  isLogin
+                    ? () => {
+                        Swal.fire({
+                          text: '이 댓글을 신고하시겠습니까?',
+                          showCancelButton: true,
+                          confirmButtonColor: '#f1b31c',
+                          cancelButtonColor: '#A7A7A7',
+                          confirmButtonText: '신고하기',
+                          cancelButtonText: '취소',
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            if ('ratingCommentId' in props) {
+                              reportChat(
+                                USERID,
+                                `평가 댓글 ${props.ratingCommentId} 신고합니다`
+                              );
+                            }
+                            if ('pairingCommentId' in props) {
+                              reportChat(
+                                USERID,
+                                `페어링 댓글 ${props.pairingCommentId} 신고합니다`
+                              );
+                            }
+                          }
+                        });
+                      }
+                    : () => {
+                        Swal.fire({
+                          text: '로그인이 필요한 서비스 입니다.',
+                          showCancelButton: true,
+                          confirmButtonColor: '#f1b31c',
+                          cancelButtonColor: '#A7A7A7',
+                          confirmButtonText: '로그인',
+                          cancelButtonText: '취소',
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            router.push({
+                              pathname: '/login',
+                            });
+                          }
+                        });
+                      }
+                }
               >
                 <RiAlarmWarningFill className="mb-[1px]" />
                 <span className="text-y-black ml-[1px]">신고하기</span>
