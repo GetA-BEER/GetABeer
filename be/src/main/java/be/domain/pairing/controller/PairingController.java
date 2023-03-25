@@ -51,11 +51,6 @@ public class PairingController {
 	@PostMapping
 	public ResponseEntity<String> post(@RequestPart(value = "post") @Valid PairingRequestDto.Post post,
 		@RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
-		log.info("************************************************************");
-		log.info("여기는 컨트롤러");
-		log.info("내용이 잘 들어오나 : " + post.getContent());
-		log.info("post 내용 확인 : " + post.getCategory());
-		log.info("************************************************************");
 		String message = pairingService.create(mapper.pairingPostDtoToPairing(post),
 			files, post.getBeerId());
 
