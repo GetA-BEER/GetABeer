@@ -14,17 +14,6 @@ import {
   RecommendBeerType,
 } from '@/components/beerPage/BeerDeclare';
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  // async여야 함
-  const response = await fetch(`${process.env.API_URL}/api/beers/recommend`);
-  const weeklyBeer: PopularBeerType = await response.json();
-  return {
-    props: {
-      weeklyBeer,
-    },
-  };
-};
-
 export default function Main({
   weeklyBeer,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -95,3 +84,14 @@ export default function Main({
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  // async여야 함
+  const response = await fetch(`${process.env.API_URL}/api/beers/recommend`);
+  const weeklyBeer: PopularBeerType = await response.json();
+  return {
+    props: {
+      weeklyBeer,
+    },
+  };
+};

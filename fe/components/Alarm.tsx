@@ -1,13 +1,13 @@
 import { FiBellOff } from 'react-icons/fi';
 import { CgBell } from 'react-icons/cg';
 import { GiConfirmed } from 'react-icons/gi';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { accessToken } from '@/atoms/login';
 import Image from 'next/image';
 import axios from '@/pages/api/axios';
 import { useRouter } from 'next/router';
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+
 export default function Alarm() {
   type noti = {
     id: number;
@@ -19,7 +19,7 @@ export default function Alarm() {
     createdAt: string;
     isRead: boolean;
   };
-  const eventSource = useRef<EventSourcePolyfill | EventSource>();
+
   const router = useRouter();
   const curRouter = router.route;
   const [alarmList, setAlarmList] = useState<noti[] | undefined>();
@@ -30,16 +30,45 @@ export default function Alarm() {
 
   useEffect(() => {
     if (TOKEN === '') {
-      setIsLogin(false);
     } else {
       setIsLogin(true);
+    }
+  }, [TOKEN]);
+
+  useEffect(() => {
+    /* 1. SSE 로 알림 기능 구현 */
+    // EventSource 객체 속성 1.onmessage 기본 메세지 / 2.onopen 접속 / 3.onerror 오류
+    // const SSE = () => {
+    //     if (TOKEN !== '') {
+    //       const EventSource = EventSourcePolyfill || NativeEventSource;
+    //       /* 1. SSE 로 알림 기능 구현 */
+    //       if (isLogin) {
+    //         eventSource.current = new EventSource(
+    //           `${process.env.API_URL}/subscribe`,
+    //           {
+    //             headers: {
+    //               Authorization: TOKEN,
+    //             },
+    //             heartbeatTimeout: 45000,
+    //             withCredentials: true,
+    //           }
+    //         );
+    //         eventSource.current.onmessage = (event: any) => {
+    //           console.log('요기지룡!', event.data);
+    //         };
+    //         eventSource.current.onopen = (event: any) => {
+    //           console.log('open ㅎㅎ', event.target.onmessage);
+    //         };
+    //         eventSource.current.onerror = (event: any) => {
+    //           console.log('에러 ㅎㅎ');
+    //         };
+    //       }
+    //     }
+    if (isLogin) {
       initNotify();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [TOKEN]);
-  // useEffect(() => {
-
-  // }, [TOKEN, isLogin]);
+  }, [TOKEN, isLogin, curRouter]);
 
   const initNotify = () => {
     /* 2. 보통의 axios 로 알림 기능 구현 */
@@ -53,38 +82,9 @@ export default function Alarm() {
         .then((response) => {
           setAlarmList(response.data.notifications);
           setUnreadCount(response.data.unreadCount);
-          SSE();
         })
         .catch((error) => console.log(error));
     }
-
-    const SSE = () => {
-      if (TOKEN !== '') {
-        const EventSource = EventSourcePolyfill || NativeEventSource;
-        /* 1. SSE 로 알림 기능 구현 */
-        if (isLogin) {
-          eventSource.current = new EventSource(
-            `http://localhost:8080/subscribe`,
-            {
-              headers: {
-                Authorization: TOKEN,
-              },
-              heartbeatTimeout: 45000,
-              withCredentials: true,
-            }
-          );
-          eventSource.current.onmessage = (event: any) => {
-            console.log('요기지룡!', event.data);
-          };
-          eventSource.current.onopen = (event: any) => {
-            console.log('open ㅎㅎ', event.data, TOKEN);
-          };
-          eventSource.current.onerror = (event: any) => {
-            console.log('에러 ㅎㅎ');
-          };
-        }
-      }
-    };
   };
 
   const handleNotify = (
