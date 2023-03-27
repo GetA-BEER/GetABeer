@@ -38,45 +38,32 @@ export default function Alarm() {
   useEffect(() => {
     /* 1. SSE 로 알림 기능 구현 */
     // EventSource 객체 속성 1.onmessage 기본 메세지 / 2.onopen 접속 / 3.onerror 오류
-    // if (isLogin) {
-    // const fetchSse = async () => {
-    // const eventSource = new EventSource(`${process.env.API_URL}/subscribe`);
-    // eventSource.addEventListener('message', function (e) {
-    // console.log('!!!!!!!!!!!!!!!!data', e.data);
-    // });
-    // connection되면
-    // eventSource.addEventListener('open', function (e) {
-    // Connection was opened.
-    // console.log('Connection was opened1.');
-    // });
-    // error 나면
-    // eventSource.addEventListener('error', function (e) {
-    // if (e.readyState == EventSource.CLOSED) {
-    // console.log('Connection was closed0.');
-    // }
-    // });
-    // try {
-    //   let eventSource = new EventSource(`${process.env.API_URL}/subscribe`);
-    //   console.log('1단계');
-    //   /* EVENTSOURCE ONMESSAGE */
-    //   eventSource.onmessage = async (event: any) => {
-    //     // const res = await event.data;
-    //     // if (!res.includes('EventStream Created.'))
-    //     console.log('오 이게 되네'); // 헤더 마이페이지 아이콘 상태 변경
-    //   };
-    //   /* EVENTSOURCE ONERROR */
-    //   eventSource.onerror = async (event: any) => {
-    //     console.log('오 이게 안되네');
-    //     // if (!event.error.message.includes('No activity'))
-    //     eventSource.close();
-    //   };
-    // } catch (error) {
-    //   console.log('ERROR!', error);
-    // }
-    // };
-    // fetchSse();
-    // return () => eventSource.close();
-    // }
+    // const SSE = () => {
+    //     if (TOKEN !== '') {
+    //       const EventSource = EventSourcePolyfill || NativeEventSource;
+    //       /* 1. SSE 로 알림 기능 구현 */
+    //       if (isLogin) {
+    //         eventSource.current = new EventSource(
+    //           `${process.env.API_URL}/subscribe`,
+    //           {
+    //             headers: {
+    //               Authorization: TOKEN,
+    //             },
+    //             heartbeatTimeout: 45000,
+    //             withCredentials: true,
+    //           }
+    //         );
+    //         eventSource.current.onmessage = (event: any) => {
+    //           console.log('요기지룡!', event.data);
+    //         };
+    //         eventSource.current.onopen = (event: any) => {
+    //           console.log('open ㅎㅎ', event.target.onmessage);
+    //         };
+    //         eventSource.current.onerror = (event: any) => {
+    //           console.log('에러 ㅎㅎ');
+    //         };
+    //       }
+    //     }
     if (isLogin) {
       initNotify();
     }
