@@ -20,6 +20,7 @@
     "browser-image-compression": "^2.0.0",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.4",
+    "event-source-polyfill": "^1.0.31",
     "heic2any": "^0.0.3",
     "next": "^13.1.4",
     "next-cookies": "^2.0.3",
@@ -38,6 +39,7 @@
     "typescript": "4.9.4"
   },
   "devDependencies": {
+    "@types/event-source-polyfill": "^1.0.1",
     "autoprefixer": "^10.4.13",
     "eslint-config-prettier": "^8.6.0",
     "postcss": "^8.4.21",

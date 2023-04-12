@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Advertise from '@/components/mainPage/Advertise';
 import RecommendBeer from '@/components/smallCards/RecommendBeer';
 import BeerCategoryBtn from '@/components/mainPage/BeerCategoryBtn';
@@ -13,9 +14,13 @@ import {
   RecommendBeerType,
 } from '@/components/beerPage/BeerDeclare';
 
-export default function Main() {
+export default function Main({
+  weeklyBeer,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [TOKEN] = useRecoilState<string>(accessToken);
-  const [popularBeer, setPopularBeer] = useState<PopularBeerType[] | string>();
+  const [popularBeer, setPopularBeer] = useState<PopularBeerType[] | string>(
+    weeklyBeer
+  );
   const [recommendBeer, setRecommendBeer] = useState<
     RecommendBeerType[] | string
   >('');
@@ -23,14 +28,7 @@ export default function Main() {
     null
   );
 
-  // 인기 많은 맥주
-  useEffect(() => {
-    axios
-      .get(`/api/beers/weekly`)
-      .then((response) => setPopularBeer(response.data));
-  }, []);
-
-  // 사용자 추천맥주
+  // 사용자 추천맥주(이 경우엔 토큰 여부에 따라 렌더링 다르므로 useEffect 써야함)
   useEffect(() => {
     if (TOKEN !== '') {
       const config = {
@@ -86,3 +84,14 @@ export default function Main() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  // async여야 함
+  const response = await fetch(`${process.env.API_URL}/api/beers/recommend`);
+  const weeklyBeer: PopularBeerType = await response.json();
+  return {
+    props: {
+      weeklyBeer,
+    },
+  };
+};

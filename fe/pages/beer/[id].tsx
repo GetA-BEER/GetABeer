@@ -4,16 +4,19 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import axios from '@/pages/api/axios';
 import SmallRatingCard from '@/components/smallCards/SmallRatingCard';
 import SmallPairingCard from '@/components/smallCards/SmallPairingCard';
 import SimilarBeer from '@/components/smallCards/SimilarBeer';
 import RatingTitle from '@/components/beerPage/RatingTitle';
 import PairingTitle from '@/components/beerPage/PairingTitle';
 import BeerDetailCard from '@/components/beerPage/BeerDetailCard';
+import Loading from '@/components/postPairingPage/Loading';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentBeer } from '@/atoms/currentBeer';
+import { userId, accessToken } from '@/atoms/login';
 import {
   BeerInfo,
   RatingInfo,
@@ -22,11 +25,7 @@ import {
   RatingCardProps,
   PairingCardProps,
 } from '@/components/beerPage/BeerDeclare';
-import axios from '@/pages/api/axios';
-import { useRecoilValue } from 'recoil';
-import { userId } from '@/atoms/login';
-import Loading from '@/components/postPairingPage/Loading';
-import { accessToken } from '@/atoms/login';
+
 export default function Beer() {
   const router = useRouter();
   const [curRoute, setCurRoute] = useState<number | undefined>();
