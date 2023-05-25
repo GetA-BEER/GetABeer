@@ -20,9 +20,9 @@ public interface RatingCustomRepository {
 
 	Rating findRatingByUserId(Long userId, Long beerId);
 
-	Page<RatingResponseDto.Total> findRatingTotalResponseOrder(Long beerId, Pageable pageable);
+	Page<RatingResponseDto.Total> findRatingTotalResponseUserNull(Long beerId, Pageable pageable, String type);
 
-	Page<RatingResponseDto.Total> findRatingTotalResponseOrder(Long beerId, Long userId, Pageable pageable);
+	Page<RatingResponseDto.Total> findRatingTotalResponseUserNotNull(Long beerId, Long userId, Pageable pageable, String type);
 
 	Page<Rating> findRatingByUser(User user, Pageable pageable);
 }

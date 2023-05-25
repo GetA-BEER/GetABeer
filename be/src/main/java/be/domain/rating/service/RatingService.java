@@ -26,6 +26,7 @@ import be.domain.rating.entity.Rating;
 import be.domain.rating.entity.RatingTag;
 import be.domain.rating.repository.RatingRepository;
 import be.domain.rating.repository.RatingTagRepository;
+import be.domain.rating.service.helper.RatingHelper;
 import be.domain.user.entity.User;
 import be.domain.user.service.UserService;
 import be.global.exception.BusinessLogicException;
@@ -45,6 +46,7 @@ public class RatingService {
 	private final RatingTagRepository tagRepository;
 	private final UserService userService;
 	private final RatingLikeRepository ratingLikeRepository;
+	private RatingHelper ratingHelper = new RatingHelper();
 
 	/* 맥주 평가 등록 */
 	@Transactional
@@ -168,52 +170,10 @@ public class RatingService {
 
 	/* 맥주 평가 페이지 조회 */
 	public Page<RatingResponseDto.Total> getRatingPageOrderBy(Long beerId, Integer page, Integer size, String type) {
-		Page<RatingResponseDto.Total> responses;
 		User user = userService.getLoginUserReturnNull();
 
-		/* 로그인 유저가 없는 경우 */
-		if (user == null) {
-			switch (type) {
-				case "recency":
-					responses = ratingRepository.findRatingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("ratingId")));
-					break;
-				case "mostlikes":
-					responses = ratingRepository.findRatingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("likeCount")));
-					break;
-				case "mostcomments":
-					responses = ratingRepository.findRatingTotalResponseOrder(beerId,
-						PageRequest.of(page - 1, size, Sort.by("commentCount")));
-					break;
-				default:
-					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
-			}
-
-			responses.forEach(pairing -> pairing.addUserLike(false));
-		} else { /* 로그인 유저가 있는 경우 */
-			switch (type) {
-				case "recency":
-					responses = ratingRepository.findRatingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("ratingId")));
-					break;
-				case "mostlikes":
-					responses = ratingRepository.findRatingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("likeCount")));
-					break;
-				case "mostcomments":
-					responses = ratingRepository.findRatingTotalResponseOrder(beerId, user.getId(),
-						PageRequest.of(page - 1, size, Sort.by("commentCount")));
-					break;
-				default:
-					throw new BusinessLogicException(ExceptionCode.WRONG_URI);
-			}
-
-			responses.forEach(rating -> rating.addUserLike(getIsUserLikes(rating.getRatingId(), user.getId())));
-		}
-		responses.forEach(rating -> rating.addTag(getRatingTagList(rating.getRatingId())));
-
-		return responses;
+		return ratingHelper.getRatingResponsePage(user, type, beerId,
+			PageRequest.of(page - 1, size), ratingRepository, ratingLikeRepository);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------

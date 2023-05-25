@@ -96,21 +96,16 @@ public class PairingCustomRepositoryImpl implements PairingCustomRepository {
 	@Override
 	public Page<PairingResponseDto.Total> findPairingTotalResponseGetCategory(Long beerId, String type, Long userId,
 		PairingCategory category, Pageable pageable) {
-		log.info("************레포지토리 입장 두둔!*****************");
 		List<PairingResponseDto.Total> list;
 
 		/* 작성한 글이 있는 경우 */
 		if (isUserWritePairing(beerId, userId, category)) { /* 작성한 글이 없는 경우*/
-			log.info("************작성글 존재 두둔*****************");
 			list = getCategoryUserPairingFirst(beerId, type, userId, category, pageable);
 		} else {
-			log.info("************작성글 존재 안해 두둔*****************");
 			list = getCategoryOrderByPageable(beerId, type, category, pageable);
 		}
 
 		var total = getCategorySize(beerId, category);
-
-		log.info("************레포지토리 퇴장 두둔!*****************");
 
 		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}

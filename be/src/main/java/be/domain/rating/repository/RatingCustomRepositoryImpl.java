@@ -10,7 +10,6 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import com.querydsl.core.types.Order;
@@ -90,21 +89,22 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 	}
 
 	@Override
-	public Page<RatingResponseDto.Total> findRatingTotalResponseOrder(Long beerId, Pageable pageable) {
-		var list = orderByPageable(beerId, pageable);
+	public Page<RatingResponseDto.Total> findRatingTotalResponseUserNull(Long beerId, Pageable pageable, String type) {
+		var list = orderByPageable(beerId, pageable, type);
 		var total = getTotalSize(beerId);
 
 		return PageableExecutionUtils.getPage(list, pageable, () -> total);
 	}
 
 	@Override
-	public Page<RatingResponseDto.Total> findRatingTotalResponseOrder(Long beerId, Long userId, Pageable pageable) {
+	public Page<RatingResponseDto.Total> findRatingTotalResponseUserNotNull(Long beerId,
+		Long userId, Pageable pageable, String type) {
 		List<RatingResponseDto.Total> list;
 
 		if (isUserWritePairing(beerId, userId)) {
-			list = orderByUserRatingFirst(beerId, userId, pageable);
+			list = orderByUserRatingFirst(beerId, userId, pageable, type);
 		} else {
-			list = orderByPageable(beerId, pageable);
+			list = orderByPageable(beerId, pageable, type);
 		}
 
 		var total = getTotalSize(beerId);
@@ -122,7 +122,7 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 	}
 
 	/* 로그인을 하지 않았거나 해당 유저가 글을 작성하지 않은 경우 */
-	private List<RatingResponseDto.Total> orderByPageable(Long beerId, Pageable pageable) {
+	private List<RatingResponseDto.Total> orderByPageable(Long beerId, Pageable pageable, String type) {
 
 		return queryFactory
 			.select(Projections.fields(RatingResponseDto.Total.class,
@@ -140,14 +140,14 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 				rating.modifiedAt
 			)).from(rating)
 			.where(rating.beer.id.eq(beerId))
-			.orderBy(createOrderSpecifier(pageable).toArray(OrderSpecifier[]::new))
+			.orderBy(createOrderSpecifier(type).toArray(OrderSpecifier[]::new))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 	}
 
 	/* 로그인 유저가 존재하며, 해당 유저가 글을 작성한 경우 */
-	private List<RatingResponseDto.Total> orderByUserRatingFirst(Long beerId, Long userId, Pageable pageable) {
+	private List<RatingResponseDto.Total> orderByUserRatingFirst(Long beerId, Long userId, Pageable pageable, String type) {
 		var sorting = new CaseBuilder()
 			.when(rating.user.id.eq(userId)).then(1)
 			.otherwise(2);
@@ -169,7 +169,7 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 			)).from(rating)
 			.where(rating.beer.id.eq(beerId))
 			.orderBy(sorting.asc())
-			.orderBy(createOrderSpecifier(pageable).toArray(OrderSpecifier[]::new))
+			.orderBy(createOrderSpecifier(type).toArray(OrderSpecifier[]::new))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -182,16 +182,14 @@ public class RatingCustomRepositoryImpl implements RatingCustomRepository {
 			.where(rating.beer.id.eq(beerId))
 			.fetch().size();
 	}
-	private List<OrderSpecifier> createOrderSpecifier(Pageable pageable) {
+
+	private List<OrderSpecifier> createOrderSpecifier(String type) {
 		List<OrderSpecifier> list = new ArrayList<>();
-		if (!pageable.getSort().isEmpty()) {
-			for (Sort.Order o : pageable.getSort()) {
-				switch (o.getProperty()) {
-					case "ratingId" : list.add(new OrderSpecifier<>(Order.DESC, rating.id));
-					case "likeCount" : list.add(new OrderSpecifier<>(Order.DESC, rating.likeCount));
-					case "commentCount" : list.add(new OrderSpecifier<>(Order.DESC, rating.commentCount));
-				}
-			}
+
+		switch (type) {
+			case "recency" : list.add(new OrderSpecifier<>(Order.DESC, rating.id));
+			case "mostlikes" : list.add(new OrderSpecifier<>(Order.DESC, rating.likeCount));
+			case "mostcomments" : list.add(new OrderSpecifier<>(Order.DESC, rating.commentCount));
 		}
 
 		return list;
